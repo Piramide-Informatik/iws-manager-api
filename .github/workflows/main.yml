@@ -21,10 +21,10 @@ jobs:
           distribution: 'adoptopenjdk'
 
       - name: Build with Gradle
-        run: ./gradlew build --no-daemon
+        run: ./gradlew build 
 
       - name: Run tests
-        run: ./gradlew test --no-daemon
+        run: ./gradlew test
 
       - name: Cache Gradle dependencies
         uses: actions/cache@v3
