@@ -24,14 +24,26 @@ repositories {
 }
 
 dependencies {
+	// Spring Boot
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	
+	// Lombok
 	compileOnly("org.projectlombok:lombok")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")
+
+	// Developer tools
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	
+	// Database
+	runtimeOnly("org.postgresql:postgresql")
+
+	// Testing
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
+	testImplementation("org.mockito:mockito-core:5.16.0")
+	testImplementation("org.mockito:mockito-junit-jupiter:5.16.0")
 }
 
 tasks.withType<Test> {

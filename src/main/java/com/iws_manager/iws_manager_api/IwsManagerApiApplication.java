@@ -10,4 +10,9 @@ public class IwsManagerApiApplication {
 		SpringApplication.run(IwsManagerApiApplication.class, args);
 	}
 
+	/** Method example for applying a test */
+	public static int sum(int a, int b) {
+        return a + b;
+    }
+
 }
