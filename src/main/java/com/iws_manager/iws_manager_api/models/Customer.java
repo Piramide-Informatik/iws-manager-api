@@ -18,20 +18,20 @@ public class Customer {
     @Column(updatable = false, nullable = false, unique = true, length = 36)
     private String uuid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "branchid", nullable = false)
-    private Integer branchid;
+    @ManyToOne
+    @JoinColumn(name = "branch_id")
+    private Branch branch;
 
     @Column(name = "city", nullable = false)
     private String city;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "companytypeid", nullable = false)
-    private Integer companytypeid;
+    @ManyToOne
+    @JoinColumn(name = "companytype_id", nullable = false)
+    private CompanyType companytype;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "countryid", nullable = false)
-    private Integer countryid;
+    @ManyToOne
+    @JoinColumn(name = "country_id")
+    private Country country;
 
     @Column(name = "customerno", nullable = false)
     private String customerno;
@@ -72,9 +72,9 @@ public class Customer {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stateid", nullable = false)
-    private Integer stateid;
+    @ManyToOne
+    @JoinColumn(name = "state_id", nullable = false)
+    private State state;
 
     @Column(name = "street", nullable = false)
     private String street;

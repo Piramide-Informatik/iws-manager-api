@@ -2,8 +2,12 @@ package com.iws_manager.iws_manager_api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-@SpringBootApplication
+//import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+
+@SpringBootApplication //(exclude = DataSourceAutoConfiguration.class)
+@EntityScan(basePackages = "com.iws_manager.iws_manager_api.models")
 public class IwsManagerApiApplication {
 
 	public static void main(String[] args) {

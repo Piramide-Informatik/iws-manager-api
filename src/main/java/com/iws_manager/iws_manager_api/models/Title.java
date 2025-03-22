@@ -10,7 +10,6 @@ import lombok.*;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "title")
-
 public class Title {
 
     @Id // title id

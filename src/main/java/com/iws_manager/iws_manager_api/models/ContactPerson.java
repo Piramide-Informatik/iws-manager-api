@@ -18,9 +18,9 @@ public class ContactPerson {
     @Column(updatable = false, nullable = false, unique = true, length = 36)
     private String uuid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customerId", nullable = false)
-    private Integer customerId;
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     @Column(name = "firstName", nullable = false)
     private String firstName;
@@ -35,10 +35,10 @@ public class ContactPerson {
     private String lastName;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "salutationId", nullable = false)
-    private Integer salutationId;
+    @JoinColumn(name = "salutation_id", nullable = false)
+    private Salutation salutation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "titleId", nullable = false)
-    private Integer titleId;
+    @JoinColumn(name = "title_id", nullable = false)
+    private Title title;
 }

@@ -1,9 +1,6 @@
 package com.iws_manager.iws_manager_api.models;
 
-import java.util.UUID;
-
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,23 +9,16 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "branch")
-public class Branch {
+@Table(name = "companyType")
+public class CompanyType {
 
-    @Id
+    @Id // companyType id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column(updatable = false, nullable = false, unique = true, length = 36)
-    private String uuid;  
+    private String uuid;
 
-    @Column(name = "branch", nullable = false)
-    private String branch;
-
-    @PrePersist
-    public void generateUUID() {
-        if (this.uuid == null) {
-            this.uuid = UUID.randomUUID().toString(); 
-        }
-    }
+    @Column(name = "companyType", nullable = false)
+    private String companyType;
 }
