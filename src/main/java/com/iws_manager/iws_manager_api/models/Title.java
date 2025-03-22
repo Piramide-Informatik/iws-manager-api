@@ -9,23 +9,17 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "country")
+@Table(name = "title")
 
-public class Country {
+public class Title {
 
-    @Id // countryid
+    @Id // title id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column(updatable = false, nullable = false, unique = true, length = 36)
     private String uuid;
 
-    @Column(name = "countryLabel", nullable = false)
-    private String countryLabel;
-
-    @Column(name = "countryName", nullable = false)
-    private String countryName;
-
-    @Column(name = "isDefault")
-    private Integer isDefault;
+    @Column(name = "title", nullable = false)
+    private String title;
 }
