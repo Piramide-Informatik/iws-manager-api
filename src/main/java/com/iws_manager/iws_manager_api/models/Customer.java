@@ -1,5 +1,7 @@
-
-
+package com.iws_manager.iws_manager_api.models;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
@@ -85,6 +87,4 @@ public class Customer {
 
     @Column(name = "zipcode", nullable = false)
     private String zipcode;
-
-
 }
