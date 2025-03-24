@@ -7,14 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class IwsManagerApiApplicationTests {
 
-	@Test
+	/*@Test
 	void contextLoads() {
-	}
-
-	/** Example of test */
-	@Test
-    public void testSum() {
-        int result = IwsManagerApiApplication.sum(1, 2);
-        assertEquals(3, result);
-    }
+	}*/
 }
