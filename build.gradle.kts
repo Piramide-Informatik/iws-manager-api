@@ -2,6 +2,8 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.4.3"
 	id("io.spring.dependency-management") version "1.1.7"
+	id("org.sonarqube") version "4.4.1.3373"
+    jacoco
 }
 
 group = "com.iws-manager"
@@ -9,7 +11,7 @@ version = "0.0.1-SNAPSHOT"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
+		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
 
@@ -39,8 +41,11 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql")
 
 	// Testing
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	// testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+    }
+	// testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
 	testImplementation("org.mockito:mockito-core:5.16.0")
 	testImplementation("org.mockito:mockito-junit-jupiter:5.16.0")
@@ -58,4 +63,51 @@ tasks.withType<Test> {
         events("passed", "failed", "skipped")
         showStandardStreams = false
     }
+	outputs.dir("build/test-results")
+}
+
+sonar {
+    properties {
+        property("sonar.projectKey", "Piramide-Informatik_iws-manager-api")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.java.binaries", "build/classes/java/main")
+        property("sonar.java.test.binaries", "build/classes/java/test")
+        property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
+        property("sonar.gradle.skipCompile", "true")
+		property("sonar.java.source", "21")
+        property("sonar.sourceEncoding", "UTF-8")
+        property("sonar.qualitygate.wait", "true")
+		property("sonar.scm.provider", "git")
+		property("sonar.gradle.skipCompile", "true")
+
+		property("sonar.exclusions", """
+            **/config/**,
+            **/exception/**,
+            **/model/**,
+            **/*Application*
+        """.trimIndent())
+    }
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required.set(true) 
+        html.required.set(true)
+    }
+	classDirectories.setFrom(files(classDirectories.files.map {
+        fileTree(it).apply {
+            exclude(
+                "**/config/**",
+                "**/exception/**",
+                "**/model/**",
+                "**/*Application*"
+            )
+        }
+    }))
+	executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
 }
