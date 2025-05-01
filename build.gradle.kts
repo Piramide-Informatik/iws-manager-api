@@ -111,7 +111,6 @@ tasks.jacocoTestReport {
             exclude(
                 "**/config/**",
                 "**/exception/**",
-                "**/*Application*"
             )
         }
     }))
