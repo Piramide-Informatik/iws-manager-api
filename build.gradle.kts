@@ -69,25 +69,26 @@ tasks.withType<Test> {
 
 sonar {
     properties {
-         // Configuración básica de SonarCloud
+         // SonarCloud Setup
         property("sonar.projectKey", "Piramide-Informatik_iws-manager-api")
         property("sonar.host.url", "https://sonarcloud.io")
         
-        // Configuración de rutas para el análisis
+        // Routing Analysis setup
         property("sonar.java.binaries", "build/classes/java/main")
         property("sonar.java.test.binaries", "build/classes/java/test")
+		property("sonar.junit.reportPaths", "build/test-results/test")
         property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
         
-        // Configuraciones varias
+        // Extra configurations
         property("sonar.java.source", "21")
         property("sonar.sourceEncoding", "UTF-8")
         property("sonar.qualitygate.wait", "true")
         property("sonar.scm.provider", "git")
         
-        // Elimina la duplicación de esta propiedad
+        // Delete duplicity
         property("sonar.gradle.skipCompile", "true")
 
-        // Exclusiones de análisis
+        // Analysis exclussion
         property("sonar.exclusions", """
             **/config/**,
             **/exception/**,
