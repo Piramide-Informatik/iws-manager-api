@@ -1,0 +1,20 @@
+# IWS Manager API
+
+![Java CI](https://github.com/Piramide-Informatik/iws-manager-api/actions/workflows/ci.yml/badge.svg)
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=Piramide-Informatik_iws-manager-api)
+
+Spring Boot backend API with Java 21, PostgreSQL 16.6, and Gradle 8.12. Features CI/CD via GitHub Actions with SonarCloud integration.
+
+## 🛠 Tech Stack
+- **Java**: 21.0.4 (Oracle)
+- **Spring Boot**: 3.4.3
+- **PostgreSQL**: 16.6
+- **Gradle**: 8.                12
+
+## 🚀 Quick Start
+
+### Prerequisites
+```bash
+java -version  # Verify Java 21
+gradle -v      # Verify Gradle 8.12
+psql --version # Verify PostgreSQL 16.6
