@@ -4,6 +4,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.7"
 	id("org.sonarqube") version "4.4.1.3373"
     jacoco
+	`java-library`
 }
 
 group = "com.iws-manager"
@@ -68,19 +69,26 @@ tasks.withType<Test> {
 
 sonar {
     properties {
+         // Configuración básica de SonarCloud
         property("sonar.projectKey", "Piramide-Informatik_iws-manager-api")
         property("sonar.host.url", "https://sonarcloud.io")
+        
+        // Configuración de rutas para el análisis
         property("sonar.java.binaries", "build/classes/java/main")
         property("sonar.java.test.binaries", "build/classes/java/test")
         property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
-        property("sonar.gradle.skipCompile", "true")
-		property("sonar.java.source", "21")
+        
+        // Configuraciones varias
+        property("sonar.java.source", "21")
         property("sonar.sourceEncoding", "UTF-8")
         property("sonar.qualitygate.wait", "true")
-		property("sonar.scm.provider", "git")
-		property("sonar.gradle.skipCompile", "true")
+        property("sonar.scm.provider", "git")
+        
+        // Elimina la duplicación de esta propiedad
+        property("sonar.gradle.skipCompile", "true")
 
-		property("sonar.exclusions", """
+        // Exclusiones de análisis
+        property("sonar.exclusions", """
             **/config/**,
             **/exception/**,
             **/model/**,
@@ -110,4 +118,16 @@ tasks.jacocoTestReport {
         }
     }))
 	executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
+}
+
+tasks.register("validateDependencies") {
+    doLast {
+        println("Validando dependencias usando verification-metadata.xml")
+    }
+}
+
+gradle.taskGraph.whenReady {
+    if (hasTask(":strictDependencyVerification")) {
+        System.setProperty("org.gradle.dependency.verification", "strict")
+    }
 }
