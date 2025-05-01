@@ -127,8 +127,10 @@ tasks.jacocoTestReport {
 }
 
 tasks.register("validateDependencies") {
+    description = "Validates project dependencies using verification-metadata.xml"
+    group = "Verification"
     doLast {
-        println("Validando dependencias usando verification-metadata.xml")
+        println("Validating dependencies using verification-metadata.xml")
     }
 }
 
