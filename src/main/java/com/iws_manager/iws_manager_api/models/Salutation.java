@@ -20,6 +20,6 @@ public class Salutation {
     @Column(updatable = false, nullable = false, unique = true, length = 36)
     private String uuid;
 
-    @Column(name = "salutation", nullable = false)
-    private String salutation;
+    @Column(name = "honorific", nullable = false)
+    private String honorific;
 }

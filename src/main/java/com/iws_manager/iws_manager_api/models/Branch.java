@@ -22,8 +22,8 @@ public class Branch {
     @Column(updatable = false, nullable = false, unique = true, length = 36)
     private String uuid;  
 
-    @Column(name = "branch", nullable = false)
-    private String branch;
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @PrePersist
     public void generateUUID() {

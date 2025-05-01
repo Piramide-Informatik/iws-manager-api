@@ -1,8 +1,17 @@
 package com.iws_manager.iws_manager_api.models;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import jakarta.persistence.*;
-import lombok.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -19,6 +28,6 @@ public class Title {
     @Column(updatable = false, nullable = false, unique = true, length = 36)
     private String uuid;
 
-    @Column(name = "title", nullable = false)
-    private String title;
+    @Column(name = "honorific", nullable = false)
+    private String honorific;
 }
