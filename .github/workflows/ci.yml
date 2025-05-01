@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: Java CI with SonarCloud
 
 on:
   push:
@@ -24,6 +24,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK 21
         uses: actions/setup-java@v3
@@ -42,15 +44,30 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Build with Gradle
-        run: ./gradlew build 
-    
-      - name: Run tests
+      - name: Build and generate reports
         env:
           DB_URL: jdbc:postgresql://localhost:5432/${{ secrets.POSTGRES_DB }}
           DB_USERNAME: ${{ secrets.POSTGRES_USER }}
           DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        run: ./gradlew test
+        run: |
+          ./gradlew clean build jacocoTestReport
+          ls -R build/classes  # Verificación de rutas
+
+      - name: Run SonarCloud Analysis
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=piramide-informatik
+            -Dsonar.projectKey=Piramide-Informatik_iws-manager-api
+            -Dsonar.java.binaries=build/classes/java/main
+            -Dsonar.java.test.binaries=build/classes/java/test
+            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
+            -Dsonar.junit.reportPaths=build/test-results/test
+            -Dsonar.sourceEncoding=UTF-8
+            -Dsonar.host.url=https://sonarcloud.io
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
