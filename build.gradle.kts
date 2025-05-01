@@ -1,3 +1,8 @@
+object Versions {
+    const val JUNIT = "5.10.1"
+    const val MOCKITO = "5.16.0"
+}
+
 plugins {
 	java
 	id("org.springframework.boot") version "3.4.3"
@@ -47,9 +52,9 @@ dependencies {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
 	// testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-	testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
-	testImplementation("org.mockito:mockito-core:5.16.0")
-	testImplementation("org.mockito:mockito-junit-jupiter:5.16.0")
+	testImplementation("org.junit.jupiter:junit-jupiter:${Versions.JUNIT}")
+	testImplementation("org.mockito:mockito-core:${Versions.MOCKITO}")
+	testImplementation("org.mockito:mockito-junit-jupiter:${Versions.MOCKITO}")
 }
 
 tasks.withType<Test> {
