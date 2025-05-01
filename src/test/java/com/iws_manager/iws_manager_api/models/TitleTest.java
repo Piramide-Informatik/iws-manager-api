@@ -22,11 +22,11 @@ public class TitleTest {
         // Act
         title = new Title();
         title.setUuid(uuid);
-        title.setTitle(titleName);
+        title.setHonorific(titleName);
 
         // Assert
         assertThat(title.getUuid()).isEqualTo(uuid);
-        assertThat(title.getTitle()).isEqualTo(titleName);
+        assertThat(title.getHonorific()).isEqualTo(titleName);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class TitleTest {
 
         // Assert
         assertThat(title.getUuid()).isEqualTo(uuid);
-        assertThat(title.getTitle()).isEqualTo(titleName);
+        assertThat(title.getHonorific()).isEqualTo(titleName);
     }
 
     @Test
