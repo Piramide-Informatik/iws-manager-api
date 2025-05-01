@@ -92,8 +92,6 @@ sonar {
         property("sonar.exclusions", """
             **/config/**,
             **/exception/**,
-            **/model/**,
-            **/*Application*
         """.trimIndent())
     }
 }
