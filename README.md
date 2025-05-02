@@ -77,3 +77,20 @@ source env.sh
 
 - **env.bat**
 - **env.sh**
+
+# 3. Run the Application
+```batch
+./gradlew bootRun
+```
+# 4. Testing 
+```batch
+# Run tests
+./gradlew test
+
+# Generate coverage report
+./gradlew jacocoTestReport
+```
+✅ View reports:
+
+- Test results: **build/reports/tests/test/**
+- Coverage: **build/reports/jacoco/test/html/index.html**
