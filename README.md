@@ -18,3 +18,21 @@ Spring Boot backend API with Java 21, PostgreSQL 16.6, and Gradle 8.12. Features
 java -version  # Verify Java 21
 gradle -v      # Verify Gradle 8.12
 psql --version # Verify PostgreSQL 16.6
+```
+
+## 1. Database Setup
+
+### Option A: Local PostgreSQL
+```bash
+# Create database (adjust credentials if needed)
+createdb -U postgres iwsmanager_bd
+
+# Verify creation
+psql -U postgres -l | grep iwsmanager_bd
+
+# Using psql client
+psql -h localhost -U admin -d iwsmanager_bd -W
+
+# Using JDBC URL (test from your app)
+jdbc:postgresql://localhost:5432/iwsmanager_bd
+```
