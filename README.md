@@ -36,3 +36,23 @@ psql -h localhost -U admin -d iwsmanager_bd -W
 # Using JDBC URL (test from your app)
 jdbc:postgresql://localhost:5432/iwsmanager_bd
 ```
+## 2. Configuration
+
+### Environment Setup
+
+#### For Windows (`env.bat`):
+Create a file named `env.bat` with:
+```batch
+@echo off
+set DB_URL=jdbc:postgresql://localhost:5432/iwsmanager_bd
+set DB_USERNAME=admin
+set DB_PASSWORD=1234
+```
+#### For Linux/MacOS (`env.sh`):
+Create a file named `env.sh` with:
+```batch
+#!/bin/bash
+export DB_URL="jdbc:postgresql://localhost:5432/iwsmanager_bd"
+export DB_USERNAME="admin"
+export DB_PASSWORD="1234"
+```
