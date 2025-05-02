@@ -56,3 +56,24 @@ export DB_URL="jdbc:postgresql://localhost:5432/iwsmanager_bd"
 export DB_USERNAME="admin"
 export DB_PASSWORD="1234"
 ```
+
+### How to Use:
+
+#### 1. Windows:
+```batch
+# Set variables and run (CMD)
+call env.bat
+gradlew bootRun
+```
+#### 2. Linux/MacOS:
+```batch
+# Make executable and run
+chmod +x env.sh
+source env.sh
+./gradlew bootRun
+```
+
+### ⚠️ Important: Add these to .gitignore:
+
+- **env.bat**
+- **env.sh**
