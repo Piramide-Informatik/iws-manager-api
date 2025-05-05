@@ -90,6 +90,10 @@ sonar {
         property("sonar.sourceEncoding", "UTF-8")
         property("sonar.qualitygate.wait", "true")
         property("sonar.scm.provider", "git")
+
+        //Jacoco
+        property("sonar.jacoco.reportPaths", "build/jacoco/test.exec")
+        property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
         
         // Delete duplicity
         property("sonar.gradle.skipCompile", "true")
