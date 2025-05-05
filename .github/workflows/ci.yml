@@ -51,7 +51,10 @@ jobs:
           DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
           ./gradlew clean build jacocoTestReport
-          ls -R build/classes  # Verificación de rutas
+          ls -R build/classes  
+
+      - name: List coverage report files (debug)
+        run: ls -lah build/reports/jacoco/test/
 
       - name: Run SonarCloud Analysis
         uses: SonarSource/sonarqube-scan-action@v5.0.0
