@@ -59,7 +59,6 @@ dependencies {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
-    include("**/models/*Test.class")
 
 	reports {
         html.required.set(true)
@@ -71,6 +70,7 @@ tasks.withType<Test> {
         showStandardStreams = false
     }
 	outputs.dir("build/test-results")
+    finalizedBy(tasks.jacocoTestReport)
 }
 
 sonar {
@@ -83,7 +83,13 @@ sonar {
         property("sonar.java.binaries", "build/classes/java/main")
         property("sonar.java.test.binaries", "build/classes/java/test")
 		property("sonar.junit.reportPaths", "build/test-results/test")
+        property("sonar.jacoco.reportPaths", "build/jacoco/test.exec")
         property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
+
+        property("sonar.sources", "src/main/java")
+        property("sonar.tests", "src/test/java")
+        property("sonar.test.exclusions", "**/*Test.java")
+        property("sonar.coverage.exclusions", "**/*Test.java")
         
         // Extra configurations
         property("sonar.java.source", "21")
