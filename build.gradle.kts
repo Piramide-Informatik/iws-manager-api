@@ -59,6 +59,7 @@ dependencies {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+    include("**/models/*Test.class")
 
 	reports {
         html.required.set(true)
@@ -97,9 +98,11 @@ sonar {
         property("sonar.exclusions", """
             **/config/**,
             **/exception/**,
-            **/model/**,
             **/*Application*
         """.trimIndent())
+
+        property("sonar.inclusions", "**/src/main/java/com/iws_manager/iws_manager_api/models/**")
+        property("sonar.test.inclusions", "**/src/test/java/com/iws_manager/iws_manager_api/models/**")
     }
 }
 
@@ -115,10 +118,10 @@ tasks.jacocoTestReport {
     }
 	classDirectories.setFrom(files(classDirectories.files.map {
         fileTree(it).apply {
+            include("com/iws_manager/iws_manager_api/models/**/*.class")
             exclude(
                 "**/config/**",
                 "**/exception/**",
-                "**/model/**",
                 "**/*Application*"
             )
         }
