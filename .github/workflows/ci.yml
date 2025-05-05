@@ -67,9 +67,7 @@ jobs:
             -Dsonar.projectKey=Piramide-Informatik_iws-manager-api
             -Dsonar.java.binaries=build/classes/java/main
             -Dsonar.java.test.binaries=build/classes/java/test
-            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
             -Dsonar.junit.reportPaths=build/test-results/test
-            -Dsonar.jacoco.reportPaths=build/jacoco/test.exec
             -Dsonar.sourceEncoding=UTF-8
             -Dsonar.host.url=https://sonarcloud.io
 
