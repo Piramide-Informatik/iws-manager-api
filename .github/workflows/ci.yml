@@ -54,7 +54,7 @@ jobs:
           ls -R build/classes  # Verificación de rutas
 
       - name: Run SonarCloud Analysis
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@v5.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
@@ -66,6 +66,7 @@ jobs:
             -Dsonar.java.test.binaries=build/classes/java/test
             -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
             -Dsonar.junit.reportPaths=build/test-results/test
+            -Dsonar.jacoco.reportPaths=build/jacoco/test.exec
             -Dsonar.sourceEncoding=UTF-8
             -Dsonar.host.url=https://sonarcloud.io
 

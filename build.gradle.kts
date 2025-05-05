@@ -100,13 +100,6 @@ sonar {
         // Delete duplicity
         property("sonar.gradle.skipCompile", "true")
 
-        // Analysis exclussion
-        property("sonar.exclusions", """
-            **/config/**,
-            **/exception/**,
-            **/*Application*
-        """.trimIndent())
-
         property("sonar.inclusions", "**/src/main/java/com/iws_manager/iws_manager_api/models/**")
         property("sonar.test.inclusions", "**/src/test/java/com/iws_manager/iws_manager_api/models/**")
     }
@@ -124,10 +117,9 @@ tasks.jacocoTestReport {
     }
 	classDirectories.setFrom(files(classDirectories.files.map {
         fileTree(it).apply {
-            include("com/iws_manager/iws_manager_api/models/**/*.class")
+            include("**/*.class")
             exclude(
                 "**/config/**",
-                "**/exception/**",
                 "**/*Application*"
             )
         }
