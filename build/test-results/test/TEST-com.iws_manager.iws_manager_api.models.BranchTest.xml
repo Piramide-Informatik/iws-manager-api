@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.iws_manager.iws_manager_api.models.BranchTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2025-05-05T15:23:07.819Z" hostname="DESKTOP-IE0IFMA" time="0.06">
-  <properties/>
-  <testcase name="testBranchWithAuditFields()" classname="com.iws_manager.iws_manager_api.models.BranchTest" time="0.053"/>
-  <testcase name="testEqualsAndHashCode()" classname="com.iws_manager.iws_manager_api.models.BranchTest" time="0.001"/>
-  <testcase name="testBranchCreation()" classname="com.iws_manager.iws_manager_api.models.BranchTest" time="0.002"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.iws_manager.iws_manager_api.models.TitleTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2025-05-05T15:23:07.888Z" hostname="DESKTOP-IE0IFMA" time="0.224">
-  <properties/>
-  <testcase name="testTitleConstructor()" classname="com.iws_manager.iws_manager_api.models.TitleTest" time="0.215"/>
-  <testcase name="testEqualsAndHashCode()" classname="com.iws_manager.iws_manager_api.models.TitleTest" time="0.006"/>
-  <testcase name="testTitleModel()" classname="com.iws_manager.iws_manager_api.models.TitleTest" time="0.001"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
