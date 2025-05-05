@@ -88,8 +88,6 @@ sonar {
 
         property("sonar.sources", "src/main/java")
         property("sonar.tests", "src/test/java")
-        property("sonar.test.exclusions", "**/*Test.java")
-        property("sonar.coverage.exclusions", "**/*Test.java")
         
         // Extra configurations
         property("sonar.java.source", "21")
@@ -100,8 +98,8 @@ sonar {
         // Delete duplicity
         property("sonar.gradle.skipCompile", "true")
 
-        property("sonar.inclusions", "**/src/main/java/com/iws_manager/iws_manager_api/models/**")
-        property("sonar.test.inclusions", "**/src/test/java/com/iws_manager/iws_manager_api/models/**")
+        // Analysis exclussion
+        property("sonar.exclusions", "**/config/**,**/exception/**,**/models/**,**/*Application*")
     }
 }
 
@@ -120,6 +118,8 @@ tasks.jacocoTestReport {
             include("**/*.class")
             exclude(
                 "**/config/**",
+                "**/exception/**",
+                "**/models/**",
                 "**/*Application*"
             )
         }
