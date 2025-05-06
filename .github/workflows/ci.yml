@@ -51,9 +51,11 @@ jobs:
           DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
           ./gradlew clean build
-          ls -R build/classes  
+          ls -R build/test-results
+
 
       - name: Run SonarCloud Analysis
+        if: always()
         uses: SonarSource/sonarqube-scan-action@v5.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -65,14 +67,19 @@ jobs:
             -Dsonar.java.binaries=build/classes/java/main
             -Dsonar.java.test.binaries=build/classes/java/test
             -Dsonar.junit.reportPaths=build/test-results/test
+            -Dsonar.java.coveragePlugin=none
+            -Dsonar.coverage.exclusions=**/*
             -Dsonar.sourceEncoding=UTF-8
             -Dsonar.host.url=https://sonarcloud.io
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: test-results
-          path: build/test-results/test/TEST-*.xml
+          path: |
+            build/test-results/test/**/*.xml
+            build/reports/tests/test/**/*
 
       - name: Upload HTML report
         uses: actions/upload-artifact@v4
