@@ -7,7 +7,8 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.4.3"
 	id("io.spring.dependency-management") version "1.1.7"
-	id("org.sonarqube") version "4.4.1.3373"
+	//id("org.sonarqube") version "4.4.1.3373"
+    id("org.sonarqube") version "6.1.0.5360"
     jacoco
 	`java-library`
 }
@@ -78,13 +79,17 @@ sonar {
          // SonarCloud Setup
         property("sonar.projectKey", "Piramide-Informatik_iws-manager-api")
         property("sonar.host.url", "https://sonarcloud.io")
-        
+
         // Routing Analysis setup
         property("sonar.java.binaries", "build/classes/java/main")
         property("sonar.java.test.binaries", "build/classes/java/test")
+
 		property("sonar.junit.reportPaths", "build/test-results/test")
         property("sonar.jacoco.reportPaths", "build/jacoco/test.exec")
         property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
+        // property("sonar.junit.reportPaths", listOf("build/test-results/test"))
+        // property("sonar.jacoco.reportPaths", listOf("build/jacoco/test.exec"))
+        // property("sonar.coverage.jacoco.xmlReportPaths", listOf("build/reports/jacoco/test/jacocoTestReport.xml"))
 
         property("sonar.sources", "src/main/java")
         property("sonar.tests", "src/test/java")
@@ -100,6 +105,7 @@ sonar {
 
         // Analysis exclussion
         property("sonar.exclusions", "**/config/**,**/exception/**,**/models/**,**/*Application*")
+        // property("sonar.exclusions", listOf("**/config/**", "**/exception/**", "**/models/**", "**/*Application*"))
     }
 }
 
