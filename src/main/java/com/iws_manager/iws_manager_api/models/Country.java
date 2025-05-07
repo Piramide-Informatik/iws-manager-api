@@ -14,10 +14,9 @@ import java.time.LocalDateTime;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "country")
-
 public class Country {
 
-    @Id // countryid
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
