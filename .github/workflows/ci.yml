@@ -50,9 +50,13 @@ jobs:
           DB_USERNAME: ${{ secrets.POSTGRES_USER }}
           DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
-          ./gradlew clean build
+          ./gradlew clean test
+          if grep -q '"failures" value="[1-9]' build/test-results/test/TEST-*.xml; then
+            echo "::error::One or more tests failed"
+            exit 1
+          fi
+          ./gradlew build 
           ls -R build/test-results
-
 
       - name: Run SonarCloud Analysis
         if: always()
