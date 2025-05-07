@@ -1,10 +1,11 @@
 package com.iws_manager.iws_manager_api.models;
 
-import java.util.UUID;
-
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.*;
+import  java.time.LocalDateTime;
 import lombok.*;
 
 @Data
@@ -16,19 +17,16 @@ import lombok.*;
 public class Branch {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    @Column(updatable = false, nullable = false, unique = true, length = 36)
-    private String uuid;  
+    @Column(name = "name", nullable = false, length = 100)
+    private String name;
 
-    @Column(name = "branch", nullable = false)
-    private String branch;
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 
-    @PrePersist
-    public void generateUUID() {
-        if (this.uuid == null) {
-            this.uuid = UUID.randomUUID().toString(); 
-        }
-    }
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 }
