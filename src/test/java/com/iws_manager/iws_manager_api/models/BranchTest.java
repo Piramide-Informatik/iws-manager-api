@@ -51,4 +51,11 @@ class BranchTest {
         assertEquals(branch1, branch2);
         assertEquals(branch1.hashCode(), branch2.hashCode());
     }
+
+    @Test
+    void testBranchWithInvalidName() {
+        Branch branch = new Branch();
+        branch.setName(null); 
+        assertNotNull(branch.getName(), "Name cannot be null");
+    }
 }
