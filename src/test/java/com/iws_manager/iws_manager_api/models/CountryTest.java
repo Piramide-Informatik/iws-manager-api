@@ -1,8 +1,7 @@
 package com.iws_manager.iws_manager_api.models;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
 
 import java.time.LocalDateTime;
 
@@ -12,15 +11,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class CountryTest {
 
     private Country country;
+    private String countryName;
+    private String countryLabel;
+    private Integer isDefault;
+    private LocalDateTime now;
+
+    @BeforeEach
+    public void setUp() {
+        country = new Country();
+        countryName = "Mexico";
+        countryLabel = "MX";
+        isDefault = 0;
+        now = LocalDateTime.now();
+    }
 
     @Test
     void testCountryModel() {
-        String uuid = UUID.randomUUID().toString();
-        String countryName = "Mexico";
-        String countryLabel = "MX";
-        int isDefault = 0;
 
-        country = new Country();
         country.setCountryName(countryName);
         country.setCountryLabel(countryLabel);
         country.setIsDefault(isDefault);
@@ -32,11 +39,6 @@ public class CountryTest {
 
     @Test
     void testCountryConstructor() {
-        String countryName = "Mexico";
-        String countryLabel = "MX";
-        Integer isDefault = 0;
-        LocalDateTime now = LocalDateTime.now();
-
         country = new Country(1,  countryLabel, countryName, isDefault, now, now);
 
         assertThat(country.getCountryName()).isEqualTo(countryName);
@@ -46,12 +48,6 @@ public class CountryTest {
 
     @Test
     void testSalutationWithAuditFields(){
-        String countryName = "Mexico";
-        String countryLabel = "MX";
-        int isDefault = 0;
-        LocalDateTime now = LocalDateTime.now();
-
-        country = new Country();
         country.setCountryName(countryName);
         country.setCountryLabel(countryLabel);
         country.setIsDefault(isDefault);
@@ -65,7 +61,6 @@ public class CountryTest {
 
     @Test
     void testEqualsAndHashCode() {
-        LocalDateTime now = LocalDateTime.now();
         Country country1 = new Country(1, "MX", "Mexico", 0, now, now);
         Country country2 = new Country(1, "MX", "Mexico", 0, now, now);
 
