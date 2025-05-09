@@ -61,8 +61,8 @@ public class CountryTest {
 
     @Test
     void testEqualsAndHashCode() {
-        Country country1 = new Country(1, "MX", "Mexico", 0, now, now);
-        Country country2 = new Country(1, "MX", "Mexico", 0, now, now);
+        Country country1 = new Country(1, countryLabel, countryName, isDefault, now, now);
+        Country country2 = new Country(1, countryLabel, countryName, isDefault, now, now);
 
         assertThat(country1).isEqualTo(country2);
         assertThat(country1.hashCode()).isEqualTo(country2.hashCode());
