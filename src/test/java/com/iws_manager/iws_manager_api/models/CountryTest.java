@@ -72,5 +72,4 @@ public class CountryTest {
         assertThat(country1).isEqualTo(country2);
         assertThat(country1.hashCode()).isEqualTo(country2.hashCode());
     }
-
 }
