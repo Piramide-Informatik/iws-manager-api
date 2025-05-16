@@ -12,12 +12,9 @@ import lombok.*;
 @Table(name = "title")
 public class Title {
 
-    @Id // title id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-
-    @Column(updatable = false, nullable = false, unique = true, length = 36)
-    private String uuid;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Column(name = "title", nullable = false)
     private String title;
