@@ -11,12 +11,9 @@ import lombok.*;
 @Table(name = "customer")
 public class Customer {
 
-    @Id // customerid
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-
-    @Column(updatable = false, nullable = false, unique = true, length = 36)
-    private String uuid;
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "branch_id")

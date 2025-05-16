@@ -23,7 +23,7 @@ public class Salutation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private long id;
 
     @Column(name = "salutation", nullable = false)
     private String name;
