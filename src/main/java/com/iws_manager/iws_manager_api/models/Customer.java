@@ -11,6 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@EqualsAndHashCode(callSuper = true, exclude = {"branch", "companytype", "country", "state"})
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "customer")
 public class Customer extends BaseEntity{

@@ -3,7 +3,6 @@ package com.iws_manager.iws_manager_api.models;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SalutationTest {
@@ -22,13 +21,16 @@ public class SalutationTest {
 
     @Test
     void testSalutationWithAuditFields() {
-        String salutationName = "Frau";
+
+        // Arrange
         LocalDateTime now = LocalDateTime.now();
 
+        // Act
         salutation.setName(salutationName);
         salutation.setCreatedAt(now);
         salutation.setUpdatedAt(now);
 
+        // Assert
         assertEquals(now, salutation.getCreatedAt());
         assertEquals(now, salutation.getUpdatedAt());
     }
