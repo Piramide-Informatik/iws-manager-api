@@ -1,6 +1,8 @@
 package com.iws_manager.iws_manager_api.models;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import com.iws_manager.iws_manager_api.models.base.BaseEntity;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,12 +12,8 @@ import lombok.*;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "title")
-public class Title {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Title extends BaseEntity{
 
     @Column(name = "title", nullable = false)
-    private String title;
+    private String name;
 }

@@ -1,10 +1,7 @@
 package com.iws_manager.iws_manager_api.models;
 
-import java.time.LocalDateTime;
-
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import com.iws_manager.iws_manager_api.models.base.BaseEntity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,14 +15,7 @@ import lombok.*;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "contactPerson")
-public class ContactPerson {
-
-    /**
-     * Unique identifier of the contact person.
-     */
-    @Id 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class ContactPerson extends BaseEntity{
 
     /**
      * Customer to whom the contact person is linked.
@@ -71,17 +61,4 @@ public class ContactPerson {
      */
     @Column(name = "function", nullable = false)
     private String function;
-
-    /**
-     * Timestamp of when the record was created.
-     */
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    /**
-     * Timestamp of the last update to the record.
-     */
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 }

@@ -8,37 +8,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SalutationTest {
 
-    private Salutation salutation;
+    String salutationName = "Frau";
+    private Salutation salutation = new Salutation();
 
     @Test
-    void testSalutationModel() {
-        String salutationName = "Frau";
-
-        salutation = new Salutation();
+    void testSalutationCreation() {
+        // Act
         salutation.setName(salutationName);
 
-        assertThat(salutation.getName()).isEqualTo(salutationName);
+        // Assert
+        assertEquals(salutationName, salutation.getName());
     }
 
     @Test
-    void testSalutationConstructor() {
+    void testSalutationWithAuditFields() {
         String salutationName = "Frau";
         LocalDateTime now = LocalDateTime.now();
 
-        salutation = new Salutation(1, salutationName, now, now);
-
-        assertThat(salutation.getId()).isEqualTo(1);
-        assertThat(salutation.getName()).isEqualTo(salutationName);
-    }
-
-    @Test
-    void testSalutationWithAuditFields(){
-        String salutationName = "Frau";
-
-        salutation = new Salutation();
         salutation.setName(salutationName);
-        LocalDateTime now = LocalDateTime.now();
-
         salutation.setCreatedAt(now);
         salutation.setUpdatedAt(now);
 
@@ -47,12 +34,17 @@ public class SalutationTest {
     }
 
     @Test
-    void testEqualsAndHashCode() {
-        LocalDateTime now = LocalDateTime.now();
-        Salutation salutation1 = new Salutation(1, "Herr", now,now);
-        Salutation salutation2 = new Salutation(1, "Herr", now, now);
+    void testEqualsAndHashCode(){
+       // Arrange
+       salutation.setName(salutationName);
+       salutation.setId(1L);
 
-        assertThat(salutation1).isEqualTo(salutation2);
-        assertThat(salutation2.hashCode()).isEqualTo(salutation2.hashCode());
-    }
+       Salutation salutation2 = new Salutation();
+       salutation2.setName(salutationName);
+       salutation2.setId(1L);
+
+       // Assert
+       assertEquals(salutation, salutation2);
+       assertEquals(salutation.hashCode(), salutation2.hashCode());
+   }
 }

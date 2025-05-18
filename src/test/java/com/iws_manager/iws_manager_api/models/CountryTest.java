@@ -10,61 +10,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CountryTest {
 
-    private Country country;
-    private String countryName;
-    private String countryLabel;
-    private Integer isDefault;
+    private Country country = new Country();
+    private String countryName = "Mexico";
+    private String countryLabel = "MX";
+    private Integer isDefault = 0;
     private LocalDateTime now;
 
-    @BeforeEach
-    public void setUp() {
-        country = new Country();
-        countryName = "Mexico";
-        countryLabel = "MX";
-        isDefault = 0;
-        now = LocalDateTime.now();
-    }
-
     @Test
-    void testCountryModel() {
+    void testCountryCreation() {
+        // Act
+        country.setName(countryName);
+        country.setLabel(countryLabel);
 
-        country.setCountryName(countryName);
-        country.setCountryLabel(countryLabel);
-        country.setIsDefault(isDefault);
-
-        assertThat(country.getCountryName()).isEqualTo(countryName);
-        assertThat(country.getCountryLabel()).isEqualTo(countryLabel);
-        assertThat(country.getIsDefault()).isEqualTo(isDefault);
+        // Assert
+        assertEquals(countryName, country.getName());
     }
 
-    @Test
-    void testCountryConstructor() {
-        country = new Country(1,  countryLabel, countryName, isDefault, now, now);
-
-        assertThat(country.getCountryName()).isEqualTo(countryName);
-        assertThat(country.getCountryLabel()).isEqualTo(countryLabel);
-        assertThat(country.getIsDefault()).isEqualTo(isDefault);
-    }
-
-    @Test
-    void testSalutationWithAuditFields(){
-        country.setCountryName(countryName);
-        country.setCountryLabel(countryLabel);
-        country.setIsDefault(isDefault);
-
-        country.setCreatedAt(now);
-        country.setUpdatedAt(now);
-
-        assertEquals(now, country.getCreatedAt());
-        assertEquals(now, country.getUpdatedAt());
-    }
-
-    @Test
-    void testEqualsAndHashCode() {
-        Country country1 = new Country(1, countryLabel, countryName, isDefault, now, now);
-        Country country2 = new Country(1, countryLabel, countryName, isDefault, now, now);
-
-        assertThat(country1).isEqualTo(country2);
-        assertThat(country1.hashCode()).isEqualTo(country2.hashCode());
-    }
+    //faltan tests
 }

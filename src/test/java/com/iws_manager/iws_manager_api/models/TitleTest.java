@@ -1,49 +1,50 @@
 package com.iws_manager.iws_manager_api.models;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.Test;
 public class TitleTest {
 
-    private Title title;
+    String titleName = "Dr.";
+    private Title title = new Title();
 
     @Test
-    void testTitleModel() {
-        // Arrange
-        long id = 1L;
-        String titleName = "Dr.";
-
+    void testTitleCreation() {        
         // Act
-        title = new Title();
-        title.setId(id);
-        title.setTitle(titleName);
+        title.setName(titleName);
 
         // Assert
-        assertThat(title.getId()).isEqualTo(id);
-        assertThat(title.getTitle()).isEqualTo(titleName);
+        assertEquals(titleName, title.getName());
     }
 
     @Test
-    void testTitleConstructor() {
+    void testTitleWithAuditFields() {
         // Arrange
-        long id = 2L;
-        String titleName = "Dr.";
+        title.setName(titleName);
+        LocalDateTime now = LocalDateTime.now();
 
         // Act
-        title = new Title(id, titleName);
+        title.setCreatedAt(now);
+        title.setUpdatedAt(now);
 
         // Assert
-        assertThat(title.getId()).isEqualTo(id);
-        assertThat(title.getTitle()).isEqualTo(titleName);
-    }
+        assertEquals(now, title.getCreatedAt());
+        assertEquals(now, title.getUpdatedAt());
+       }
 
     @Test
     void testEqualsAndHashCode() {
         // Arrange
-        Title title1 = new Title(1L, "Dr.");
-        Title title2 = new Title(1L, "Dr.");
+        title.setName(titleName);
+        title.setId(1L);
+
+        Title title2 = new Title();
+        title2.setName(titleName);
+        title2.setId(1L);
 
         // Assert
-        assertThat(title1).isEqualTo(title2);
-        assertThat(title1.hashCode()).isEqualTo(title2.hashCode());
+        assertEquals(title, title2);
+        assertEquals(title.hashCode(), title2.hashCode());
     }
 }

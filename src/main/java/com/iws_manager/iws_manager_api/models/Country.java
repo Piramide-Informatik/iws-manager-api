@@ -1,12 +1,10 @@
 package com.iws_manager.iws_manager_api.models;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import com.iws_manager.iws_manager_api.models.base.BaseEntity;
+
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 /**
  * Represents a Country in the IWS system constants.
@@ -19,25 +17,14 @@ import java.time.LocalDateTime;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "country")
-public class Country {
+public class Country extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Column(name = "label", nullable = false)
+    private String label;
 
-    @Column(name = "countryLabel", nullable = false)
-    private String countryLabel;
-
-    @Column(name = "countryName", nullable = false)
-    private String countryName;
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @Column(name = "isDefault")
     private Integer isDefault;
-
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 }
