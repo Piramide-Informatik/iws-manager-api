@@ -11,7 +11,9 @@ import lombok.*;
  * This entity is mapped to the 'country' table in the database.
  * It contains information about the country unique identifier, country label, country name,ísDefaults,
  */
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

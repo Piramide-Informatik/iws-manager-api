@@ -9,7 +9,9 @@ import lombok.*;
 /**
  * Entity representing a German federal state (Bundesland).
  */
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

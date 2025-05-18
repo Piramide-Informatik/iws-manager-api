@@ -11,7 +11,9 @@ import lombok.*;
  * This entity is mapped to the 'salutation' table in the database.
  * It contains information about the salutation unique identifier and name,
  */
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

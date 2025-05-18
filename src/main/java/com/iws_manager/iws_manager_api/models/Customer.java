@@ -5,7 +5,9 @@ import com.iws_manager.iws_manager_api.models.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

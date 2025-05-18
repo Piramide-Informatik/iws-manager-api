@@ -11,7 +11,9 @@ import lombok.*;
  * Entity representing a system user for authentication purposes.
  * Supports Basic Authentication with email/password credentials.
  */
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

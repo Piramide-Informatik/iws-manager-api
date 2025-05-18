@@ -9,7 +9,9 @@ import lombok.*;
 /**
  * Entity representing a contact person associated with a customer.
  */
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
