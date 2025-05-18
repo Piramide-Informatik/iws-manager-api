@@ -1,58 +1,50 @@
 package com.iws_manager.iws_manager_api.models;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.time.LocalDateTime;
 
-import java.util.UUID;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import com.iws_manager.iws_manager_api.models.Title;
-
 public class TitleTest {
 
-    private Title title;
+    String titleName = "Dr.";
+    private Title title = new Title();
 
     @Test
-    void testTitleModel() {
-        // Arrange
-        String uuid = UUID.randomUUID().toString();
-        String titleName = "Dr.";
-
+    void testTitleCreation() {        
         // Act
-        title = new Title();
-        title.setUuid(uuid);
-        title.setTitle(titleName);
+        title.setName(titleName);
 
         // Assert
-        assertThat(title.getUuid()).isEqualTo(uuid);
-        assertThat(title.getTitle()).isEqualTo(titleName);
+        assertEquals(titleName, title.getName());
     }
 
     @Test
-    void testTitleConstructor() {
+    void testTitleWithAuditFields() {
         // Arrange
-        String uuid = UUID.randomUUID().toString();
-        String titleName = "Dr.";
+        title.setName(titleName);
+        LocalDateTime now = LocalDateTime.now();
 
         // Act
-        title = new Title(null, uuid, titleName);
+        title.setCreatedAt(now);
+        title.setUpdatedAt(now);
 
         // Assert
-        assertThat(title.getUuid()).isEqualTo(uuid);
-        assertThat(title.getTitle()).isEqualTo(titleName);
-    }
+        assertEquals(now, title.getCreatedAt());
+        assertEquals(now, title.getUpdatedAt());
+       }
 
     @Test
     void testEqualsAndHashCode() {
         // Arrange
-        String uuid = UUID.randomUUID().toString();
-        Title title1 = new Title(1, uuid, "Dr.");
-        Title title2 = new Title(1, uuid, "Dr.");
+        title.setName(titleName);
+        title.setId(1L);
+
+        Title title2 = new Title();
+        title2.setName(titleName);
+        title2.setId(1L);
 
         // Assert
-        assertThat(title1).isEqualTo(title2);
-        assertThat(title1.hashCode()).isEqualTo(title2.hashCode());
+        assertEquals(title, title2);
+        assertEquals(title.hashCode(), title2.hashCode());
     }
-
 }

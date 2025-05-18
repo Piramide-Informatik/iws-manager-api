@@ -1,22 +1,20 @@
 package com.iws_manager.iws_manager_api.models;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import com.iws_manager.iws_manager_api.models.base.BaseEntity;
+
 import jakarta.persistence.*;
 import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@EqualsAndHashCode(callSuper = true, exclude = {"branch", "companytype", "country", "state"})
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "customer")
-public class Customer {
-
-    @Id // customerid
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-
-    @Column(updatable = false, nullable = false, unique = true, length = 36)
-    private String uuid;
+public class Customer extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "branch_id")

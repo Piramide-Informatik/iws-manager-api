@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.iws_manager.iws_manager_api.models.ContactPerson;
-
 public class ContactPersonTest {
 
     String firstName = "Joe";
@@ -57,12 +55,16 @@ public class ContactPersonTest {
     @Test
     void testEqualsAndHashCode() {
         // Arrange
-        LocalDateTime now = LocalDateTime.now();
-        ContactPerson contactPerson1 = buildContactPerson(now, now);
-        ContactPerson contactPerson2 = buildContactPerson(now, now);
+    LocalDateTime now = LocalDateTime.now();
+    
+    ContactPerson contactPerson1 = buildContactPerson(now, now);
+    contactPerson1.setId(1L);
+    
+    ContactPerson contactPerson2 = buildContactPerson(now, now);
+    contactPerson2.setId(1L);
 
-        // Assert
-        assertEquals(contactPerson1, contactPerson2);
-        assertEquals(contactPerson1.hashCode(), contactPerson2.hashCode());
+    // Assert
+    assertEquals(contactPerson1, contactPerson2);
+    assertEquals(contactPerson1.hashCode(), contactPerson2.hashCode());
     }
 }
