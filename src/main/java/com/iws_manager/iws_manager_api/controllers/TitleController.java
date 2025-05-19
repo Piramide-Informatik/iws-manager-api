@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * REST Controller for managing {@link Title} entities.
@@ -42,7 +44,14 @@ public class TitleController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Title> createTitle(@RequestBody Title title) {
+    public ResponseEntity<?> createTitle(@RequestBody Title title) {
+        
+        if (title.getName() == null || title.getName().trim().isEmpty()) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Name is required");
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
+
         Title createdTitle = titleService.create(title);
         return new ResponseEntity<>(createdTitle, HttpStatus.CREATED);
     }
