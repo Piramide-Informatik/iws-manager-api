@@ -39,7 +39,7 @@ class TitleServiceImplTest {
 
     @Test
     @DisplayName("Should save title successfully")
-    void create_ShouldReturnSavedTitle() {
+    void createShouldReturnSavedTitle() {
         // Arrange
         when(titleRepository.save(any(Title.class))).thenReturn(sampleTitle);
 
@@ -54,7 +54,7 @@ class TitleServiceImplTest {
 
     @Test
     @DisplayName("Should throw exception when creating null title")
-    void create_ShouldThrowException_WhenTitleIsNull() {
+    void createShouldThrowExceptionWhenTitleIsNull() {
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> titleService.create(null));
         verify(titleRepository, never()).save(any());
@@ -62,7 +62,7 @@ class TitleServiceImplTest {
 
     @Test
     @DisplayName("Should find title by ID")
-    void findById_ShouldReturnTitle_WhenExists() {
+    void findByIdShouldReturnTitleWhenExists() {
         // Arrange
         when(titleRepository.findById(1L)).thenReturn(Optional.of(sampleTitle));
 
@@ -77,7 +77,7 @@ class TitleServiceImplTest {
 
     @Test
     @DisplayName("Should return empty when title not found")
-    void findById_ShouldReturnEmpty_WhenNotFound() {
+    void findByIdShouldReturnEmptyWhenNotFound() {
         // Arrange
         when(titleRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -91,7 +91,7 @@ class TitleServiceImplTest {
 
     @Test
     @DisplayName("Should throw exception when finding with null ID")
-    void findById_ShouldThrowException_WhenIdIsNull() {
+    void findByIdShouldThrowExceptionWhenIdIsNull() {
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> titleService.findById(null));
         verify(titleRepository, never()).findById(any());
@@ -99,7 +99,7 @@ class TitleServiceImplTest {
 
     @Test
     @DisplayName("Should return all titles")
-    void findAll_ShouldReturnAllTitles() {
+    void findAllShouldReturnAllTitles() {
         // Arrange
         Title title2 = new Title();
         title2.setId(2L);
@@ -117,7 +117,7 @@ class TitleServiceImplTest {
 
     @Test
     @DisplayName("Should update title successfully")
-    void update_ShouldReturnUpdatedTitle() {
+    void updateShouldReturnUpdatedTitle() {
         // Arrange
         Title updatedDetails = new Title();
         updatedDetails.setName("Dr. Updated");
@@ -136,7 +136,7 @@ class TitleServiceImplTest {
 
     @Test
     @DisplayName("Should throw exception when updating non-existent title")
-    void update_ShouldThrowException_WhenTitleNotFound() {
+    void updateShouldThrowExceptionWhenTitleNotFound() {
         // Arrange
         when(titleRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -148,7 +148,7 @@ class TitleServiceImplTest {
 
     @Test
     @DisplayName("Should delete title successfully")
-    void delete_ShouldExecuteDelete() {
+    void deleteShouldExecuteDelete() {
         // Arrange
         doNothing().when(titleRepository).deleteById(1L);
 
@@ -161,7 +161,7 @@ class TitleServiceImplTest {
 
     @Test
     @DisplayName("Should throw exception when deleting with null ID")
-    void delete_ShouldThrowException_WhenIdIsNull() {
+    void deleteShouldThrowExceptionWhenIdIsNull() {
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> titleService.delete(null));
         verify(titleRepository, never()).deleteById(any());
