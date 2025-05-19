@@ -1,0 +1,169 @@
+package com.iws_manager.iws_manager_api.services.impl;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+import com.iws_manager.iws_manager_api.models.Title;
+import com.iws_manager.iws_manager_api.repositories.TitleRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+@ExtendWith(MockitoExtension.class)
+@DisplayName("Title Service Implementation Tests")
+class TitleServiceImplTest {
+
+    @Mock
+    private TitleRepository titleRepository;
+
+    @InjectMocks
+    private TitleServiceImpl titleService;
+
+    private Title sampleTitle;
+
+    @BeforeEach
+    void setUp() {
+        sampleTitle = new Title();
+        sampleTitle.setId(1L);
+        sampleTitle.setName("Dr.");
+    }
+
+    @Test
+    @DisplayName("Should save title successfully")
+    void create_ShouldReturnSavedTitle() {
+        // Arrange
+        when(titleRepository.save(any(Title.class))).thenReturn(sampleTitle);
+
+        // Act
+        Title result = titleService.create(sampleTitle);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("Dr.", result.getName());
+        verify(titleRepository, times(1)).save(any(Title.class));
+    }
+
+    @Test
+    @DisplayName("Should throw exception when creating null title")
+    void create_ShouldThrowException_WhenTitleIsNull() {
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> titleService.create(null));
+        verify(titleRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("Should find title by ID")
+    void findById_ShouldReturnTitle_WhenExists() {
+        // Arrange
+        when(titleRepository.findById(1L)).thenReturn(Optional.of(sampleTitle));
+
+        // Act
+        Optional<Title> result = titleService.findById(1L);
+
+        // Assert
+        assertTrue(result.isPresent());
+        assertEquals("Dr.", result.get().getName());
+        verify(titleRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    @DisplayName("Should return empty when title not found")
+    void findById_ShouldReturnEmpty_WhenNotFound() {
+        // Arrange
+        when(titleRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        // Act
+        Optional<Title> result = titleService.findById(99L);
+
+        // Assert
+        assertFalse(result.isPresent());
+        verify(titleRepository, times(1)).findById(99L);
+    }
+
+    @Test
+    @DisplayName("Should throw exception when finding with null ID")
+    void findById_ShouldThrowException_WhenIdIsNull() {
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> titleService.findById(null));
+        verify(titleRepository, never()).findById(any());
+    }
+
+    @Test
+    @DisplayName("Should return all titles")
+    void findAll_ShouldReturnAllTitles() {
+        // Arrange
+        Title title2 = new Title();
+        title2.setId(2L);
+        title2.setName("Prof.");
+        
+        when(titleRepository.findAll()).thenReturn(Arrays.asList(sampleTitle, title2));
+
+        // Act
+        List<Title> result = titleService.findAll();
+
+        // Assert
+        assertEquals(2, result.size());
+        verify(titleRepository, times(1)).findAll();
+    }
+
+    @Test
+    @DisplayName("Should update title successfully")
+    void update_ShouldReturnUpdatedTitle() {
+        // Arrange
+        Title updatedDetails = new Title();
+        updatedDetails.setName("Dr. Updated");
+
+        when(titleRepository.findById(1L)).thenReturn(Optional.of(sampleTitle));
+        when(titleRepository.save(any(Title.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // Act
+        Title result = titleService.update(1L, updatedDetails);
+
+        // Assert
+        assertEquals("Dr. Updated", result.getName());
+        verify(titleRepository, times(1)).findById(1L);
+        verify(titleRepository, times(1)).save(any(Title.class));
+    }
+
+    @Test
+    @DisplayName("Should throw exception when updating non-existent title")
+    void update_ShouldThrowException_WhenTitleNotFound() {
+        // Arrange
+        when(titleRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(RuntimeException.class, 
+            () -> titleService.update(99L, new Title()));
+        verify(titleRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("Should delete title successfully")
+    void delete_ShouldExecuteDelete() {
+        // Arrange
+        doNothing().when(titleRepository).deleteById(1L);
+
+        // Act
+        titleService.delete(1L);
+
+        // Assert
+        verify(titleRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    @DisplayName("Should throw exception when deleting with null ID")
+    void delete_ShouldThrowException_WhenIdIsNull() {
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> titleService.delete(null));
+        verify(titleRepository, never()).deleteById(any());
+    }
+}
