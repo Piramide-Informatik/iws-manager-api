@@ -29,6 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TitleControllerTest {
 
     private MockMvc mockMvc;
+    private String uri = "/api/v1/titles";
+    private String name = "$.name";
 
     @Mock
     private TitleService titleService;
@@ -57,29 +59,29 @@ class TitleControllerTest {
     void createTitleShouldReturnCreatedStatus() throws Exception {
         given(titleService.create(any(Title.class))).willReturn(title1);
 
-        mockMvc.perform(post("/api/v1/titles")
+        mockMvc.perform(post(uri)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(title1)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name").value("Dr."));
+                .andExpect(jsonPath(name).value("Dr."));
     }
 
     @Test
     void getTitleByIdShouldReturnTitle() throws Exception {
         given(titleService.findById(1L)).willReturn(Optional.of(title1));
 
-        mockMvc.perform(get("/api/v1/titles/1"))
+        mockMvc.perform(get(uri + "/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.name").value("Dr."));
+                .andExpect(jsonPath(name).value("Dr."));
     }
 
     @Test
     void getTitleByIdShouldReturnNotFound() throws Exception {
         given(titleService.findById(99L)).willReturn(Optional.empty());
 
-        mockMvc.perform(get("/api/v1/titles/99"))
+        mockMvc.perform(get(uri + "/99"))
                 .andExpect(status().isNotFound());
     }
 
@@ -88,7 +90,7 @@ class TitleControllerTest {
         List<Title> titles = Arrays.asList(title1, title2);
         given(titleService.findAll()).willReturn(titles);
 
-        mockMvc.perform(get("/api/v1/titles"))
+        mockMvc.perform(get(uri))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].name").value("Dr."))
@@ -103,11 +105,11 @@ class TitleControllerTest {
 
         given(titleService.update(1L, updatedTitle)).willReturn(updatedTitle);
 
-        mockMvc.perform(put("/api/v1/titles/1")
+        mockMvc.perform(put(uri + "/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatedTitle)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Dr. Updated"));
+                .andExpect(jsonPath(name).value("Dr. Updated"));
     }
 
     @Test
@@ -115,7 +117,7 @@ class TitleControllerTest {
         given(titleService.update(anyLong(), any(Title.class)))
             .willThrow(new RuntimeException("Title not found"));
 
-        mockMvc.perform(put("/api/v1/titles/99")
+        mockMvc.perform(put(uri + "/99")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(title1)))
                 .andExpect(status().isNotFound());
@@ -133,7 +135,7 @@ class TitleControllerTest {
     void createTitleShouldValidateInput() throws Exception {
         Title invalidTitle = new Title(); 
 
-        mockMvc.perform(post("/api/v1/titles")
+        mockMvc.perform(post(uri)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(invalidTitle)))
                 .andExpect(status().isBadRequest());
@@ -146,10 +148,10 @@ void createTitleShouldReturnCreatedTitle() throws Exception {
         
         when(titleService.create(any(Title.class))).thenReturn(validTitle);
         
-        mockMvc.perform(post("/api/v1/titles")
+        mockMvc.perform(post(uri)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(validTitle)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name").value("Dr."));
+                .andExpect(jsonPath(name).value("Dr."));
     }
 }
