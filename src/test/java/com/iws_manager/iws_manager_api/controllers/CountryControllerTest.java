@@ -31,6 +31,7 @@ class CountryControllerTest {
     private static final String NAME_JSON_PATH = "$.name";
     private static final String LABEL_JSON_PATH = "$.label";
     private static final String ERROR_JSON_PATH = "$.error";
+    private static final String ID = "/{id}";
     private static final long VALID_ID = 1L;
     private static final long INVALID_ID = 99L;
 
@@ -99,7 +100,7 @@ class CountryControllerTest {
     void getCountryByIdShouldReturnCountryWhenValidId() throws Exception {
         when(countryService.findById(VALID_ID)).thenReturn(Optional.of(validCountry));
 
-        mockMvc.perform(get(BASE_URL + "/{id}", VALID_ID))
+        mockMvc.perform(get(BASE_URL + ID, VALID_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(NAME_JSON_PATH).value(COUNTRY_NAME))
                 .andExpect(jsonPath(LABEL_JSON_PATH).value(COUNTRY_LABEL));
@@ -109,7 +110,7 @@ class CountryControllerTest {
     void getCountryByIdShouldReturnNotFoundWhenInvalidId() throws Exception {
         when(countryService.findById(INVALID_ID)).thenReturn(Optional.empty());
 
-        mockMvc.perform(get(BASE_URL + "/{id}", INVALID_ID))
+        mockMvc.perform(get(BASE_URL + ID, INVALID_ID))
                 .andExpect(status().isNotFound());
     }
 
@@ -129,7 +130,7 @@ class CountryControllerTest {
     void updateCountryShouldReturnUpdatedCountryWhenValidInput() throws Exception {
         when(countryService.update(eq(VALID_ID), any(Country.class))).thenReturn(validCountry);
 
-        mockMvc.perform(put(BASE_URL + "/{id}", VALID_ID)
+        mockMvc.perform(put(BASE_URL + ID, VALID_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(buildCountryJson(COUNTRY_NAME, COUNTRY_LABEL, true)))
                 .andExpect(status().isOk())
@@ -139,7 +140,7 @@ class CountryControllerTest {
     // ------------------- DELETE TESTS -------------------
     @Test
     void deleteCountryShouldReturnNoContentWhenValidId() throws Exception {
-        mockMvc.perform(delete(BASE_URL + "/{id}", VALID_ID))
+        mockMvc.perform(delete(BASE_URL + ID, VALID_ID))
                 .andExpect(status().isNoContent());
 
         verify(countryService, times(1)).delete(VALID_ID);
