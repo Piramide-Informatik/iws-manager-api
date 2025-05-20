@@ -29,5 +29,5 @@ public class Country extends BaseEntity{
     private String name;
 
     @Column(name = "isDefault")
-    private Integer isDefault;
+    private Boolean isDefault;
 }

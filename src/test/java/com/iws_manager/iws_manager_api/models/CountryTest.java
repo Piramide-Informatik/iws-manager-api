@@ -3,7 +3,6 @@ package com.iws_manager.iws_manager_api.models;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CountryTest {
@@ -11,7 +10,7 @@ public class CountryTest {
     private Country country = new Country();
     private String countryName = "Mexico";
     private String countryLabel = "MX";
-    private Integer isDefault = 0;
+    private Boolean isDefault = false;
     private LocalDateTime now = LocalDateTime.now();
 
     @Test
