@@ -38,7 +38,7 @@ public class CountryServiceImplTest {
 
     // ------------------- CREATE TESTS -------------------
     @Test
-    void create_ShouldReturnSavedCountry() {
+    void createShouldReturnSavedCountry() {
         when(countryRepository.save(any(Country.class))).thenReturn(country);
 
         Country savedCountry = countryService.create(country);
@@ -49,13 +49,13 @@ public class CountryServiceImplTest {
     }
 
     @Test
-    void create_ShouldThrowIllegalArgumentException_WhenCountryIsNull() {
+    void createShouldThrowIllegalArgumentExceptionWhenCountryIsNull() {
         assertThrows(IllegalArgumentException.class, () -> countryService.create(null));
     }
 
     // ------------------- FIND BY ID TESTS -------------------
     @Test
-    void findById_ShouldReturnCountry_WhenIdExists() {
+    void findByIdShouldReturnCountryWhenIdExists() {
         when(countryRepository.findById(1L)).thenReturn(Optional.of(country));
 
         Optional<Country> foundCountry = countryService.findById(1L);
@@ -65,7 +65,7 @@ public class CountryServiceImplTest {
     }
 
     @Test
-    void findById_ShouldReturnEmpty_WhenIdDoesNotExist() {
+    void findByIdShouldReturnEmptyWhenIdDoesNotExist() {
         when(countryRepository.findById(2L)).thenReturn(Optional.empty());
 
         Optional<Country> foundCountry = countryService.findById(2L);
@@ -74,13 +74,13 @@ public class CountryServiceImplTest {
     }
 
     @Test
-    void findById_ShouldThrowIllegalArgumentException_WhenIdIsNull() {
+    void findByIdShouldThrowIllegalArgumentExceptionWhenIdIsNull() {
         assertThrows(IllegalArgumentException.class, () -> countryService.findById(null));
     }
 
     // ------------------- FIND ALL TESTS -------------------
     @Test
-    void findAll_ShouldReturnAllCountries() {
+    void findAllShouldReturnAllCountries() {
         when(countryRepository.findAll()).thenReturn(List.of(country));
 
         List<Country> countries = countryService.findAll();
@@ -92,7 +92,7 @@ public class CountryServiceImplTest {
 
     // ------------------- UPDATE TESTS -------------------
     @Test
-    void update_ShouldUpdateCountry_WhenIdExists() {
+    void updateShouldUpdateCountryWhenIdExists() {
         Country updatedDetails = new Country();
         updatedDetails.setName("Argentina");
         updatedDetails.setLabel("AR");
@@ -109,7 +109,7 @@ public class CountryServiceImplTest {
     }
 
     @Test
-    void update_ShouldThrowRuntimeException_WhenIdDoesNotExist() {
+    void updateShouldThrowRuntimeExceptionWhenIdDoesNotExist() {
         Country updatedDetails = new Country();
         when(countryRepository.findById(2L)).thenReturn(Optional.empty());
 
@@ -117,14 +117,14 @@ public class CountryServiceImplTest {
     }
 
     @Test
-    void update_ShouldThrowIllegalArgumentException_WhenParamsAreNull() {
+    void updateShouldThrowIllegalArgumentExceptionWhenParamsAreNull() {
         assertThrows(IllegalArgumentException.class, () -> countryService.update(null, new Country()));
         assertThrows(IllegalArgumentException.class, () -> countryService.update(1L, null));
     }
 
     // ------------------- DELETE TESTS -------------------
     @Test
-    void delete_ShouldDeleteCountry_WhenIdExists() {
+    void deleteShouldDeleteCountryWhenIdExists() {
         doNothing().when(countryRepository).deleteById(1L);
 
         countryService.delete(1L);
@@ -133,7 +133,7 @@ public class CountryServiceImplTest {
     }
 
     @Test
-    void delete_ShouldThrowIllegalArgumentException_WhenIdIsNull() {
+    void deleteShouldThrowIllegalArgumentExceptionWhenIdIsNull() {
         assertThrows(IllegalArgumentException.class, () -> countryService.delete(null));
     }
 }
