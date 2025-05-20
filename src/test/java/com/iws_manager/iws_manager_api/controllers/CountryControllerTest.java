@@ -74,7 +74,7 @@ class CountryControllerTest {
 
     // ------------------- CREATE TESTS -------------------
     @Test
-    void createCountry_ShouldReturnCreated_WhenValidInput() throws Exception {
+    void createCountryShouldReturnCreatedWhenValidInput() throws Exception {
         when(countryService.create(any(Country.class))).thenReturn(validCountry);
 
         mockMvc.perform(post(BASE_URL)
@@ -86,7 +86,7 @@ class CountryControllerTest {
     }
 
     @Test
-    void createCountry_ShouldReturnBadRequest_WhenMissingName() throws Exception {
+    void createCountryShouldReturnBadRequestWhenMissingName() throws Exception {
         mockMvc.perform(post(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(buildCountryJson(null, COUNTRY_LABEL, null)))
@@ -96,7 +96,7 @@ class CountryControllerTest {
 
     // ------------------- GET BY ID TESTS -------------------
     @Test
-    void getCountryById_ShouldReturnCountry_WhenValidId() throws Exception {
+    void getCountryByIdShouldReturnCountryWhenValidId() throws Exception {
         when(countryService.findById(VALID_ID)).thenReturn(Optional.of(validCountry));
 
         mockMvc.perform(get(BASE_URL + "/{id}", VALID_ID))
@@ -106,7 +106,7 @@ class CountryControllerTest {
     }
 
     @Test
-    void getCountryById_ShouldReturnNotFound_WhenInvalidId() throws Exception {
+    void getCountryByIdShouldReturnNotFoundWhenInvalidId() throws Exception {
         when(countryService.findById(INVALID_ID)).thenReturn(Optional.empty());
 
         mockMvc.perform(get(BASE_URL + "/{id}", INVALID_ID))
@@ -115,7 +115,7 @@ class CountryControllerTest {
 
     // ------------------- GET ALL TESTS -------------------
     @Test
-    void getAllCountries_ShouldReturnAllCountries() throws Exception {
+    void getAllCountriesShouldReturnAllCountries() throws Exception {
         when(countryService.findAll()).thenReturn(Arrays.asList(validCountry));
 
         mockMvc.perform(get(BASE_URL))
@@ -126,7 +126,7 @@ class CountryControllerTest {
 
     // ------------------- UPDATE TESTS -------------------
     @Test
-    void updateCountry_ShouldReturnUpdatedCountry_WhenValidInput() throws Exception {
+    void updateCountryShouldReturnUpdatedCountryWhenValidInput() throws Exception {
         when(countryService.update(eq(VALID_ID), any(Country.class))).thenReturn(validCountry);
 
         mockMvc.perform(put(BASE_URL + "/{id}", VALID_ID)
@@ -138,7 +138,7 @@ class CountryControllerTest {
 
     // ------------------- DELETE TESTS -------------------
     @Test
-    void deleteCountry_ShouldReturnNoContent_WhenValidId() throws Exception {
+    void deleteCountryShouldReturnNoContentWhenValidId() throws Exception {
         mockMvc.perform(delete(BASE_URL + "/{id}", VALID_ID))
                 .andExpect(status().isNoContent());
 
