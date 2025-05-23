@@ -16,7 +16,7 @@ version = "0.0.1-SNAPSHOT"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
@@ -34,6 +34,8 @@ dependencies {
     // Spring Boot
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+
     
     // Lombok
     compileOnly("org.projectlombok:lombok")
@@ -49,6 +51,8 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
+    testImplementation("org.springframework.security:spring-security-test")
+
     testImplementation("org.junit.jupiter:junit-jupiter:${Versions.JUNIT}")
     testImplementation("org.mockito:mockito-core:${Versions.MOCKITO}")
     testImplementation("org.mockito:mockito-junit-jupiter:${Versions.MOCKITO}")
