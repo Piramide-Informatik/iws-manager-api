@@ -18,6 +18,6 @@ public class CompanyType extends BaseEntity{
     /**
      * TypeName of the company type (e.g., Public, Private).
      */
-    @Column(name = "typeName", nullable = false, length = 100)
-    private String typeName;
+    @Column(name = "name", nullable = false, length = 100)
+    private String name;
 }
