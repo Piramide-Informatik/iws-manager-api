@@ -29,12 +29,13 @@ class CompanyTypeServiceImplTest {
     private CompanyTypeServiceImpl companyTypeService;
 
     private CompanyType sampleCompanyType;
+    private String name = "Public";
 
     @BeforeEach
     void setUp() {
         sampleCompanyType = new CompanyType();
         sampleCompanyType.setId(1L);
-        sampleCompanyType.setName("Public");
+        sampleCompanyType.setName(name);
     }
 
     @Test
@@ -48,7 +49,7 @@ class CompanyTypeServiceImplTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals("Public", result.getName());
+        assertEquals(name, result.getName());
         verify(companyTypeRepository, times(1)).save(any(CompanyType.class));
     }
 
@@ -71,7 +72,7 @@ class CompanyTypeServiceImplTest {
 
         // Assert
         assertTrue(result.isPresent());
-        assertEquals("Public", result.get().getName());
+        assertEquals(name, result.get().getName());
         verify(companyTypeRepository, times(1)).findById(1L);
     }
 
