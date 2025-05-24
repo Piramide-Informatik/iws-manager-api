@@ -22,6 +22,6 @@ import lombok.*;
 @Table(name = "salutation")
 public class Salutation extends BaseEntity{
 
-    @Column(name = "salutation", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 }
