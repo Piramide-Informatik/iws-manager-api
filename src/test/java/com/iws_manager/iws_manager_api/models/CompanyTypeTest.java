@@ -14,16 +14,16 @@ public class CompanyTypeTest {
     @Test
     void testCompanyTypeCreation(){
         //Act
-        companyType.setTypeName(typeName);
+        companyType.setName(typeName);
 
         //Assert
-        assertEquals(typeName, companyType.getTypeName());
+        assertEquals(typeName, companyType.getName());
     }
 
     @Test
     void testCompanyTypeWithAuditFields(){
         //Arrange 
-        companyType.setTypeName("Private");
+        companyType.setName("Private");
         LocalDateTime now = LocalDateTime.now();
 
         //Act
@@ -38,11 +38,11 @@ public class CompanyTypeTest {
     @Test
     void testEqualsAndHashCode(){
         //Arrange
-        companyType.setTypeName(typeName);
+        companyType.setName(typeName);
         companyType.setId(1L);
 
         CompanyType companyType2 = new CompanyType();
-        companyType2.setTypeName(typeName);
+        companyType2.setName(typeName);
         companyType2.setId(1L);
 
         //Assert
