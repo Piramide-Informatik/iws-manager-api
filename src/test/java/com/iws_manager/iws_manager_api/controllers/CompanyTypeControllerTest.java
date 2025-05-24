@@ -31,6 +31,7 @@ class CompanyTypeControllerTest {
     private MockMvc mockMvc;
     private String uri = "/api/v1/company-types";
     private String name = "$.name";
+    private String ctname = "Public";
 
     @Mock
     private CompanyTypeService companyTypeService;
@@ -48,7 +49,7 @@ class CompanyTypeControllerTest {
         
         companyType1 = new CompanyType();
         companyType1.setId(1L);
-        companyType1.setName("Public");
+        companyType1.setName(ctname);
 
         companyType2 = new CompanyType();
         companyType2.setId(2L);
@@ -64,7 +65,7 @@ class CompanyTypeControllerTest {
                 .content(objectMapper.writeValueAsString(companyType1)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath(name).value("Public"));
+                .andExpect(jsonPath(name).value(ctname));
     }
 
     @Test
@@ -74,7 +75,7 @@ class CompanyTypeControllerTest {
         mockMvc.perform(get(uri + "/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath(name).value("Public"));
+                .andExpect(jsonPath(name).value(ctname));
     }
 
     @Test
@@ -93,7 +94,7 @@ class CompanyTypeControllerTest {
         mockMvc.perform(get(uri))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].name").value("Public"))
+                .andExpect(jsonPath("$[0].name").value(ctname))
                 .andExpect(jsonPath("$[1].id").value(2L))
                 .andExpect(jsonPath("$[1].name").value("Private"));
     }
@@ -144,7 +145,7 @@ class CompanyTypeControllerTest {
     @Test
 void createCompanyTypeShouldReturnCreatedCompanyType() throws Exception {
         CompanyType validCompanyType = new CompanyType();
-        validCompanyType.setName("Public");
+        validCompanyType.setName(ctname);
         
         when(companyTypeService.create(any(CompanyType.class))).thenReturn(validCompanyType);
         
@@ -152,6 +153,6 @@ void createCompanyTypeShouldReturnCreatedCompanyType() throws Exception {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(validCompanyType)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath(name).value("Public"));
+                .andExpect(jsonPath(name).value(ctname));
     }
 }
