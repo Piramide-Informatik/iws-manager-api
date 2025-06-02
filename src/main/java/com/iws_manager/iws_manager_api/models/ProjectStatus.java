@@ -17,12 +17,12 @@ import lombok.*;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "project-status")
+@Table(name = "projectstatus")
 public class ProjectStatus extends BaseEntity{
 
     /**
-     * Official name of the project-status (e.g., "Bavaria", "Berlin", "Hamburg").
+     * Official name of the project-status (e.g., "Bavaria", "Berlin").
      */
-    @Column(name = "name", nullable = false)
+    @Column(name = "projectstatus", nullable = false)
     private String name;
 }
