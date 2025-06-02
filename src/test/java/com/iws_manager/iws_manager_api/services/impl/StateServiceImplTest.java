@@ -29,12 +29,13 @@ class StateServiceImplTest {
     private StateServiceImpl stateService;
 
     private State sampleState;
+    private String stateName = "California";
 
     @BeforeEach
     void setUp() {
         sampleState = new State();
         sampleState.setId(1L);
-        sampleState.setName("California");
+        sampleState.setName(stateName);
     }
 
     @Test
@@ -48,7 +49,7 @@ class StateServiceImplTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals("California", result.getName());
+        assertEquals(stateName, result.getName());
         verify(stateRepository, times(1)).save(any(State.class));
     }
 
@@ -71,7 +72,7 @@ class StateServiceImplTest {
 
         // Assert
         assertTrue(result.isPresent());
-        assertEquals("California", result.get().getName());
+        assertEquals(stateName, result.get().getName());
         verify(stateRepository, times(1)).findById(1L);
     }
 
