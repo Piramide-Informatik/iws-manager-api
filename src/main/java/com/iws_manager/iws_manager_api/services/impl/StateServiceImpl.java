@@ -92,7 +92,7 @@ public class StateServiceImpl implements StateService {
 
         return stateRepository.findById(id)
                 .map(existingState -> {
-                    existingState.setName(existingState.getName());
+                    existingState.setName(stateDetails.getName());
                     return stateRepository.save(existingState);
                 })
                 .orElseThrow(() -> new RuntimeException("State not found with id: " + id));
