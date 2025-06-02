@@ -31,6 +31,7 @@ class StateControllerTest {
     private MockMvc mockMvc;
     private String uri = "/api/v1/states";
     private String name = "$.name";
+    private String stateName = "California";
 
     @Mock
     private StateService stateService;
@@ -48,7 +49,7 @@ class StateControllerTest {
         
         state1 = new State();
         state1.setId(1L);
-        state1.setName("California");
+        state1.setName(stateName);
 
         state2 = new State();
         state2.setId(2L);
@@ -64,7 +65,7 @@ class StateControllerTest {
                 .content(objectMapper.writeValueAsString(state1)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath(name).value("California"));
+                .andExpect(jsonPath(name).value(stateName));
     }
 
     @Test
@@ -74,7 +75,7 @@ class StateControllerTest {
         mockMvc.perform(get(uri + "/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath(name).value("California"));
+                .andExpect(jsonPath(name).value(stateName));
     }
 
     @Test
@@ -93,7 +94,7 @@ class StateControllerTest {
         mockMvc.perform(get(uri))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].name").value("California"))
+                .andExpect(jsonPath("$[0].name").value(stateName))
                 .andExpect(jsonPath("$[1].id").value(2L))
                 .andExpect(jsonPath("$[1].name").value("Florida"));
     }
@@ -144,7 +145,7 @@ class StateControllerTest {
     @Test
 void createStateShouldReturnCreatedState() throws Exception {
         State validState = new State();
-        validState.setName("California");
+        validState.setName(stateName);
         
         when(stateService.create(any(State.class))).thenReturn(validState);
         
@@ -152,6 +153,6 @@ void createStateShouldReturnCreatedState() throws Exception {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(validState)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath(name).value("California"));
+                .andExpect(jsonPath(name).value(stateName));
     }
 }
