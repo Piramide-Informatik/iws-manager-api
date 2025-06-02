@@ -34,7 +34,7 @@ class StateServiceImplTest {
     void setUp() {
         sampleState = new State();
         sampleState.setId(1L);
-        sampleState.setName("Mr.");
+        sampleState.setName("California");
     }
 
     @Test
@@ -48,7 +48,7 @@ class StateServiceImplTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals("Mr.", result.getName());
+        assertEquals("California", result.getName());
         verify(stateRepository, times(1)).save(any(State.class));
     }
 
@@ -71,7 +71,7 @@ class StateServiceImplTest {
 
         // Assert
         assertTrue(result.isPresent());
-        assertEquals("Mr.", result.get().getName());
+        assertEquals("California", result.get().getName());
         verify(stateRepository, times(1)).findById(1L);
     }
 
@@ -103,7 +103,7 @@ class StateServiceImplTest {
         // Arrange
         State state2 = new State();
         state2.setId(2L);
-        state2.setName("Mrs.");
+        state2.setName("Florida");
         
         when(stateRepository.findAll()).thenReturn(Arrays.asList(sampleState, state2));
 
@@ -120,7 +120,7 @@ class StateServiceImplTest {
     void updateShouldReturnUpdatedState() {
         // Arrange
         State updatedDetails = new State();
-        updatedDetails.setName("Mr. Updated");
+        updatedDetails.setName("California Updated");
 
         when(stateRepository.findById(1L)).thenReturn(Optional.of(sampleState));
         when(stateRepository.save(any(State.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -129,7 +129,7 @@ class StateServiceImplTest {
         State result = stateService.update(1L, updatedDetails);
 
         // Assert
-        assertEquals("Mr. Updated", result.getName());
+        assertEquals("California Updated", result.getName());
         verify(stateRepository, times(1)).findById(1L);
         verify(stateRepository, times(1)).save(any(State.class));
     }
