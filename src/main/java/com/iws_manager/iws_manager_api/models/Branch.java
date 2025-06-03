@@ -14,8 +14,9 @@ import lombok.*;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "branch")
+@AttributeOverride(name = "id", column = @Column(name = "branchid"))
 public class Branch extends BaseEntity{
 
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(name = "branch", length = 255)
     private String name;
 }
