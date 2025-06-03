@@ -24,6 +24,6 @@ public class State extends BaseEntity{
     /**
      * Official name of the state (e.g., "Bavaria", "Berlin", "Hamburg").
      */
-    @Column(name = "name", nullable = false)
+    @Column(name = "statename", nullable = false, length = 255)
     private String name;
 }

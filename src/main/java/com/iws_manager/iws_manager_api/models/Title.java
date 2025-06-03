@@ -18,6 +18,6 @@ import lombok.*;
 @AttributeOverride(name = "id", column = @Column(name = "titleid"))
 public class Title extends BaseEntity{
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = false, length = 255)
     private String name;
 }
