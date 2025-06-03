@@ -18,14 +18,14 @@ import lombok.*;
 public class Customer extends BaseEntity{
 
     @ManyToOne
-    @JoinColumn(name = "branchid", referencedColumnName = "branchid")
+    @JoinColumn(name = "branchid", referencedColumnName = "branchid", nullable = true)
     private Branch branch;
 
     @Column(name = "city", nullable = true, length = 255)
     private String city;
 
     @ManyToOne
-    @JoinColumn(name = "companytypeid", referencedColumnName = "companytypeid", nullable = false)
+    @JoinColumn(name = "companytypeid", referencedColumnName = "companytypeid", nullable = true)
     private CompanyType companytype;
 
     @ManyToOne
@@ -72,7 +72,7 @@ public class Customer extends BaseEntity{
     private String phone;
 
     @ManyToOne
-    @JoinColumn(name = "stateid", referencedColumnName = "stateid", nullable = false)
+    @JoinColumn(name = "stateid", referencedColumnName = "stateid", nullable = true)
     private State state;
 
     @Column(name = "street", nullable = true, length = 255)
