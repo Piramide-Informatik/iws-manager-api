@@ -18,11 +18,12 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "state")
+@AttributeOverride(name = "id", column = @Column(name = "stateid"))
 public class State extends BaseEntity{
 
     /**
      * Official name of the state (e.g., "Bavaria", "Berlin", "Hamburg").
      */
-    @Column(name = "name", nullable = false)
+    @Column(name = "statename", nullable = true, length = 255)
     private String name;
 }
