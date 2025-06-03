@@ -23,6 +23,6 @@ import lombok.*;
 @AttributeOverride(name = "id", column = @Column(name = "salutationid"))
 public class Salutation extends BaseEntity{
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "salutation", nullable = true, length = 255)
     private String name;
 }
