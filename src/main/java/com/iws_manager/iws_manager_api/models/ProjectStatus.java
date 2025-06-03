@@ -18,6 +18,7 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "projectstatus")
+@AttributeOverride(name = "id", column = @Column(name = "statusid"))
 public class ProjectStatus extends BaseEntity{
 
     /**
