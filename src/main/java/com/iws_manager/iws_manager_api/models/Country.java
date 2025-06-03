@@ -20,12 +20,13 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "country")
+@AttributeOverride(name = "id", column = @Column(name = "countryid"))
 public class Country extends BaseEntity{
 
-    @Column(name = "label", nullable = false)
+    @Column(name = "countrylabel", nullable = true, length = 255)
     private String label;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "countryname", nullable = true, length = 255)
     private String name;
 
     @Column(name = "isDefault")
