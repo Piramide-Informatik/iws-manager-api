@@ -13,11 +13,12 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "companyType")
+@Table(name = "companytype")
+@AttributeOverride(name = "id", column = @Column(name = "companytypeid"))
 public class CompanyType extends BaseEntity{
     /**
      * TypeName of the company type (e.g., Public, Private).
      */
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(name = "companytype", nullable = true, length = 255)
     private String name;
 }
