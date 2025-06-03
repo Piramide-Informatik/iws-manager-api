@@ -14,75 +14,76 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true, exclude = {"branch", "companytype", "country", "state"})
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "customer")
+@AttributeOverride(name = "id", column = @Column(name = "customerid"))
 public class Customer extends BaseEntity{
 
     @ManyToOne
-    @JoinColumn(name = "branch_id")
+    @JoinColumn(name = "branchid", referencedColumnName = "branchid")
     private Branch branch;
 
-    @Column(name = "city", nullable = false)
+    @Column(name = "city", nullable = true, length = 255)
     private String city;
 
     @ManyToOne
-    @JoinColumn(name = "companytype_id", nullable = false)
+    @JoinColumn(name = "companytypeid", referencedColumnName = "companytypeid", nullable = false)
     private CompanyType companytype;
 
     @ManyToOne
-    @JoinColumn(name = "country_id")
+    @JoinColumn(name = "countryid", referencedColumnName = "countryid")
     private Country country;
 
-    @Column(name = "customerno", nullable = false)
-    private String customerno;
+    @Column(name = "customerno", nullable = true)
+    private Integer customerno;
 
-    @Column(name = "customername1", nullable = false)
+    @Column(name = "customername1", nullable = true, length = 255)
     private String customername1;
     
-    @Column(name = "customername2", nullable = false)
+    @Column(name = "customername2", nullable = true, length = 255)
     private String customername2;
 
-    @Column(name = "email1", nullable = false)
+    @Column(name = "email1", nullable = true, length = 255)
     private String email1;
 
-    @Column(name = "email2", nullable = false)
+    @Column(name = "email2", nullable = true, length = 255)
     private String email2;
 
-    @Column(name = "email3", nullable = false)
+    @Column(name = "email3", nullable = true, length = 255)
     private String email3;
 
-    @Column(name = "email4", nullable = false)
+    @Column(name = "email4", nullable = true, length = 255)
     private String email4;
 
-    @Column(name = "homepage", nullable = false)
+    @Column(name = "homepage", nullable = true, length = 255)
     private String homepage;
 
-    @Column(name = "hoursperweek", nullable = false)
+    @Column(name = "hoursperweek", nullable = true, columnDefinition = "DECIMAL(5,2)")
     private Double hoursperweek;
 
-    @Column(name = "maxhoursmonth", nullable = false)
+    @Column(name = "maxhoursmonth", nullable = true, columnDefinition = "DECIMAL(5,2)")
     private Double maxhoursmonth;
 
-    @Column(name = "maxhoursyear", nullable = false)
+    @Column(name = "maxhoursyear", nullable = true, columnDefinition = "DECIMAL(5,2)")
     private Double maxhoursyear;
 
-    @Column(name = "note", nullable = false)
+    @Column(name = "note", columnDefinition = "TEXT", nullable = true)
     private String note;
 
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone", nullable = true, length = 255)
     private String phone;
 
     @ManyToOne
-    @JoinColumn(name = "state_id", nullable = false)
+    @JoinColumn(name = "stateid", referencedColumnName = "stateid", nullable = false)
     private State state;
 
-    @Column(name = "street", nullable = false)
+    @Column(name = "street", nullable = true, length = 255)
     private String street;
 
-    @Column(name = "taxno", nullable = false)
+    @Column(name = "taxno", nullable = true, length = 255)
     private String taxno;
 
-    @Column(name = "taxoffice", nullable = false)
+    @Column(name = "taxoffice", nullable = true, length = 255)
     private String taxoffice;
 
-    @Column(name = "zipcode", nullable = false)
+    @Column(name = "zipcode", nullable = true, length = 255)
     private String zipcode;
 }

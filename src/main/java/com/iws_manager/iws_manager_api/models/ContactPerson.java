@@ -16,51 +16,52 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "contactPerson")
+@Table(name = "contactperson")
+@AttributeOverride(name = "id", column = @Column(name = "contactpersonid"))
 public class ContactPerson extends BaseEntity{
 
     /**
      * Customer to whom the contact person is linked.
      */
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customerid", referencedColumnName = "customerid", nullable = false)
     private Customer customer;
-
-    /**
-     * Title of the contact person (e.g., Mr., Mrs.).
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "title_id", nullable = false)
-    private Title title;
-
-    /**
-     * Salutation of the contact person (e.g., Dr., Eng.).
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "salutation_id", nullable = false)
-    private Salutation salutation;
 
     /**
      * First name of the contact person.
      */
-    @Column(name = "firstName", nullable = false)
+    @Column(name = "firstname", length = 255)
     private String firstName;
-
-    /**
-     * Last name of the contact person.
-     */
-    @Column(name = "lastName", nullable = false)
-    private String lastName;
 
     /**
      * Indicates whether the contact person is responsible for invoicing.
      */
-    @Column(name = "forInvoincing", nullable = false)
+    @Column(name = "forinvoincing")
     private Integer forInvoincing;
 
     /**
      * Job position or role of the contact person.
      */
-    @Column(name = "function", nullable = false)
+    @Column(name = "`function`", length = 255)
     private String function;
+
+    /**
+     * Last name of the contact person.
+     */
+    @Column(name = "lastname", length = 255)
+    private String lastName;
+
+    /**
+     * Salutation of the contact person (e.g., Dr., Eng.).
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "salutationid",  referencedColumnName = "salutationid", nullable = false)
+    private Salutation salutation;
+
+    /**
+     * Title of the contact person (e.g., Mr., Mrs.).
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "titleid",  referencedColumnName = "titleid", nullable = false)
+    private Title title;
 }
