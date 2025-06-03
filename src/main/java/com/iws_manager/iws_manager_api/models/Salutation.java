@@ -20,6 +20,7 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "salutation")
+@AttributeOverride(name = "id", column = @Column(name = "salutationid"))
 public class Salutation extends BaseEntity{
 
     @Column(name = "name", nullable = false)

@@ -4,6 +4,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.iws_manager.iws_manager_api.models.base.BaseEntity;
 
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -21,11 +22,12 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "companyType")
+@Table(name = "companytype")
+@AttributeOverride(name = "id", column = @Column(name = "companytypeid"))
 public class CompanyType extends BaseEntity{
     /**
      * TypeName of the company type (e.g., Public, Private).
      */
-    @Column(name = "name", nullable = true, length = 255)
+    @Column(name = "companytype", nullable = true, length = 255)
     private String name;
 }

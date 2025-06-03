@@ -14,6 +14,7 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true, exclude = {"branch", "companytype", "country", "state"})
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "customer")
+@AttributeOverride(name = "id", column = @Column(name = "customerid"))
 public class Customer extends BaseEntity{
 
     @ManyToOne

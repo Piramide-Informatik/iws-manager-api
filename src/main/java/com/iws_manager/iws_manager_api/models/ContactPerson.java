@@ -34,7 +34,7 @@ public class ContactPerson extends BaseEntity{
      * Customer to whom the contact person is linked.
      */
     @ManyToOne
-    @JoinColumn(name = "customerid", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "customerid", referencedColumnName = "customerid", nullable = false)
     private Customer customer;
 
     /**
@@ -65,13 +65,13 @@ public class ContactPerson extends BaseEntity{
      * Salutation of the contact person (e.g., Dr., Eng.).
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "salutationid",  referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "salutationid",  referencedColumnName = "salutationid", nullable = false)
     private Salutation salutation;
 
     /**
      * Title of the contact person (e.g., Mr., Mrs.).
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "titleid",  referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "titleid",  referencedColumnName = "titleid", nullable = false)
     private Title title;
 }
