@@ -55,13 +55,13 @@ public class ContactPerson extends BaseEntity{
      * Salutation of the contact person (e.g., Dr., Eng.).
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "salutationid",  referencedColumnName = "salutationid", nullable = false)
+    @JoinColumn(name = "salutationid",  referencedColumnName = "salutationid", nullable = true)
     private Salutation salutation;
 
     /**
      * Title of the contact person (e.g., Mr., Mrs.).
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "titleid",  referencedColumnName = "titleid", nullable = false)
+    @JoinColumn(name = "titleid",  referencedColumnName = "titleid", nullable = true)
     private Title title;
 }
