@@ -23,10 +23,10 @@ import lombok.*;
 @AttributeOverride(name = "id", column = @Column(name = "countryid"))
 public class Country extends BaseEntity{
 
-    @Column(name = "countrylabel", nullable = false)
+    @Column(name = "countrylabel", nullable = true, length = 255)
     private String label;
 
-    @Column(name = "countryname", nullable = false)
+    @Column(name = "countryname", nullable = true, length = 255)
     private String name;
 
     @Column(name = "isdefault")
