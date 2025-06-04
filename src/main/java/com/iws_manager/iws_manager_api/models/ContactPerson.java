@@ -36,8 +36,8 @@ public class ContactPerson extends BaseEntity{
     /**
      * Indicates whether the contact person is responsible for invoicing.
      */
-    @Column(name = "forinvoincing")
-    private Integer forInvoincing;
+    @Column(name = "forinvoicing")
+    private Integer forInvoicing;
 
     /**
      * Job position or role of the contact person.

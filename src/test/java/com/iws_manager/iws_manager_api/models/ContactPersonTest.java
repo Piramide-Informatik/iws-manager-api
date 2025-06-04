@@ -2,8 +2,8 @@ package com.iws_manager.iws_manager_api.models;
 
 import java.time.LocalDateTime;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class ContactPersonTest {
 
@@ -16,7 +16,7 @@ public class ContactPersonTest {
         ContactPerson cp = new ContactPerson();
         cp.setFirstName(firstName);
         cp.setLastName(lastName);
-        cp.setForInvoincing(forInvoicing);
+        cp.setForInvoicing(forInvoicing);
         cp.setFunction(function);
         cp.setCreatedAt(createdAt);
         cp.setUpdatedAt(updatedAt);
@@ -35,7 +35,7 @@ public class ContactPersonTest {
         // Assert
         assertEquals(firstName, contactPerson.getFirstName());
         assertEquals(lastName, contactPerson.getLastName());
-        assertEquals(forInvoicing, contactPerson.getForInvoincing());
+        assertEquals(forInvoicing, contactPerson.getForInvoicing());
         assertEquals(function, contactPerson.getFunction());
     }
 
