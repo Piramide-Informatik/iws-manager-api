@@ -11,6 +11,8 @@ import com.iws_manager.iws_manager_api.models.Customer;
 import com.iws_manager.iws_manager_api.repositories.CustomerRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.CustomerService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 /**
  * Implementation of the {@link CustomerService} interface for managing Customer entities.
  * Provides CRUD operations and business logic for Customer management.
@@ -131,6 +133,10 @@ public class CustomerServiceImpl implements CustomerService {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
         }
+        if (!customerRepository.existsById(id)) {  
+            throw new EntityNotFoundException("Customer not found with id: " + id);
+        }
+        
         customerRepository.deleteById(id);
     }
 }
