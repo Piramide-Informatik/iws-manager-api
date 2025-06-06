@@ -38,7 +38,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void createCustomer_ShouldReturnCreated() {
+    void createCustomerShouldReturnCreated() {
         when(customerService.create(any(Customer.class))).thenReturn(testCustomer);
 
         ResponseEntity<?> response = customerController.createCustomer(testCustomer);
@@ -49,7 +49,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void getCustomerById_ShouldReturnCustomer() {
+    void getCustomerByIdShouldReturnCustomer() {
         when(customerService.findById(1L)).thenReturn(Optional.of(testCustomer));
 
         ResponseEntity<Customer> response = customerController.getCustomerById(1L);
@@ -59,7 +59,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void getCustomerById_ShouldReturnNotFound() {
+    void getCustomerByIdShouldReturnNotFound() {
         when(customerService.findById(1L)).thenReturn(Optional.empty());
 
         ResponseEntity<Customer> response = customerController.getCustomerById(1L);
@@ -68,7 +68,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void getAllCustomers_ShouldReturnAllCustomers() {
+    void getAllCustomersShouldReturnAllCustomers() {
         List<Customer> customers = Arrays.asList(testCustomer, new Customer());
         when(customerService.findAll()).thenReturn(customers);
 
@@ -79,7 +79,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void updateCustomer_ShouldReturnUpdatedCustomer() {
+    void updateCustomerShouldReturnUpdatedCustomer() {
         Customer updatedDetails = new Customer();
         updatedDetails.setCustomername1("Updated Name");
         
@@ -92,7 +92,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void updateCustomer_ShouldReturnNotFound() {
+    void updateCustomerShouldReturnNotFound() {
         Customer updatedDetails = new Customer();
         when(customerService.update(1L, updatedDetails)).thenThrow(new RuntimeException());
 
@@ -102,7 +102,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void deleteCustomer_ShouldReturnNoContent() {
+    void deleteCustomerShouldReturnNoContent() {
         doNothing().when(customerService).delete(1L);
 
         ResponseEntity<Void> response = customerController.deleteCustomer(1L);
