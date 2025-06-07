@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Version;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -66,4 +67,19 @@ public abstract class BaseEntity {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+     /**
+     * Version number for optimistic locking control.
+     * <p>
+     * This field is automatically managed by JPA to implement optimistic locking.
+     * It gets incremented automatically on each update to the entity, preventing
+     * concurrent modifications (lost updates).
+     * 
+     * <p>When an entity is updated, the version in memory is compared with the version
+     * in the database. If they differ, an OptimisticLockException is thrown, indicating
+     * the entity was modified by another transaction.
+     */
+    @Version
+    @Column(name = "version", nullable = false, columnDefinition = "bigint default 0")
+    private Long version;
 }
