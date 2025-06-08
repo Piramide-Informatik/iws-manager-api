@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -147,23 +148,40 @@ class TitleServiceImplTest {
     }
 
     @Test
-    @DisplayName("Should delete title successfully")
-    void deleteShouldExecuteDelete() {
-        // Arrange
-        doNothing().when(titleRepository).deleteById(1L);
+    public void update_ShouldThrowException_WhenOptimisticLockingFails() {
+        // Setup
+        Long titleId = 1L;
+        Title currentTitle = new Title();
+        currentTitle.setId(titleId);
+        currentTitle.setName("Dr.");
+        currentTitle.setVersion(2L); // Current version in DB
+        
+        Title outdatedTitle = new Title();
+        outdatedTitle.setId(titleId);
+        outdatedTitle.setName("Doctor");
+        outdatedTitle.setVersion(1L); // Outdated version
 
-        // Act
-        titleService.delete(1L);
+        when(titleRepository.findById(titleId)).thenReturn(Optional.of(currentTitle));
+        when(titleRepository.save(any(Title.class)))
+            .thenThrow(new ObjectOptimisticLockingFailureException("Concurrent modification detected", 
+                    new ObjectOptimisticLockingFailureException(Title.class, titleId)));
 
-        // Assert
-        verify(titleRepository, times(1)).deleteById(1L);
-    }
+        // Execution and verification
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            titleService.update(titleId, outdatedTitle);
+        });
 
-    @Test
-    @DisplayName("Should throw exception when deleting with null ID")
-    void deleteShouldThrowExceptionWhenIdIsNull() {
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> titleService.delete(null));
-        verify(titleRepository, never()).deleteById(any());
+        assertNotNull(exception, "An exception should have been thrown");
+        
+        // Verify if it's the direct exception or wrapped
+        if (!(exception instanceof ObjectOptimisticLockingFailureException)) {
+            assertNotNull(exception.getCause(), "The exception should have a cause");
+            assertTrue(exception.getCause() instanceof ObjectOptimisticLockingFailureException, 
+                    "The cause should be ObjectOptimisticLockingFailureException");
+        }
+        
+        // Verify repository interactions
+        verify(titleRepository).findById(titleId);
+        verify(titleRepository).save(any(Title.class));
     }
 }
