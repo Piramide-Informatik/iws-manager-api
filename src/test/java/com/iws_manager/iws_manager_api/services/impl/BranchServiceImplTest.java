@@ -30,12 +30,13 @@ class BranchServiceImplTest {
     private BranchServiceImpl branchService;
 
     private Branch sampleBranch;
+    private String branchName = "Talent management";
 
     @BeforeEach
     void setUp() {
         sampleBranch = new Branch();
         sampleBranch.setId(1L);
-        sampleBranch.setName("Dr.");
+        sampleBranch.setName(branchName);
     }
 
     @Test
@@ -49,7 +50,7 @@ class BranchServiceImplTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals("Dr.", result.getName());
+        assertEquals(branchName, result.getName());
         verify(branchRepository, times(1)).save(any(Branch.class));
     }
 
@@ -72,7 +73,7 @@ class BranchServiceImplTest {
 
         // Assert
         assertTrue(result.isPresent());
-        assertEquals("Dr.", result.get().getName());
+        assertEquals(branchName, result.get().getName());
         verify(branchRepository, times(1)).findById(1L);
     }
 
@@ -104,7 +105,7 @@ class BranchServiceImplTest {
         // Arrange
         Branch branch2 = new Branch();
         branch2.setId(2L);
-        branch2.setName("Prof.");
+        branch2.setName("Economics department");
         
         when(branchRepository.findAll()).thenReturn(Arrays.asList(sampleBranch, branch2));
 
@@ -121,7 +122,7 @@ class BranchServiceImplTest {
     void updateShouldReturnUpdatedBranch() {
         // Arrange
         Branch updatedDetails = new Branch();
-        updatedDetails.setName("Dr. Updated");
+        updatedDetails.setName("Talent management Updated");
 
         when(branchRepository.findById(1L)).thenReturn(Optional.of(sampleBranch));
         when(branchRepository.save(any(Branch.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -130,7 +131,7 @@ class BranchServiceImplTest {
         Branch result = branchService.update(1L, updatedDetails);
 
         // Assert
-        assertEquals("Dr. Updated", result.getName());
+        assertEquals("Talent management Updated", result.getName());
         verify(branchRepository, times(1)).findById(1L);
         verify(branchRepository, times(1)).save(any(Branch.class));
     }
@@ -153,7 +154,7 @@ class BranchServiceImplTest {
         Long branchId = 1L;
         Branch currentBranch = new Branch();
         currentBranch.setId(branchId);
-        currentBranch.setName("Dr.");
+        currentBranch.setName(branchName);
         currentBranch.setVersion(2L); // Current version in DB
         
         Branch outdatedBranch = new Branch();
@@ -167,9 +168,7 @@ class BranchServiceImplTest {
                     new ObjectOptimisticLockingFailureException(Branch.class, branchId)));
 
         // Execution and verification
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            branchService.update(branchId, outdatedBranch);
-        });
+        Exception exception = assertThrows(RuntimeException.class, () -> branchService.update(branchId, outdatedBranch));
 
         assertNotNull(exception, "An exception should have been thrown");
         
