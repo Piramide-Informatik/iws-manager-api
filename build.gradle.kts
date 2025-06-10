@@ -1,6 +1,7 @@
 object Versions {
     const val JUNIT = "5.10.1"
     const val MOCKITO = "5.16.0"
+    const val MARIADB = "3.3.3"
 }
 
 plugins {
@@ -45,7 +46,8 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     
     // Database
-    runtimeOnly("org.postgresql:postgresql")
+    runtimeOnly("org.mariadb.jdbc:mariadb-java-client:${Versions.MARIADB}")
+
 
     // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
