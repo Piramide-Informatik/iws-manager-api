@@ -42,67 +42,67 @@ public class BranchServiceImpl implements BranchService {
      * @throws IllegalArgumentException if the branch parameter is null
      */
     @Override
-    public Title create(Title title) {
-        if (title == null) {
-            throw new IllegalArgumentException("Title cannot be null");
+    public Branch create(Branch branch) {
+        if (branch == null) {
+            throw new IllegalArgumentException("Branch cannot be null");
         }
-        return titleRepository.save(title);
+        return branchRepository.save(branch);
     }
 
     /**
-     * Retrieves a Title by its unique identifier.
+     * Retrieves a Branch by its unique identifier.
      * 
-     * @param id the ID of the Title to retrieve
-     * @return an Optional containing the found Title, or empty if not found
+     * @param id the ID of the Branch to retrieve
+     * @return an Optional containing the found Branch, or empty if not found
      * @throws IllegalArgumentException if the id parameter is null
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<Title> findById(Long id) {
+    public Optional<Branch> findById(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
         }
-        return titleRepository.findById(id);
+        return branchRepository.findById(id);
     }
 
     /**
-     * Retrieves all Title entities from the database.
+     * Retrieves all Branch entities from the database.
      * 
-     * @return a List of all Title entities (empty if none found)
+     * @return a List of all Branch entities (empty if none found)
      */
     @Override
     @Transactional(readOnly = true)
-    public List<Title> findAll() {
-        return titleRepository.findAll();
+    public List<Branch> findAll() {
+        return branchRepository.findAll();
     }
 
     /**
-     * Updates an existing Title entity.
+     * Updates an existing Branch entity.
      * 
-     * @param id the ID of the Title to update
-     * @param titleDetails the Title object containing updated fields
-     * @return the updated Title entity
-     * @throws RuntimeException if no Title exists with the given ID
+     * @param id the ID of the Branch to update
+     * @param branchDetails the Branch object containing updated fields
+     * @return the updated Branch entity
+     * @throws RuntimeException if no Branch exists with the given ID
      * @throws IllegalArgumentException if either parameter is null
      */
     @Override
-    public Title update(Long id, Title titleDetails) {
-        if (id == null || titleDetails == null) {
-            throw new IllegalArgumentException("ID and title details cannot be null");
+    public Branch update(Long id, Branch branchDetails) {
+        if (id == null || branchDetails == null) {
+            throw new IllegalArgumentException("ID and branch details cannot be null");
         }
         
-        return titleRepository.findById(id)
-                .map(existingTitle -> {
-                    existingTitle.setName(titleDetails.getName());
-                    return titleRepository.save(existingTitle);
+        return branchRepository.findById(id)
+                .map(existingBranch -> {
+                    existingBranch.setName(branchDetails.getName());
+                    return branchRepository.save(existingBranch);
                 })
-                .orElseThrow(() -> new RuntimeException("Title not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("Branch not found with id: " + id));
     }
 
     /**
-     * Deletes a Title entity by its ID.
+     * Deletes a Branch entity by its ID.
      * 
-     * @param id the ID of the Title to delete
+     * @param id the ID of the Branch to delete
      * @throws IllegalArgumentException if the id parameter is null
      */
     @Override
@@ -110,6 +110,6 @@ public class BranchServiceImpl implements BranchService {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
         }
-        titleRepository.deleteById(id);
+        branchRepository.deleteById(id);
     }
 }
