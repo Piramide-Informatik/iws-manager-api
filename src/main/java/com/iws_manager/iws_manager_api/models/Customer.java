@@ -56,13 +56,13 @@ public class Customer extends BaseEntity{
     @Column(name = "homepage", nullable = true, length = 255)
     private String homepage;
 
-    @Column(name = "hoursperweek", nullable = true, columnDefinition = "DECIMAL(5,2)")
+    @Column(name = "hoursperweek", nullable = true, columnDefinition = "DECIMAL(7,2)")
     private Double hoursperweek;
 
-    @Column(name = "maxhoursmonth", nullable = true, columnDefinition = "DECIMAL(5,2)")
+    @Column(name = "maxhoursmonth", nullable = true, columnDefinition = "DECIMAL(7,2)")
     private Double maxhoursmonth;
 
-    @Column(name = "maxhoursyear", nullable = true, columnDefinition = "DECIMAL(5,2)")
+    @Column(name = "maxhoursyear", nullable = true, columnDefinition = "DECIMAL(7,2)")
     private Double maxhoursyear;
 
     @Column(name = "note", columnDefinition = "TEXT", nullable = true)
