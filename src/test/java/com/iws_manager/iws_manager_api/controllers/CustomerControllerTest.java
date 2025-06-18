@@ -1,6 +1,8 @@
 package com.iws_manager.iws_manager_api.controllers;
 
 import com.iws_manager.iws_manager_api.models.Customer;
+import com.iws_manager.iws_manager_api.models.ContactPerson;
+
 import com.iws_manager.iws_manager_api.services.interfaces.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -109,5 +112,56 @@ class CustomerControllerTest {
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         verify(customerService, times(1)).delete(1L);
+    }
+
+    @Test
+    void getContactsByCustomerShouldReturnContacts() {
+        Long customerId = 1L;
+
+        ContactPerson contact1 = new ContactPerson();
+        contact1.setFirstName("John");
+        contact1.setLastName("Doe");
+
+        ContactPerson contact2 = new ContactPerson();
+        contact2.setFirstName("Jane");
+        contact2.setLastName("Smith");
+
+        List<ContactPerson> contacts = Arrays.asList(contact1, contact2);
+
+        when(customerService.findContactsByCustomerId(customerId)).thenReturn(contacts);
+
+        ResponseEntity<List<ContactPerson>> response = customerController.getContactsByCustomer(customerId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(contacts, response.getBody());
+        verify(customerService, times(1)).findContactsByCustomerId(customerId);
+    }
+
+    @Test
+    void getContactsByCustomerShouldReturnNotFoundWhenCustomerNotExists() {
+        Long customerId = 99L;
+
+        when(customerService.findContactsByCustomerId(customerId))
+            .thenThrow(new EntityNotFoundException());
+
+        ResponseEntity<List<ContactPerson>> response = customerController.getContactsByCustomer(customerId);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+        verify(customerService, times(1)).findContactsByCustomerId(customerId);
+    }
+
+    @Test
+    void getContactsByCustomerShouldReturnBadRequestOnIllegalArgument() {
+        Long customerId = -1L;
+
+        when(customerService.findContactsByCustomerId(customerId))
+            .thenThrow(new IllegalArgumentException());
+
+        ResponseEntity<List<ContactPerson>> response = customerController.getContactsByCustomer(customerId);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNull(response.getBody());
+        verify(customerService, times(1)).findContactsByCustomerId(customerId);
     }
 }
