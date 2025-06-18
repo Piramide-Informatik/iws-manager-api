@@ -36,7 +36,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     public CustomerServiceImpl(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
-     //   this.contactPersonRepository = contactPersonRepository;
     }
 
     /**
