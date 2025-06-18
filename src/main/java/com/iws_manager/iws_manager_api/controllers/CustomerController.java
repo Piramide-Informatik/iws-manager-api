@@ -1,11 +1,14 @@
 package com.iws_manager.iws_manager_api.controllers;
 
 import com.iws_manager.iws_manager_api.models.Customer;
+import com.iws_manager.iws_manager_api.models.ContactPerson;
+
 import com.iws_manager.iws_manager_api.services.interfaces.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -102,5 +105,26 @@ public class CustomerController {
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
         customerService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    // GET CONTACTS BY CUSTOMER ID
+    /**
+     * Retrieves all contacts for a specific customer.
+     * 
+     * @param customerId the ID of the customer
+     * @return List of contacts ordered by lastName and firstName (HTTP 200)
+     * @throws CustomerNotFoundException if customer doesn't exist (HTTP 404)
+     */
+    @GetMapping("/{id}/contacts")
+    public ResponseEntity<List<ContactPerson>> getContactsByCustomer(
+            @PathVariable("id") Long customerId) {
+        try {
+            List<ContactPerson> contacts = customerService.findContactsByCustomerId(customerId);
+            return ResponseEntity.ok(contacts);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
