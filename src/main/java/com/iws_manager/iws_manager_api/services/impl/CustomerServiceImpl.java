@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.iws_manager.iws_manager_api.models.Customer;
+import com.iws_manager.iws_manager_api.models.ContactPerson;
 import com.iws_manager.iws_manager_api.repositories.CustomerRepository;
+import com.iws_manager.iws_manager_api.repositories.ContactPersonRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.CustomerService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -34,6 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     public CustomerServiceImpl(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
+     //   this.contactPersonRepository = contactPersonRepository;
     }
 
     /**
@@ -138,5 +141,16 @@ public class CustomerServiceImpl implements CustomerService {
         }
         
         customerRepository.deleteById(id);
+    }
+
+        /* GET ALL CONTACTS BY CUSTOMER ID*/
+    @Override
+    @Transactional(readOnly = true)
+    public List<ContactPerson> findContactsByCustomerId(Long customerId) {
+        if (!customerRepository.existsById(customerId)) {
+            throw new EntityNotFoundException("Customer with ID " + customerId + " not found!");
+        }
+        
+        return customerRepository.findByCustomerId(customerId);
     }
 }
