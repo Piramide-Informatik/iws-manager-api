@@ -102,6 +102,7 @@ public class ContactPersonServiceImpl implements ContactPersonService {
                     existingContactPerson.setLastName(contactPersonDetails.getLastName());
                     existingContactPerson.setSalutation(contactPersonDetails.getSalutation());
                     existingContactPerson.setTitle(contactPersonDetails.getTitle());
+                    existingContactPerson.setEmail(contactPersonDetails.getEmail());
                     return contactPersonRepository.save(existingContactPerson);
                 })
                 .orElseThrow(() -> new RuntimeException("ContactPerson not found with id: " + id));
