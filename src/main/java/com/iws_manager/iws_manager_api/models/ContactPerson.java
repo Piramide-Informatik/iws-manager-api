@@ -28,6 +28,12 @@ public class ContactPerson extends BaseEntity{
     private Customer customer;
 
     /**
+     * Email of the contact person.
+     */
+    @Column(name = "email", length = 255)
+    private String email;
+
+    /**
      * First name of the contact person.
      */
     @Column(name = "firstname", length = 255)
