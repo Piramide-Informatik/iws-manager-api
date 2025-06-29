@@ -20,12 +20,7 @@ public class QualificationFZ extends BaseEntity{
     @Column(name = "qualificationfz", length = 255)
     private String qualification;
 
-    /**
-     * Relación temporalmente comentada porque se necesita implementar employees
-     * TODO: Implementar cuando se complete employees
-     */
-    // @OneToMany(mappedBy = "qualificationFZ", fetch = FetchType.LAZY)
-    // @ToString.Exclude
-    // private Set<Employee> employees = new HashSet<>();
-
+    @OneToMany(mappedBy = "qualificationFZ", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private Set<Employee> employees = new HashSet<>();
 }
