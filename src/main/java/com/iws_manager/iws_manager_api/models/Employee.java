@@ -16,8 +16,8 @@ import java.util.Set;
 @Entity
 @EqualsAndHashCode(callSuper = true, exclude = {
     "salutation", "title", "customer", "qualificationFZ",
-    "absenceDays", "employmentContracts", "projects"
-})
+    "absenceDays"
+}) // Agregar una vez este implementado "employmentContracts", "projects"
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "employee")
 @AttributeOverride(name = "id", column = @Column(name = "employeeid", nullable = false))
@@ -80,21 +80,29 @@ public class Employee extends BaseEntity {
     )
     private Set<AbsenceDay> absenceDays = new HashSet<>();
 
-    @OneToMany(
-        mappedBy = "employee",
-        fetch = FetchType.LAZY,
-        cascade = CascadeType.ALL,
-        orphanRemoval = true
-    )
-    private Set<EmploymentContract> employmentContracts = new HashSet<>();
+    /**
+     * Relación temporalmente comentada porque se necesita implementar employee contract
+     * TODO: Implementar cuando se complete employee contract
+     */
+    // @OneToMany(
+    //     mappedBy = "employee",
+    //     fetch = FetchType.LAZY,
+    //     cascade = CascadeType.ALL,
+    //     orphanRemoval = true
+    // )
+    // private Set<EmploymentContract> employmentContracts = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "projectemployee",
-        joinColumns = @JoinColumn(name = "employeeid"),
-        inverseJoinColumns = @JoinColumn(name = "projectid")
-    )
-    private Set<Project> projects = new HashSet<>();
+    /**
+     * Relación temporalmente comentada porque se necesita implementar project
+     * TODO: Implementar cuando se complete project
+     */
+    // @ManyToMany(fetch = FetchType.LAZY)
+    // @JoinTable(
+    //     name = "projectemployee",
+    //     joinColumns = @JoinColumn(name = "employeeid"),
+    //     inverseJoinColumns = @JoinColumn(name = "projectid")
+    // )
+    // private Set<Project> projects = new HashSet<>();
 
     public void addAbsenceDay(AbsenceDay absenceDay) {
         absenceDays.add(absenceDay);
@@ -106,18 +114,26 @@ public class Employee extends BaseEntity {
         absenceDay.setEmployee(null);
     }
 
-    public void addEmploymentContract(EmploymentContract contract) {
-        employmentContracts.add(contract);
-        contract.setEmployee(this);
-    }
+    /**
+     * Relación temporalmente comentada porque se necesita implementar contract
+     * TODO: Implementar cuando se complete contract
+     */
+    // public void addEmploymentContract(EmploymentContract contract) {
+    //     employmentContracts.add(contract);
+    //     contract.setEmployee(this);
+    // }
 
-    public void addProject(Project project) {
-        projects.add(project);
-        project.getEmployees().add(this);
-    }
+    /**
+     * Relación temporalmente comentada porque se necesita implementar project
+     * TODO: Implementar cuando se complete project
+     */
+    // public void addProject(Project project) {
+    //     projects.add(project);
+    //     project.getEmployees().add(this);
+    // }
 
-    public void removeProject(Project project) {
-        projects.remove(project);
-        project.getEmployees().remove(this);
-    }
+    // public void removeProject(Project project) {
+    //     projects.remove(project);
+    //     project.getEmployees().remove(this);
+    // }
 }

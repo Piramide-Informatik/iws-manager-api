@@ -26,11 +26,7 @@ public class AbsenceDay extends BaseEntity{
     private AbsenceType absenceType;
 
 
-    /**
-     * Relación temporalmente comentada porque se necesita implementar employees
-     * TODO: Implementar cuando se complete employees
-     */
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "employeeid", referencedColumnName = "employeeid")
-    // private Employee employee;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employeeid", referencedColumnName = "employeeid")
+    private Employee employee;
 }

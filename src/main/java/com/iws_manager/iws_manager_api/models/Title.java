@@ -3,6 +3,9 @@ package com.iws_manager.iws_manager_api.models;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.iws_manager.iws_manager_api.models.base.BaseEntity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.*;
 import lombok.*;
 
