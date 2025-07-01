@@ -37,8 +37,8 @@ class EmployeeControllerTest {
 
     private static final String JSON_ID = "$.id";
     private static final String JSON_FIRSTNAME = "$.firstname";
-    private static final String JSON_LASTNAME = "$.lastname";
 
+    private static final String FIRSTNAME_0 = "$[0].firstname";
     private static final String FIRSTNAME_1 = "Alice";
     private static final String FIRSTNAME_2 = "Bob";
     private static final String UPDATED_FIRSTNAME = "Alice Updated";
@@ -106,7 +106,7 @@ class EmployeeControllerTest {
 
         mockMvc.perform(get(BASE_URI))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].firstname").value(FIRSTNAME_1))
+                .andExpect(jsonPath(FIRSTNAME_0).value(FIRSTNAME_1))
                 .andExpect(jsonPath("$[1].firstname").value(FIRSTNAME_2));
     }
 
@@ -138,7 +138,7 @@ class EmployeeControllerTest {
 
         mockMvc.perform(get(BASE_URI + "/lastname/" + LASTNAME))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].firstname").value(FIRSTNAME_1));
+                .andExpect(jsonPath(FIRSTNAME_0).value(FIRSTNAME_1));
     }
 
     @Test
@@ -164,7 +164,7 @@ class EmployeeControllerTest {
 
         mockMvc.perform(get(BASE_URI + "/title/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].firstname").value(FIRSTNAME_1));
+                .andExpect(jsonPath(FIRSTNAME_0).value(FIRSTNAME_1));
     }
 
     @Test
@@ -173,7 +173,7 @@ class EmployeeControllerTest {
 
         mockMvc.perform(get(BASE_URI + "/salutation/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].firstname").value(FIRSTNAME_1));
+                .andExpect(jsonPath(FIRSTNAME_0).value(FIRSTNAME_1));
     }
 
     @Test
@@ -182,7 +182,7 @@ class EmployeeControllerTest {
 
         mockMvc.perform(get(BASE_URI + "/qualification/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].firstname").value(FIRSTNAME_1));
+                .andExpect(jsonPath(FIRSTNAME_0).value(FIRSTNAME_1));
     }
 
     @Test
@@ -191,6 +191,6 @@ class EmployeeControllerTest {
 
         mockMvc.perform(get(BASE_URI + "/customer/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].firstname").value(FIRSTNAME_1));
+                .andExpect(jsonPath(FIRSTNAME_0).value(FIRSTNAME_1));
     }
 }

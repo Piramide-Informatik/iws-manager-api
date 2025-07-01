@@ -24,8 +24,4 @@ public class Title extends BaseEntity{
     @Column(name = "title", length = 255)
     private String name;
 
-    /* Eliminar este codigo una vez se haya creado el servicio en el repositorio */
-    // @OneToMany(mappedBy = "title", fetch = FetchType.LAZY)
-    // @ToString.Exclude
-    // private Set<Employee> employees = new HashSet<>();
 }

@@ -29,8 +29,4 @@ public class Salutation extends BaseEntity{
     @Column(name = "salutation", length = 255)
     private String name;
 
-    /*Eliminar este bloque de codigo una vez se haya implementado el servicio en Employee */
-    // @OneToMany(mappedBy = "salutation", fetch = FetchType.LAZY)
-    // @ToString.Exclude
-    // private Set<Employee> employees = new HashSet<>();
 }
