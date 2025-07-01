@@ -3,9 +3,9 @@ package com.iws_manager.iws_manager_api.services.interfaces;
 import java.util.List;
 import java.util.Optional;
 
-import com.iws_manager.iws_manager_api.models.Branch;
+import com.iws_manager.iws_manager_api.models.Employee;
 
-public interface BranchService {
+public interface EmployeeService {
 
     Employee create(Employee employee);
     Optional<Employee> findById(Long id);
