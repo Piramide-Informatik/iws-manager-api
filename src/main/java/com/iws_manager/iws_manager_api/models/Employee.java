@@ -25,7 +25,7 @@ public class Employee extends BaseEntity {
     @Column(name = "coentrepreneursince")
     private LocalDate coentrepreneursince;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customerid", referencedColumnName = "customerid")
     private Customer customer;
 
@@ -50,14 +50,14 @@ public class Employee extends BaseEntity {
     @Column(name = "phone", length = 255)
     private String phone;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "qualificationfzid", referencedColumnName = "qualificationfzid")
     private QualificationFZ qualificationFZ;
 
     @Column(name = "qualificationkmui", length = 255)
     private String qualificationkmui;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "salutationid", referencedColumnName = "salutationid")
     private Salutation salutation;
 
@@ -67,7 +67,7 @@ public class Employee extends BaseEntity {
     @Column(name = "soleproprietorsince")
     private LocalDate soleproprietorsince;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "titleid", referencedColumnName = "titleid")
     private Title title;
 
