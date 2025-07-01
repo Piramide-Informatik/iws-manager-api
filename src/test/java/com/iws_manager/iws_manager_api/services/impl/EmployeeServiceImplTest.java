@@ -19,6 +19,14 @@ import static org.mockito.Mockito.*;
 
 class EmployeeServiceImplTest {
 
+    private static final String FIRSTNAME = "Joe";
+    private static final String LASTNAME = "Doe";
+    private static final String EMAIL = "joe.doe@example.com";
+    private static final String PHONE = "123456789";
+    private static final Integer NO = 1001;
+    private static final String LABEL = "Senior Dev";
+    private static final LocalDate COENTREPRENEURSINCE = LocalDate.of(2020, 1, 1);
+
     @Mock
     private EmployeeRepository employeeRepository;
 
@@ -32,13 +40,13 @@ class EmployeeServiceImplTest {
         MockitoAnnotations.openMocks(this);
         sampleEmployee = new Employee();
         sampleEmployee.setId(1L);
-        sampleEmployee.setFirstname("John");
-        sampleEmployee.setLastname("Doe");
-        sampleEmployee.setEmail("john.doe@example.com");
-        sampleEmployee.setPhone("123456789");
-        sampleEmployee.setEmployeeno(1001);
-        sampleEmployee.setLabel("Dev");
-        sampleEmployee.setCoentrepreneursince(LocalDate.of(2020, 1, 1));
+        sampleEmployee.setFirstname(FIRSTNAME);
+        sampleEmployee.setLastname(LASTNAME);
+        sampleEmployee.setEmail(EMAIL);
+        sampleEmployee.setPhone(PHONE);
+        sampleEmployee.setEmployeeno(NO);
+        sampleEmployee.setLabel(LABEL);
+        sampleEmployee.setCoentrepreneursince(COENTREPRENEURSINCE);
     }
 
     @Test
@@ -46,7 +54,7 @@ class EmployeeServiceImplTest {
         when(employeeRepository.save(any(Employee.class))).thenReturn(sampleEmployee);
         Employee created = employeeService.create(sampleEmployee);
         assertNotNull(created);
-        assertEquals("John", created.getFirstname());
+        assertEquals(FIRSTNAME, created.getFirstname());
         verify(employeeRepository, times(1)).save(sampleEmployee);
     }
 
@@ -55,7 +63,7 @@ class EmployeeServiceImplTest {
         when(employeeRepository.findById(1L)).thenReturn(Optional.of(sampleEmployee));
         Optional<Employee> result = employeeService.findById(1L);
         assertTrue(result.isPresent());
-        assertEquals("Doe", result.get().getLastname());
+        assertEquals(LASTNAME, result.get().getLastname());
         verify(employeeRepository, times(1)).findById(1L);
     }
 
@@ -71,17 +79,17 @@ class EmployeeServiceImplTest {
     @Test
     void testUpdate() {
         Employee updated = new Employee();
-        updated.setFirstname("Jane");
-        updated.setLastname("Smith");
-        updated.setEmail("jane.smith@example.com");
-        updated.setPhone("987654321");
+        updated.setFirstname(FIRSTNAME);
+        updated.setLastname(LASTNAME);
+        updated.setEmail(EMAIL);
+        updated.setPhone(PHONE);
 
         when(employeeRepository.findById(1L)).thenReturn(Optional.of(sampleEmployee));
         when(employeeRepository.save(any(Employee.class))).thenReturn(updated);
 
         Employee result = employeeService.update(1L, updated);
         assertNotNull(result);
-        assertEquals("Jane", result.getFirstname());
+        assertEquals(FIRSTNAME, result.getFirstname());
         verify(employeeRepository, times(1)).findById(1L);
         verify(employeeRepository, times(1)).save(any(Employee.class));
     }
@@ -95,19 +103,19 @@ class EmployeeServiceImplTest {
 
     @Test
     void testFindByLastname() {
-        when(employeeRepository.findByLastname("Doe")).thenReturn(List.of(sampleEmployee));
-        List<Employee> result = employeeService.findByLastname("Doe");
+        when(employeeRepository.findByLastname(LASTNAME)).thenReturn(List.of(sampleEmployee));
+        List<Employee> result = employeeService.findByLastname(LASTNAME);
         assertEquals(1, result.size());
-        verify(employeeRepository, times(1)).findByLastname("Doe");
+        verify(employeeRepository, times(1)).findByLastname(LASTNAME);
     }
 
     @Test
     void testFindByEmail() {
-        when(employeeRepository.findByEmail("john.doe@example.com")).thenReturn(sampleEmployee);
-        Optional<Employee> result = employeeService.findByEmail("john.doe@example.com");
+        when(employeeRepository.findByEmail(EMAIL)).thenReturn(sampleEmployee);
+        Optional<Employee> result = employeeService.findByEmail(EMAIL);
         assertTrue(result.isPresent());
-        assertEquals("Doe", result.get().getLastname());
-        verify(employeeRepository, times(1)).findByEmail("john.doe@example.com");
+        assertEquals(LASTNAME, result.get().getLastname());
+        verify(employeeRepository, times(1)).findByEmail(EMAIL);
     }
 
     @Test
