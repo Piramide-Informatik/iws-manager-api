@@ -15,9 +15,8 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = true, exclude = {
-    "salutation", "title", "customer", "qualificationFZ",
-    "absenceDays"
-}) // Agregar una vez este implementado "employmentContracts", "projects"
+    "salutation", "title", "customer", "qualificationFZ"
+}) // Agregar una vez este implementado "employmentContracts", "projects", "absenceDays"
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "employee")
 @AttributeOverride(name = "id", column = @Column(name = "employeeid", nullable = false))
@@ -72,13 +71,14 @@ public class Employee extends BaseEntity {
     @JoinColumn(name = "titleid", referencedColumnName = "titleid")
     private Title title;
 
-    @OneToMany(
-        mappedBy = "employee",
-        fetch = FetchType.LAZY,
-        cascade = CascadeType.ALL,
-        orphanRemoval = true
-    )
-    private Set<AbsenceDay> absenceDays = new HashSet<>();
+        /* Crear servicio */
+    // @OneToMany(
+    //     mappedBy = "employee",
+    //     fetch = FetchType.LAZY,
+    //     cascade = CascadeType.ALL,
+    //     orphanRemoval = true
+    // )
+    //private Set<AbsenceDay> absenceDays = new HashSet<>();
 
     /**
      * Relación temporalmente comentada porque se necesita implementar employee contract
@@ -104,15 +104,17 @@ public class Employee extends BaseEntity {
     // )
     // private Set<Project> projects = new HashSet<>();
 
-    public void addAbsenceDay(AbsenceDay absenceDay) {
-        absenceDays.add(absenceDay);
-        absenceDay.setEmployee(this);
-    }
+    // Relación comentada temporalmente para evitar ciclos hasta que se implemente el servicio correspondiente.
+    // TODO: Volver a habilitar cuando se cree el servicio para gestionar AbsenceDay desde Employee.
+    // public void addAbsenceDay(AbsenceDay absenceDay) {
+    //     absenceDays.add(absenceDay);
+    //     absenceDay.setEmployee(this);
+    // }
 
-    public void removeAbsenceDay(AbsenceDay absenceDay) {
-        absenceDays.remove(absenceDay);
-        absenceDay.setEmployee(null);
-    }
+    // public void removeAbsenceDay(AbsenceDay absenceDay) {
+    //     absenceDays.remove(absenceDay);
+    //     absenceDay.setEmployee(null);
+    // }
 
     /**
      * Relación temporalmente comentada porque se necesita implementar contract
