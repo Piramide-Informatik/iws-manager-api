@@ -3,6 +3,9 @@ package com.iws_manager.iws_manager_api.models;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.iws_manager.iws_manager_api.models.base.BaseEntity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,4 +23,9 @@ public class Title extends BaseEntity{
 
     @Column(name = "title", length = 255)
     private String name;
+
+    /* Eliminar este codigo una vez se haya creado el servicio en el repositorio */
+    // @OneToMany(mappedBy = "title", fetch = FetchType.LAZY)
+    // @ToString.Exclude
+    // private Set<Employee> employees = new HashSet<>();
 }
