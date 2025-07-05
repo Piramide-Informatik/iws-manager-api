@@ -88,15 +88,6 @@ public class Employee extends BaseEntity {
     @JoinColumn(name = "titleid", referencedColumnName = "titleid")
     private Title title;
 
-        /* Crear servicio */
-    // @OneToMany(
-    //     mappedBy = "employee",
-    //     fetch = FetchType.LAZY,
-    //     cascade = CascadeType.ALL,
-    //     orphanRemoval = true
-    // )
-    // private Set<AbsenceDay> absenceDays = new HashSet<>();
-
     /**
      * Relación temporalmente comentada porque se necesita implementar employee contract
      * TODO: Implementar cuando se complete employee contract
