@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@EqualsAndHashCode(callSuper = true, exclude = { "employee" })
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "absenceday")
 @AttributeOverride(name = "id", column = @Column(name = "absencedayid"))
