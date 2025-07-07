@@ -107,13 +107,10 @@ public class QualificationFZServiceImpl implements QualificationFZService {
      */
     @Override
     public void delete(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("ID cannot be null");
+        if (id == null || !qualificationFZRepository.existsById(id)) {
+            throw new IllegalArgumentException("ID cannot be null or QualificationFZ not found with id:" + id);
         }
 
-        if (!qualificationFZRepository.existsById(id)) { 
-            throw new RuntimeException("QualificationFZ not found with id: " + id);
-        }
         qualificationFZRepository.deleteById(id);
     }
 }

@@ -24,7 +24,7 @@ class QualificationFZServiceImplTest {
     private QualificationFZServiceImpl qualificationFZService;
 
     @Test
-    void create_shouldSaveQualificationSuccessfully() {
+    void createshouldSaveQualificationSuccessfully() {
         // Arrange
         QualificationFZ input = new QualificationFZ();
         input.setQualification("Wissenschaftler");
@@ -46,7 +46,7 @@ class QualificationFZServiceImplTest {
     }
 
     @Test
-    void create_shouldThrowWhenQualificationIsEmpty() {
+    void createshouldThrowWhenQualificationIsEmpty() {
         // Arrange
         QualificationFZ input = new QualificationFZ();
         input.setQualification("  ");
@@ -59,7 +59,7 @@ class QualificationFZServiceImplTest {
     }
 
     @Test
-    void findById_shouldReturnQualificationWhenExists() {
+    void findByIdshouldReturnQualificationWhenExists() {
         // Arrange
         QualificationFZ expected = new QualificationFZ();
         expected.setId(1L);
@@ -76,7 +76,7 @@ class QualificationFZServiceImplTest {
     }
 
     @Test
-    void findById_shouldReturnEmptyWhenNotExists() {
+    void findByIdshouldReturnEmptyWhenNotExists() {
         // Arrange
         when(qualificationFZRepository.findById(1L)).thenReturn(Optional.empty());
 
@@ -89,7 +89,7 @@ class QualificationFZServiceImplTest {
     }
 
     @Test
-    void findById_shouldThrowWhenIdIsNull() {
+    void findByIdshouldThrowWhenIdIsNull() {
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
             qualificationFZService.findById(null);
@@ -98,7 +98,7 @@ class QualificationFZServiceImplTest {
     }
 
     @Test
-    void findAll_shouldReturnOrderedQualifications() {
+    void findAllshouldReturnOrderedQualifications() {
         // Arrange
         QualificationFZ q1 = new QualificationFZ();
         q1.setQualification("Ärzte");
@@ -119,7 +119,7 @@ class QualificationFZServiceImplTest {
     }
 
     @Test
-    void update_shouldUpdateExistingQualification() {
+    void updateshouldUpdateExistingQualification() {
         // Arrange
         QualificationFZ existing = new QualificationFZ();
         existing.setId(1L);
@@ -141,7 +141,7 @@ class QualificationFZServiceImplTest {
     }
 
     @Test
-    void update_shouldThrowWhenQualificationNotFound() {
+    void updateshouldThrowWhenQualificationNotFound() {
         // Arrange
         when(qualificationFZRepository.findById(1L)).thenReturn(Optional.empty());
 
@@ -154,7 +154,7 @@ class QualificationFZServiceImplTest {
     }
 
     @Test
-    void update_shouldThrowWhenIdIsNull() {
+    void updateshouldThrowWhenIdIsNull() {
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
             qualificationFZService.update(null, new QualificationFZ());
@@ -163,7 +163,7 @@ class QualificationFZServiceImplTest {
     }
 
     @Test
-    void update_shouldThrowWhenDetailsIsNull() {
+    void updateshouldThrowWhenDetailsIsNull() {
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
             qualificationFZService.update(1L, null);
@@ -172,7 +172,7 @@ class QualificationFZServiceImplTest {
     }
 
    @Test
-    void update_shouldUpdateQualificationSuccessfully() {
+    void updateshouldUpdateQualificationSuccessfully() {
         // Arrange
         Long id = 1L;
         QualificationFZ existing = new QualificationFZ();
@@ -196,7 +196,7 @@ class QualificationFZServiceImplTest {
     }
 
     @Test
-    void delete_shouldDeleteExistingQualification() {
+    void deleteshouldDeleteExistingQualification() {
         // Arrange
         when(qualificationFZRepository.existsById(1L)).thenReturn(true);
 
@@ -209,7 +209,7 @@ class QualificationFZServiceImplTest {
     }
 
     @Test
-    void delete_shouldThrowWhenQualificationNotFound() {
+    void deleteshouldThrowWhenQualificationNotFound() {
         // Arrange
         when(qualificationFZRepository.existsById(1L)).thenReturn(false);
 
@@ -222,7 +222,7 @@ class QualificationFZServiceImplTest {
     }
 
     @Test
-    void delete_shouldThrowWhenIdIsNull() {
+    void deleteshouldThrowWhenIdIsNull() {
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> {
             qualificationFZService.delete(null);
