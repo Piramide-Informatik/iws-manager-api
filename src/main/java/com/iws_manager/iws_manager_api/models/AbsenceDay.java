@@ -20,7 +20,7 @@ import java.time.LocalDate;
 public class AbsenceDay extends BaseEntity{
 
     @Column(name = "absencedate")
-    private LocalDate absencedate;
+    private LocalDate absenceDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "absencetypeid", referencedColumnName = "absencetypeid")
