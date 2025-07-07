@@ -18,11 +18,11 @@ class AbsenceDayTest {
 
         AbsenceDay absenceDay = new AbsenceDay();
         absenceDay.setId(10L);
-        absenceDay.setAbsencedate(date);
+        absenceDay.setAbsenceDate(date);
         absenceDay.setAbsenceType(absenceType);
 
         assertEquals(10L, absenceDay.getId());
-        assertEquals(date, absenceDay.getAbsencedate());
+        assertEquals(date, absenceDay.getAbsenceDate());
         assertNotNull(absenceDay.getAbsenceType());
         assertEquals("Sick Leave", absenceDay.getAbsenceType().getName());
     }
