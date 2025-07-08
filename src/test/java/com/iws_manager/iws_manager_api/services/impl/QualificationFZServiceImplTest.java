@@ -54,9 +54,7 @@ class QualificationFZServiceImplTest {
         input.setQualification("  ");
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            qualificationFZService.create(input);
-        });
+        assertThrows(IllegalArgumentException.class, () -> qualificationFZService.create(input));
         verifyNoInteractions(qualificationFZRepository);
     }
 
@@ -93,9 +91,7 @@ class QualificationFZServiceImplTest {
     @Test
     void findByIdshouldThrowWhenIdIsNull() {
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            qualificationFZService.findById(null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> qualificationFZService.findById(null));
         verifyNoInteractions(qualificationFZRepository);
     }
 
@@ -148,9 +144,8 @@ class QualificationFZServiceImplTest {
         when(qualificationFZRepository.findById(1L)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            qualificationFZService.update(1L, new QualificationFZ());
-        });
+        assertThrows(RuntimeException.class, () -> qualificationFZService.update(1L, new QualificationFZ()));
+
         verify(qualificationFZRepository).findById(1L);
         verify(qualificationFZRepository, never()).save(any());
     }
@@ -158,18 +153,14 @@ class QualificationFZServiceImplTest {
     @Test
     void updateshouldThrowWhenIdIsNull() {
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            qualificationFZService.update(null, new QualificationFZ());
-        });
+        assertThrows(IllegalArgumentException.class, () -> qualificationFZService.update(null, new QualificationFZ()));
         verifyNoInteractions(qualificationFZRepository);
     }
 
     @Test
     void updateshouldThrowWhenDetailsIsNull() {
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            qualificationFZService.update(1L, null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> qualificationFZService.update(1L, null));
         verifyNoInteractions(qualificationFZRepository);
     }
 
@@ -216,9 +207,7 @@ class QualificationFZServiceImplTest {
         when(qualificationFZRepository.existsById(1L)).thenReturn(false);
 
         // Act & Assert
-        assertThrows(RuntimeException.class, () -> {
-            qualificationFZService.delete(1L);
-        });
+        assertThrows(RuntimeException.class, () -> qualificationFZService.delete(1L));
         verify(qualificationFZRepository).existsById(1L);
         verify(qualificationFZRepository, never()).deleteById(any());
     }
@@ -226,9 +215,7 @@ class QualificationFZServiceImplTest {
     @Test
     void deleteshouldThrowWhenIdIsNull() {
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            qualificationFZService.delete(null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> qualificationFZService.delete(null));
         verifyNoInteractions(qualificationFZRepository);
     }
 }
