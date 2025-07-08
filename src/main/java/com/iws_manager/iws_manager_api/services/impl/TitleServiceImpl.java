@@ -73,7 +73,7 @@ public class TitleServiceImpl implements TitleService {
     @Override
     @Transactional(readOnly = true)
     public List<Title> findAll() {
-        return titleRepository.findAll();
+        return titleRepository.findAllByOrderByNameAsc();
     }
 
     /**

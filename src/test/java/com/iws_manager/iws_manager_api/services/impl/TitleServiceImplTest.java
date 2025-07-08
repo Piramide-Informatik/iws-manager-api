@@ -106,14 +106,40 @@ class TitleServiceImplTest {
         title2.setId(2L);
         title2.setName("Prof.");
         
-        when(titleRepository.findAll()).thenReturn(Arrays.asList(sampleTitle, title2));
+        when(titleRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(sampleTitle, title2));
 
         // Act
         List<Title> result = titleService.findAll();
 
         // Assert
         assertEquals(2, result.size());
-        verify(titleRepository, times(1)).findAll();
+        verify(titleRepository, times(1)).findAllByOrderByNameAsc();
+    }
+
+    @Test
+    @DisplayName("Should return all titles ordered by name")
+    void findAllShouldReturnAllTitlesOrderedByName() {
+        // Arrange
+        Title title1 = new Title();
+        title1.setId(1L);
+        title1.setName("Dr.");
+        
+        Title title2 = new Title();
+        title2.setId(2L);
+        title2.setName("Prof.");
+        
+        // Mockea el método que realmente usa el servicio
+        when(titleRepository.findAllByOrderByNameAsc())
+            .thenReturn(List.of(title1, title2)); // Ordenados alfabéticamente
+
+        // Act
+        List<Title> result = titleService.findAll();
+
+        // Assert
+        assertEquals(2, result.size());
+        assertEquals("Dr.", result.get(0).getName()); // Verifica el orden
+        assertEquals("Prof.", result.get(1).getName());
+        verify(titleRepository, times(1)).findAllByOrderByNameAsc(); // Verifica el método correcto
     }
 
     @Test

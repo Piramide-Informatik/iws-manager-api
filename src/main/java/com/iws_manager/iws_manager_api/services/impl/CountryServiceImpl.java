@@ -73,7 +73,7 @@ public class CountryServiceImpl implements CountryService {
     @Override
     @Transactional(readOnly = true)
     public List<Country> findAll() {
-        return countryRepository.findAll();
+        return countryRepository.findAllByOrderByNameAsc();
     }
 
     /**

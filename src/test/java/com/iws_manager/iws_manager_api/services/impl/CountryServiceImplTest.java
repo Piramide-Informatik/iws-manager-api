@@ -80,14 +80,22 @@ public class CountryServiceImplTest {
 
     // ------------------- FIND ALL TESTS -------------------
     @Test
-    void findAllShouldReturnAllCountries() {
-        when(countryRepository.findAll()).thenReturn(List.of(country));
+    void findAllShouldReturnAllCountriesOrderedByName() {
+        Country country1 = new Country();
+        country1.setName("Brasil");
+        Country country2 = new Country();
+        country2.setName("Argentina");
+        
+        when(countryRepository.findAllByOrderByNameAsc())
+            .thenReturn(List.of(country2, country1)); 
 
         List<Country> countries = countryService.findAll();
 
         assertFalse(countries.isEmpty());
-        assertEquals(1, countries.size());
-        verify(countryRepository, times(1)).findAll();
+        assertEquals(2, countries.size());
+        assertEquals("Argentina", countries.get(0).getName());
+        assertEquals("Brasil", countries.get(1).getName());
+        verify(countryRepository, times(1)).findAllByOrderByNameAsc();
     }
 
     // ------------------- UPDATE TESTS -------------------
