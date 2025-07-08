@@ -28,58 +28,58 @@ class EmploymentContractServiceImplTest {
     private EmploymentContractServiceImpl employmentContractService;
 
     private EmploymentContract contract;
-    private final Long contractId = 1L;
-    private final Long employeeId = 1L;
-    private final Long customerId = 1L;
+    private static final Long CONTRACT_ID = 1L;
+    private static final Long EMPLOYEE_ID = 1L;
+    private static final Long CUSTOMER_ID = 1L;
 
     @BeforeEach
     void setUp() {
         contract = new EmploymentContract();
-        contract.setId(contractId);
+        contract.setId(CONTRACT_ID);
     }
 
     @Test
-    void create_ShouldSaveAndReturnContract() {
+    void createShouldSaveAndReturnContract() {
         when(employmentContractRepository.save(any(EmploymentContract.class))).thenReturn(contract);
 
         EmploymentContract result = employmentContractService.create(contract);
 
         assertNotNull(result);
-        assertEquals(contractId, result.getId());
+        assertEquals(CONTRACT_ID, result.getId());
         verify(employmentContractRepository, times(1)).save(contract);
     }
 
     @Test
-    void create_WithNullContract_ShouldThrowIllegalArgumentException() {
+    void createWithNullContractShouldThrowIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> employmentContractService.create(null));
     }
 
     @Test
-    void findById_ShouldReturnContract() {
-        when(employmentContractRepository.findById(contractId)).thenReturn(Optional.of(contract));
+    void findByIdShouldReturnContract() {
+        when(employmentContractRepository.findById(CONTRACT_ID)).thenReturn(Optional.of(contract));
 
-        Optional<EmploymentContract> result = employmentContractService.findById(contractId);
+        Optional<EmploymentContract> result = employmentContractService.findById(CONTRACT_ID);
 
         assertTrue(result.isPresent());
-        assertEquals(contractId, result.get().getId());
+        assertEquals(CONTRACT_ID, result.get().getId());
     }
 
     @Test
-    void findById_WithNullId_ShouldThrowIllegalArgumentException() {
+    void findByIdWithNullIdShouldThrowIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> employmentContractService.findById(null));
     }
 
     @Test
-    void findById_NonExistentId_ShouldReturnEmptyOptional() {
-        when(employmentContractRepository.findById(contractId)).thenReturn(Optional.empty());
+    void findByIdNonExistentIdShouldReturnEmptyOptional() {
+        when(employmentContractRepository.findById(CONTRACT_ID)).thenReturn(Optional.empty());
 
-        Optional<EmploymentContract> result = employmentContractService.findById(contractId);
+        Optional<EmploymentContract> result = employmentContractService.findById(CONTRACT_ID);
 
         assertFalse(result.isPresent());
     }
 
     @Test
-    void findAll_ShouldReturnAllContracts() {
+    void findAllShouldReturnAllContracts() {
         List<EmploymentContract> contracts = Arrays.asList(contract, new EmploymentContract());
         when(employmentContractRepository.findAll()).thenReturn(contracts);
 
@@ -90,14 +90,14 @@ class EmploymentContractServiceImplTest {
     }
 
     @Test
-    void update_ShouldUpdateAndReturnContract() {
+    void updateShouldUpdateAndReturnContract() {
         EmploymentContract updatedContract = new EmploymentContract();
         updatedContract.setHourlyRate(25.50);
 
-        when(employmentContractRepository.findById(contractId)).thenReturn(Optional.of(contract));
+        when(employmentContractRepository.findById(CONTRACT_ID)).thenReturn(Optional.of(contract));
         when(employmentContractRepository.save(any(EmploymentContract.class))).thenReturn(updatedContract);
 
-        EmploymentContract result = employmentContractService.update(contractId, updatedContract);
+        EmploymentContract result = employmentContractService.update(CONTRACT_ID, updatedContract);
 
         assertNotNull(result);
         assertEquals(25.50, result.getHourlyRate());
@@ -105,66 +105,66 @@ class EmploymentContractServiceImplTest {
     }
 
     @Test
-    void update_WithNullId_ShouldThrowIllegalArgumentException() {
+    void updateWithNullIdShouldThrowIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, 
             () -> employmentContractService.update(null, new EmploymentContract()));
     }
 
     @Test
-    void update_WithNullContract_ShouldThrowIllegalArgumentException() {
+    void updateWithNullContractShouldThrowIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, 
-            () -> employmentContractService.update(contractId, null));
+            () -> employmentContractService.update(CONTRACT_ID, null));
     }
 
     @Test
-    void update_NonExistentId_ShouldThrowRuntimeException() {
-        when(employmentContractRepository.findById(contractId)).thenReturn(Optional.empty());
+    void updateNonExistentIdShouldThrowRuntimeException() {
+        when(employmentContractRepository.findById(CONTRACT_ID)).thenReturn(Optional.empty());
 
         assertThrows(RuntimeException.class, 
-            () -> employmentContractService.update(contractId, new EmploymentContract()));
+            () -> employmentContractService.update(CONTRACT_ID, new EmploymentContract()));
     }
 
     @Test
-    void delete_ShouldDeleteContract() {
-        when(employmentContractRepository.existsById(contractId)).thenReturn(true);
+    void deleteShouldDeleteContract() {
+        when(employmentContractRepository.existsById(CONTRACT_ID)).thenReturn(true);
 
-        employmentContractService.delete(contractId);
+        employmentContractService.delete(CONTRACT_ID);
 
-        verify(employmentContractRepository, times(1)).deleteById(contractId);
+        verify(employmentContractRepository, times(1)).deleteById(CONTRACT_ID);
     }
 
     @Test
-    void delete_WithNullId_ShouldThrowIllegalArgumentException() {
+    void deleteWithNullIdShouldThrowIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> employmentContractService.delete(null));
     }
 
     @Test
-    void delete_NonExistentId_ShouldThrowEntityNotFoundException() {
-        when(employmentContractRepository.existsById(contractId)).thenReturn(false);
+    void deleteNonExistentIdShouldThrowEntityNotFoundException() {
+        when(employmentContractRepository.existsById(CONTRACT_ID)).thenReturn(false);
 
         assertThrows(EntityNotFoundException.class, 
-            () -> employmentContractService.delete(contractId));
+            () -> employmentContractService.delete(CONTRACT_ID));
     }
 
     @Test
-    void findByEmployeeId_ShouldReturnContracts() {
+    void findByEmployeeIdShouldReturnContracts() {
         List<EmploymentContract> contracts = Arrays.asList(contract);
-        when(employmentContractRepository.findByEmployeeId(employeeId)).thenReturn(contracts);
+        when(employmentContractRepository.findByEmployeeId(EMPLOYEE_ID)).thenReturn(contracts);
 
-        List<EmploymentContract> result = employmentContractService.findByEmployeeId(employeeId);
+        List<EmploymentContract> result = employmentContractService.findByEmployeeId(EMPLOYEE_ID);
 
         assertEquals(1, result.size());
-        verify(employmentContractRepository, times(1)).findByEmployeeId(employeeId);
+        verify(employmentContractRepository, times(1)).findByEmployeeId(EMPLOYEE_ID);
     }
 
     @Test
-    void findByCustomerId_ShouldReturnContracts() {
+    void findByCustomerIdShouldReturnContracts() {
         List<EmploymentContract> contracts = Arrays.asList(contract);
-        when(employmentContractRepository.findByCustomerId(customerId)).thenReturn(contracts);
+        when(employmentContractRepository.findByCustomerId(CUSTOMER_ID)).thenReturn(contracts);
 
-        List<EmploymentContract> result = employmentContractService.findByCustomerId(customerId);
+        List<EmploymentContract> result = employmentContractService.findByCustomerId(CUSTOMER_ID);
 
         assertEquals(1, result.size());
-        verify(employmentContractRepository, times(1)).findByCustomerId(customerId);
+        verify(employmentContractRepository, times(1)).findByCustomerId(CUSTOMER_ID);
     }
 }
