@@ -17,6 +17,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class QualificationFZServiceImplTest {
 
+     private static final String QUALIFICATION = "Wissenschaftler";
+
     @Mock
     private QualificationFZRepository qualificationFZRepository;
 
@@ -27,11 +29,11 @@ class QualificationFZServiceImplTest {
     void createshouldSaveQualificationSuccessfully() {
         // Arrange
         QualificationFZ input = new QualificationFZ();
-        input.setQualification("Wissenschaftler");
+        input.setQualification(QUALIFICATION);
         
         QualificationFZ saved = new QualificationFZ();
         saved.setId(1L);
-        saved.setQualification("Wissenschaftler");
+        saved.setQualification(QUALIFICATION);
         
         when(qualificationFZRepository.save(input)).thenReturn(saved);
 
@@ -41,7 +43,7 @@ class QualificationFZServiceImplTest {
         // Assert
         assertNotNull(result);
         assertEquals(1L, result.getId());
-        assertEquals("Wissenschaftler", result.getQualification());
+        assertEquals(QUALIFICATION, result.getQualification());
         verify(qualificationFZRepository).save(input);
     }
 
