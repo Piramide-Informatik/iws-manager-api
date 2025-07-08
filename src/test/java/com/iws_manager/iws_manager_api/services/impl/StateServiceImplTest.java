@@ -106,14 +106,42 @@ class StateServiceImplTest {
         state2.setId(2L);
         state2.setName("Florida");
         
-        when(stateRepository.findAll()).thenReturn(Arrays.asList(sampleState, state2));
+        when(stateRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(sampleState, state2));
 
         // Act
         List<State> result = stateService.findAll();
 
         // Assert
         assertEquals(2, result.size());
-        verify(stateRepository, times(1)).findAll();
+        verify(stateRepository, times(1)).findAllByOrderByNameAsc();
+    }
+
+    @Test
+    @DisplayName("Should return all states ordered by name")
+    void findAllShouldReturnStatesOrderedByName() {
+        // Arrange
+        State berlin = new State();
+        berlin.setName("Berlin");
+        
+        State bavaria = new State();
+        bavaria.setName("Bavaria");
+        
+        State hamburg = new State();
+        hamburg.setName("Hamburg");
+        
+        // Mock ordenado alfabéticamente
+        when(stateRepository.findAllByOrderByNameAsc())
+            .thenReturn(List.of(bavaria, berlin, hamburg));
+        
+        // Act
+        List<State> result = stateService.findAll();
+        
+        // Assert
+        assertEquals(3, result.size());
+        assertEquals("Bavaria", result.get(0).getName());
+        assertEquals("Berlin", result.get(1).getName());
+        assertEquals("Hamburg", result.get(2).getName());
+        verify(stateRepository, times(1)).findAllByOrderByNameAsc();
     }
 
     @Test

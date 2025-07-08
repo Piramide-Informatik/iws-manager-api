@@ -80,22 +80,30 @@ public class CountryServiceImplTest {
 
     // ------------------- FIND ALL TESTS -------------------
     @Test
-    void findAllShouldReturnAllCountries() {
-        when(countryRepository.findAll()).thenReturn(List.of(country));
+    void findAllShouldReturnAllCountriesOrderedByName() {
+        Country country1 = new Country();
+        country1.setName("Brasil");
+        Country country2 = new Country();
+        country2.setName("Argentina");
+        
+        when(countryRepository.findAllByOrderByNameAsc())
+            .thenReturn(List.of(country2, country1)); 
 
         List<Country> countries = countryService.findAll();
 
         assertFalse(countries.isEmpty());
-        assertEquals(1, countries.size());
-        verify(countryRepository, times(1)).findAll();
+        assertEquals(2, countries.size());
+        assertEquals("Argentina", countries.get(0).getName());
+        assertEquals("Brasil", countries.get(1).getName());
+        verify(countryRepository, times(1)).findAllByOrderByNameAsc();
     }
 
     // ------------------- UPDATE TESTS -------------------
     @Test
     void updateShouldUpdateCountryWhenIdExists() {
         Country updatedDetails = new Country();
-        updatedDetails.setName("Argentina");
-        updatedDetails.setLabel("AR");
+        updatedDetails.setName("Peru");
+        updatedDetails.setLabel("PE");
         updatedDetails.setIsDefault(false);
 
         when(countryRepository.findById(1L)).thenReturn(Optional.of(country));
@@ -103,8 +111,8 @@ public class CountryServiceImplTest {
 
         Country updatedCountry = countryService.update(1L, updatedDetails);
 
-        assertEquals("Argentina", updatedCountry.getName());
-        assertEquals("AR", updatedCountry.getLabel());
+        assertEquals("Peru", updatedCountry.getName());
+        assertEquals("PE", updatedCountry.getLabel());
         assertFalse(updatedCountry.getIsDefault());
     }
 

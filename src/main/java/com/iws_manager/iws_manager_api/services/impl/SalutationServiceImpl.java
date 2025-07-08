@@ -73,7 +73,7 @@ public class SalutationServiceImpl implements SalutationService {
     @Override
     @Transactional(readOnly = true)
     public List<Salutation> findAll() {
-        return salutationRepository.findAll();
+        return salutationRepository.findAllByOrderByNameAsc();
     }
 
     /**

@@ -72,7 +72,7 @@ public class StateServiceImpl implements StateService {
     @Override
     @Transactional(readOnly = true)
     public List<State> findAll() {
-        return stateRepository.findAll();
+        return stateRepository.findAllByOrderByNameAsc();
     }
 
     /**

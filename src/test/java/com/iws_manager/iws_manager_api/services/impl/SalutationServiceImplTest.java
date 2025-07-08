@@ -105,14 +105,41 @@ class SalutationServiceImplTest {
         salutation2.setId(2L);
         salutation2.setName("Mrs.");
         
-        when(salutationRepository.findAll()).thenReturn(Arrays.asList(sampleSalutation, salutation2));
+        when(salutationRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(sampleSalutation, salutation2));
 
         // Act
         List<Salutation> result = salutationService.findAll();
 
         // Assert
         assertEquals(2, result.size());
-        verify(salutationRepository, times(1)).findAll();
+        verify(salutationRepository, times(1)).findAllByOrderByNameAsc();
+    }
+
+    @Test
+    @DisplayName("Should get all salutations ordered by name")
+    void shouldGetAllSalutationsOrdered() {
+        // Arrange
+        Salutation mr = new Salutation();
+        mr.setName("Mr.");
+        
+        Salutation mrs = new Salutation();
+        mrs.setName("Mrs.");
+        
+        Salutation dr = new Salutation();
+        dr.setName("Dr.");
+        
+        when(salutationRepository.findAllByOrderByNameAsc())
+            .thenReturn(List.of(dr, mr, mrs));
+
+        // Act
+        List<Salutation> result = salutationService.findAll();
+
+        // Assert
+        assertEquals(3, result.size());
+        assertEquals("Dr.", result.get(0).getName());
+        assertEquals("Mr.", result.get(1).getName());
+        assertEquals("Mrs.", result.get(2).getName());
+        verify(salutationRepository, times(1)).findAllByOrderByNameAsc();
     }
 
     @Test

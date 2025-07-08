@@ -73,7 +73,7 @@ public class CompanyTypeServiceImpl implements CompanyTypeService {
     @Override
     @Transactional(readOnly = true)
     public List<CompanyType> findAll() {
-        return companyTypeRepository.findAll();
+        return companyTypeRepository.findAllByOrderByNameAsc();
     }
 
     /**
