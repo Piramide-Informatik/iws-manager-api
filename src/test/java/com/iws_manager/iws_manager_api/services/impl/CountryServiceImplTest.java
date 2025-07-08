@@ -102,8 +102,8 @@ public class CountryServiceImplTest {
     @Test
     void updateShouldUpdateCountryWhenIdExists() {
         Country updatedDetails = new Country();
-        updatedDetails.setName("Argentina");
-        updatedDetails.setLabel("AR");
+        updatedDetails.setName("Peru");
+        updatedDetails.setLabel("PE");
         updatedDetails.setIsDefault(false);
 
         when(countryRepository.findById(1L)).thenReturn(Optional.of(country));
@@ -111,8 +111,8 @@ public class CountryServiceImplTest {
 
         Country updatedCountry = countryService.update(1L, updatedDetails);
 
-        assertEquals("Argentina", updatedCountry.getName());
-        assertEquals("AR", updatedCountry.getLabel());
+        assertEquals("Peru", updatedCountry.getName());
+        assertEquals("PE", updatedCountry.getLabel());
         assertFalse(updatedCountry.getIsDefault());
     }
 

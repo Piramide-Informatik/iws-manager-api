@@ -104,7 +104,7 @@ class TitleServiceImplTest {
         // Arrange
         Title title2 = new Title();
         title2.setId(2L);
-        title2.setName("Prof.");
+        title2.setName("Mgtr.");
         
         when(titleRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(sampleTitle, title2));
 

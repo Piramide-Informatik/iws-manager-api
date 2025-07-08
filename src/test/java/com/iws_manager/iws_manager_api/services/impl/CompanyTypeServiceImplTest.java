@@ -119,15 +119,18 @@ class CompanyTypeServiceImplTest {
     @Test
     @DisplayName("Should return all company types ordered by name")
     void shouldGetAllCompanyTypesOrdered() {
+        String name1 = "Public";
+        String name2 = "Private";
+        String name3 = "Non-Profit";
         // Arrange
         CompanyType publicType = new CompanyType();
-        publicType.setName("Public");
+        publicType.setName(name1);
         
         CompanyType privateType = new CompanyType();
-        privateType.setName("Private");
+        privateType.setName(name2);
         
         CompanyType nonprofit = new CompanyType();
-        nonprofit.setName("Non-Profit");
+        nonprofit.setName(name3);
         
         when(companyTypeRepository.findAllByOrderByNameAsc())
             .thenReturn(List.of(nonprofit, privateType, publicType));
@@ -137,9 +140,9 @@ class CompanyTypeServiceImplTest {
 
         // Assert
         assertEquals(3, result.size());
-        assertEquals("Non-Profit", result.get(0).getName());
-        assertEquals("Private", result.get(1).getName());
-        assertEquals("Public", result.get(2).getName());
+        assertEquals(name3, result.get(0).getName());
+        assertEquals(name2, result.get(1).getName());
+        assertEquals(name1, result.get(2).getName());
         verify(companyTypeRepository, times(1)).findAllByOrderByNameAsc();
     }
 
