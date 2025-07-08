@@ -106,14 +106,41 @@ class CompanyTypeServiceImplTest {
         companyType2.setId(2L);
         companyType2.setName("Private");
         
-        when(companyTypeRepository.findAll()).thenReturn(Arrays.asList(sampleCompanyType, companyType2));
+        when(companyTypeRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(sampleCompanyType, companyType2));
 
         // Act
         List<CompanyType> result = companyTypeService.findAll();
 
         // Assert
         assertEquals(2, result.size());
-        verify(companyTypeRepository, times(1)).findAll();
+        verify(companyTypeRepository, times(1)).findAllByOrderByNameAsc();
+    }
+
+    @Test
+    @DisplayName("Should return all company types ordered by name")
+    void shouldGetAllCompanyTypesOrdered() {
+        // Arrange
+        CompanyType publicType = new CompanyType();
+        publicType.setName("Public");
+        
+        CompanyType privateType = new CompanyType();
+        privateType.setName("Private");
+        
+        CompanyType nonprofit = new CompanyType();
+        nonprofit.setName("Non-Profit");
+        
+        when(companyTypeRepository.findAllByOrderByNameAsc())
+            .thenReturn(List.of(nonprofit, privateType, publicType));
+
+        // Act
+        List<CompanyType> result = companyTypeService.findAll();
+
+        // Assert
+        assertEquals(3, result.size());
+        assertEquals("Non-Profit", result.get(0).getName());
+        assertEquals("Private", result.get(1).getName());
+        assertEquals("Public", result.get(2).getName());
+        verify(companyTypeRepository, times(1)).findAllByOrderByNameAsc();
     }
 
     @Test
