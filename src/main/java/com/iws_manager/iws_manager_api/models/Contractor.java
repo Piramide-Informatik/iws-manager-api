@@ -46,8 +46,7 @@ public class Contractor extends BaseEntity{
     @Column(name = "zipcode", length = 255)
     private String zipCode;
 
-    /*implement subcontracts for the next functionality */
-    // @OneToMany(mappedBy = "contractor", cascade = CascadeType.ALL, orphanRemoval = true)
-    // @ToString.Exclude
-    // private List<Subcontract> subcontracts = new ArrayList<>();
+    @OneToMany(mappedBy = "contractor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Subcontract> subcontracts = new ArrayList<>();
 }
