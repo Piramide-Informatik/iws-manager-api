@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 
 class SubcontractTest {
 
+    private static final String TEST_INVOICE_NO = "INV-2023-001";
+
     @Test
     void testSubcontractCreation() {
         // Arrange
@@ -32,7 +34,7 @@ class SubcontractTest {
         subcontract.setInvoiceDate(testDate.plusDays(30));
         subcontract.setInvoiceGross(testAmount);
         subcontract.setInvoiceNet(testAmount);
-        subcontract.setInvoiceNo("INV-2023-001");
+        subcontract.setInvoiceNo(TEST_INVOICE_NO);
         subcontract.setIsAfa(true);
         subcontract.setNetOrGross(true);
         subcontract.setNote("Urgent project");
@@ -49,7 +51,7 @@ class SubcontractTest {
         assertEquals(testDate.plusDays(30), subcontract.getInvoiceDate());
         assertEquals(testAmount, subcontract.getInvoiceGross());
         assertEquals(testAmount, subcontract.getInvoiceNet());
-        assertEquals("INV-2023-001", subcontract.getInvoiceNo());
+        assertEquals(TEST_INVOICE_NO, subcontract.getInvoiceNo());
         assertTrue(subcontract.getIsAfa());
         assertTrue(subcontract.getNetOrGross());
         assertEquals("Urgent project", subcontract.getNote());
@@ -99,7 +101,7 @@ class SubcontractTest {
         // Arrange
         Subcontract subcontract = new Subcontract();
         subcontract.setId(1L);
-        subcontract.setInvoiceNo("INV-2023-001");
+        subcontract.setInvoiceNo(TEST_INVOICE_NO);
         subcontract.setContractTitle("Test Contract");
 
         // Act
@@ -107,7 +109,7 @@ class SubcontractTest {
 
         // Assert
         assertNotNull(toStringResult);
-        assertTrue(toStringResult.contains("INV-2023-001"));
+        assertTrue(toStringResult.contains(TEST_INVOICE_NO));
         assertTrue(toStringResult.contains("Test Contract"));
         assertFalse(toStringResult.contains("subcontractProjects")); // Because of @ToString.Exclude
     }
