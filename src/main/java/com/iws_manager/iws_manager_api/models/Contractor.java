@@ -5,6 +5,8 @@ import com.iws_manager.iws_manager_api.models.base.BaseEntity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
+import java.util.ArrayList;
 
 @Getter
 @Setter
@@ -46,7 +48,6 @@ public class Contractor extends BaseEntity{
     @Column(name = "zipcode", length = 255)
     private String zipCode;
 
-    /*implement subcontracts for the next functionality */
     // @OneToMany(mappedBy = "contractor", cascade = CascadeType.ALL, orphanRemoval = true)
     // @ToString.Exclude
     // private List<Subcontract> subcontracts = new ArrayList<>();
