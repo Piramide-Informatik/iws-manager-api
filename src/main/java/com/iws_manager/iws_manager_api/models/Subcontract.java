@@ -22,7 +22,7 @@ import lombok.*;
 public class Subcontract extends BaseEntity{
 
     @Column(name = "afamonths", nullable = true, columnDefinition = "SMALLINT")
-    private Integer afamonths;
+    private Boolean afamonths;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "contractorid", referencedColumnName = "contractorid")
@@ -69,4 +69,8 @@ public class Subcontract extends BaseEntity{
     // @ManyToOne(fetch = FetchType.EAGER)
     // @JoinColumn(name = "projectcostcenterid", referencedColumnName = "projectcostcenterid")
     // private ProjectCostCenter projectCostCenter;
+
+    // @OneToMany(mappedBy = "subcontract", cascade = CascadeType.ALL)
+    // @ToString.Exclude
+    // private List<SubcontractProject> subcontractProjects = new ArrayList<>();
 }

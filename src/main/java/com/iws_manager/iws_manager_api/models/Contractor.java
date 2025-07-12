@@ -5,6 +5,8 @@ import com.iws_manager.iws_manager_api.models.base.BaseEntity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
+import java.util.ArrayList;
 
 @Getter
 @Setter
