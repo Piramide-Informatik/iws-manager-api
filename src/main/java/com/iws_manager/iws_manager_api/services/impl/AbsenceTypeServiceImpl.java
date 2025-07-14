@@ -51,6 +51,11 @@ public class AbsenceTypeServiceImpl implements AbsenceTypeService {
         return absenceTypeRepository.findById(id)
                 .map(existingAbsenseType -> {
                     existingAbsenseType.setName(absenceTypeDetails.getName());
+                    existingAbsenseType.setHours(absenceTypeDetails.getHours());
+                    existingAbsenseType.setLabel(absenceTypeDetails.getLabel());
+                    existingAbsenseType.setIsHoliday(absenceTypeDetails.getIsHoliday());
+                    existingAbsenseType.setShareOfDay(absenceTypeDetails.getShareOfDay());
+
                     return absenceTypeRepository.save(existingAbsenseType);
                 }).orElseThrow(()-> new RuntimeException("AbsenseType not found with id: "+ id));
     }
