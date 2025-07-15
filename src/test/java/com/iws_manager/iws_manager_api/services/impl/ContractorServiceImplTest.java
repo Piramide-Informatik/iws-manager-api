@@ -109,7 +109,7 @@ public class ContractorServiceImplTest {
 
         Contractor contractor2 = new Contractor();
         contractor2.setId(2L);
-        contractor2.setName("C");
+        contractor2.setName("D");
 
         //Mockea el metodo que realmente usa el servicio
         when(contractorRepository.findAllByOrderByNameAsc())
@@ -121,7 +121,7 @@ public class ContractorServiceImplTest {
         //Assert
         assertEquals(2, result.size());
         assertEquals("A", result.get(0).getName());//verfica el orden
-        assertEquals("C", result.get(1).getName());
+        assertEquals("D", result.get(1).getName());
         verify(contractorRepository, times(1)).findAllByOrderByNameAsc();//Verfica el metodo correcto
     }
     @Test
