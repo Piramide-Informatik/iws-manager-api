@@ -137,7 +137,7 @@ public class ContractorServiceImplTest {
     }
 
     @Test
-    public void update_ShouldThrowExceptio_WhenOptimisticLockingFails(){
+    public void updateShouldThrowExceptioWhenOptimisticLockingFails(){
         //Setup
         Long contractorId = 1L;
         Contractor currentContractor = new Contractor();
@@ -156,9 +156,9 @@ public class ContractorServiceImplTest {
                         new ObjectOptimisticLockingFailureException(Contractor.class, contractorId)));
 
         //Execution and verification
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            contractorService.update(contractorId, outdatedContractor);
-        });
+        Exception exception = assertThrows(RuntimeException.class,
+                () -> contractorService.update(contractorId, outdatedContractor)
+        );
 
         assertNotNull(exception, "An exception should have been thrown");
 

@@ -71,4 +71,16 @@ public class ContractorController {
         contractorService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<List<Contractor>> getContractorsByCustomerId(@PathVariable Long customerId) {
+        List<Contractor> contractors = contractorService.getContractorsByCustomerId(customerId);
+        return new ResponseEntity<>(contractors, HttpStatus.OK);
+    }
+
+    @GetMapping("/country/{countryId}")
+    public ResponseEntity<List<Contractor>> getContractorsByCountryId(@PathVariable Long countryId) {
+        List<Contractor> contractors = contractorService.getContractorsByCountryId(countryId);
+        return new ResponseEntity<>(contractors, HttpStatus.OK);
+    }
 }

@@ -13,10 +13,10 @@ import java.util.Optional;
 @Service
 @Transactional
 public class ContractorServiceImpl implements ContractorService {
-    private final ContractorRepository contractRepository;
+    private final ContractorRepository contractorRepository;
     @Autowired
-    public ContractorServiceImpl(ContractorRepository contractRepository) {
-        this.contractRepository = contractRepository;
+    public ContractorServiceImpl(ContractorRepository contractorRepository) {
+        this.contractorRepository = contractorRepository;
     }
 
 
@@ -25,7 +25,7 @@ public class ContractorServiceImpl implements ContractorService {
         if(contractor == null){
             throw new IllegalArgumentException("Contractor cannot be null");
         }
-        return contractRepository.save(contractor);
+        return contractorRepository.save(contractor);
     }
 
     @Override
@@ -34,12 +34,12 @@ public class ContractorServiceImpl implements ContractorService {
         if(id == null){
             throw new IllegalArgumentException("ID cannot be null");
         }
-        return  contractRepository.findById(id);
+        return  contractorRepository.findById(id);
     }
 
     @Override
     public List<Contractor> findAll() {
-        return contractRepository.findAllByOrderByNameAsc();
+        return contractorRepository.findAllByOrderByNameAsc();
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ContractorServiceImpl implements ContractorService {
         if (id==null || contractorDetails == null){
             throw new IllegalArgumentException("ID and contractor Details cannot be null");
         }
-        return contractRepository.findById(id)
+        return contractorRepository.findById(id)
                 .map(existingContractor -> {
                     existingContractor.setName(contractorDetails.getName());
                     existingContractor.setCity(contractorDetails.getCity());
@@ -60,7 +60,7 @@ public class ContractorServiceImpl implements ContractorService {
                     existingContractor.setZipCode(contractorDetails.getZipCode());
 
 
-                    return contractRepository.save(existingContractor);
+                    return contractorRepository.save(existingContractor);
                 })
                 .orElseThrow(()-> new RuntimeException("Contractor not found with id: "+ id));
     }
@@ -70,6 +70,16 @@ public class ContractorServiceImpl implements ContractorService {
         if (id==null){
             throw new IllegalArgumentException("ID cannot be null");
         }
-        contractRepository.deleteById(id);
+        contractorRepository.deleteById(id);
+    }
+
+   @Override
+    public List<Contractor> getContractorsByCustomerId(Long customerId) {
+        return contractorRepository.findByCustomerId(customerId);
+    }
+
+    @Override
+    public List<Contractor> getContractorsByCountryId(Long countryId) {
+        return contractorRepository.findByCountryId(countryId);
     }
 }

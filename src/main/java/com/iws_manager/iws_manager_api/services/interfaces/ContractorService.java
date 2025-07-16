@@ -13,4 +13,7 @@ public interface ContractorService {
     List<Contractor> findAll();
     Contractor update(Long id, Contractor contractorDetails);
     void delete(Long id);
+
+    List<Contractor> getContractorsByCustomerId(Long customerId);
+    List<Contractor> getContractorsByCountryId(Long countryId);
 }
