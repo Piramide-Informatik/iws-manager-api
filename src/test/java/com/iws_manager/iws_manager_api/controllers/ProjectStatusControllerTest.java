@@ -27,6 +27,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 public class ProjectStatusControllerTest {
+    private static final String ACTIVE = "active"; // ← constante añadida
+    private static final String UPDATED_ACTIVE = "active updated";
+    private static final String COMPLETED = "completed";
     private MockMvc mockMvc;
     private String uri = "/api/v1/projectstatus";
     private String name = "$.name";
@@ -47,11 +50,11 @@ public class ProjectStatusControllerTest {
 
         projectStatus1 = new ProjectStatus();
         projectStatus1.setId(1L);
-        projectStatus1.setName("active");
+        projectStatus1.setName(ACTIVE);
 
         projectStatus2 = new ProjectStatus();
         projectStatus2.setId(2L);
-        projectStatus2.setName("completed");
+        projectStatus2.setName(COMPLETED);
     }
 
     @Test
@@ -63,7 +66,7 @@ public class ProjectStatusControllerTest {
                 .content(objectMapper.writeValueAsString(projectStatus1)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath(name).value("active"));
+                .andExpect(jsonPath(name).value(ACTIVE));
     }
 
     @Test
@@ -73,7 +76,7 @@ public class ProjectStatusControllerTest {
         mockMvc.perform(get(uri+"/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath(name).value("active"));
+                .andExpect(jsonPath(name).value(ACTIVE));
     }
 
     @Test
@@ -92,15 +95,15 @@ public class ProjectStatusControllerTest {
         mockMvc.perform(get(uri))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].name").value("active"))
+                .andExpect(jsonPath("$[0].name").value(ACTIVE))
                 .andExpect(jsonPath("$[1].id").value(2L))
-                .andExpect(jsonPath("$[1].name").value("completed"));
+                .andExpect(jsonPath("$[1].name").value(COMPLETED));
     }
 
     @Test
     void updateProjectStatusShouldReturnUpdatedTitle() throws Exception{
         ProjectStatus updatedprojectStatus = new ProjectStatus();
-        updatedprojectStatus.setName("active updated");
+        updatedprojectStatus.setName(UPDATED_ACTIVE);
 
         given(projectStatusService.update(1L, updatedprojectStatus)).willReturn(updatedprojectStatus);
 
@@ -108,7 +111,7 @@ public class ProjectStatusControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatedprojectStatus)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath(name).value("active updated"));
+                .andExpect(jsonPath(name).value(UPDATED_ACTIVE));
     }
 
     @Test
@@ -143,7 +146,7 @@ public class ProjectStatusControllerTest {
     @Test
     void createProjectStatusShouldReturnCreatedProjectStatus() throws Exception {
         ProjectStatus validprojectStatus = new ProjectStatus();
-        validprojectStatus.setName("active");
+        validprojectStatus.setName(ACTIVE);
 
         when(projectStatusService.create(any(ProjectStatus.class))).thenReturn(validprojectStatus);
 
@@ -151,7 +154,7 @@ public class ProjectStatusControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(validprojectStatus)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath(name).value("active"));
+                .andExpect(jsonPath(name).value(ACTIVE));
     }
 
 }
