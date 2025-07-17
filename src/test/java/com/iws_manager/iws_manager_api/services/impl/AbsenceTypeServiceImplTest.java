@@ -23,7 +23,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @DisplayName("AbsenceType Service Implementation Tests")
 public class AbsenceTypeServiceImplTest {
-
+    private static final String VACATION_NAME = "Vacation";
+    private static final String PERSONAL_PERMISSION="Personal permission";
     @Mock
     private AbsenceTypeRepository absenceTypeRepository;
     @InjectMocks
@@ -34,7 +35,7 @@ public class AbsenceTypeServiceImplTest {
     void setUp(){
         sampleAbsenceType = new AbsenceType();
         sampleAbsenceType.setId(1L);
-        sampleAbsenceType.setName("Vacation");
+        sampleAbsenceType.setName(VACATION_NAME);
     }
 
     @Test
@@ -45,7 +46,7 @@ public class AbsenceTypeServiceImplTest {
         AbsenceType result = absenceTypeService.create(sampleAbsenceType);
 
         assertNotNull(result);
-        assertEquals("Vacation", result.getName());
+        assertEquals(VACATION_NAME, result.getName());
         verify(absenceTypeRepository, times(1)).save(any(AbsenceType.class));
     }
 
@@ -64,7 +65,7 @@ public class AbsenceTypeServiceImplTest {
         Optional<AbsenceType> result = absenceTypeService.findById(1L);
 
         assertTrue(result.isPresent());
-        assertEquals("Vacation", result.get().getName());
+        assertEquals(VACATION_NAME, result.get().getName());
         verify(absenceTypeRepository, times(1)).findById(1L);
     }
 
@@ -80,7 +81,7 @@ public class AbsenceTypeServiceImplTest {
     void findAllShouldReturnAllAbsenceType() {
         AbsenceType absenceType2 = new AbsenceType();
         absenceType2.setId(2L);
-        absenceType2.setName("Personal permission");
+        absenceType2.setName(PERSONAL_PERMISSION);
 
         when(absenceTypeRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(sampleAbsenceType,absenceType2));
 
@@ -128,12 +129,12 @@ public class AbsenceTypeServiceImplTest {
         Long absenceTypeId = 1L;
         AbsenceType currentAbsenceType = new AbsenceType();
         currentAbsenceType.setId(absenceTypeId);
-        currentAbsenceType.setName("Vacation");
+        currentAbsenceType.setName(VACATION_NAME);
         currentAbsenceType.setVersion(2L);
 
         AbsenceType outdatedAbsenceType = new AbsenceType();
         outdatedAbsenceType.setId(absenceTypeId);
-        outdatedAbsenceType.setName("Personal permission");
+        outdatedAbsenceType.setName(PERSONAL_PERMISSION);
         outdatedAbsenceType.setVersion(1L);
 
         when(absenceTypeRepository.findById(absenceTypeId)).thenReturn(Optional.of(currentAbsenceType));
