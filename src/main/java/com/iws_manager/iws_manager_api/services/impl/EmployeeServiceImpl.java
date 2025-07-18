@@ -156,6 +156,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> findByCustomerId(Long customerId) {
-        return employeeRepository.findByCustomerId(customerId);
+        return employeeRepository.findByCustomerIdOrderByEmployeenoAsc(customerId);
     }
 }
