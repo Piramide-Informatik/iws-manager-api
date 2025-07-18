@@ -166,9 +166,9 @@ class EmployeeServiceImplTest {
 
     @Test
     void testFindByCustomerId() {
-        when(employeeRepository.findByCustomerId(1L)).thenReturn(List.of(sampleEmployee));
+        when(employeeRepository.findByCustomerIdOrderByEmployeenoAsc(1L)).thenReturn(List.of(sampleEmployee));
         List<Employee> result = employeeService.findByCustomerId(1L);
         assertEquals(1, result.size());
-        verify(employeeRepository, times(1)).findByCustomerId(1L);
+        verify(employeeRepository, times(1)).findByCustomerIdOrderByEmployeenoAsc(1L);
     }
 }

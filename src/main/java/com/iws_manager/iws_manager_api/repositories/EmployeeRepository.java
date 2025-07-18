@@ -15,5 +15,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findByTitleId(Long titleId);
     List<Employee> findBySalutationId(Long salutationId);
     List<Employee> findByQualificationFZId(Long qualificationFZId);
-    List<Employee> findByCustomerId(Long customerId);
+    //find by customer Id 
+    List<Employee> findByCustomerIdOrderByEmployeenoAsc(Long customerId);
 }
