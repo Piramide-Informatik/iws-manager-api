@@ -70,10 +70,32 @@ class EmployeeServiceImplTest {
     @Test
     void testFindAll() {
         List<Employee> employees = List.of(sampleEmployee);
-        when(employeeRepository.findAll()).thenReturn(employees);
+        
+        when(employeeRepository.findAllByOrderByEmployeenoAsc()).thenReturn(employees);
+        
         List<Employee> result = employeeService.findAll();
+        
         assertEquals(1, result.size());
-        verify(employeeRepository, times(1)).findAll();
+        verify(employeeRepository, times(1)).findAllByOrderByEmployeenoAsc();
+        verify(employeeRepository, never()).findAll();
+    }
+
+    @Test
+    void testFindAllReturnsEmployeesInOrder() {
+        Employee emp1 = new Employee();
+        emp1.setEmployeeno(2);
+        Employee emp2 = new Employee();
+        emp2.setEmployeeno(1);
+        
+        List<Employee> expectedSorted = List.of(emp2, emp1);
+        
+        when(employeeRepository.findAllByOrderByEmployeenoAsc()).thenReturn(expectedSorted);
+        
+        List<Employee> result = employeeService.findAll();
+        
+        assertEquals(2, result.size());
+        assertEquals(1, result.get(0).getEmployeeno());
+        assertEquals(2, result.get(1).getEmployeeno());
     }
 
     @Test
