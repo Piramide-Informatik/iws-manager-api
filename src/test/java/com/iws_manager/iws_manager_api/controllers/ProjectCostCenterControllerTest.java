@@ -37,6 +37,7 @@ class ProjectCostCenterControllerTest {
     private static final Integer UPDATED_SEQUENCE_NO = 2;
     private static final String BASE_URL = "/api/v1/projectcostcenters";
     private static final String ID_URL = BASE_URL + "/{id}";
+    private static final String COST_CENTER_STR = "$.costCenter";
 
     private MockMvc mockMvc;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -61,7 +62,7 @@ class ProjectCostCenterControllerTest {
     }
 
     @Test
-    void create_ShouldReturnCreatedProjectCostCenter() throws Exception {
+    void createShouldReturnCreatedProjectCostCenter() throws Exception {
         when(projectCostCenterService.create(any(ProjectCostCenter.class))).thenReturn(projectCostCenter);
 
         mockMvc.perform(post(BASE_URL)
@@ -69,7 +70,7 @@ class ProjectCostCenterControllerTest {
                 .content(objectMapper.writeValueAsString(projectCostCenter)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(ID))
-                .andExpect(jsonPath("$.costCenter").value(COST_CENTER))
+                .andExpect(jsonPath(COST_CENTER_STR).value(COST_CENTER))
                 .andExpect(jsonPath("$.kmuino").value(KMUINO))
                 .andExpect(jsonPath("$.sequenceno").value(SEQUENCE_NO));
 
@@ -77,19 +78,19 @@ class ProjectCostCenterControllerTest {
     }
 
     @Test
-    void findById_ShouldReturnProjectCostCenter_WhenExists() throws Exception {
+    void findByIdShouldReturnProjectCostCenterWhenExists() throws Exception {
         when(projectCostCenterService.findById(ID)).thenReturn(Optional.of(projectCostCenter));
 
         mockMvc.perform(get(ID_URL, ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(ID))
-                .andExpect(jsonPath("$.costCenter").value(COST_CENTER));
+                .andExpect(jsonPath(COST_CENTER_STR).value(COST_CENTER));
 
         verify(projectCostCenterService, times(1)).findById(ID);
     }
 
     @Test
-    void findById_ShouldReturnNotFound_WhenNotExists() throws Exception {
+    void findByIdShouldReturnNotFoundWhenNotExists() throws Exception {
         when(projectCostCenterService.findById(ID)).thenReturn(Optional.empty());
 
         mockMvc.perform(get(ID_URL, ID))
@@ -99,7 +100,7 @@ class ProjectCostCenterControllerTest {
     }
 
     @Test
-    void findAll_ShouldReturnAllProjectCostCenters() throws Exception {
+    void findAllShouldReturnAllProjectCostCenters() throws Exception {
         List<ProjectCostCenter> costCenters = Arrays.asList(projectCostCenter);
         when(projectCostCenterService.findAll()).thenReturn(costCenters);
 
@@ -112,7 +113,7 @@ class ProjectCostCenterControllerTest {
     }
 
     @Test
-    void update_ShouldReturnUpdatedProjectCostCenter() throws Exception {
+    void updateShouldReturnUpdatedProjectCostCenter() throws Exception {
         ProjectCostCenter updated = new ProjectCostCenter();
         updated.setCostCenter(UPDATED_COST_CENTER);
         updated.setKmuino(UPDATED_KMUINO);
@@ -124,7 +125,7 @@ class ProjectCostCenterControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updated)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.costCenter").value(UPDATED_COST_CENTER))
+                .andExpect(jsonPath(COST_CENTER_STR).value(UPDATED_COST_CENTER))
                 .andExpect(jsonPath("$.kmuino").value(UPDATED_KMUINO))
                 .andExpect(jsonPath("$.sequenceno").value(UPDATED_SEQUENCE_NO));
 
@@ -132,7 +133,7 @@ class ProjectCostCenterControllerTest {
     }
 
     @Test
-    void delete_ShouldReturnNoContent() throws Exception {
+    void deleteShouldReturnNoContent() throws Exception {
         doNothing().when(projectCostCenterService).delete(ID);
 
         mockMvc.perform(delete(ID_URL, ID))
