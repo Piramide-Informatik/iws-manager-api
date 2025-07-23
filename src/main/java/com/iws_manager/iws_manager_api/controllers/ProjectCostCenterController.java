@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/project-cost-centers")
+@RequestMapping("/api/v1/projectcostcenters")
 public class ProjectCostCenterController {
 
     private final ProjectCostCenterService projectCostCenterService;
