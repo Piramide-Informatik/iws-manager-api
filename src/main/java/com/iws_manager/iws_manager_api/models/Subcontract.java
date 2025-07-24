@@ -65,10 +65,9 @@ public class Subcontract extends BaseEntity{
     @Column(name = "note", length = 255)
     private String note;
 
-    /* Implement project cost center */
-    // @ManyToOne(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "projectcostcenterid", referencedColumnName = "projectcostcenterid")
-    // private ProjectCostCenter projectCostCenter;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "projectcostcenterid", referencedColumnName = "projectcostcenterid")
+    private ProjectCostCenter projectCostCenter;
 
     // @OneToMany(mappedBy = "subcontract", cascade = CascadeType.ALL)
     // @ToString.Exclude
