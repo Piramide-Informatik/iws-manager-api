@@ -11,8 +11,8 @@ public interface SubcontractRepository extends JpaRepository<Subcontract, Long> 
     List<Subcontract> findAllByOrderByContractTitleAsc();
 
     List<Subcontract> findByContractorId(Long contractorId);
-    List<Subcontract> findByCustomerId(Long customerId);
     List<Subcontract> findByProjectCostCenterId(Long projectCostCenterId);
+    //find by customer id
     List<Subcontract> findByCustomerIdOrderByContractTitleAsc(Long customerId);
 
 //     List<Subcontract> findByContractor_ContractorId(Long contractorId);
