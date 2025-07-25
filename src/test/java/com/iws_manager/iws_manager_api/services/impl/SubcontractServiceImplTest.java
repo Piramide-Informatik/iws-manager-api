@@ -22,13 +22,11 @@ class SubcontractServiceImplTest {
     @InjectMocks
     private SubcontractServiceImpl subcontractService;
 
-    private AutoCloseable closeable;
-
     private Subcontract sampleSubcontract;
 
     @BeforeEach
     void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
+        AutoCloseable closeable = MockitoAnnotations.openMocks(this);
         sampleSubcontract = new Subcontract();
         sampleSubcontract.setId(1L);
         sampleSubcontract.setContractTitle("Test Contract");
