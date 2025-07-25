@@ -4,6 +4,7 @@ import com.iws_manager.iws_manager_api.models.Subcontract;
 import com.iws_manager.iws_manager_api.repositories.SubcontractRepository;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
@@ -23,15 +24,21 @@ class SubcontractServiceImplTest {
     private SubcontractServiceImpl subcontractService;
 
     private Subcontract sampleSubcontract;
+    private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
-        AutoCloseable closeable = MockitoAnnotations.openMocks(this);
+        closeable = MockitoAnnotations.openMocks(this);
         sampleSubcontract = new Subcontract();
         sampleSubcontract.setId(1L);
         sampleSubcontract.setContractTitle("Test Contract");
         sampleSubcontract.setInvoiceAmount(new BigDecimal("1000.00"));
         sampleSubcontract.setDate(LocalDate.now());
+    }
+
+    @AfterEach
+    void tearDown() throws Exception {
+        closeable.close();
     }
 
     @Test
