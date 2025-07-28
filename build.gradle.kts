@@ -48,6 +48,8 @@ dependencies {
     // Database
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client:${Versions.MARIADB}")
 
+     // Swagger/OpenAPI Documentation
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
 
     // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
