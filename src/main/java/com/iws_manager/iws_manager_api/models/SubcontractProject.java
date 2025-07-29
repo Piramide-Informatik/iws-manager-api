@@ -21,10 +21,9 @@ import lombok.*;
 @AttributeOverride(name = "id", column = @Column(name = "subcontractprojectid"))
 public class SubcontractProject extends BaseEntity{
 
-    /* Subcontract year needs to be implemented */
-    // @ManyToOne(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "subcontractyearid", referencedColumnName = "subcontractyearid")
-    // private SubcontractYear subcontractYear;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "subcontractyearid", referencedColumnName = "subcontractyearid")
+    private SubcontractYear subcontractYear;
 
     @Column(name = "amount", nullable = true, columnDefinition = "DECIMAL(10,2)")
     private String amount;
