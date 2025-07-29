@@ -14,13 +14,14 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@EqualsAndHashCode(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="approvalstatus")
 @AttributeOverride(name= "id" ,column = @Column(name="approvalstatusid"))
 public class ApprovalStatus extends BaseEntity {
 
     @Column(name = "approvalstatus", length = 255)
-    private String name;
+    private String status;
 
     @Column(name = "forprojects", columnDefinition = "SMALLINT")
     private Short forProjects;
@@ -30,28 +31,4 @@ public class ApprovalStatus extends BaseEntity {
 
     @Column(name = "sequenceno", columnDefinition = "INT")
     private Integer sequenceNo;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ApprovalStatus that = (ApprovalStatus) o;
-
-        if (this.getId() != null && that.getId() != null) {
-            return this.getId().equals(that.getId());
-        }
-
-        return Objects.equals(name, that.name) &&
-                Objects.equals(forProjects, that.forProjects) &&
-                Objects.equals(forNetworks, that.forNetworks) &&
-                Objects.equals(sequenceNo, that.sequenceNo);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-                getId() != null ? getId() : name, forProjects, forNetworks, sequenceNo
-        );
-    }
 }
