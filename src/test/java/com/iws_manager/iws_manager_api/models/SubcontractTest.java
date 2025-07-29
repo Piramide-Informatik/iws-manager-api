@@ -24,7 +24,7 @@ class SubcontractTest {
 
         // Act
         Subcontract subcontract = new Subcontract();
-        subcontract.setAfamonths(true);
+        subcontract.setAfamonths(1);
         subcontract.setContractor(contractor);
         subcontract.setContractTitle("Construction Work");
         subcontract.setCustomer(customer);
@@ -41,7 +41,7 @@ class SubcontractTest {
 
         // Assert
         assertNotNull(subcontract);
-        assertTrue(subcontract.getAfamonths());
+        assertEquals(1, subcontract.getAfamonths());
         assertEquals(contractor, subcontract.getContractor());
         assertEquals("Construction Work", subcontract.getContractTitle());
         assertEquals(customer, subcontract.getCustomer());
