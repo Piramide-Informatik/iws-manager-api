@@ -25,7 +25,7 @@ import lombok.*;
 public class Subcontract extends BaseEntity{
 
     @Column(name = "afamonths", nullable = true, columnDefinition = "SMALLINT")
-    private Boolean afamonths;
+    private Integer afamonths;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "contractorid", referencedColumnName = "contractorid")
