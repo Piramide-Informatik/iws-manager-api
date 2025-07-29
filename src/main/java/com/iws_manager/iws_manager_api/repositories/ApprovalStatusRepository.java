@@ -8,5 +8,4 @@ import java.util.List;
 
 @Repository
 public interface ApprovalStatusRepository extends JpaRepository<ApprovalStatus, Long> {
-    List<ApprovalStatus> findAllByOrderByNameAsc();
 }
