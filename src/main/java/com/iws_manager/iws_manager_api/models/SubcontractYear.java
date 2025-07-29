@@ -13,7 +13,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@EqualsAndHashCode(callSuper = true, exclude = { "subcontract" })
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "subcontractyear")
 @AttributeOverride(name = "id", column = @Column(name = "subcontractyearid"))
