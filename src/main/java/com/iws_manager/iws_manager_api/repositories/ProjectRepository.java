@@ -75,4 +75,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     // --- Special Queries ---
     List<Project> findByCustomerIdOrderByStartDateDesc(Long customerId);
+
+
+    
 }
