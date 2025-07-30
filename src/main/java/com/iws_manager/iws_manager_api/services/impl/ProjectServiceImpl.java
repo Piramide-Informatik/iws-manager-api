@@ -160,177 +160,177 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Project> findByApprovalDate(LocalDate approvalDate) {
+    public List<Project> getProjectsByApprovalDate(LocalDate approvalDate) {
         return projectRepository.findByApprovalDate(approvalDate);
     }
 
     @Override
-    public List<Project> findByAuthorizationDate(LocalDate authorizationDate) {
+    public List<Project> getProjectsByAuthorizationDate(LocalDate authorizationDate) {
         return projectRepository.findByAuthorizationDate(authorizationDate);
     }
 
     @Override
-    public List<Project> findByEndApproval(LocalDate endApproval) {
+    public List<Project> getProjectsByEndApproval(LocalDate endApproval) {
         return projectRepository.findByEndApproval(endApproval);
     }
 
     @Override
-    public List<Project> findByEndDate(LocalDate endDate) {
+    public List<Project> getProjectsByEndDate(LocalDate endDate) {
         return projectRepository.findByEndDate(endDate);
     }
 
     @Override
-    public List<Project> findByStartApproval(LocalDate startApproval) {
+    public List<Project> getProjectsByStartApproval(LocalDate startApproval) {
         return projectRepository.findByStartApproval(startApproval);
     }
 
     @Override
-    public List<Project> findByStartDate(LocalDate startDate) {
+    public List<Project> getProjectsByStartDate(LocalDate startDate) {
         return projectRepository.findByStartDate(startDate);
     }
 
     @Override
-    public List<Project> findByChance(BigDecimal chance) {
+    public List<Project> getProjectsByChance(BigDecimal chance) {
         return projectRepository.findByChance(chance);
     }
 
     @Override
-    public List<Project> findByFundingRate(BigDecimal fundingRate) {
+    public List<Project> getProjectsByFundingRate(BigDecimal fundingRate) {
         return projectRepository.findByFundingRate(fundingRate);
     }
 
     @Override
-    public List<Project> findByHourlyRateMueu(BigDecimal hourlyRateMueu) {
+    public List<Project> getProjectsByHourlyRateMueu(BigDecimal hourlyRateMueu) {
         return projectRepository.findByHourlyRateMueu(hourlyRateMueu);
     }
 
     @Override
-    public List<Project> findByMaxHoursPerMonth(BigDecimal maxHoursPerMonth) {
+    public List<Project> getProjectsByMaxHoursPerMonth(BigDecimal maxHoursPerMonth) {
         return projectRepository.findByMaxHoursPerMonth(maxHoursPerMonth);
     }
 
     @Override
-    public List<Project> findByMaxHoursPerYear(BigDecimal maxHoursPerYear) {
+    public List<Project> getProjectsByMaxHoursPerYear(BigDecimal maxHoursPerYear) {
         return projectRepository.findByMaxHoursPerYear(maxHoursPerYear);
     }
 
     @Override
-    public List<Project> findByProductiveHoursPerYear(BigDecimal productiveHoursPerYear) {
+    public List<Project> getProjectsByProductiveHoursPerYear(BigDecimal productiveHoursPerYear) {
         return projectRepository.findByProductiveHoursPerYear(productiveHoursPerYear);
     }
 
     @Override
-    public List<Project> findByShareResearch(BigDecimal shareResearch) {
+    public List<Project> getProjectsByShareResearch(BigDecimal shareResearch) {
         return projectRepository.findByShareResearch(shareResearch);
     }
 
     @Override
-    public List<Project> findByStuffFlat(BigDecimal stuffFlat) {
+    public List<Project> getProjectsByStuffFlat(BigDecimal stuffFlat) {
         return projectRepository.findByStuffFlat(stuffFlat);
     }
 
     @Override
-    public List<Project> findByOrderIdFue(Integer orderIdFue) {
+    public List<Project> getProjectsByOrderIdFue(Integer orderIdFue) {
         return projectRepository.findByOrderIdFue(orderIdFue);
     }
 
     @Override
-    public List<Project> findByOrderIdAdmin(Integer orderIdAdmin) {
+    public List<Project> getProjectsByOrderIdAdmin(Integer orderIdAdmin) {
         return projectRepository.findByOrderIdAdmin(orderIdAdmin);
     }
 
     @Override
-    public List<Project> findByCommentContaining(String keyword) {
+    public List<Project> getProjectsByCommentContaining(String keyword) {
         return projectRepository.findByCommentContaining(keyword);
     }
 
     @Override
-    public List<Project> findByFinanceAuthority(String authority) {
+    public List<Project> getProjectsByFinanceAuthority(String authority) {
         return projectRepository.findByFinanceAuthority(authority);
     }
 
     @Override
-    public List<Project> findByFundingLabel(String label) {
+    public List<Project> getProjectsByFundingLabel(String label) {
         return projectRepository.findByFundingLabel(label);
     }
 
     @Override
-    public List<Project> findByNoteContaining(String text) {
+    public List<Project> getProjectsByNoteContaining(String text) {
         return projectRepository.findByNoteContaining(text);
     }
 
     @Override
-    public List<Project> findByProjectLabel(String projectLabel) {
+    public List<Project> getProjectsByProjectLabel(String projectLabel) {
         return projectRepository.findByProjectLabel(projectLabel);
     }
 
     @Override
-    public List<Project> findByProjectName(String projectName) {
+    public List<Project> getProjectsByProjectName(String projectName) {
         return projectRepository.findByProjectName(projectName);
     }
 
     @Override
-    public List<Project> findByTitle(String title) {
+    public List<Project> getProjectsByTitle(String title) {
         return projectRepository.findByTitle(title);
     }
 
     @Override
-    public List<Project> findByCustomerId(Long customerId) {
+    public List<Project> getProjectsByCustomerId(Long customerId) {
         return projectRepository.findByCustomerId(customerId);
     }
 
     @Override
-    public List<Project> findByApprovalDateBetween(LocalDate start, LocalDate end) {
+    public List<Project> getProjectsByApprovalDateBetween(LocalDate start, LocalDate end) {
         return projectRepository.findByApprovalDateBetween(start, end);
     }
 
     @Override
-    public List<Project> findByAuthorizationDateBefore(LocalDate date) {
+    public List<Project> getProjectsByAuthorizationDateBefore(LocalDate date) {
         return projectRepository.findByAuthorizationDateBefore(date);
     }
 
     @Override
-    public List<Project> findByEndDateAfter(LocalDate date) {
+    public List<Project> getProjectsByEndDateAfter(LocalDate date) {
         return projectRepository.findByEndDateAfter(date);
     }
 
     @Override
-    public List<Project> findByStartDateBetween(LocalDate start, LocalDate end) {
+    public List<Project> getProjectsByStartDateBetween(LocalDate start, LocalDate end) {
         return projectRepository.findByStartDateBetween(start, end);
     }
 
     @Override
-    public List<Project> findByChanceGreaterThan(BigDecimal chance) {
+    public List<Project> getProjectsByChanceGreaterThan(BigDecimal chance) {
         return projectRepository.findByChanceGreaterThan(chance);
     }
 
     @Override
-    public List<Project> findByFundingRateLessThan(BigDecimal fundingRate) {
+    public List<Project> getProjectsByFundingRateLessThan(BigDecimal fundingRate) {
         return projectRepository.findByFundingRateLessThan(fundingRate);
     }
 
     @Override
-    public List<Project> findByHourlyRateMueuBetween(BigDecimal min, BigDecimal max) {
+    public List<Project> getProjectsByHourlyRateMueuBetween(BigDecimal min, BigDecimal max) {
         return projectRepository.findByHourlyRateMueuBetween(min, max);
     }
 
     @Override
-    public List<Project> findByProjectNameContainingIgnoreCase(String name) {
+    public List<Project> getProjectsByProjectNameContainingIgnoreCase(String name) {
         return projectRepository.findByProjectNameContainingIgnoreCase(name);
     }
 
     @Override
-    public List<Project> findByFundingLabelStartingWith(String prefix) {
+    public List<Project> getProjectsByFundingLabelStartingWith(String prefix) {
         return projectRepository.findByFundingLabelStartingWith(prefix);
     }
 
     @Override
-    public List<Project> findByTitleEndingWith(String suffix) {
+    public List<Project> getProjectsByTitleEndingWith(String suffix) {
         return projectRepository.findByTitleEndingWith(suffix);
     }
 
     @Override
-    public List<Project> findByCustomerIdOrderByStartDateDesc(Long customerId) {
+    public List<Project> getProjectsByCustomerIdOrderByStartDateDesc(Long customerId) {
         return projectRepository.findByCustomerIdOrderByStartDateDesc(customerId);
     }
 }

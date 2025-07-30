@@ -41,7 +41,7 @@ class ProjectServiceImplTest {
 
     // CRUD Operations Tests
     @Test
-    void create_ShouldSaveAndReturnProject() {
+    void createShouldSaveAndReturnProject() {
         when(projectRepository.save(any(Project.class))).thenReturn(testProject);
 
         Project result = projectService.create(testProject);
@@ -52,12 +52,12 @@ class ProjectServiceImplTest {
     }
 
     @Test
-    void create_ShouldThrowExceptionWhenProjectIsNull() {
+    void createShouldThrowExceptionWhenProjectIsNull() {
         assertThrows(IllegalArgumentException.class, () -> projectService.create(null));
     }
 
     @Test
-    void findById_ShouldReturnProjectWhenExists() {
+    void findByIdShouldReturnProjectWhenExists() {
         when(projectRepository.findById(1L)).thenReturn(Optional.of(testProject));
 
         Optional<Project> result = projectService.findById(1L);
@@ -67,7 +67,7 @@ class ProjectServiceImplTest {
     }
 
     @Test
-    void findById_ShouldReturnEmptyWhenNotExists() {
+    void findByIdShouldReturnEmptyWhenNotExists() {
         when(projectRepository.findById(1L)).thenReturn(Optional.empty());
 
         Optional<Project> result = projectService.findById(1L);
@@ -76,12 +76,12 @@ class ProjectServiceImplTest {
     }
 
     @Test
-    void findById_ShouldThrowExceptionWhenIdIsNull() {
+    void findByIdShouldThrowExceptionWhenIdIsNull() {
         assertThrows(IllegalArgumentException.class, () -> projectService.findById(null));
     }
 
     @Test
-    void findAll_ShouldReturnAllProjectsOrderedByName() {
+    void findAllShouldReturnAllProjectsOrderedByName() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectRepository.findAllByOrderByProjectNameAsc()).thenReturn(projects);
 
@@ -92,7 +92,7 @@ class ProjectServiceImplTest {
     }
 
     @Test
-    void update_ShouldUpdateExistingProject() {
+    void updateShouldUpdateExistingProject() {
         Project updatedDetails = new Project();
         updatedDetails.setProjectName("Updated Project");
         updatedDetails.setChance(BigDecimal.valueOf(90.0));
@@ -108,414 +108,414 @@ class ProjectServiceImplTest {
     }
 
     @Test
-    void update_ShouldThrowExceptionWhenProjectNotFound() {
+    void updateShouldThrowExceptionWhenProjectNotFound() {
         when(projectRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(RuntimeException.class, () -> projectService.update(1L, new Project()));
     }
 
     @Test
-    void update_ShouldThrowExceptionWhenIdOrDetailsIsNull() {
+    void updateShouldThrowExceptionWhenIdOrDetailsIsNull() {
         assertThrows(IllegalArgumentException.class, () -> projectService.update(null, new Project()));
         assertThrows(IllegalArgumentException.class, () -> projectService.update(1L, null));
     }
 
     @Test
-    void delete_ShouldDeleteProject() {
+    void deleteShouldDeleteProject() {
         projectService.delete(1L);
         
         verify(projectRepository).deleteById(1L);
     }
 
     @Test
-    void delete_ShouldThrowExceptionWhenIdIsNull() {
+    void deleteShouldThrowExceptionWhenIdIsNull() {
         assertThrows(IllegalArgumentException.class, () -> projectService.delete(null));
     }
 
     // Search Methods Tests
     @Test
-    void findByApprovalDate_ShouldReturnProjects() {
+    void findByApprovalDateShouldReturnProjects() {
         LocalDate date = LocalDate.now();
         when(projectRepository.findByApprovalDate(date)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByApprovalDate(date);
+        List<Project> result = projectService.getProjectsByApprovalDate(date);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByApprovalDate(date);
     }
 
     @Test
-    void findByAuthorizationDate_ShouldReturnProjects() {
+    void findByAuthorizationDateShouldReturnProjects() {
         LocalDate date = LocalDate.now();
         when(projectRepository.findByAuthorizationDate(date)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByAuthorizationDate(date);
+        List<Project> result = projectService.getProjectsByAuthorizationDate(date);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByAuthorizationDate(date);
     }
 
     @Test
-    void findByEndApproval_ShouldReturnProjects() {
+    void findByEndApprovalShouldReturnProjects() {
         LocalDate date = LocalDate.now();
         when(projectRepository.findByEndApproval(date)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByEndApproval(date);
+        List<Project> result = projectService.getProjectsByEndApproval(date);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByEndApproval(date);
     }
 
     @Test
-    void findByEndDate_ShouldReturnProjects() {
+    void findByEndDateShouldReturnProjects() {
         LocalDate date = LocalDate.now();
         when(projectRepository.findByEndDate(date)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByEndDate(date);
+        List<Project> result = projectService.getProjectsByEndDate(date);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByEndDate(date);
     }
 
     @Test
-    void findByStartApproval_ShouldReturnProjects() {
+    void findByStartApprovalShouldReturnProjects() {
         LocalDate date = LocalDate.now();
         when(projectRepository.findByStartApproval(date)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByStartApproval(date);
+        List<Project> result = projectService.getProjectsByStartApproval(date);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByStartApproval(date);
     }
 
     @Test
-    void findByStartDate_ShouldReturnProjects() {
+    void findByStartDateShouldReturnProjects() {
         LocalDate date = LocalDate.now();
         when(projectRepository.findByStartDate(date)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByStartDate(date);
+        List<Project> result = projectService.getProjectsByStartDate(date);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByStartDate(date);
     }
 
     @Test
-    void findByChance_ShouldReturnProjects() {
+    void findByChanceShouldReturnProjects() {
         BigDecimal chance = BigDecimal.valueOf(80.0);
         when(projectRepository.findByChance(chance)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByChance(chance);
+        List<Project> result = projectService.getProjectsByChance(chance);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByChance(chance);
     }
 
     @Test
-    void findByFundingRate_ShouldReturnProjects() {
+    void findByFundingRateShouldReturnProjects() {
         BigDecimal rate = BigDecimal.valueOf(50.0);
         when(projectRepository.findByFundingRate(rate)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByFundingRate(rate);
+        List<Project> result = projectService.getProjectsByFundingRate(rate);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByFundingRate(rate);
     }
 
     @Test
-    void findByHourlyRateMueu_ShouldReturnProjects() {
+    void findByHourlyRateMueuShouldReturnProjects() {
         BigDecimal rate = BigDecimal.valueOf(100.0);
         when(projectRepository.findByHourlyRateMueu(rate)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByHourlyRateMueu(rate);
+        List<Project> result = projectService.getProjectsByHourlyRateMueu(rate);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByHourlyRateMueu(rate);
     }
 
     @Test
-    void findByMaxHoursPerMonth_ShouldReturnProjects() {
+    void findByMaxHoursPerMonthShouldReturnProjects() {
         BigDecimal hours = BigDecimal.valueOf(160.0);
         when(projectRepository.findByMaxHoursPerMonth(hours)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByMaxHoursPerMonth(hours);
+        List<Project> result = projectService.getProjectsByMaxHoursPerMonth(hours);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByMaxHoursPerMonth(hours);
     }
 
     @Test
-    void findByMaxHoursPerYear_ShouldReturnProjects() {
+    void findByMaxHoursPerYearShouldReturnProjects() {
         BigDecimal hours = BigDecimal.valueOf(1920.0);
         when(projectRepository.findByMaxHoursPerYear(hours)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByMaxHoursPerYear(hours);
+        List<Project> result = projectService.getProjectsByMaxHoursPerYear(hours);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByMaxHoursPerYear(hours);
     }
 
     @Test
-    void findByProductiveHoursPerYear_ShouldReturnProjects() {
+    void findByProductiveHoursPerYearShouldReturnProjects() {
         BigDecimal hours = BigDecimal.valueOf(1800.0);
         when(projectRepository.findByProductiveHoursPerYear(hours)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByProductiveHoursPerYear(hours);
+        List<Project> result = projectService.getProjectsByProductiveHoursPerYear(hours);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByProductiveHoursPerYear(hours);
     }
 
     @Test
-    void findByShareResearch_ShouldReturnProjects() {
+    void findByShareResearchShouldReturnProjects() {
         BigDecimal share = BigDecimal.valueOf(30.0);
         when(projectRepository.findByShareResearch(share)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByShareResearch(share);
+        List<Project> result = projectService.getProjectsByShareResearch(share);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByShareResearch(share);
     }
 
     @Test
-    void findByStuffFlat_ShouldReturnProjects() {
+    void findByStuffFlatShouldReturnProjects() {
         BigDecimal flat = BigDecimal.valueOf(500.0);
         when(projectRepository.findByStuffFlat(flat)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByStuffFlat(flat);
+        List<Project> result = projectService.getProjectsByStuffFlat(flat);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByStuffFlat(flat);
     }
 
     @Test
-    void findByOrderIdFue_ShouldReturnProjects() {
+    void findByOrderIdFueShouldReturnProjects() {
         Integer orderId = 123;
         when(projectRepository.findByOrderIdFue(orderId)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByOrderIdFue(orderId);
+        List<Project> result = projectService.getProjectsByOrderIdFue(orderId);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByOrderIdFue(orderId);
     }
 
     @Test
-    void findByOrderIdAdmin_ShouldReturnProjects() {
+    void findByOrderIdAdminShouldReturnProjects() {
         Integer orderId = 456;
         when(projectRepository.findByOrderIdAdmin(orderId)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByOrderIdAdmin(orderId);
+        List<Project> result = projectService.getProjectsByOrderIdAdmin(orderId);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByOrderIdAdmin(orderId);
     }
 
     @Test
-    void findByCommentContaining_ShouldReturnProjects() {
+    void findByCommentContainingShouldReturnProjects() {
         String keyword = "test";
         when(projectRepository.findByCommentContaining(keyword)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByCommentContaining(keyword);
+        List<Project> result = projectService.getProjectsByCommentContaining(keyword);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByCommentContaining(keyword);
     }
 
     @Test
-    void findByFinanceAuthority_ShouldReturnProjects() {
+    void findByFinanceAuthorityShouldReturnProjects() {
         String authority = "Test Authority";
         when(projectRepository.findByFinanceAuthority(authority)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByFinanceAuthority(authority);
+        List<Project> result = projectService.getProjectsByFinanceAuthority(authority);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByFinanceAuthority(authority);
     }
 
     @Test
-    void findByFundingLabel_ShouldReturnProjects() {
+    void findByFundingLabelShouldReturnProjects() {
         String label = "Test Label";
         when(projectRepository.findByFundingLabel(label)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByFundingLabel(label);
+        List<Project> result = projectService.getProjectsByFundingLabel(label);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByFundingLabel(label);
     }
 
     @Test
-    void findByNoteContaining_ShouldReturnProjects() {
+    void findByNoteContainingShouldReturnProjects() {
         String text = "test note";
         when(projectRepository.findByNoteContaining(text)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByNoteContaining(text);
+        List<Project> result = projectService.getProjectsByNoteContaining(text);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByNoteContaining(text);
     }
 
     @Test
-    void findByProjectLabel_ShouldReturnProjects() {
+    void findByProjectLabelShouldReturnProjects() {
         String label = "Test Label";
         when(projectRepository.findByProjectLabel(label)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByProjectLabel(label);
+        List<Project> result = projectService.getProjectsByProjectLabel(label);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByProjectLabel(label);
     }
 
     @Test
-    void findByProjectName_ShouldReturnProjects() {
+    void findByProjectNameShouldReturnProjects() {
         String name = "Test Project";
         when(projectRepository.findByProjectName(name)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByProjectName(name);
+        List<Project> result = projectService.getProjectsByProjectName(name);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByProjectName(name);
     }
 
     @Test
-    void findByTitle_ShouldReturnProjects() {
+    void findByTitleShouldReturnProjects() {
         String title = "Test Title";
         when(projectRepository.findByTitle(title)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByTitle(title);
+        List<Project> result = projectService.getProjectsByTitle(title);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByTitle(title);
     }
 
     @Test
-    void findByCustomerId_ShouldReturnProjects() {
+    void findByCustomerIdShouldReturnProjects() {
         Long customerId = 1L;
         when(projectRepository.findByCustomerId(customerId)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByCustomerId(customerId);
+        List<Project> result = projectService.getProjectsByCustomerId(customerId);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByCustomerId(customerId);
     }
 
     @Test
-    void findByApprovalDateBetween_ShouldReturnProjects() {
+    void findByApprovalDateBetweenShouldReturnProjects() {
         LocalDate start = LocalDate.now().minusDays(1);
         LocalDate end = LocalDate.now();
         when(projectRepository.findByApprovalDateBetween(start, end)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByApprovalDateBetween(start, end);
+        List<Project> result = projectService.getProjectsByApprovalDateBetween(start, end);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByApprovalDateBetween(start, end);
     }
 
     @Test
-    void findByAuthorizationDateBefore_ShouldReturnProjects() {
+    void findByAuthorizationDateBeforeShouldReturnProjects() {
         LocalDate date = LocalDate.now();
         when(projectRepository.findByAuthorizationDateBefore(date)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByAuthorizationDateBefore(date);
+        List<Project> result = projectService.getProjectsByAuthorizationDateBefore(date);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByAuthorizationDateBefore(date);
     }
 
     @Test
-    void findByEndDateAfter_ShouldReturnProjects() {
+    void findByEndDateAfterShouldReturnProjects() {
         LocalDate date = LocalDate.now();
         when(projectRepository.findByEndDateAfter(date)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByEndDateAfter(date);
+        List<Project> result = projectService.getProjectsByEndDateAfter(date);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByEndDateAfter(date);
     }
 
     @Test
-    void findByStartDateBetween_ShouldReturnProjects() {
+    void findByStartDateBetweenShouldReturnProjects() {
         LocalDate start = LocalDate.now().minusDays(1);
         LocalDate end = LocalDate.now();
         when(projectRepository.findByStartDateBetween(start, end)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByStartDateBetween(start, end);
+        List<Project> result = projectService.getProjectsByStartDateBetween(start, end);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByStartDateBetween(start, end);
     }
 
     @Test
-    void findByChanceGreaterThan_ShouldReturnProjects() {
+    void findByChanceGreaterThanShouldReturnProjects() {
         BigDecimal chance = BigDecimal.valueOf(50.0);
         when(projectRepository.findByChanceGreaterThan(chance)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByChanceGreaterThan(chance);
+        List<Project> result = projectService.getProjectsByChanceGreaterThan(chance);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByChanceGreaterThan(chance);
     }
 
     @Test
-    void findByFundingRateLessThan_ShouldReturnProjects() {
+    void findByFundingRateLessThanShouldReturnProjects() {
         BigDecimal rate = BigDecimal.valueOf(100.0);
         when(projectRepository.findByFundingRateLessThan(rate)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByFundingRateLessThan(rate);
+        List<Project> result = projectService.getProjectsByFundingRateLessThan(rate);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByFundingRateLessThan(rate);
     }
 
     @Test
-    void findByHourlyRateMueuBetween_ShouldReturnProjects() {
+    void findByHourlyRateMueuBetweenShouldReturnProjects() {
         BigDecimal min = BigDecimal.valueOf(50.0);
         BigDecimal max = BigDecimal.valueOf(150.0);
         when(projectRepository.findByHourlyRateMueuBetween(min, max)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByHourlyRateMueuBetween(min, max);
+        List<Project> result = projectService.getProjectsByHourlyRateMueuBetween(min, max);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByHourlyRateMueuBetween(min, max);
     }
 
     @Test
-    void findByProjectNameContainingIgnoreCase_ShouldReturnProjects() {
+    void findByProjectNameContainingIgnoreCaseShouldReturnProjects() {
         String name = "test";
         when(projectRepository.findByProjectNameContainingIgnoreCase(name)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByProjectNameContainingIgnoreCase(name);
+        List<Project> result = projectService.getProjectsByProjectNameContainingIgnoreCase(name);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByProjectNameContainingIgnoreCase(name);
     }
 
     @Test
-    void findByFundingLabelStartingWith_ShouldReturnProjects() {
+    void findByFundingLabelStartingWithShouldReturnProjects() {
         String prefix = "Test";
         when(projectRepository.findByFundingLabelStartingWith(prefix)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByFundingLabelStartingWith(prefix);
+        List<Project> result = projectService.getProjectsByFundingLabelStartingWith(prefix);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByFundingLabelStartingWith(prefix);
     }
 
     @Test
-    void findByTitleEndingWith_ShouldReturnProjects() {
+    void findByTitleEndingWithShouldReturnProjects() {
         String suffix = "Project";
         when(projectRepository.findByTitleEndingWith(suffix)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByTitleEndingWith(suffix);
+        List<Project> result = projectService.getProjectsByTitleEndingWith(suffix);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByTitleEndingWith(suffix);
     }
 
     @Test
-    void findByCustomerIdOrderByStartDateDesc_ShouldReturnProjects() {
+    void findByCustomerIdOrderByStartDateDescShouldReturnProjects() {
         Long customerId = 1L;
         when(projectRepository.findByCustomerIdOrderByStartDateDesc(customerId)).thenReturn(Arrays.asList(testProject));
 
-        List<Project> result = projectService.findByCustomerIdOrderByStartDateDesc(customerId);
+        List<Project> result = projectService.getProjectsByCustomerIdOrderByStartDateDesc(customerId);
 
         assertEquals(1, result.size());
         verify(projectRepository).findByCustomerIdOrderByStartDateDesc(customerId);

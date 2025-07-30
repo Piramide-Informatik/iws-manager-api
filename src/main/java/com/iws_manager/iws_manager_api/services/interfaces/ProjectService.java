@@ -14,44 +14,44 @@ public interface ProjectService {
     Project update(Long id, Project projectDetails);
     void delete(Long id);
 
-    List<Project> findByApprovalDate(LocalDate approvalDate);
-    List<Project> findByAuthorizationDate(LocalDate authorizationDate);
-    List<Project> findByEndApproval(LocalDate endApproval);
-    List<Project> findByEndDate(LocalDate endDate);
-    List<Project> findByStartApproval(LocalDate startApproval);
-    List<Project> findByStartDate(LocalDate startDate);
-    List<Project> findByChance(BigDecimal chance);
-    List<Project> findByFundingRate(BigDecimal fundingRate);
-    List<Project> findByHourlyRateMueu(BigDecimal hourlyRateMueu);
-    List<Project> findByMaxHoursPerMonth(BigDecimal maxHoursPerMonth);
-    List<Project> findByMaxHoursPerYear(BigDecimal maxHoursPerYear);
-    List<Project> findByProductiveHoursPerYear(BigDecimal productiveHoursPerYear);
-    List<Project> findByShareResearch(BigDecimal shareResearch);
-    List<Project> findByStuffFlat(BigDecimal stuffFlat);
-    List<Project> findByOrderIdFue(Integer orderIdFue);
-    List<Project> findByOrderIdAdmin(Integer orderIdAdmin);
-    List<Project> findByCommentContaining(String keyword);
-    List<Project> findByFinanceAuthority(String authority);
-    List<Project> findByFundingLabel(String label);
-    List<Project> findByNoteContaining(String text);
-    List<Project> findByProjectLabel(String projectLabel);
-    List<Project> findByProjectName(String projectName);
-    List<Project> findByTitle(String title);
+    List<Project> getProjectsByApprovalDate(LocalDate approvalDate);
+    List<Project> getProjectsByAuthorizationDate(LocalDate authorizationDate);
+    List<Project> getProjectsByEndApproval(LocalDate endApproval);
+    List<Project> getProjectsByEndDate(LocalDate endDate);
+    List<Project> getProjectsByStartApproval(LocalDate startApproval);
+    List<Project> getProjectsByStartDate(LocalDate startDate);
+    List<Project> getProjectsByChance(BigDecimal chance);
+    List<Project> getProjectsByFundingRate(BigDecimal fundingRate);
+    List<Project> getProjectsByHourlyRateMueu(BigDecimal hourlyRateMueu);
+    List<Project> getProjectsByMaxHoursPerMonth(BigDecimal maxHoursPerMonth);
+    List<Project> getProjectsByMaxHoursPerYear(BigDecimal maxHoursPerYear);
+    List<Project> getProjectsByProductiveHoursPerYear(BigDecimal productiveHoursPerYear);
+    List<Project> getProjectsByShareResearch(BigDecimal shareResearch);
+    List<Project> getProjectsByStuffFlat(BigDecimal stuffFlat);
+    List<Project> getProjectsByOrderIdFue(Integer orderIdFue);
+    List<Project> getProjectsByOrderIdAdmin(Integer orderIdAdmin);
+    List<Project> getProjectsByCommentContaining(String keyword);
+    List<Project> getProjectsByFinanceAuthority(String authority);
+    List<Project> getProjectsByFundingLabel(String label);
+    List<Project> getProjectsByNoteContaining(String text);
+    List<Project> getProjectsByProjectLabel(String projectLabel);
+    List<Project> getProjectsByProjectName(String projectName);
+    List<Project> getProjectsByTitle(String title);
 
-    List<Project> findByCustomerId(Long customerId);
-    // List<Project> findByEmpiws20Id(Long empiws20Id);  // Cuando se descomente
-    // List<Project> findByFundingProgramId(Long fundingProgramId);  // Cuando se descomente
-    // List<Project> findByStatusId(Long statusId);  // Cuando se descomente
+    List<Project> getProjectsByCustomerId(Long customerId);
+    // List<Project> getProjectsByEmpiws20Id(Long empiws20Id);  // Cuando se descomente
+    // List<Project> getProjectsByFundingProgramId(Long fundingProgramId);  // Cuando se descomente
+    // List<Project> getProjectsByStatusId(Long statusId);  // Cuando se descomente
 
-    List<Project> findByApprovalDateBetween(LocalDate start, LocalDate end);
-    List<Project> findByAuthorizationDateBefore(LocalDate date);
-    List<Project> findByEndDateAfter(LocalDate date);
-    List<Project> findByStartDateBetween(LocalDate start, LocalDate end);
-    List<Project> findByChanceGreaterThan(BigDecimal chance);
-    List<Project> findByFundingRateLessThan(BigDecimal fundingRate);
-    List<Project> findByHourlyRateMueuBetween(BigDecimal min, BigDecimal max);
-    List<Project> findByProjectNameContainingIgnoreCase(String name);
-    List<Project> findByFundingLabelStartingWith(String prefix);
-    List<Project> findByTitleEndingWith(String suffix);
-    List<Project> findByCustomerIdOrderByStartDateDesc(Long customerId);
+    List<Project> getProjectsByApprovalDateBetween(LocalDate start, LocalDate end);
+    List<Project> getProjectsByAuthorizationDateBefore(LocalDate date);
+    List<Project> getProjectsByEndDateAfter(LocalDate date);
+    List<Project> getProjectsByStartDateBetween(LocalDate start, LocalDate end);
+    List<Project> getProjectsByChanceGreaterThan(BigDecimal chance);
+    List<Project> getProjectsByFundingRateLessThan(BigDecimal fundingRate);
+    List<Project> getProjectsByHourlyRateMueuBetween(BigDecimal min, BigDecimal max);
+    List<Project> getProjectsByProjectNameContainingIgnoreCase(String name);
+    List<Project> getProjectsByFundingLabelStartingWith(String prefix);
+    List<Project> getProjectsByTitleEndingWith(String suffix);
+    List<Project> getProjectsByCustomerIdOrderByStartDateDesc(Long customerId);
 }
