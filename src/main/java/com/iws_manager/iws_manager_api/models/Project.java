@@ -54,10 +54,10 @@ public class Project extends BaseEntity{
     private LocalDate date5;
 
     @Column(name = "datelevel1", nullable = true, columnDefinition = "DATE")
-    private LocalDate datelevel1;
+    private LocalDate dateLevel1;
 
     @Column(name = "datelevel2", nullable = true, columnDefinition = "DATE")
-    private LocalDate datelevel2;
+    private LocalDate dateLevel2;
 
     // @ManyToOne(fetch = FetchType.EAGER)
     // @JoinColumn(name = "empiws20id", referencedColumnName = "empiws20id")
