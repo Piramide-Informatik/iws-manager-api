@@ -36,6 +36,7 @@ public class SubcontractYearControllerTest {
 
     private static final String URI = "/api/v1/subcontractyear";
     private static final String JSON_MONTHS_PATH = "$.months";
+    private static final String JSON_ID_PATH = "$[0].id";
     private static final Integer MONTHS = 12;
 
     private MockMvc mockMvc;
@@ -79,7 +80,7 @@ public class SubcontractYearControllerTest {
                 .content(objectMapper.writeValueAsString(sy1)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.months").value(MONTHS));
+                .andExpect(jsonPath(JSON_MONTHS_PATH).value(MONTHS));
     }
 
     @Test
@@ -106,7 +107,7 @@ public class SubcontractYearControllerTest {
 
         mockMvc.perform(get(URI))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1L))
+                .andExpect(jsonPath(JSON_ID_PATH).value(1L))
                 .andExpect(jsonPath("$[1].id").value(2L));
     }
 
@@ -159,7 +160,7 @@ public class SubcontractYearControllerTest {
 
         mockMvc.perform(get(URI + "/months/12"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1L));
+                .andExpect(jsonPath(JSON_ID_PATH).value(1L));
     }
 
     @Test
@@ -168,7 +169,7 @@ public class SubcontractYearControllerTest {
 
         mockMvc.perform(get(URI + "/subcontract/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1L));
+                .andExpect(jsonPath(JSON_ID_PATH).value(1L));
     }
 
     @Test
@@ -178,6 +179,6 @@ public class SubcontractYearControllerTest {
 
         mockMvc.perform(get(URI + "/year/2025-01-01"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1L));
+                .andExpect(jsonPath(JSON_ID_PATH).value(1L));
     }
 }
