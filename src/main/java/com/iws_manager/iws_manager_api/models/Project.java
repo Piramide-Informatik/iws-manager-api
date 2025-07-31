@@ -59,6 +59,9 @@ public class Project extends BaseEntity{
     @Column(name = "datelevel2", nullable = true, columnDefinition = "DATE")
     private LocalDate dateLevel2;
 
+    @Column(name = "donation", nullable = true, columnDefinition = "DECIMAL(10,2)")
+    private BigDecimal donation;
+
     // @ManyToOne(fetch = FetchType.EAGER)
     // @JoinColumn(name = "empiws20id", referencedColumnName = "empiws20id")
     // private Empiws20 empiws20;
