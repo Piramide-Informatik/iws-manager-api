@@ -108,6 +108,7 @@ public class ProjectServiceImpl implements ProjectService {
                     existingProject.setDate5(projectDetails.getDate5());
                     existingProject.setDateLevel1(projectDetails.getDateLevel1());
                     existingProject.setDateLevel2(projectDetails.getDateLevel2());
+                    existingProject.setDonation(projectDetails.getDonation());
                     // existingProject.setEmpiws20(projectDetails.getEmpiws20());
                     // existingProject.setEmpiws30(projectDetails.getEmpiws30());
                     // existingProject.setEmpiws50(projectDetails.getEmpiws50());
