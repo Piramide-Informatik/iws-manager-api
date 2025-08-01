@@ -114,7 +114,7 @@ public class ProjectServiceImpl implements ProjectService {
                     // existingProject.setEmpiws50(projectDetails.getEmpiws50());
                     existingProject.setEndApproval(projectDetails.getEndApproval());
                     existingProject.setEndDate(projectDetails.getEndDate());
-                    existingProject.setFincanceAuthority(projectDetails.getFincanceAuthority());
+                    existingProject.setFinanceAuthority(projectDetails.getFinanceAuthority());
                     existingProject.setFundingLabel(projectDetails.getFundingLabel());
                     // existingProject.setFundingProgram(projectDetails.getFundingProgram());
                     existingProject.setFundingRate(projectDetails.getFundingRate());

@@ -81,7 +81,7 @@ public class Project extends BaseEntity{
     private LocalDate endDate;
 
     @Column(name = "fincanceauthority", length = 255)
-    private String fincanceAuthority;
+    private String financeAuthority;
 
     @Column(name = "fundinglabel", length = 255)
     private String fundingLabel;
