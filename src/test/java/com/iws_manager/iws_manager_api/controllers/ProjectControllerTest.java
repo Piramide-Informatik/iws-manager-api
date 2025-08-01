@@ -43,7 +43,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void update_ShouldReturnUpdatedProject() {
+    void updateShouldReturnUpdatedProject() {
         when(projectService.update(eq(TEST_ID), any(Project.class))).thenReturn(testProject);
 
         ResponseEntity<Project> response = projectController.update(TEST_ID, testProject);
@@ -53,7 +53,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void update_ShouldReturnNotFoundWhenProjectNotExists() {
+    void updateShouldReturnNotFoundWhenProjectNotExists() {
         when(projectService.update(eq(TEST_ID), any(Project.class)))
             .thenThrow(new RuntimeException("Not found"));
 
@@ -63,7 +63,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void create_ShouldReturnCreatedProject() {
+    void createShouldReturnCreatedProject() {
         when(projectService.create(any(Project.class))).thenReturn(testProject);
 
         ResponseEntity<?> response = projectController.create(testProject);
@@ -74,7 +74,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getById_ShouldReturnProjectWhenExists() {
+    void getByIdShouldReturnProjectWhenExists() {
         when(projectService.findById(TEST_ID)).thenReturn(Optional.of(testProject));
 
         ResponseEntity<Project> response = projectController.getById(TEST_ID);
@@ -84,7 +84,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getById_ShouldReturnNotFoundWhenNotExists() {
+    void getByIdShouldReturnNotFoundWhenNotExists() {
         when(projectService.findById(TEST_ID)).thenReturn(Optional.empty());
 
         ResponseEntity<Project> response = projectController.getById(TEST_ID);
@@ -93,7 +93,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getAll_ShouldReturnAllProjects() {
+    void getAllShouldReturnAllProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.findAll()).thenReturn(projects);
 
@@ -104,7 +104,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void delete_ShouldReturnNoContentWhenSuccess() {
+    void deleteShouldReturnNoContentWhenSuccess() {
         doNothing().when(projectService).delete(TEST_ID);
 
         ResponseEntity<Void> response = projectController.delete(TEST_ID);
@@ -114,7 +114,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void delete_ShouldReturnNotFoundWhenProjectNotExists() {
+    void deleteShouldReturnNotFoundWhenProjectNotExists() {
         doThrow(new RuntimeException("Not found")).when(projectService).delete(TEST_ID);
 
         ResponseEntity<Void> response = projectController.delete(TEST_ID);
@@ -124,7 +124,7 @@ class ProjectControllerTest {
 
     // Date Filter Tests
     @Test
-    void getByApprovalDate_ShouldReturnProjects() {
+    void getByApprovalDateShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.getProjectsByApprovalDate(TEST_DATE)).thenReturn(projects);
 
@@ -135,7 +135,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByApprovalDateRange_ShouldReturnProjects() {
+    void getByApprovalDateRangeShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.getProjectsByApprovalDateBetween(TEST_DATE, TEST_DATE.plusDays(1)))
             .thenReturn(projects);
@@ -148,7 +148,7 @@ class ProjectControllerTest {
 
     // Numeric Filter Tests
     @Test
-    void getByChance_ShouldReturnProjects() {
+    void getByChanceShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.getProjectsByChance(TEST_DECIMAL)).thenReturn(projects);
 
@@ -159,7 +159,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getWithChanceGreaterThan_ShouldReturnProjects() {
+    void getWithChanceGreaterThanShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.getProjectsByChanceGreaterThan(TEST_DECIMAL)).thenReturn(projects);
 
@@ -170,7 +170,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByHourlyRateRange_ShouldReturnProjects() {
+    void getByHourlyRateRangeShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.getProjectsByHourlyRateMueuBetween(TEST_DECIMAL, TEST_DECIMAL.add(BigDecimal.TEN)))
             .thenReturn(projects);
@@ -183,7 +183,7 @@ class ProjectControllerTest {
 
     // Text Filter Tests
     @Test
-    void getWithNameContaining_ShouldReturnProjects() {
+    void getWithNameContainingShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.getProjectsByProjectNameContainingIgnoreCase(TEST_STRING)).thenReturn(projects);
 
@@ -194,7 +194,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByCustomerId_ShouldReturnProjects() {
+    void getByCustomerIdShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.getProjectsByCustomerId(TEST_ID)).thenReturn(projects);
 
@@ -205,7 +205,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByCustomerOrderedByStartDate_ShouldReturnProjects() {
+    void getByCustomerOrderedByStartDateShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.getProjectsByCustomerIdOrderByStartDateDesc(TEST_ID)).thenReturn(projects);
 
@@ -217,7 +217,7 @@ class ProjectControllerTest {
 
     // Additional tests
     @Test
-    void getByAuthorizationDate_ShouldReturnProjects() {
+    void getByAuthorizationDateShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.getProjectsByAuthorizationDate(TEST_DATE)).thenReturn(projects);
 
@@ -228,7 +228,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByEndApproval_ShouldReturnProjects() {
+    void getByEndApprovalShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.getProjectsByEndApproval(TEST_DATE)).thenReturn(projects);
 
@@ -239,7 +239,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByFundingRate_ShouldReturnProjects() {
+    void getByFundingRateShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.getProjectsByFundingRate(TEST_DECIMAL)).thenReturn(projects);
 
@@ -250,7 +250,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByProjectName_ShouldReturnProjects() {
+    void getByProjectNameShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.getProjectsByProjectName(TEST_STRING)).thenReturn(projects);
 
@@ -261,7 +261,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getWithFundingLabelStarting_ShouldReturnProjects() {
+    void getWithFundingLabelStartingShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.getProjectsByFundingLabelStartingWith(TEST_STRING)).thenReturn(projects);
 
@@ -272,7 +272,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByFinanceAuthority_ShouldReturnProjects() {
+    void getByFinanceAuthorityShouldReturnProjects() {
         List<Project> expectedProjects = Arrays.asList(testProject);
         when(projectService.getProjectsByFinanceAuthority(TEST_STRING)).thenReturn(expectedProjects);
 
@@ -285,7 +285,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByFinanceAuthority_ShouldReturnEmptyListWhenNoMatches() {
+    void getByFinanceAuthorityShouldReturnEmptyListWhenNoMatches() {
         when(projectService.getProjectsByFinanceAuthority(TEST_STRING)).thenReturn(List.of());
 
         ResponseEntity<List<Project>> response = 
@@ -296,7 +296,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByFundingLabel_ShouldReturnProjects() {
+    void getByFundingLabelShouldReturnProjects() {
         List<Project> expectedProjects = Arrays.asList(testProject);
         when(projectService.getProjectsByFundingLabel(TEST_STRING)).thenReturn(expectedProjects);
 
@@ -308,7 +308,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByFundingLabel_ShouldBeCaseSensitive() {
+    void getByFundingLabelShouldBeCaseSensitive() {
         String differentCase = "TEST";
         when(projectService.getProjectsByFundingLabel(differentCase)).thenReturn(List.of());
 
@@ -321,7 +321,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByNoteContaining_ShouldReturnProjectsWithMatchingText() {
+    void getByNoteContainingShouldReturnProjectsWithMatchingText() {
         List<Project> expectedProjects = Arrays.asList(testProject);
         when(projectService.getProjectsByNoteContaining(TEST_STRING)).thenReturn(expectedProjects);
 
@@ -333,7 +333,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByNoteContaining_ShouldAcceptPartialMatches() {
+    void getByNoteContainingShouldAcceptPartialMatches() {
         String partialText = "est"; // Part of the string "test"
         when(projectService.getProjectsByNoteContaining(partialText)).thenReturn(List.of(testProject));
 
@@ -345,7 +345,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByProjectLabel_ShouldReturnExactMatches() {
+    void getByProjectLabelShouldReturnExactMatches() {
         List<Project> expectedProjects = Arrays.asList(testProject);
         when(projectService.getProjectsByProjectLabel(TEST_STRING)).thenReturn(expectedProjects);
 
@@ -357,7 +357,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByTitle_ShouldReturnProjectsWithExactTitle() {
+    void getByTitleShouldReturnProjectsWithExactTitle() {
         List<Project> expectedProjects = Arrays.asList(testProject);
         when(projectService.getProjectsByTitle(TEST_STRING)).thenReturn(expectedProjects);
 
@@ -369,7 +369,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getWithTitleEnding_ShouldReturnProjects() {
+    void getWithTitleEndingShouldReturnProjects() {
         List<Project> expectedProjects = Arrays.asList(testProject);
         when(projectService.getProjectsByTitleEndingWith(TEST_STRING)).thenReturn(expectedProjects);
 
@@ -381,7 +381,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getWithTitleEnding_ShouldMatchSuffixCorrectly() {
+    void getWithTitleEndingShouldMatchSuffixCorrectly() {
         String suffix = "tion";
         Project matchingProject = new Project();
         matchingProject.setTitle("Important Project Documentation");
@@ -397,7 +397,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByShareResearch_ShouldReturnProjectsWithExactValue() {
+    void getByShareResearchShouldReturnProjectsWithExactValue() {
         BigDecimal shareValue = BigDecimal.valueOf(30.5);
         List<Project> expectedProjects = List.of(testProject);
         when(projectService.getProjectsByShareResearch(shareValue)).thenReturn(expectedProjects);
@@ -410,7 +410,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByShareResearch_ShouldHandleDifferentPrecision() {
+    void getByShareResearchShouldHandleDifferentPrecision() {
         BigDecimal shareValue = new BigDecimal("30.50");
         when(projectService.getProjectsByShareResearch(shareValue)).thenReturn(List.of(testProject));
 
@@ -421,7 +421,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByStuffFlat_ShouldReturnProjects() {
+    void getByStuffFlatShouldReturnProjects() {
         BigDecimal stuffFlatValue = BigDecimal.valueOf(500.0);
         List<Project> expectedProjects = List.of(testProject);
         when(projectService.getProjectsByStuffFlat(stuffFlatValue)).thenReturn(expectedProjects);
@@ -433,7 +433,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByStuffFlat_ShouldReturnEmptyListForNonExistingValue() {
+    void getByStuffFlatShouldReturnEmptyListForNonExistingValue() {
         BigDecimal nonExistingValue = BigDecimal.valueOf(999.99);
         when(projectService.getProjectsByStuffFlat(nonExistingValue)).thenReturn(List.of());
 
@@ -444,7 +444,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByOrderIdFue_ShouldReturnProjectsWithSpecificOrderId() {
+    void getByOrderIdFueShouldReturnProjectsWithSpecificOrderId() {
         Integer orderId = 12345;
         List<Project> expectedProjects = List.of(testProject);
         when(projectService.getProjectsByOrderIdFue(orderId)).thenReturn(expectedProjects);
@@ -456,7 +456,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByOrderIdFue_ShouldHandleNullValue() {
+    void getByOrderIdFueShouldHandleNullValue() {
         when(projectService.getProjectsByOrderIdFue(null)).thenReturn(List.of());
 
         ResponseEntity<List<Project>> response = projectController.getByOrderIdFue(null);
@@ -466,7 +466,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByOrderIdAdmin_ShouldReturnProjects() {
+    void getByOrderIdAdminShouldReturnProjects() {
         Integer orderId = 54321;
         List<Project> expectedProjects = List.of(testProject);
         when(projectService.getProjectsByOrderIdAdmin(orderId)).thenReturn(expectedProjects);
@@ -478,7 +478,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByOrderIdAdmin_ShouldReturnNotFoundForInvalidId() {
+    void getByOrderIdAdminShouldReturnNotFoundForInvalidId() {
         Integer invalidId = -1;
         when(projectService.getProjectsByOrderIdAdmin(invalidId)).thenReturn(List.of());
 
@@ -489,7 +489,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByCommentContaining_ShouldReturnProjectsWithMatchingComments() {
+    void getByCommentContainingShouldReturnProjectsWithMatchingComments() {
         String searchTerm = "urgent";
         List<Project> expectedProjects = List.of(testProject);
         when(projectService.getProjectsByCommentContaining(searchTerm)).thenReturn(expectedProjects);
@@ -501,7 +501,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByCommentContaining_ShouldBeCaseInsensitive() {
+    void getByCommentContainingShouldBeCaseInsensitive() {
         String searchTerm = "UrGeNt";
         List<Project> expectedProjects = List.of(testProject);
         when(projectService.getProjectsByCommentContaining(searchTerm)).thenReturn(expectedProjects);
@@ -513,7 +513,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByCommentContaining_ShouldHandleSpecialCharacters() {
+    void getByCommentContainingShouldHandleSpecialCharacters() {
         String searchTerm = "método #2";
         when(projectService.getProjectsByCommentContaining(searchTerm)).thenReturn(List.of(testProject));
 
@@ -524,7 +524,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getWithAuthorizationBefore_ShouldReturnProjectsBeforeDate() {
+    void getWithAuthorizationBeforeShouldReturnProjectsBeforeDate() {
         LocalDate TEST_DATE = LocalDate.of(2023, 12, 31);
         List<Project> expectedProjects = List.of(testProject);
         
@@ -540,7 +540,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getWithAuthorizationBefore_ShouldHandleNullDate() {
+    void getWithAuthorizationBeforeShouldHandleNullDate() {
         ResponseEntity<List<Project>> response = 
             projectController.getWithAuthorizationBefore(null);
 
@@ -548,7 +548,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getWithEndDateAfter_ShouldReturnProjectsAfterDate() {
+    void getWithEndDateAfterShouldReturnProjectsAfterDate() {
         LocalDate TEST_DATE = LocalDate.of(2023, 1, 1);
         List<Project> expectedProjects = List.of(testProject);
         
@@ -563,7 +563,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getWithEndDateAfter_ShouldReturnEmptyListForFutureDate() {
+    void getWithEndDateAfterShouldReturnEmptyListForFutureDate() {
         LocalDate futureDate = LocalDate.now().plusYears(10);
         when(projectService.getProjectsByEndDateAfter(futureDate))
             .thenReturn(List.of());
@@ -576,7 +576,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getWithFundingRateLessThan_ShouldReturnProjectsBelowRate() {
+    void getWithFundingRateLessThanShouldReturnProjectsBelowRate() {
         BigDecimal rateLimit = BigDecimal.valueOf(50.0);
         List<Project> expectedProjects = List.of(testProject);
         
@@ -591,7 +591,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getWithFundingRateLessThan_ShouldHandleEdgeCases() {
+    void getWithFundingRateLessThanShouldHandleEdgeCases() {
         BigDecimal zeroRate = BigDecimal.ZERO;
         when(projectService.getProjectsByFundingRateLessThan(zeroRate))
             .thenReturn(List.of());
@@ -604,7 +604,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByMaxHoursPerMonth_ShouldReturnProjectsWithExactHours() {
+    void getByMaxHoursPerMonthShouldReturnProjectsWithExactHours() {
         BigDecimal hours = BigDecimal.valueOf(160.0);
         List<Project> expectedProjects = List.of(testProject);
         
@@ -619,7 +619,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByMaxHoursPerMonth_ShouldHandleDecimalValues() {
+    void getByMaxHoursPerMonthShouldHandleDecimalValues() {
         BigDecimal decimalHours = BigDecimal.valueOf(120.5);
         when(projectService.getProjectsByMaxHoursPerMonth(decimalHours))
             .thenReturn(List.of(testProject));
@@ -632,7 +632,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByMaxHoursPerYear_ShouldReturnProjects() {
+    void getByMaxHoursPerYearShouldReturnProjects() {
         BigDecimal hours = BigDecimal.valueOf(1920.0);
         List<Project> expectedProjects = List.of(testProject);
         
@@ -647,7 +647,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByMaxHoursPerYear_ShouldHandleLargeValues() {
+    void getByMaxHoursPerYearShouldHandleLargeValues() {
         BigDecimal largeValue = BigDecimal.valueOf(10000.0);
         when(projectService.getProjectsByMaxHoursPerYear(largeValue))
             .thenReturn(List.of());
@@ -660,7 +660,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByProductiveHoursPerYear_ShouldReturnProjects() {
+    void getByProductiveHoursPerYearShouldReturnProjects() {
         BigDecimal hours = BigDecimal.valueOf(1800.0);
         List<Project> expectedProjects = List.of(testProject);
         
@@ -675,7 +675,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByProductiveHoursPerYear_ShouldHandlePrecision() {
+    void getByProductiveHoursPerYearShouldHandlePrecision() {
         BigDecimal preciseHours = new BigDecimal("1768.75");
         when(projectService.getProjectsByProductiveHoursPerYear(preciseHours))
             .thenReturn(List.of(testProject));
@@ -688,7 +688,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByEndDate_ShouldReturnProjects() {
+    void getByEndDateShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.getProjectsByEndDate(TEST_DATE)).thenReturn(projects);
 
@@ -700,7 +700,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByEndDate_ShouldReturnEmptyListWhenNoMatches() {
+    void getByEndDateShouldReturnEmptyListWhenNoMatches() {
         when(projectService.getProjectsByEndDate(TEST_DATE)).thenReturn(List.of());
 
         ResponseEntity<List<Project>> response = projectController.getByEndDate(TEST_DATE);
@@ -710,7 +710,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByStartApproval_ShouldReturnProjects() {
+    void getByStartApprovalShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.getProjectsByStartApproval(TEST_DATE)).thenReturn(projects);
 
@@ -722,7 +722,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByStartDate_ShouldReturnProjects() {
+    void getByStartDateShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.getProjectsByStartDate(TEST_DATE)).thenReturn(projects);
 
@@ -734,7 +734,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByStartDate_ShouldReturnEmptyListForFutureDate() {
+    void getByStartDateShouldReturnEmptyListForFutureDate() {
         LocalDate futureDate = LocalDate.now().plusYears(1);
         when(projectService.getProjectsByStartDate(futureDate)).thenReturn(List.of());
 
@@ -745,7 +745,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByStartDateRange_ShouldReturnProjects() {
+    void getByStartDateRangeShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         LocalDate startDate = TEST_DATE;
         LocalDate endDate = TEST_DATE.plusDays(7);
@@ -762,7 +762,7 @@ class ProjectControllerTest {
     }
 
     @Test
-    void getByStartDateRange_ShouldReturnEmptyListForInvalidRange() {
+    void getByStartDateRangeShouldReturnEmptyListForInvalidRange() {
         LocalDate startDate = TEST_DATE;
         LocalDate endDate = TEST_DATE.minusDays(1); // invalid range
         
