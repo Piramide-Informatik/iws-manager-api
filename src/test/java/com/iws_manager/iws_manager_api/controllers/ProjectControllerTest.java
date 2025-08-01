@@ -525,18 +525,18 @@ class ProjectControllerTest {
 
     @Test
     void getWithAuthorizationBeforeShouldReturnProjectsBeforeDate() {
-        LocalDate TEST_DATE = LocalDate.of(2023, 12, 31);
+        LocalDate date1 = LocalDate.of(2023, 12, 31);
         List<Project> expectedProjects = List.of(testProject);
         
-        when(projectService.getProjectsByAuthorizationDateBefore(TEST_DATE))
+        when(projectService.getProjectsByAuthorizationDateBefore(date1))
             .thenReturn(expectedProjects);
 
         ResponseEntity<List<Project>> response = 
-            projectController.getWithAuthorizationBefore(TEST_DATE);
+            projectController.getWithAuthorizationBefore(date1);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedProjects, response.getBody());
-        verify(projectService).getProjectsByAuthorizationDateBefore(TEST_DATE);
+        verify(projectService).getProjectsByAuthorizationDateBefore(date1);
     }
 
     @Test
@@ -549,14 +549,14 @@ class ProjectControllerTest {
 
     @Test
     void getWithEndDateAfterShouldReturnProjectsAfterDate() {
-        LocalDate TEST_DATE = LocalDate.of(2023, 1, 1);
+        LocalDate date2 = LocalDate.of(2023, 1, 1);
         List<Project> expectedProjects = List.of(testProject);
         
-        when(projectService.getProjectsByEndDateAfter(TEST_DATE))
+        when(projectService.getProjectsByEndDateAfter(date2))
             .thenReturn(expectedProjects);
 
         ResponseEntity<List<Project>> response = 
-            projectController.getWithEndDateAfter(TEST_DATE);
+            projectController.getWithEndDateAfter(date2);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedProjects, response.getBody());
