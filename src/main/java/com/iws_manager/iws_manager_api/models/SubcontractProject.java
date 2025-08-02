@@ -31,10 +31,9 @@ public class SubcontractProject extends BaseEntity{
     @Column(name = "months", nullable = true, columnDefinition = "TINYINT")
     private Integer months;
     
-    /* project needs to be implemented */
-    // @ManyToOne(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "projectid", referencedColumnName = "projectid")
-    // private Project project;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "projectid", referencedColumnName = "projectid")
+    private Project project;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "subcontractid", referencedColumnName = "subcontractid")
