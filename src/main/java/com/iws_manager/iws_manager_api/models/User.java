@@ -19,26 +19,36 @@ import lombok.*;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "app_user")
+@Table(name = "user")
+@AttributeOverride(name ="id", column = @Column(name = "userid"))
 public class User extends BaseEntity{
-
-    /**
-     * User's email address (used as username). Must be unique.
-     * Example: "user@company.com"
-     */
-    @Column(unique = true, nullable = false)
-    private String email;
-
-    /**
-     * Encrypted user password (using BCrypt hashing).
-     */
-    @Column(nullable = false)
-    private String password;
 
     /**
      * Indicates if the account is active.
      * Default: true
      */
-    @Column(nullable = false)
+    @Column(name="active",nullable = false)
     private boolean active = true;
+
+    @Column(name="firstname", length = 255)
+    private String first_name;
+
+    @Column(name = "lastname", length = 255)
+    private String last_name;
+    /**
+     * User's email address (used as username). Must be unique.
+     * Example: "user@company.com"
+     */
+    @Column(name = "mail", length = 255 ,unique = true, nullable = false)
+    private String email;
+
+    /**
+     * Encrypted user password (using BCrypt hashing).
+     */
+    @Column(name = "password", length = 255,nullable = false)
+    private String password;
+
+    @Column(name = "username", length = 255)
+    private String username;
+
 }

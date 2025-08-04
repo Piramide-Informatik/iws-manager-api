@@ -2,6 +2,8 @@ package com.iws_manager.iws_manager_api.models;
 
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {
@@ -10,16 +12,26 @@ class UserTest {
     void testUserCreation() {
         // Arrange
         String email = "test@company.com";
-        String password = "securePassword123";
+        String rawPassword = "securePassword123";
+        String first_name = "testFirstName";
+        String last_name = "testLastName";
+        String username = "testUsername";
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         
         // Act
         User user = new User();
         user.setEmail(email);
-        user.setPassword(password);
+        user.setPassword(encoder.encode(rawPassword));// Hash here
+        user.setFirst_name(first_name);
+        user.setLast_name(last_name);
+        user.setUsername(username);
         
         // Assert
         assertEquals(email, user.getEmail());
-        assertEquals(password, user.getPassword());
+        assertTrue(encoder.matches(rawPassword, user.getPassword()));// Verify the hash
+        assertEquals(first_name, user.getFirst_name());
+        assertEquals(last_name, user.getLast_name());
+        assertEquals(username, user.getUsername());
     }
 
     @Test
