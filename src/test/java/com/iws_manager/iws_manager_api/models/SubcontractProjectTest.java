@@ -40,18 +40,6 @@ class SubcontractProjectTest {
         return project;
     }
 
-    private SubcontractProject createSubcontractProject2() {
-        SubcontractProject project = new SubcontractProject();
-        project.setSubcontractYear(MOCK_SUBCONTRACT_YEAR);
-        project.setAmount(AMOUNT_1);
-        project.setMonths(MONTHS_1);
-        project.setProject(MOCK_PROJECT);
-        project.setSubcontract(MOCK_SUBCONTRACT);
-        project.setShare(SHARE_1);
-        project.setYear(YEAR_1);
-        return project;
-    }
-
     private SubcontractProject createDifferentSubcontractProject() {
         SubcontractProject project = new SubcontractProject();
         project.setSubcontractYear(DIFFERENT_MOCK_SUBCONTRACT_YEAR);
@@ -93,7 +81,7 @@ class SubcontractProjectTest {
     @Test
     void testEqualsAndHashCode() {
         SubcontractProject project1 = createSubcontractProject1();
-        SubcontractProject project2 = createSubcontractProject2();
+        SubcontractProject project2 = createSubcontractProject1();
         SubcontractProject projectSame = project1;
         SubcontractProject differentProject = createDifferentSubcontractProject();
 
@@ -107,7 +95,7 @@ class SubcontractProjectTest {
         assertEquals(project1.hashCode(), project2.hashCode());
 
         // Transitivity
-        SubcontractProject project3 = createSubcontractProject2();
+        SubcontractProject project3 = createSubcontractProject1();
         assertEquals(project1, project2);
         assertEquals(project2, project3);
         assertEquals(project1, project3);
