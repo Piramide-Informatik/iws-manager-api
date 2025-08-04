@@ -17,7 +17,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@EqualsAndHashCode(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "user")
 @AttributeOverride(name ="id", column = @Column(name = "userid"))
@@ -31,10 +30,10 @@ public class User extends BaseEntity{
     private boolean active = true;
 
     @Column(name="firstname", length = 255)
-    private String first_name;
+    private String firstName;
 
     @Column(name = "lastname", length = 255)
-    private String last_name;
+    private String lastName;
     /**
      * User's email address (used as username). Must be unique.
      * Example: "user@company.com"

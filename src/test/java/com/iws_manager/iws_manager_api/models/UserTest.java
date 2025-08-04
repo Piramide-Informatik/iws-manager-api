@@ -13,8 +13,8 @@ class UserTest {
         // Arrange
         String email = "test@company.com";
         String rawPassword = "securePassword123";
-        String first_name = "testFirstName";
-        String last_name = "testLastName";
+        String firstName = "testFirstName";
+        String lastName = "testLastName";
         String username = "testUsername";
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         
@@ -22,15 +22,15 @@ class UserTest {
         User user = new User();
         user.setEmail(email);
         user.setPassword(encoder.encode(rawPassword));// Hash here
-        user.setFirst_name(first_name);
-        user.setLast_name(last_name);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
         user.setUsername(username);
         
         // Assert
         assertEquals(email, user.getEmail());
         assertTrue(encoder.matches(rawPassword, user.getPassword()));// Verify the hash
-        assertEquals(first_name, user.getFirst_name());
-        assertEquals(last_name, user.getLast_name());
+        assertEquals(firstName, user.getFirstName());
+        assertEquals(lastName, user.getLastName());
         assertEquals(username, user.getUsername());
     }
 
