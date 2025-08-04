@@ -16,7 +16,7 @@ public interface SubcontractProjectService {
     void delete(Long id);
 
     List<SubcontractProject> getByMonths(Integer months);
-    List<SubcontractProject> getByAmount(String amount);
+    List<SubcontractProject> getByAmount(BigDecimal amount);
     List<SubcontractProject> getByShare(BigDecimal share);
     List<SubcontractProject> getByYear(LocalDate year);
     List<SubcontractProject> getBySubcontractYearId(Long subcontractYearId);

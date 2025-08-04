@@ -21,6 +21,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class SubcontractProjectServiceImplTest {
 
+    private static final BigDecimal TEST_AMOUNT = new BigDecimal("1000.00");
+    private static final BigDecimal TEST_SHARE = new BigDecimal("50.00");
+
     @Mock
     private SubcontractProjectRepository subcontractProjectRepository;
 
@@ -35,20 +38,20 @@ class SubcontractProjectServiceImplTest {
         project1 = new SubcontractProject();
         project1.setId(1L);
         project1.setMonths(6);
-        project1.setAmount("1000.00");
-        project1.setShare(new BigDecimal("50.00"));
+        project1.setAmount(TEST_AMOUNT);
+        project1.setShare(TEST_SHARE);
         project1.setYear(LocalDate.of(2023, 1, 1));
 
         project2 = new SubcontractProject();
         project2.setId(2L);
         project2.setMonths(12);
-        project2.setAmount("2000.00");
+        project2.setAmount(new BigDecimal("2000.00"));
         project2.setShare(new BigDecimal("75.00"));
         project2.setYear(LocalDate.of(2024, 1, 1));
     }
 
     @Test
-    void create_ShouldReturnSavedProject() {
+    void createShouldReturnSavedProject() {
         when(subcontractProjectRepository.save(project1)).thenReturn(project1);
 
         SubcontractProject result = subcontractProjectService.create(project1);
@@ -59,7 +62,7 @@ class SubcontractProjectServiceImplTest {
     }
 
     @Test
-    void findById_ShouldReturnProjectWhenExists() {
+    void findByIdShouldReturnProjectWhenExists() {
         when(subcontractProjectRepository.findById(1L)).thenReturn(Optional.of(project1));
 
         Optional<SubcontractProject> result = subcontractProjectService.findById(1L);
@@ -69,7 +72,7 @@ class SubcontractProjectServiceImplTest {
     }
 
     @Test
-    void findById_ShouldReturnEmptyWhenNotExists() {
+    void findByIdShouldReturnEmptyWhenNotExists() {
         when(subcontractProjectRepository.findById(99L)).thenReturn(Optional.empty());
 
         Optional<SubcontractProject> result = subcontractProjectService.findById(99L);
@@ -78,7 +81,7 @@ class SubcontractProjectServiceImplTest {
     }
 
     @Test
-    void findAll_ShouldReturnAllProjects() {
+    void findAllShouldReturnAllProjects() {
         when(subcontractProjectRepository.findAll()).thenReturn(Arrays.asList(project1, project2));
 
         List<SubcontractProject> result = subcontractProjectService.findAll();
@@ -89,10 +92,10 @@ class SubcontractProjectServiceImplTest {
     }
 
     @Test
-    void update_ShouldUpdateExistingProject() {
+    void updateShouldUpdateExistingProject() {
         SubcontractProject updatedDetails = new SubcontractProject();
         updatedDetails.setMonths(24);
-        updatedDetails.setAmount("3000.00");
+        updatedDetails.setAmount(new BigDecimal("3000.00"));
         updatedDetails.setShare(new BigDecimal("100.00"));
 
         when(subcontractProjectRepository.findById(1L)).thenReturn(Optional.of(project1));
@@ -101,12 +104,12 @@ class SubcontractProjectServiceImplTest {
         SubcontractProject result = subcontractProjectService.update(1L, updatedDetails);
 
         assertEquals(24, result.getMonths());
-        assertEquals("3000.00", result.getAmount());
+        assertEquals(new BigDecimal("3000.00"), result.getAmount());
         assertEquals(new BigDecimal("100.00"), result.getShare());
     }
 
     @Test
-    void update_ShouldThrowWhenProjectNotFound() {
+    void updateShouldThrowWhenProjectNotFound() {
         when(subcontractProjectRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThrows(RuntimeException.class, () -> 
@@ -114,7 +117,7 @@ class SubcontractProjectServiceImplTest {
     }
 
     @Test
-    void delete_ShouldCallRepositoryDelete() {
+    void deleteShouldCallRepositoryDelete() {
         doNothing().when(subcontractProjectRepository).deleteById(1L);
 
         subcontractProjectService.delete(1L);
@@ -124,7 +127,7 @@ class SubcontractProjectServiceImplTest {
 
     // Query methods tests
     @Test
-    void getByMonths_ShouldReturnMatchingProjects() {
+    void getByMonthsShouldReturnMatchingProjects() {
         when(subcontractProjectRepository.findByMonths(6)).thenReturn(Arrays.asList(project1));
 
         List<SubcontractProject> result = subcontractProjectService.getByMonths(6);
@@ -134,27 +137,27 @@ class SubcontractProjectServiceImplTest {
     }
 
     @Test
-    void getByAmount_ShouldReturnMatchingProjects() {
-        when(subcontractProjectRepository.findByAmount("1000.00")).thenReturn(Arrays.asList(project1));
+    void getByAmountShouldReturnMatchingProjects() {
+        when(subcontractProjectRepository.findByAmount(TEST_AMOUNT)).thenReturn(Arrays.asList(project1));
 
-        List<SubcontractProject> result = subcontractProjectService.getByAmount("1000.00");
-
-        assertEquals(1, result.size());
-        assertEquals(project1, result.get(0));
-    }
-
-    @Test
-    void getByShare_ShouldReturnMatchingProjects() {
-        when(subcontractProjectRepository.findByShare(new BigDecimal("50.00"))).thenReturn(Arrays.asList(project1));
-
-        List<SubcontractProject> result = subcontractProjectService.getByShare(new BigDecimal("50.00"));
+        List<SubcontractProject> result = subcontractProjectService.getByAmount(TEST_AMOUNT);
 
         assertEquals(1, result.size());
         assertEquals(project1, result.get(0));
     }
 
     @Test
-    void getByYear_ShouldReturnMatchingProjects() {
+    void getByShareShouldReturnMatchingProjects() {
+        when(subcontractProjectRepository.findByShare(TEST_SHARE)).thenReturn(Arrays.asList(project1));
+
+        List<SubcontractProject> result = subcontractProjectService.getByShare(TEST_SHARE);
+
+        assertEquals(1, result.size());
+        assertEquals(project1, result.get(0));
+    }
+
+    @Test
+    void getByYearShouldReturnMatchingProjects() {
         LocalDate year = LocalDate.of(2023, 1, 1);
         when(subcontractProjectRepository.findByYear(year)).thenReturn(Arrays.asList(project1));
 
@@ -165,7 +168,7 @@ class SubcontractProjectServiceImplTest {
     }
 
     @Test
-    void getBySubcontractYearId_ShouldReturnMatchingProjects() {
+    void getBySubcontractYearIdShouldReturnMatchingProjects() {
         when(subcontractProjectRepository.findBySubcontractYearId(1L)).thenReturn(Arrays.asList(project1));
 
         List<SubcontractProject> result = subcontractProjectService.getBySubcontractYearId(1L);
@@ -175,7 +178,7 @@ class SubcontractProjectServiceImplTest {
     }
 
     @Test
-    void getByProjectId_ShouldReturnMatchingProjects() {
+    void getByProjectIdShouldReturnMatchingProjects() {
         when(subcontractProjectRepository.findByProjectId(1L)).thenReturn(Arrays.asList(project1));
 
         List<SubcontractProject> result = subcontractProjectService.getByProjectId(1L);
@@ -185,7 +188,7 @@ class SubcontractProjectServiceImplTest {
     }
 
     @Test
-    void getBySubcontractId_ShouldReturnMatchingProjects() {
+    void getBySubcontractIdShouldReturnMatchingProjects() {
         when(subcontractProjectRepository.findBySubcontractId(1L)).thenReturn(Arrays.asList(project1));
 
         List<SubcontractProject> result = subcontractProjectService.getBySubcontractId(1L);
@@ -195,7 +198,7 @@ class SubcontractProjectServiceImplTest {
     }
 
     @Test
-    void getByShareBetween_ShouldReturnMatchingProjects() {
+    void getByShareBetweenShouldReturnMatchingProjects() {
         BigDecimal start = new BigDecimal("40.00");
         BigDecimal end = new BigDecimal("60.00");
         when(subcontractProjectRepository.findByShareBetween(start, end)).thenReturn(Arrays.asList(project1));
@@ -207,7 +210,7 @@ class SubcontractProjectServiceImplTest {
     }
 
     @Test
-    void getByMonthsGreaterThan_ShouldReturnMatchingProjects() {
+    void getByMonthsGreaterThanShouldReturnMatchingProjects() {
         when(subcontractProjectRepository.findByMonthsGreaterThan(6)).thenReturn(Arrays.asList(project2));
 
         List<SubcontractProject> result = subcontractProjectService.getByMonthsGreaterThan(6);
@@ -217,7 +220,7 @@ class SubcontractProjectServiceImplTest {
     }
 
     @Test
-    void getByMonthsLessThan_ShouldReturnMatchingProjects() {
+    void getByMonthsLessThanShouldReturnMatchingProjects() {
         when(subcontractProjectRepository.findByMonthsLessThan(12)).thenReturn(Arrays.asList(project1));
 
         List<SubcontractProject> result = subcontractProjectService.getByMonthsLessThan(12);
@@ -227,7 +230,7 @@ class SubcontractProjectServiceImplTest {
     }
 
     @Test
-    void getByYearAfter_ShouldReturnMatchingProjects() {
+    void getByYearAfterShouldReturnMatchingProjects() {
         LocalDate date = LocalDate.of(2022, 12, 31);
         when(subcontractProjectRepository.findByYearAfter(date)).thenReturn(Arrays.asList(project1, project2));
 
@@ -239,7 +242,7 @@ class SubcontractProjectServiceImplTest {
     }
 
     @Test
-    void getByYearBefore_ShouldReturnMatchingProjects() {
+    void getByYearBeforeShouldReturnMatchingProjects() {
         LocalDate date = LocalDate.of(2024, 12, 31);
         when(subcontractProjectRepository.findByYearBefore(date)).thenReturn(Arrays.asList(project1, project2));
 

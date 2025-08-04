@@ -129,7 +129,7 @@ public class SubcontractProjectServiceImpl implements SubcontractProjectService 
     }
 
     @Override
-    public List<SubcontractProject> getByAmount(String amount){
+    public List<SubcontractProject> getByAmount(BigDecimal amount){
         return subcontractProjectRepository.findByAmount(amount);
     }
 
