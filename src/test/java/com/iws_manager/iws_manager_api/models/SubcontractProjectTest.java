@@ -20,14 +20,6 @@ class SubcontractProjectTest {
     private static final BigDecimal SHARE_1 = new BigDecimal("25.50");
     private static final LocalDate YEAR_1 = LocalDate.of(2023, 1, 1);
     
-    private static final SubcontractYear DIFFERENT_MOCK_SUBCONTRACT_YEAR = mock(SubcontractYear.class);
-    private static final Project DIFFERENT_MOCK_PROJECT = mock(Project.class);
-    private static final Subcontract DIFFERENT_MOCK_SUBCONTRACT = mock(Subcontract.class);
-    private static final String AMOUNT_2 = "2000.00";
-    private static final Integer MONTHS_2 = 12;
-    private static final BigDecimal SHARE_2 = new BigDecimal("50.00");
-    private static final LocalDate YEAR_2 = LocalDate.of(2024, 1, 1);
-
     private SubcontractProject createSubcontractProject1() {
         SubcontractProject project = new SubcontractProject();
         project.setSubcontractYear(MOCK_SUBCONTRACT_YEAR);
@@ -37,18 +29,6 @@ class SubcontractProjectTest {
         project.setSubcontract(MOCK_SUBCONTRACT);
         project.setShare(SHARE_1);
         project.setYear(YEAR_1);
-        return project;
-    }
-
-    private SubcontractProject createDifferentSubcontractProject() {
-        SubcontractProject project = new SubcontractProject();
-        project.setSubcontractYear(DIFFERENT_MOCK_SUBCONTRACT_YEAR);
-        project.setAmount(AMOUNT_2);
-        project.setMonths(MONTHS_2);
-        project.setProject(DIFFERENT_MOCK_PROJECT);
-        project.setSubcontract(DIFFERENT_MOCK_SUBCONTRACT);
-        project.setShare(SHARE_2);
-        project.setYear(YEAR_2);
         return project;
     }
 
@@ -82,8 +62,6 @@ class SubcontractProjectTest {
     void testEqualsAndHashCode() {
         SubcontractProject project1 = createSubcontractProject1();
         SubcontractProject project2 = createSubcontractProject1();
-        SubcontractProject projectSame = project1;
-        SubcontractProject differentProject = createDifferentSubcontractProject();
 
         // Reflexivity
         assertEquals(project1, project1);
