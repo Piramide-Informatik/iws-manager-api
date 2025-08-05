@@ -28,11 +28,11 @@ class SubcontractProjectControllerTest {
     private SubcontractProjectController subcontractProjectController;
 
     private SubcontractProject testProject;
-    private final Long TEST_ID = 1L;
-    private final Integer TEST_MONTHS = 6;
-    private final BigDecimal TEST_AMOUNT = new BigDecimal("1000.50");
-    private final BigDecimal TEST_SHARE = new BigDecimal("25.50");
-    private final LocalDate TEST_DATE = LocalDate.of(2023, 1, 1);
+    private static final Long TEST_ID = 1L;
+    private static final Integer TEST_MONTHS = 6;
+    private static final BigDecimal TEST_AMOUNT = new BigDecimal("1000.50");
+    private static final BigDecimal TEST_SHARE = new BigDecimal("25.50");
+    private static final LocalDate TEST_DATE = LocalDate.of(2023, 1, 1);
 
     @BeforeEach
     void setUp() {
@@ -42,7 +42,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void create_ShouldReturnCreatedResponse() {
+    void createShouldReturnCreatedResponse() {
         when(subcontractProjectService.create(any(SubcontractProject.class))).thenReturn(testProject);
 
         ResponseEntity<?> response = subcontractProjectController.create(testProject);
@@ -53,7 +53,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void getById_WhenExists_ShouldReturnProject() {
+    void getByIdWhenExistsShouldReturnProject() {
         when(subcontractProjectService.findById(TEST_ID)).thenReturn(Optional.of(testProject));
 
         ResponseEntity<SubcontractProject> response = subcontractProjectController.getById(TEST_ID);
@@ -63,7 +63,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void getById_WhenNotExists_ShouldReturnNotFound() {
+    void getByIdWhenNotExistsShouldReturnNotFound() {
         when(subcontractProjectService.findById(TEST_ID)).thenReturn(Optional.empty());
 
         ResponseEntity<SubcontractProject> response = subcontractProjectController.getById(TEST_ID);
@@ -72,7 +72,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void getAll_ShouldReturnAllProjects() {
+    void getAllShouldReturnAllProjects() {
         List<SubcontractProject> projects = Arrays.asList(testProject, new SubcontractProject());
         when(subcontractProjectService.findAll()).thenReturn(projects);
 
@@ -83,7 +83,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void update_WhenExists_ShouldReturnUpdatedProject() {
+    void updateWhenExistsShouldReturnUpdatedProject() {
         when(subcontractProjectService.update(eq(TEST_ID), any(SubcontractProject.class))).thenReturn(testProject);
 
         ResponseEntity<SubcontractProject> response = subcontractProjectController.update(TEST_ID, testProject);
@@ -93,7 +93,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void update_WhenNotExists_ShouldReturnNotFound() {
+    void updateWhenNotExistsShouldReturnNotFound() {
         when(subcontractProjectService.update(eq(TEST_ID), any(SubcontractProject.class)))
                 .thenThrow(new RuntimeException());
 
@@ -103,7 +103,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void delete_WhenExists_ShouldReturnNoContent() {
+    void deleteWhenExistsShouldReturnNoContent() {
         doNothing().when(subcontractProjectService).delete(TEST_ID);
 
         ResponseEntity<Void> response = subcontractProjectController.delete(TEST_ID);
@@ -113,7 +113,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void delete_WhenNotExists_ShouldReturnNotFound() {
+    void deleteWhenNotExistsShouldReturnNotFound() {
         doThrow(new RuntimeException()).when(subcontractProjectService).delete(TEST_ID);
 
         ResponseEntity<Void> response = subcontractProjectController.delete(TEST_ID);
@@ -122,7 +122,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void getByMonths_ShouldReturnProjects() {
+    void getByMonthsShouldReturnProjects() {
         List<SubcontractProject> projects = Arrays.asList(testProject);
         when(subcontractProjectService.getByMonths(TEST_MONTHS)).thenReturn(projects);
 
@@ -133,7 +133,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void getByAmount_ShouldReturnProjects() {
+    void getByAmountShouldReturnProjects() {
         List<SubcontractProject> projects = Arrays.asList(testProject);
         when(subcontractProjectService.getByAmount(TEST_AMOUNT)).thenReturn(projects);
 
@@ -144,7 +144,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void getByShare_ShouldReturnProjects() {
+    void getByShareShouldReturnProjects() {
         List<SubcontractProject> projects = Arrays.asList(testProject);
         when(subcontractProjectService.getByShare(TEST_SHARE)).thenReturn(projects);
 
@@ -155,7 +155,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void getByYear_ShouldReturnProjects() {
+    void getByYearShouldReturnProjects() {
         List<SubcontractProject> projects = Arrays.asList(testProject);
         when(subcontractProjectService.getByYear(TEST_DATE)).thenReturn(projects);
 
@@ -166,7 +166,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void getBySubcontractYearId_ShouldReturnProjects() {
+    void getBySubcontractYearIdShouldReturnProjects() {
         List<SubcontractProject> projects = Arrays.asList(testProject);
         when(subcontractProjectService.getBySubcontractYearId(TEST_ID)).thenReturn(projects);
 
@@ -177,7 +177,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void getByProjectId_ShouldReturnProjects() {
+    void getByProjectIdShouldReturnProjects() {
         List<SubcontractProject> projects = Arrays.asList(testProject);
         when(subcontractProjectService.getByProjectId(TEST_ID)).thenReturn(projects);
 
@@ -188,7 +188,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void getBySubcontractId_ShouldReturnProjects() {
+    void getBySubcontractIdShouldReturnProjects() {
         List<SubcontractProject> projects = Arrays.asList(testProject);
         when(subcontractProjectService.getBySubcontractId(TEST_ID)).thenReturn(projects);
 
@@ -199,7 +199,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void getByShareBetween_ShouldReturnProjects() {
+    void getByShareBetweenShouldReturnProjects() {
         List<SubcontractProject> projects = Arrays.asList(testProject);
         when(subcontractProjectService.getByShareBetween(TEST_SHARE, TEST_SHARE.add(BigDecimal.ONE))).thenReturn(projects);
 
@@ -210,7 +210,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void getByMonthsGreaterThan_ShouldReturnProjects() {
+    void getByMonthsGreaterThanShouldReturnProjects() {
         List<SubcontractProject> projects = Arrays.asList(testProject);
         when(subcontractProjectService.getByMonthsGreaterThan(TEST_MONTHS)).thenReturn(projects);
 
@@ -221,7 +221,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void getByMonthsLessThan_ShouldReturnProjects() {
+    void getByMonthsLessThanShouldReturnProjects() {
         List<SubcontractProject> projects = Arrays.asList(testProject);
         when(subcontractProjectService.getByMonthsLessThan(TEST_MONTHS)).thenReturn(projects);
 
@@ -232,7 +232,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void getByYearAfter_ShouldReturnProjects() {
+    void getByYearAfterShouldReturnProjects() {
         List<SubcontractProject> projects = Arrays.asList(testProject);
         when(subcontractProjectService.getByYearAfter(TEST_DATE)).thenReturn(projects);
 
@@ -243,7 +243,7 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void getByYearBefore_ShouldReturnProjects() {
+    void getByYearBeforeShouldReturnProjects() {
         List<SubcontractProject> projects = Arrays.asList(testProject);
         when(subcontractProjectService.getByYearBefore(TEST_DATE)).thenReturn(projects);
 
