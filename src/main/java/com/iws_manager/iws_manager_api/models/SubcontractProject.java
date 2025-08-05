@@ -26,7 +26,7 @@ public class SubcontractProject extends BaseEntity{
     private SubcontractYear subcontractYear;
 
     @Column(name = "amount", nullable = true, columnDefinition = "DECIMAL(10,2)")
-    private String amount;
+    private BigDecimal amount;
 
     @Column(name = "months", nullable = true, columnDefinition = "TINYINT")
     private Integer months;

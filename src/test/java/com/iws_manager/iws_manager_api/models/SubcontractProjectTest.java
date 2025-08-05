@@ -15,7 +15,7 @@ class SubcontractProjectTest {
     private static final SubcontractYear MOCK_SUBCONTRACT_YEAR = mock(SubcontractYear.class);
     private static final Project MOCK_PROJECT = mock(Project.class);
     private static final Subcontract MOCK_SUBCONTRACT = mock(Subcontract.class);
-    private static final String AMOUNT_1 = "1000.50";
+    private static final BigDecimal AMOUNT_1 = new BigDecimal("1000.50");
     private static final Integer MONTHS_1 = 6;
     private static final BigDecimal SHARE_1 = new BigDecimal("25.50");
     private static final LocalDate YEAR_1 = LocalDate.of(2023, 1, 1);
