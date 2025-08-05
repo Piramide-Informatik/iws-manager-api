@@ -48,7 +48,7 @@ public class RoleServiceImplTest {
         Role result = roleService.create(sampleRole);
 
         assertNotNull(result);
-        assertEquals("admin", result.getName());
+        assertEquals(FIRST_ROLE, result.getName());
         verify(roleRepository, times(1)).save(any(Role.class));
     }
 
@@ -67,7 +67,7 @@ public class RoleServiceImplTest {
         Optional<Role> result = roleService.findById(1L);
 
         assertTrue(result.isPresent());
-        assertEquals("admin",result.get().getName());
+        assertEquals(FIRST_ROLE,result.get().getName());
         verify(roleRepository, times(1)).findById(1L);
     }
 
@@ -131,7 +131,7 @@ public class RoleServiceImplTest {
     }
 
     @Test
-    public void update_ShouldThrowException_WhenOptimisticLockingFails() {
+    public void updateShouldThrowExceptionWhenOptimisticLockingFails() {
         Long roleId = 1L;
         Role currentRole = new Role();
         currentRole.setId(roleId);
@@ -148,9 +148,9 @@ public class RoleServiceImplTest {
                 .thenThrow(new ObjectOptimisticLockingFailureException("Concurrent modification detected",
                          new ObjectOptimisticLockingFailureException(Role.class, roleId)));
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-           roleService.update(roleId, outdatedRole);
-        });
+        Exception exception = assertThrows(RuntimeException.class, () ->
+           roleService.update(roleId, outdatedRole)
+        );
 
         assertNotNull(exception, "An exception should have been thrown");
 
