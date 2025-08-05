@@ -15,7 +15,7 @@ public interface SubcontractProjectRepository extends JpaRepository<SubcontractP
     List<SubcontractProject> findByMonths(Integer months);
     
     // Find by amount (as string)
-    List<SubcontractProject> findByAmount(String amount);
+    List<SubcontractProject> findByAmount(BigDecimal amount);
     
     // Find by share percentage
     List<SubcontractProject> findByShare(BigDecimal share);
