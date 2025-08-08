@@ -71,10 +71,6 @@ public class RoleServiceImpl implements RoleService {
                     "Role is assigned to " + userCount + " user(s) and cannot be deleted"
             );
         }
-//        if (!role.getUsers().isEmpty()) {
-//            throw new RuntimeException("Cannot delete role because it is assigned to users");
-//        }
-
         roleRepository.deleteById(id);
     }
 

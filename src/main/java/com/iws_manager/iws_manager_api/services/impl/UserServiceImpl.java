@@ -18,6 +18,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
+    private static final String USERNOTFOUND = "User not found";
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
@@ -74,7 +75,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException(USERNOTFOUND));
         int roleCount = user.getRoles().size();
 
         if (roleCount > 0) {
@@ -83,15 +84,12 @@ public class UserServiceImpl implements UserService {
                     "User is assigned to " + roleCount + " role(s) and cannot be deleted"
             );
         }
-//        if(!user.getRoles().isEmpty()) {
-//            throw new IllegalArgumentException("Id cannot be null");
-//        }
         userRepository.deleteById(id);
     }
 
     @Override
     public User assignRole(Long userId, List<Long> roleIds) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(USERNOTFOUND));
         List<Role> roles = roleRepository.findAllById(roleIds);
         user.setRoles(roles);
         return userRepository.save(user);
@@ -100,7 +98,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Role> getRolesByUser(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(()->new RuntimeException("User not found"));
+                .orElseThrow(()->new RuntimeException(USERNOTFOUND));
         return user.getRoles();
     }
 

@@ -78,14 +78,12 @@ public class UserController {
     public ResponseEntity<User> assignRoles(
             @PathVariable Long id,
             @RequestBody List<Long> roleIDs){
-        userService.assignRole(id,roleIDs);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.ok(userService.assignRole(id,roleIDs));
     }
 
     @GetMapping("/{id}/roles")
     public ResponseEntity<List<Role>> getRolesByUser(@PathVariable Long id) {
-        userService.getRolesByUser(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(userService.getRolesByUser(id));
     }
 
 }
