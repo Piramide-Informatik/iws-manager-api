@@ -1,6 +1,7 @@
 package com.iws_manager.iws_manager_api.controllers;
 
 import com.iws_manager.iws_manager_api.models.Role;
+import com.iws_manager.iws_manager_api.models.User;
 import com.iws_manager.iws_manager_api.services.interfaces.RoleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,5 +71,10 @@ public class RoleController {
     public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
         roleService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/{id}/users")
+    public ResponseEntity<List<User>> getUsersByRole(@PathVariable Long id) {
+        return ResponseEntity.ok(roleService.getUsersByRole(id));
     }
 }
