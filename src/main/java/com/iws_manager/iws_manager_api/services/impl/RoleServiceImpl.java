@@ -3,6 +3,7 @@ package com.iws_manager.iws_manager_api.services.impl;
 import com.iws_manager.iws_manager_api.models.Role;
 import com.iws_manager.iws_manager_api.models.User;
 import com.iws_manager.iws_manager_api.repositories.RoleRepository;
+import com.iws_manager.iws_manager_api.repositories.UserRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,10 +18,12 @@ import java.util.Optional;
 @Transactional
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public RoleServiceImpl(RoleRepository roleRepository) {
+    public RoleServiceImpl(RoleRepository roleRepository, UserRepository userRepository) {
         this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -61,9 +64,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void delete(Long id) {
-        Role role = roleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Role not found"));
-        int userCount = role.getUsers().size();
+        int userCount = userRepository.findByRolesId(id).size();
 
         if (userCount > 0) {
             throw new ResponseStatusException(
@@ -74,11 +75,12 @@ public class RoleServiceImpl implements RoleService {
         roleRepository.deleteById(id);
     }
 
+
     @Override
     public List<User> getUsersByRole(Long roleId) {
-        Role role = roleRepository.findById(roleId)
-                .orElseThrow(() -> new RuntimeException("Role not found"));
-
-        return role.getUsers();
+        if (roleId == null) {
+            throw new IllegalArgumentException("Role ID cannot be null");
+        }
+        return userRepository.findByRolesId(roleId);
     }
 }

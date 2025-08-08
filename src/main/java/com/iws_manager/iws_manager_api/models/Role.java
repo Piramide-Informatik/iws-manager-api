@@ -32,7 +32,4 @@ public class Role extends BaseEntity {
     @Column(name = "role", length = 255)
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
-    @JsonIgnore
-    private List<User> users = new ArrayList<>();
 }

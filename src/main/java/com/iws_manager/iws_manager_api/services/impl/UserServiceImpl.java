@@ -74,9 +74,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(USERNOTFOUND));
-        int roleCount = user.getRoles().size();
+        int roleCount = roleRepository.findByUserId(id).size();
 
         if (roleCount > 0) {
             throw new ResponseStatusException(
@@ -97,9 +95,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Role> getRolesByUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(()->new RuntimeException(USERNOTFOUND));
-        return user.getRoles();
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID cannot be null");
+        }
+        return roleRepository.findByUserId(userId);
     }
 
 

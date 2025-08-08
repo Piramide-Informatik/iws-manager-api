@@ -12,6 +12,6 @@ public interface RoleService {
     List<Role> findAll();
     Role update(Long id, Role roleDetails);
     void delete(Long id);
-
     List<User> getUsersByRole(Long roleId);
+
 }
