@@ -1,5 +1,6 @@
 package com.iws_manager.iws_manager_api.controllers;
 
+import com.iws_manager.iws_manager_api.models.Role;
 import com.iws_manager.iws_manager_api.models.User;
 import com.iws_manager.iws_manager_api.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,4 +73,19 @@ public class UserController {
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PostMapping("/{id}/roles")
+    public ResponseEntity<User> assignRoles(
+            @PathVariable Long id,
+            @RequestBody List<Long> roleIDs){
+        userService.assignRole(id,roleIDs);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}/roles")
+    public ResponseEntity<List<Role>> getRolesByUser(@PathVariable Long id) {
+        userService.getRolesByUser(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
