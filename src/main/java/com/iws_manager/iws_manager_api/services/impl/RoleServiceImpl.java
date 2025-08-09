@@ -1,11 +1,15 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.models.Role;
+import com.iws_manager.iws_manager_api.models.User;
 import com.iws_manager.iws_manager_api.repositories.RoleRepository;
+import com.iws_manager.iws_manager_api.repositories.UserRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,10 +18,12 @@ import java.util.Optional;
 @Transactional
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public RoleServiceImpl(RoleRepository roleRepository) {
+    public RoleServiceImpl(RoleRepository roleRepository, UserRepository userRepository) {
         this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -58,9 +64,23 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void delete(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Id cannot be null");
+        int userCount = userRepository.findByRolesId(id).size();
+
+        if (userCount > 0) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Role is assigned to " + userCount + " user(s) and cannot be deleted"
+            );
         }
         roleRepository.deleteById(id);
+    }
+
+
+    @Override
+    public List<User> getUsersByRole(Long roleId) {
+        if (roleId == null) {
+            throw new IllegalArgumentException("Role ID cannot be null");
+        }
+        return userRepository.findByRolesId(roleId);
     }
 }
