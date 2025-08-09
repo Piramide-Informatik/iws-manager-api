@@ -1,11 +1,15 @@
 package com.iws_manager.iws_manager_api.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.iws_manager.iws_manager_api.models.base.BaseEntity;
 
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Entity representing a system user for authentication purposes.
@@ -49,5 +53,14 @@ public class User extends BaseEntity{
 
     @Column(name = "username", length = 255)
     private String username;
+
+    @ManyToMany
+    @JoinTable(
+            name = "userrole",
+            joinColumns = @JoinColumn(name = "userid"),
+            inverseJoinColumns = @JoinColumn(name = "roleid")
+    )
+    @JsonIgnore
+    private List<Role> roles = new ArrayList<>();
 
 }

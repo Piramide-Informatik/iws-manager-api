@@ -1,12 +1,16 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
+import com.iws_manager.iws_manager_api.models.Role;
 import com.iws_manager.iws_manager_api.models.User;
+import com.iws_manager.iws_manager_api.repositories.RoleRepository;
 import com.iws_manager.iws_manager_api.repositories.UserRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,12 +18,15 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
+    private static final String USERNOTFOUND = "User not found";
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -67,9 +74,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long id) {
-        if(id == null) {
-            throw new IllegalArgumentException("Id cannot be null");
+        int roleCount = roleRepository.findByUserId(id).size();
+
+        if (roleCount > 0) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "User is assigned to " + roleCount + " role(s) and cannot be deleted"
+            );
         }
         userRepository.deleteById(id);
     }
+
+    @Override
+    public User assignRole(Long userId, List<Long> roleIds) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(USERNOTFOUND));
+        List<Role> roles = roleRepository.findAllById(roleIds);
+        user.setRoles(roles);
+        return userRepository.save(user);
+    }
+
+    @Override
+    public List<Role> getRolesByUser(Long userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID cannot be null");
+        }
+        return roleRepository.findByUserId(userId);
+    }
+
+
 }
