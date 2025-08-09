@@ -29,6 +29,7 @@ class FundingProgramServiceImplTest {
     private FundingProgramServiceImpl fundingProgramService;
 
     private FundingProgram sampleFundingProgram;
+    private static final String FUNDING_PROGRAM_NAME = "KMU-i";
 
     @BeforeEach
     void setUp() {
@@ -81,7 +82,7 @@ class FundingProgramServiceImplTest {
         // Arrange
         FundingProgram fp2 = new FundingProgram();
         fp2.setId(2L);
-        fp2.setName("KMU-i");
+        fp2.setName(FUNDING_PROGRAM_NAME);
         when(fundingProgramRepository.findAll()).thenReturn(Arrays.asList(sampleFundingProgram, fp2));
         // Act
         List<FundingProgram> result = fundingProgramService.findAll();
@@ -101,13 +102,13 @@ class FundingProgramServiceImplTest {
         updated.setDefaultHoursPerYear(2000.0);
         updated.setDefaultResearchShare(40.0);
         updated.setDefaultStuffFlat(10.0);
-        updated.setName("KMU-i");
+        updated.setName(FUNDING_PROGRAM_NAME);
         when(fundingProgramRepository.findById(1L)).thenReturn(Optional.of(sampleFundingProgram));
         when(fundingProgramRepository.save(any(FundingProgram.class))).thenReturn(sampleFundingProgram);
         // Act
         FundingProgram result = fundingProgramService.update(1L, updated);
         // Assert
-        assertEquals("KMU-i", result.getName());
+        assertEquals(FUNDING_PROGRAM_NAME, result.getName());
         assertEquals(20.0, result.getDefaultFundingRate());
         assertEquals(2000.0, result.getDefaultHoursPerYear());
         assertEquals(40.0, result.getDefaultResearchShare());
