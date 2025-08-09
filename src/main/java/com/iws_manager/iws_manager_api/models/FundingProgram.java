@@ -30,5 +30,5 @@ public class FundingProgram extends BaseEntity {
     private Double defaultStuffFlat;
 
     @Column(name = "fundingprogram", length = 255)
-    private String fundingProgram;
+    private String name;
 }
