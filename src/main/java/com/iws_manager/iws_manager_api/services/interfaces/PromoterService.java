@@ -1,0 +1,14 @@
+package com.iws_manager.iws_manager_api.services.interfaces;
+
+import java.util.List;
+import java.util.Optional;
+
+import com.iws_manager.iws_manager_api.models.Promoter;
+
+public interface PromoterService {
+    Promoter create(Promoter promoter);
+    Optional<Promoter> findById(Long id);
+    List<Promoter> findAll();
+    Promoter update(Long id, Promoter promoterDetails);
+    void delete(Long id);
+}
