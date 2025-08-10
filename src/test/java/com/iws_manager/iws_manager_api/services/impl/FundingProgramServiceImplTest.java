@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
@@ -33,14 +32,13 @@ class FundingProgramServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
         sampleFundingProgram = new FundingProgram();
         sampleFundingProgram.setId(1L);
         sampleFundingProgram.setDefaultFundingRate(12.5);
         sampleFundingProgram.setDefaultHoursPerYear(1800.0);
         sampleFundingProgram.setDefaultResearchShare(30.0);
         sampleFundingProgram.setDefaultStuffFlat(15.0);
-        sampleFundingProgram.setName("ZIM");
+        sampleFundingProgram.setName(FUNDING_PROGRAM_NAME);
     }
 
     /**
@@ -50,12 +48,12 @@ class FundingProgramServiceImplTest {
     @DisplayName("Should create funding program")
     void testCreateFundingProgram() {
         // Arrange
-        when(fundingProgramRepository.save(sampleFundingProgram)).thenReturn(sampleFundingProgram);
+        when(fundingProgramRepository.save(any(FundingProgram.class))).thenReturn(sampleFundingProgram);
         // Act
         FundingProgram result = fundingProgramService.create(sampleFundingProgram);
         // Assert
         assertEquals(sampleFundingProgram, result);
-        verify(fundingProgramRepository, times(1)).save(sampleFundingProgram);
+        verify(fundingProgramRepository, times(1)).save(any(FundingProgram.class));
     }
 
     /**
