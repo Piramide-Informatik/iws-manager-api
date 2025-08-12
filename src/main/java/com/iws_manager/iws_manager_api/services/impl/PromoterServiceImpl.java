@@ -130,8 +130,8 @@ public class PromoterServiceImpl implements PromoterService {
     }
 
     @Override
-    public List<Promoter> getByCountryid(Long countryId) {
-        return promoterRepository.findByCountryid(countryId);
+    public List<Promoter> getByCountryId(Long countryId) {
+        return promoterRepository.findByCountryId(countryId);
     }
 
     @Override

@@ -140,9 +140,9 @@ class PromoterServiceImplTest {
 
     @Test
     void getByCountryidShouldReturnList() {
-        when(promoterRepository.findByCountryid(1L)).thenReturn(List.of(promoter));
+        when(promoterRepository.findByCountryId(1L)).thenReturn(List.of(promoter));
 
-        List<Promoter> result = promoterService.getByCountryid(1L);
+        List<Promoter> result = promoterService.getByCountryId(1L);
 
         assertEquals(1, result.size());
     }
