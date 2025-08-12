@@ -60,7 +60,6 @@ public class User extends BaseEntity{
             joinColumns = @JoinColumn(name = "userid"),
             inverseJoinColumns = @JoinColumn(name = "roleid")
     )
-    @JsonIgnore
     private List<Role> roles = new ArrayList<>();
 
 }
