@@ -11,4 +11,15 @@ public interface PromoterService {
     List<Promoter> findAll();
     Promoter update(Long id, Promoter promoterDetails);
     void delete(Long id);
+
+    List<Promoter> getByCity(String city);
+    List<Promoter> getByCountryid(Long countryId);
+    List<Promoter> getByProjectPromoter(String projectPromoter);
+    List<Promoter> getByPromoterName1(String promoterName1);
+    List<Promoter> getByPromoterName2(String promoterName2);
+    List<Promoter> getByPromoterNo(String promoterNo);
+    List<Promoter> getByStreet(String street);
+    List<Promoter> getByZipCode(String zipCode);
+
+    List<Promoter> getByPromoterName1OrPromoterName2(String name1, String name2);
 }
