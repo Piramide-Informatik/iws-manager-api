@@ -13,7 +13,7 @@ public interface PromoterService {
     void delete(Long id);
 
     List<Promoter> getByCity(String city);
-    List<Promoter> getByCountryid(Long countryId);
+    List<Promoter> getByCountryId(Long countryId);
     List<Promoter> getByProjectPromoter(String projectPromoter);
     List<Promoter> getByPromoterName1(String promoterName1);
     List<Promoter> getByPromoterName2(String promoterName2);
