@@ -123,4 +123,15 @@ public class PromoterController {
         List<Promoter> promoters = promoterService.getByZipCode(zipCode);
         return new ResponseEntity<>(promoters, HttpStatus.OK);
     }
+
+    //GET /api/v1/promoters/by-promoter-name1-or-name2?name1=Juan&name2=Pedro
+
+    @GetMapping("/by-promoter-name1-or-name2")
+    public ResponseEntity<List<Promoter>> getByPromoterName1OrPromoterName2(
+            @RequestParam String name1,
+            @RequestParam String name2) {
+        List<Promoter> promoters = promoterService.getByPromoterName1OrPromoterName2(name1, name2);
+        return new ResponseEntity<>(promoters, HttpStatus.OK);
+    }
+
 }
