@@ -86,9 +86,9 @@ public class Project extends BaseEntity{
     @Column(name = "fundinglabel", length = 255)
     private String fundingLabel;
 
-    // @ManyToOne(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "fundingprogramid", referencedColumnName = "fundingprogramid")
-    // private FundingProgram fundingprogram;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fundingprogramid", referencedColumnName = "fundingprogramid")
+    private FundingProgram fundingprogram;
 
     @Column(name = "fundingrate", nullable = true, columnDefinition = "DECIMAL(5,2)")
     private BigDecimal fundingRate;
@@ -139,9 +139,9 @@ public class Project extends BaseEntity{
     @Column(name = "projectname", length = 255)
     private String projectName;
     
-    // @ManyToOne(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "promoterid", referencedColumnName = "promoterid")
-    // private Promoter promoter;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "promoterid", referencedColumnName = "promoterid")
+    private Promoter promoter;
 
     @Column(name = "note", nullable = true, columnDefinition = "TEXT")
     private String note;
