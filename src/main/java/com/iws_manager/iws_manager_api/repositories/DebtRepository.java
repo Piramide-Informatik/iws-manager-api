@@ -1,12 +1,17 @@
 package com.iws_manager.iws_manager_api.repositories;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.math.BigDecimal;
+
 import com.iws_manager.iws_manager_api.models.Debt;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DebtRepository extends JpaRepository<Debt, Long> {
-    //property Methods
+    //properties Methods
     List<Debt> findByBillingEnd(LocalDate billingEnd);
     List<Debt> findByBillingMonths(Integer billingMonths);
     List<Debt> findByBillingStart(LocalDate billingStart);
@@ -41,4 +46,20 @@ public interface DebtRepository extends JpaRepository<Debt, Long> {
     List<Debt> findByPromoter_Id(Long promoterId);
     List<Debt> findByRequestNo(Integer requestNo);
     List<Debt> findByTaxAmount(BigDecimal taxAmount);
+
+    // Additional Methods
+    List<Debt> findByDebtTitleContainingIgnoreCase(String titlePart);
+    List<Debt> findByCommentContainingIgnoreCase(String commentPart);
+
+    List<Debt> findByBillingStartBetween(LocalDate startDate, LocalDate endDate);
+    List<Debt> findByBillingEndBetween(LocalDate startDate, LocalDate endDate);
+    List<Debt> findByDateBetween(LocalDate startDate, LocalDate endDate);
+
+    List<Debt> findByGrossAmountGreaterThan(BigDecimal amount);
+    List<Debt> findByGrossAmountLessThan(BigDecimal amount);
+    List<Debt> findByGrossAmountBetween(BigDecimal minAmount, BigDecimal maxAmount);
+    
+    List<Debt> findByNetAmountGreaterThan(BigDecimal amount);
+    List<Debt> findByNetAmountLessThan(BigDecimal amount);
+    List<Debt> findByNetAmountBetween(BigDecimal minAmount, BigDecimal maxAmount);
 }
