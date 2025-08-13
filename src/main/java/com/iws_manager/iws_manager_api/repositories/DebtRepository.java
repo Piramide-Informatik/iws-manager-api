@@ -18,7 +18,7 @@ public interface DebtRepository extends JpaRepository<Debt, Long> {
     List<Debt> findByComment(String comment);
     List<Debt> findByConfDateLevel1(LocalDate confDateLevel1);
     List<Debt> findByConfDateLevel2(LocalDate confDateLevel2);
-    List<Debt> findByCustomer_Id(Long customerId);
+    List<Debt> findByCustomerId(Long customerId);
     List<Debt> findByDate(LocalDate date);
     List<Debt> findByDebtNo(Integer debtNo);
     List<Debt> findByDebtTitle(String debtTitle);
@@ -37,13 +37,13 @@ public interface DebtRepository extends JpaRepository<Debt, Long> {
     List<Debt> findByLastPaymentDate(LocalDate lastPaymentDate);
     List<Debt> findByNetAmount(BigDecimal netAmount);
     List<Debt> findByOpenAmount(BigDecimal openAmount);
-    List<Debt> findByOrder_Id(Long orderId);
+    List<Debt> findByOrderId(Long orderId);
     List<Debt> findByPayedAmount(BigDecimal payedAmount);
     List<Debt> findByProjectCosts(BigDecimal projectCosts);
     List<Debt> findByProjectEnd(LocalDate projectEnd);
-    List<Debt> findByProject_Id(Long projectId);
+    List<Debt> findByProjectId(Long projectId);
     List<Debt> findByProjectStart(LocalDate projectStart);
-    List<Debt> findByPromoter_Id(Long promoterId);
+    List<Debt> findByPromoterId(Long promoterId);
     List<Debt> findByRequestNo(Integer requestNo);
     List<Debt> findByTaxAmount(BigDecimal taxAmount);
 
