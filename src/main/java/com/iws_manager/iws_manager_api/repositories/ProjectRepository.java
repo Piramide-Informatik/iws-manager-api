@@ -49,7 +49,8 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     // --- Entities (Relationships) ---
     List<Project> findByCustomerId(Long customerId);
     // List<Project> findByEmpiws20Id(Long empiws20Id);  // Cuando se descomente
-    // List<Project> findByFundingProgramId(Long fundingProgramId);  // Cuando se descomente
+    List<Project> findByFundingProgramId(Long fundingProgramId);
+    List<Project> findByPromoterId(Long promoterId);  
     // List<Project> findByStatusId(Long statusId);  // Cuando se descomente
 
 

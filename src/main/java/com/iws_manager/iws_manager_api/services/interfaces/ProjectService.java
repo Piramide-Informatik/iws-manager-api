@@ -40,7 +40,8 @@ public interface ProjectService {
 
     List<Project> getProjectsByCustomerId(Long customerId);
     // List<Project> getProjectsByEmpiws20Id(Long empiws20Id);  // Cuando se descomente
-    // List<Project> getProjectsByFundingProgramId(Long fundingProgramId);  // Cuando se descomente
+    List<Project> getProjectsByFundingProgramId(Long fundingProgramId);
+    List<Project> getProjectsByPromoterId(Long promoterId);
     // List<Project> getProjectsByStatusId(Long statusId);  // Cuando se descomente
 
     List<Project> getProjectsByApprovalDateBetween(LocalDate start, LocalDate end);

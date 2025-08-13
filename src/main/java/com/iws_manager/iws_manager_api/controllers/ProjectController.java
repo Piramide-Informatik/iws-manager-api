@@ -238,12 +238,17 @@ public class ProjectController {
     //     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     // }
 
-    // @GetMapping("/by-funding-program/{fundingProgramId}")
-    // public ResponseEntity<List<Project>> getByFundingProgramId(@PathVariable Long fundingProgramId) {
-    //     // List<Project> projects = projectService.getProjectsByFundingProgramId(fundingProgramId);
-    //     // return new ResponseEntity<>(projects, HttpStatus.OK);
-    //     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    // }
+    @GetMapping("/by-funding-program/{fundingProgramId}")
+    public ResponseEntity<List<Project>> getByFundingProgramId(@PathVariable Long fundingProgramId) {
+        List<Project> projects = projectService.getProjectsByFundingProgramId(fundingProgramId);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
+
+    @GetMapping("/by-promoter/{promoterId}")
+    public ResponseEntity<List<Project>> getProjectsByPromoterId(@PathVariable Long promoterId) {
+        List<Project> projects = projectService.getProjectsByPromoterId(promoterId);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
 
     // @GetMapping("/by-status/{statusId}")
     // public ResponseEntity<List<Project>> getByStatusId(@PathVariable Long statusId) {
