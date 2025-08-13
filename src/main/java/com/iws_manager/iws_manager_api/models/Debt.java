@@ -97,9 +97,9 @@ public class Debt extends BaseEntity{
     @Column(name = "openamount", nullable = true, columnDefinition = "DECIMAL(10,2)")
     private BigDecimal openAmount;
 
-    // @ManyToOne(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "orderid", referencedColumnName = "orderid")
-    // private Order order;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "orderid", referencedColumnName = "orderid")
+    private Order order;
 
     @Column(name = "payedamount", nullable = true, columnDefinition = "DECIMAL(10,2)")
     private BigDecimal payedAmount;
