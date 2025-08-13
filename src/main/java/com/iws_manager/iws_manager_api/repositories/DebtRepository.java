@@ -62,4 +62,14 @@ public interface DebtRepository extends JpaRepository<Debt, Long> {
     List<Debt> findByNetAmountGreaterThan(BigDecimal amount);
     List<Debt> findByNetAmountLessThan(BigDecimal amount);
     List<Debt> findByNetAmountBetween(BigDecimal minAmount, BigDecimal maxAmount);
+
+    //queries
+    @Query("SELECT SUM(d.grossAmount) FROM Debt d WHERE d.customer.id = :customerId")
+    BigDecimal sumGrossAmountByCustomer(@Param("customerId") Long customerId);
+
+    @Query("SELECT SUM(d.grossAmount - d.payedAmount) FROM Debt d WHERE d.project.id = :projectId")
+    BigDecimal sumOpenAmountByProject(@Param("projectId") Long projectId);
+
+    @Query("SELECT d FROM Debt d WHERE d.date < :currentDate AND d.grossAmount > d.payedAmount ORDER BY d.date ASC")
+    List<Debt> findOverdueDebts(@Param("currentDate") LocalDate currentDate);
 }
