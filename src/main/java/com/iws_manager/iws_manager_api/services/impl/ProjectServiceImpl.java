@@ -116,7 +116,7 @@ public class ProjectServiceImpl implements ProjectService {
                     existingProject.setEndDate(projectDetails.getEndDate());
                     existingProject.setFinanceAuthority(projectDetails.getFinanceAuthority());
                     existingProject.setFundingLabel(projectDetails.getFundingLabel());
-                    // existingProject.setFundingProgram(projectDetails.getFundingProgram());
+                    existingProject.setFundingProgram(projectDetails.getFundingProgram());
                     existingProject.setFundingRate(projectDetails.getFundingRate());
                     existingProject.setHourlyRateMueu(projectDetails.getHourlyRateMueu());
                     existingProject.setIncome1(projectDetails.getIncome1());
@@ -133,7 +133,7 @@ public class ProjectServiceImpl implements ProjectService {
                     existingProject.setProductiveHoursPerYear(projectDetails.getProductiveHoursPerYear());
                     existingProject.setProjectLabel(projectDetails.getProjectLabel());
                     existingProject.setProjectName(projectDetails.getProjectName());
-                    // existingProject.setPromoter(projectDetails.getPromoter());
+                    existingProject.setPromoter(projectDetails.getPromoter());
                     existingProject.setNote(projectDetails.getNote());
                     existingProject.setShareResearch(projectDetails.getShareResearch());
                     existingProject.setStartApproval(projectDetails.getStartApproval());
@@ -198,6 +198,16 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<Project> getProjectsByFundingRate(BigDecimal fundingRate) {
         return projectRepository.findByFundingRate(fundingRate);
+    }
+
+    @Override
+    public List<Project> getProjectsByFundingProgramId(Long fundingProgramId) {
+        return projectRepository.findByFundingProgramId(fundingProgramId);
+    }
+
+    @Override
+    public List<Project> getProjectsByPromoterId(Long fundingProgramId) {
+        return projectRepository.findByPromoterId(fundingProgramId);
     }
 
     @Override

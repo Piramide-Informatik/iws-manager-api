@@ -88,7 +88,7 @@ public class Project extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fundingprogramid", referencedColumnName = "fundingprogramid")
-    private FundingProgram fundingprogram;
+    private FundingProgram fundingProgram;
 
     @Column(name = "fundingrate", nullable = true, columnDefinition = "DECIMAL(5,2)")
     private BigDecimal fundingRate;
