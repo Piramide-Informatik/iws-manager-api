@@ -53,17 +53,17 @@ public class Order extends BaseEntity{
     @Column(name = "contractpdf", nullable = true, columnDefinition = "BLOB")
     private byte[] contractPdf;
     
-    // @ManyToOne(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "contractstatusid", referencedColumnName = "contractstatusid")
-    // private ContractStatus contractStatus;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "contractstatusid", referencedColumnName = "contractstatusid")
+    private ContractStatus contractStatus;
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customerid", referencedColumnName = "customerid")
     private Customer customer;
     
-    // @ManyToOne(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "employeeiwsid", referencedColumnName = "employeeiwsid")
-    // private EmployeeIws employeeIws;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "employeeiwsid", referencedColumnName = "employeeiwsid")
+    private EmployeeIws employeeIws;
     
     @Column(name = "fixcommission", nullable = true, columnDefinition = "DECIMAL(5,2)")
     private BigDecimal fixCommission;
@@ -93,9 +93,13 @@ public class Order extends BaseEntity{
     @Column(name = "orderno", nullable = true)
     private Integer orderNo;
     
-    // @ManyToOne(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "ordertypeid", referencedColumnName = "ordertypeid")
-    // private OrderType orderType;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(
+        name = "ordertypeid", 
+        referencedColumnName = "costtypeid",
+        foreignKey = @ForeignKey(name = "ordertypeid_ordertypeid")
+    )
+    private CostType orderType;
     
     @Column(name = "ordertitle", nullable = true, length = 255)
     private String orderTitle;
