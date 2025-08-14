@@ -21,7 +21,7 @@ public interface DebtService {
     List<Debt> getByComment(String comment);
     List<Debt> getByConfDateLevel1(LocalDate confDateLevel1);
     List<Debt> getByConfDateLevel2(LocalDate confDateLevel2);
-    List<Debt> getByCustomer_Id(Long customerId);
+    List<Debt> getByCustomerId(Long customerId);
     List<Debt> getByDate(LocalDate date);
     List<Debt> getByDebtNo(Integer debtNo);
     List<Debt> getByDebtTitle(String debtTitle);
