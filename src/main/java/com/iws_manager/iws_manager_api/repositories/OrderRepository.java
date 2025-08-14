@@ -1,6 +1,10 @@
-package com.iwsmanager.iwsmanagerapi.repositories;
+package com.iws_manager.iws_manager_api.repositories;
 
-import com.iwsmanager.iwsmanagerapi.models.Order;
+import com.iws_manager.iws_manager_api.models.Order;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -36,5 +40,11 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findBySignatureDate(LocalDate signatureDate);
 
     //HELPERS
+    List<Order> findByOrderValueLessThanEqual(BigDecimal value);
+    List<Order> findByOrderValueGreaterThanEqual(BigDecimal value);
+    List<Order> findByOrderValueBetween(BigDecimal startValue, BigDecimal endValue);
 
+    List<Order> findByApprovalDateBetween(LocalDate start, LocalDate end);
+    List<Order> findByApprovalDateIsNull();
+    List<Order> findByApprovalDateIsNotNull();
 }
