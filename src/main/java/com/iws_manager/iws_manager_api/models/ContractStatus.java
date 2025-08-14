@@ -25,5 +25,5 @@ public class ContractStatus extends BaseEntity{
     private BigDecimal chance;
     
     @Column(name = "contractstatus", nullable = true, length = 255)
-    private String contractStatus;
+    private String status;
 }
