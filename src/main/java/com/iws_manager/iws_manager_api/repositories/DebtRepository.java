@@ -5,7 +5,8 @@ import java.util.List;
 import java.math.BigDecimal;
 
 import com.iws_manager.iws_manager_api.models.Debt;
-
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +19,7 @@ public interface DebtRepository extends JpaRepository<Debt, Long> {
     List<Debt> findByComment(String comment);
     List<Debt> findByConfDateLevel1(LocalDate confDateLevel1);
     List<Debt> findByConfDateLevel2(LocalDate confDateLevel2);
-    List<Debt> findByCustomer_Id(Long customerId);
+    List<Debt> findByCustomerId(Long customerId);
     List<Debt> findByDate(LocalDate date);
     List<Debt> findByDebtNo(Integer debtNo);
     List<Debt> findByDebtTitle(String debtTitle);
@@ -37,13 +38,13 @@ public interface DebtRepository extends JpaRepository<Debt, Long> {
     List<Debt> findByLastPaymentDate(LocalDate lastPaymentDate);
     List<Debt> findByNetAmount(BigDecimal netAmount);
     List<Debt> findByOpenAmount(BigDecimal openAmount);
-    List<Debt> findByOrder_Id(Long orderId);
+    List<Debt> findByOrderId(Long orderId);
     List<Debt> findByPayedAmount(BigDecimal payedAmount);
     List<Debt> findByProjectCosts(BigDecimal projectCosts);
     List<Debt> findByProjectEnd(LocalDate projectEnd);
-    List<Debt> findByProject_Id(Long projectId);
+    List<Debt> findByProjectId(Long projectId);
     List<Debt> findByProjectStart(LocalDate projectStart);
-    List<Debt> findByPromoter_Id(Long promoterId);
+    List<Debt> findByPromoterId(Long promoterId);
     List<Debt> findByRequestNo(Integer requestNo);
     List<Debt> findByTaxAmount(BigDecimal taxAmount);
 
@@ -62,4 +63,14 @@ public interface DebtRepository extends JpaRepository<Debt, Long> {
     List<Debt> findByNetAmountGreaterThan(BigDecimal amount);
     List<Debt> findByNetAmountLessThan(BigDecimal amount);
     List<Debt> findByNetAmountBetween(BigDecimal minAmount, BigDecimal maxAmount);
+
+    //queries
+    @Query("SELECT SUM(d.grossAmount) FROM Debt d WHERE d.customer.id = :customerId")
+    BigDecimal sumGrossAmountByCustomer(@Param("customerId") Long customerId);
+
+    @Query("SELECT SUM(d.grossAmount - d.payedAmount) FROM Debt d WHERE d.project.id = :projectId")
+    BigDecimal sumOpenAmountByProject(@Param("projectId") Long projectId);
+
+    @Query("SELECT d FROM Debt d WHERE d.date < :currentDate AND d.grossAmount > d.payedAmount ORDER BY d.date ASC")
+    List<Debt> findOverdueDebts(@Param("currentDate") LocalDate currentDate);
 }
