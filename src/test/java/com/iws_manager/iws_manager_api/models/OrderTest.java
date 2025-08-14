@@ -113,4 +113,21 @@ class OrderTest {
         order.setOrderTitle(title);
         return order;
     }
+
+    @Test
+    void testOrderWithCostTypeRelationship() {
+        CostType type = new CostType();
+        type.setId(1L);
+        type.setType("Standard");
+        
+        Order order = new Order();
+        order.setOrderNo(1001);
+        order.setOrderType(type);
+        
+        assertAll(
+            () -> assertEquals(1001, order.getOrderNo()),
+            () -> assertEquals(1L, order.getOrderType().getId()),
+            () -> assertEquals("Standard", order.getOrderType().getType())
+        );
+    }
 }
