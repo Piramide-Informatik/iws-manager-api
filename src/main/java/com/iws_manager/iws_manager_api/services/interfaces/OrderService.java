@@ -14,6 +14,10 @@ public interface OrderService {
     Order update(Long id, Order orderDetails);
     void delete(Long id);
 
+    List<Order> getByCustomerIdOrderByOrderTitleAsc(Long customerId);
+    List<Order> getByCustomerIdOrderByOrderLabelAsc(Long customerId);
+
+    //PROPERTIES
     List<Order> getByAcronym(String acronym);
     List<Order> getByApprovalDate(LocalDate approvalDate);
     List<Order> getByApprovalStatusId(Long approvalStatusId);
