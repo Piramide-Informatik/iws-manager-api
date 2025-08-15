@@ -317,4 +317,22 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getByApprovalDateIsNotNull() {
         return orderRepository.findByApprovalDateIsNotNull();
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Order> getByCustomerIdOrderByOrderTitleAsc(Long customerId) {
+        if (customerId == null) {
+            throw new IllegalArgumentException("Customer ID cannot be null");
+        }
+        return orderRepository.findByCustomerIdOrderByOrderTitleAsc(customerId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Order> getByCustomerIdOrderByOrderLabelAsc(Long customerId) {
+        if (customerId == null) {
+            throw new IllegalArgumentException("Customer ID cannot be null");
+        }
+        return orderRepository.findByCustomerIdOrderByOrderLabelAsc(customerId);
+    }
 }

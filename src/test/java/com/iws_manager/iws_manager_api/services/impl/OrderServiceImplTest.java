@@ -214,4 +214,46 @@ public class OrderServiceImplTest {
         List<Order> result = orderService.getByApprovalDateIsNotNull();
         assertNotNull(result.get(0).getApprovalDate());
     }
+
+    @Test
+    void getByCustomerIdOrderByOrderTitleAscShouldReturnSortedOrders() {
+        Order orderA = new Order();
+        orderA.setOrderTitle("A - Orden");
+        Order orderB = new Order();
+        orderB.setOrderTitle("B - Orden");
+        
+        when(orderRepository.findByCustomerIdOrderByOrderTitleAsc(1L))
+            .thenReturn(Arrays.asList(orderA, orderB));
+        
+        List<Order> result = orderService.getByCustomerIdOrderByOrderTitleAsc(1L);
+        
+        assertEquals(2, result.size());
+        assertEquals("A - Orden", result.get(0).getOrderTitle());
+        assertEquals("B - Orden", result.get(1).getOrderTitle());
+    }
+
+    @Test
+    void getByCustomerIdOrderByOrderLabelAscShouldReturnSortedOrders() {
+        Order orderX = new Order();
+        orderX.setOrderLabel("X - Etiqueta");
+        Order orderY = new Order();
+        orderY.setOrderLabel("Y - Etiqueta");
+        
+        when(orderRepository.findByCustomerIdOrderByOrderLabelAsc(1L))
+            .thenReturn(Arrays.asList(orderX, orderY));
+        
+        List<Order> result = orderService.getByCustomerIdOrderByOrderLabelAsc(1L);
+        
+        assertEquals(2, result.size());
+        assertEquals("X - Etiqueta", result.get(0).getOrderLabel());
+        assertEquals("Y - Etiqueta", result.get(1).getOrderLabel());
+    }
+
+    @Test
+    void getByCustomerIdOrderByShouldThrowExceptionWhenCustomerIdIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> 
+            orderService.getByCustomerIdOrderByOrderTitleAsc(null));
+        assertThrows(IllegalArgumentException.class, () -> 
+            orderService.getByCustomerIdOrderByOrderLabelAsc(null));
+    }
 }

@@ -13,6 +13,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     List<Order> findAllByOrderByOrderTitleAsc();
 
+    List<Order> findByCustomerIdOrderByOrderTitleAsc(Long customerId);
+    List<Order> findByCustomerIdOrderByOrderLabelAsc(Long customerId);
+
     //PROPERTIES
     List<Order> findByAcronym(String acronym);
     List<Order> findByApprovalDate(LocalDate approvalDate);
