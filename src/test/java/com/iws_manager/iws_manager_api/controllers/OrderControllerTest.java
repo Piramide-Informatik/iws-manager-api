@@ -35,7 +35,7 @@ public class OrderControllerTest {
 
     // Base URI and Paths
     private static final String BASE_URI = "/api/v1/orders";
-    private static final String ID_PATH = "/{id}";  // Compliant path is annotated
+    private static final String ID_PATH_1 = "/1"; 
     private static final String BY_ORDER_VALUE_BETWEEN_PATH = "/by-order-value-between";
     private static final String BY_APPROVAL_DATE_RANGE_PATH = "/by-approval-date-range";
     private static final String WITHOUT_APPROVAL_DATE_PATH = "/without-approval-date";
@@ -118,7 +118,7 @@ public class OrderControllerTest {
     void getOrderByIdShouldReturnOrder() throws Exception {
         given(orderService.findById(ORDER_ID_1)).willReturn(Optional.of(order1));
 
-        mockMvc.perform(get(BASE_URI + "/1"))
+        mockMvc.perform(get(BASE_URI + ID_PATH_1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(JSON_ID_PATH).value(ORDER_ID_1))
                 .andExpect(jsonPath(JSON_TITLE_PATH).value(ORDER_TITLE));
@@ -128,7 +128,7 @@ public class OrderControllerTest {
     void getOrderByIdShouldReturnNotFound() throws Exception {
         given(orderService.findById(ORDER_ID_NOT_FOUND)).willReturn(Optional.empty());
 
-        mockMvc.perform(get(BASE_URI + ID_PATH, ORDER_ID_NOT_FOUND))
+        mockMvc.perform(get(BASE_URI + "/99"))
                 .andExpect(status().isNotFound());
     }
 
@@ -151,7 +151,7 @@ public class OrderControllerTest {
 
         given(orderService.update(ORDER_ID_1, updated)).willReturn(updated);
 
-        mockMvc.perform(put(BASE_URI + ID_PATH, ORDER_ID_1)
+        mockMvc.perform(put(BASE_URI + ID_PATH_1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updated)))
                 .andExpect(status().isOk())
@@ -162,7 +162,7 @@ public class OrderControllerTest {
     void deleteOrderShouldReturnNoContent() throws Exception {
         doNothing().when(orderService).delete(ORDER_ID_1);
 
-        mockMvc.perform(delete(BASE_URI + ID_PATH, ORDER_ID_1))
+        mockMvc.perform(delete(BASE_URI + ID_PATH_1))
                 .andExpect(status().isNoContent());
     }
 
@@ -170,7 +170,7 @@ public class OrderControllerTest {
     void deleteOrderShouldReturnNotFound() throws Exception {
         doThrow(new RuntimeException("Not found")).when(orderService).delete(NON_EXISTENT_ID);
 
-        mockMvc.perform(delete(BASE_URI + ID_PATH, NON_EXISTENT_ID))
+        mockMvc.perform(delete(BASE_URI + "/999"))
                 .andExpect(status().isNotFound());
     }
 
