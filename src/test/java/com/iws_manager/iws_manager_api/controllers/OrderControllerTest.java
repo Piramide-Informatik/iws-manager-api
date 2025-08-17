@@ -35,14 +35,13 @@ public class OrderControllerTest {
 
     // Base URI and Paths
     private static final String BASE_URI = "/api/v1/orders";
-    private static final String ID_PATH = "/api/v1/orders/{id}";
+    private static final String ID_PATH = "/{id}";  // Compliant path is annotated
     private static final String BY_CUSTOMER_PATH = "/by-customer/";
     private static final String BY_ORDER_VALUE_PATH = "/by-ordervalue/";
     private static final String BY_ORDER_VALUE_BETWEEN_PATH = "/by-order-value-between";
     private static final String BY_APPROVAL_DATE_RANGE_PATH = "/by-approval-date-range";
     private static final String WITHOUT_APPROVAL_DATE_PATH = "/without-approval-date";
     private static final String CUSTOMER_SORT_BY_TITLE_PATH = "/customer/{customerId}/sort-by-title";
-    private static final String BY_ORDERTITLE_PATH = "/by-ordertitle/";
 
     // Test Data Constants
     private static final String ORDER_TITLE = "Test Order";
@@ -122,7 +121,7 @@ public class OrderControllerTest {
     void getOrderByIdShouldReturnOrder() throws Exception {
         given(orderService.findById(ORDER_ID_1)).willReturn(Optional.of(order1));
 
-        mockMvc.perform(get(ID_PATH, ORDER_ID_1))
+        mockMvc.perform(get(BASE_URI + ID_PATH, ORDER_ID_1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(JSON_ID_PATH).value(ORDER_ID_1))
                 .andExpect(jsonPath(JSON_TITLE_PATH).value(ORDER_TITLE));
@@ -132,7 +131,7 @@ public class OrderControllerTest {
     void getOrderByIdShouldReturnNotFound() throws Exception {
         given(orderService.findById(ORDER_ID_NOT_FOUND)).willReturn(Optional.empty());
 
-        mockMvc.perform(get(ID_PATH, ORDER_ID_NOT_FOUND))
+        mockMvc.perform(get(BASE_URI + ID_PATH, ORDER_ID_NOT_FOUND))
                 .andExpect(status().isNotFound());
     }
 
@@ -142,7 +141,7 @@ public class OrderControllerTest {
 
         mockMvc.perform(get(BASE_URI))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath(ID_0).value(ORDER_ID_1))
+                .andExpect(jsonPath("$[0].id").value(ORDER_ID_1))
                 .andExpect(jsonPath("$[0].orderTitle").value(ORDER_TITLE))
                 .andExpect(jsonPath("$[1].id").value(ORDER_ID_2))
                 .andExpect(jsonPath("$[1].orderTitle").value(SECOND_ORDER_TITLE));
@@ -155,7 +154,7 @@ public class OrderControllerTest {
 
         given(orderService.update(ORDER_ID_1, updated)).willReturn(updated);
 
-        mockMvc.perform(put(ID_PATH, ORDER_ID_1)
+        mockMvc.perform(put(BASE_URI + ID_PATH, ORDER_ID_1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updated)))
                 .andExpect(status().isOk())
@@ -166,7 +165,7 @@ public class OrderControllerTest {
     void deleteOrderShouldReturnNoContent() throws Exception {
         doNothing().when(orderService).delete(ORDER_ID_1);
 
-        mockMvc.perform(delete(ID_PATH, ORDER_ID_1))
+        mockMvc.perform(delete(BASE_URI + ID_PATH, ORDER_ID_1))
                 .andExpect(status().isNoContent());
     }
 
@@ -174,7 +173,7 @@ public class OrderControllerTest {
     void deleteOrderShouldReturnNotFound() throws Exception {
         doThrow(new RuntimeException("Not found")).when(orderService).delete(NON_EXISTENT_ID);
 
-        mockMvc.perform(delete(ID_PATH, NON_EXISTENT_ID))
+        mockMvc.perform(delete(BASE_URI + ID_PATH, NON_EXISTENT_ID))
                 .andExpect(status().isNotFound());
     }
 
@@ -184,7 +183,7 @@ public class OrderControllerTest {
 
         mockMvc.perform(get(BASE_URI + BY_CUSTOMER_PATH + CUSTOMER_ID))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath(ID_0).value(ORDER_ID_1));
+                .andExpect(jsonPath("$[0].id").value(ORDER_ID_1));
     }
 
     @Test
@@ -206,7 +205,7 @@ public class OrderControllerTest {
                 .param("startValue", ORDER_VALUE_1000.toString())
                 .param("endValue", ORDER_VALUE_2000.toString()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath(ID_0).value(ORDER_ID_1));
+                .andExpect(jsonPath("$[0].id").value(ORDER_ID_1));
     }
 
     @Test
@@ -228,7 +227,7 @@ public class OrderControllerTest {
                 .param("start", START_DATE.toString())
                 .param("end", END_DATE.toString()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath(ID_0).value(ORDER_ID_1));
+                .andExpect(jsonPath("$[0].id").value(ORDER_ID_1));
     }
 
     @Test
@@ -238,7 +237,7 @@ public class OrderControllerTest {
 
         mockMvc.perform(get(BASE_URI + WITHOUT_APPROVAL_DATE_PATH))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath(ID_0).value(ORDER_ID_1));
+                .andExpect(jsonPath("$[0].id").value(ORDER_ID_1));
     }
 
     @Test
@@ -248,7 +247,7 @@ public class OrderControllerTest {
 
         mockMvc.perform(get(BASE_URI + CUSTOMER_SORT_BY_TITLE_PATH, CUSTOMER_ID))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath(ID_0).value(ORDER_ID_1));
+                .andExpect(jsonPath("$[0].id").value(ORDER_ID_1));
     }
 
     @Test
@@ -266,7 +265,7 @@ public class OrderControllerTest {
         given(orderService.getByOrderTitle(NON_EXISTENT_ORDER))
             .willReturn(Collections.emptyList());
 
-        mockMvc.perform(get(BASE_URI + BY_ORDERTITLE_PATH + NON_EXISTENT_ORDER))
+        mockMvc.perform(get(BASE_URI + "/by-ordertitle/" + NON_EXISTENT_ORDER))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$").isEmpty());
