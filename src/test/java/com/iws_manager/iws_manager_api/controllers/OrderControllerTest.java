@@ -36,8 +36,6 @@ public class OrderControllerTest {
     // Base URI and Paths
     private static final String BASE_URI = "/api/v1/orders";
     private static final String ID_PATH = "/{id}";  // Compliant path is annotated
-    private static final String BY_CUSTOMER_PATH = "/by-customer/";
-    private static final String BY_ORDER_VALUE_PATH = "/by-ordervalue/";
     private static final String BY_ORDER_VALUE_BETWEEN_PATH = "/by-order-value-between";
     private static final String BY_APPROVAL_DATE_RANGE_PATH = "/by-approval-date-range";
     private static final String WITHOUT_APPROVAL_DATE_PATH = "/without-approval-date";
@@ -120,7 +118,7 @@ public class OrderControllerTest {
     void getOrderByIdShouldReturnOrder() throws Exception {
         given(orderService.findById(ORDER_ID_1)).willReturn(Optional.of(order1));
 
-        mockMvc.perform(get(BASE_URI + ID_PATH, ORDER_ID_1))
+        mockMvc.perform(get(BASE_URI + "/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(JSON_ID_PATH).value(ORDER_ID_1))
                 .andExpect(jsonPath(JSON_TITLE_PATH).value(ORDER_TITLE));
@@ -180,7 +178,7 @@ public class OrderControllerTest {
     void getByCustomerIdShouldReturnList() throws Exception {
         given(orderService.getByCustomerId(CUSTOMER_ID)).willReturn(Collections.singletonList(order1));
 
-        mockMvc.perform(get(BASE_URI + BY_CUSTOMER_PATH + CUSTOMER_ID))
+        mockMvc.perform(get(BASE_URI + "/by-customer/" + CUSTOMER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(ID_0).value(ORDER_ID_1));
     }
@@ -190,7 +188,7 @@ public class OrderControllerTest {
         given(orderService.getByOrderValue(ORDER_VALUE_1000))
             .willReturn(Collections.singletonList(order1));
 
-        mockMvc.perform(get(BASE_URI + BY_ORDER_VALUE_PATH + ORDER_VALUE_1000))
+        mockMvc.perform(get(BASE_URI + "/by-ordervalue/" + ORDER_VALUE_1000))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].orderTitle").value(ORDER_TITLE));
     }
