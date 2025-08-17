@@ -35,7 +35,7 @@ public class OrderControllerTest {
 
     // Base URI and Paths
     private static final String BASE_URI = "/api/v1/orders";
-    private static final String ID_PATH = "/{id}";
+    private static final String ID_PATH = "/{id}";  // Compliant path is annotated
     private static final String BY_CUSTOMER_PATH = "/by-customer/";
     private static final String BY_ORDER_VALUE_PATH = "/by-ordervalue/";
     private static final String BY_ORDER_VALUE_BETWEEN_PATH = "/by-order-value-between";
