@@ -3,7 +3,6 @@ package com.iws_manager.iws_manager_api.services.interfaces;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.math.BigDecimal;
 
 import com.iws_manager.iws_manager_api.models.BasicContract;
 
