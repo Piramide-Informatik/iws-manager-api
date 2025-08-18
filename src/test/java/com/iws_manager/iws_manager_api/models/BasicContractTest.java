@@ -8,6 +8,10 @@ import java.time.LocalDateTime;
 
 class BasicContractTest {
 
+    private static final Long TEST_ID = 1L;
+    private static final Integer CONTRACT_NO = 1001;
+    private static final String CONTRACT_TITLE = "Service Agreement";
+
     @Test
     void testBasicContractCreation() {
         // Arrange
@@ -63,19 +67,19 @@ class BasicContractTest {
     void testEqualsAndHashCode() {
         // Arrange
         BasicContract contract1 = new BasicContract();
-        contract1.setId(1L);
-        contract1.setContractNo(1001);
-        contract1.setContractTitle("Service Agreement");
+        contract1.setId(TEST_ID);
+        contract1.setContractNo(CONTRACT_NO);
+        contract1.setContractTitle(CONTRACT_TITLE);
         
         BasicContract contract2 = new BasicContract();
-        contract2.setId(1L);
-        contract2.setContractNo(1001);
-        contract2.setContractTitle("Service Agreement");
+        contract2.setId(TEST_ID);
+        contract2.setContractNo(CONTRACT_NO);
+        contract2.setContractTitle(CONTRACT_TITLE);
         
         BasicContract contract3 = new BasicContract();
-        contract3.setId(2L); // Different ID
-        contract3.setContractNo(1001);
-        contract3.setContractTitle("Service Agreement");
+        contract3.setId(2L); 
+        contract3.setContractNo(CONTRACT_NO);
+        contract3.setContractTitle(CONTRACT_TITLE);
         
         // Assert
         assertEquals(contract1, contract2);
