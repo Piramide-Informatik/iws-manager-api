@@ -46,7 +46,7 @@ public class BasicContract extends BaseEntity{
     @JoinColumn(name = "fundingprogramid", referencedColumnName = "fundingprogramid")
     private FundingProgram fundingProgram;
 
-    // @ManyToOne(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "iwsemployeeid", referencedColumnName = "iwsemployeeid")
-    // private IwsEmployee iwsEmployee;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "employeeiwsid", referencedColumnName = "employeeiwsid")
+    private EmployeeIws employeeIws;
 }
