@@ -31,17 +31,4 @@ public interface BasicContractRepository extends JpaRepository<BasicContract, Lo
     // Date range queries
     List<BasicContract> findByDateBetween(LocalDate startDate, LocalDate endDate);
     List<BasicContract> findByConfirmationDateBetween(LocalDate startDate, LocalDate endDate);
-
-    // Query with custom JPQL for more complex scenarios
-     @Query("SELECT bc FROM BasicContract bc WHERE " +
-           "bc.customer.customerId = :customerId AND " +
-           "(:contractStatusId IS NULL OR bc.contractStatus.contractStatusId = :contractStatusId) AND " +
-           "(:startDate IS NULL OR bc.date >= :startDate) AND " +
-           "(:endDate IS NULL OR bc.date <= :endDate) " +
-           "ORDER BY bc.contractNo ASC")
-    List<BasicContract> findFilteredContracts(
-            @Param("customerId") Long customerId,
-            @Param("contractStatusId") Long contractStatusId,
-            @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate);
 }

@@ -160,17 +160,4 @@ public class BasicContractController {
         return new ResponseEntity<>(contracts, HttpStatus.OK);
     }
 
-    // Filtered search endpoint
-    @GetMapping("/filtered")
-    public ResponseEntity<List<BasicContract>> findFilteredContracts(
-            @RequestParam Long customerId,
-            @RequestParam(required = false) Long contractStatusId,
-            @RequestParam(required = false) LocalDate startDate,
-            @RequestParam(required = false) LocalDate endDate) {
-        
-        List<BasicContract> contracts = basicContractService.findFilteredContracts(
-            customerId, contractStatusId, startDate, endDate);
-            
-        return new ResponseEntity<>(contracts, HttpStatus.OK);
-    }
 }

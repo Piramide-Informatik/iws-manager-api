@@ -279,31 +279,4 @@ class BasicContractControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(list, response.getBody());
     }
-
-    // Filtered Search Test
-    @Test
-    void findFilteredContractsReturnsList() {
-        List<BasicContract> list = Arrays.asList(basicContract);
-        when(basicContractService.findFilteredContracts(CUSTOMER_ID, CONTRACT_STATUS_ID, START_DATE, END_DATE))
-            .thenReturn(list);
-
-        ResponseEntity<List<BasicContract>> response = 
-            basicContractController.findFilteredContracts(CUSTOMER_ID, CONTRACT_STATUS_ID, START_DATE, END_DATE);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(list, response.getBody());
-    }
-
-    @Test
-    void findFilteredContractsWithNullOptionalParamsReturnsList() {
-        List<BasicContract> list = Arrays.asList(basicContract);
-        when(basicContractService.findFilteredContracts(CUSTOMER_ID, null, null, null))
-            .thenReturn(list);
-
-        ResponseEntity<List<BasicContract>> response = 
-            basicContractController.findFilteredContracts(CUSTOMER_ID, null, null, null);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(list, response.getBody());
-    }
 }

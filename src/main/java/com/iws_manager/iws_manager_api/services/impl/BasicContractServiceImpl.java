@@ -196,28 +196,4 @@ public class BasicContractServiceImpl implements BasicContractService {
     public List<BasicContract> getByConfirmationDateBetween(LocalDate startDate, LocalDate endDate) {
         return basicContractRepository.findByConfirmationDateBetween(startDate, endDate);
     }
-
-    //query wit custome jpql form complex scenarios
-    @Override
-    public List<BasicContract> findFilteredContracts(
-            Long customerId,
-            Long contractStatusId,
-            LocalDate startDate,
-            LocalDate endDate) {
-        
-        if (customerId == null) {
-            throw new IllegalArgumentException("Customer ID cannot be null");
-        }
-        
-        if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
-            throw new IllegalArgumentException("End date cannot be before start date");
-        }
-        
-        return basicContractRepository.findFilteredContracts(
-            customerId,
-            contractStatusId,
-            startDate,
-            endDate
-        );
-    }
 }
