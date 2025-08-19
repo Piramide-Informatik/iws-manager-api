@@ -17,16 +17,16 @@ public interface BasicContractRepository extends JpaRepository<BasicContract, Lo
     List<BasicContract> findByConfirmationDate(LocalDate confirmationDate);
     List<BasicContract> findByContractLabel(String contractLabel);
     List<BasicContract> findByContractNo(Integer contractNo);
-    List<BasicContract> findByContractStatus_ContractStatusId(Long contractStatusId);
+    List<BasicContract> findByContractStatusId(Long contractStatusId);
     List<BasicContract> findByContractTitle(String contractTitle);
-    List<BasicContract> findByCustomer_CustomerId(Long customerId);
+    List<BasicContract> findByCustomerId(Long customerId);
     List<BasicContract> findByDate(LocalDate date);
-    List<BasicContract> findByFundingProgram_FundingProgramId(Long fundingProgramId);
-    List<BasicContract> findByEmployeeIws_EmployeeIwsId(Long employeeIwsId);
+    List<BasicContract> findByFundingProgramId(Long fundingProgramId);
+    List<BasicContract> findByEmployeeIwsId(Long employeeIwsId);
 
     // Customer-specific ordered finders
-    List<BasicContract> findByCustomer_CustomerIdOrderByContractNoAsc(Long customerId);
-    List<BasicContract> findByCustomer_CustomerIdOrderByContractLabelAsc(Long customerId);
+    List<BasicContract> findByCustomerIdOrderByContractNoAsc(Long customerId);
+    List<BasicContract> findByCustomerIdOrderByContractLabelAsc(Long customerId);
 
     // Date range queries
     List<BasicContract> findByDateBetween(LocalDate startDate, LocalDate endDate);
