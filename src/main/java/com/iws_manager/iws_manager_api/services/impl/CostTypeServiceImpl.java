@@ -93,7 +93,9 @@ public class CostTypeServiceImpl implements CostTypeService {
         
         return costTypeRepository.findById(id)
                 .map(existingCostType -> {
-                    existingCostType.setName(costTypeDetails.getName());
+                    existingCostType.setType(costTypeDetails.getType());
+                    existingCostType.setSequenceNo(costTypeDetails.getSequenceNo());
+
                     return costTypeRepository.save(existingCostType);
                 })
                 .orElseThrow(() -> new RuntimeException("CostType not found with id: " + id));
