@@ -100,7 +100,7 @@ public class OrderServiceImpl implements OrderService {
                     existingOrder.setApprovalDate(orderDetails.getApprovalDate());
                     existingOrder.setApprovalPdf(orderDetails.getApprovalPdf());
                     existingOrder.setApprovalStatus(orderDetails.getApprovalStatus());
-                    // existingOrder.setBasicContractorderDetails.getBasicContract));
+                    existingOrder.setBasiccontract(orderDetails.getBasiccontract());
                     existingOrder.setContractData1(orderDetails.getContractData1());
                     existingOrder.setContractData2(orderDetails.getContractData2());
                     existingOrder.setContractor(orderDetails.getContractor());
