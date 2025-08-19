@@ -31,11 +31,13 @@ class CostTypeServiceImplTest {
     private CostType sampleCostType;
     private CostType sampleCostType2;
 
+    private static final String TYPE_TEST = "Material";
+
     @BeforeEach
     void setUp() {
         sampleCostType = new CostType();
         sampleCostType.setId(1L);
-        sampleCostType.setType("Material");
+        sampleCostType.setType(TYPE_TEST);
         sampleCostType.setSequenceNo(1);
 
         sampleCostType2 = new CostType();
@@ -55,7 +57,7 @@ class CostTypeServiceImplTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals("Material", result.getType());
+        assertEquals(TYPE_TEST, result.getType());
         assertEquals(1, result.getSequenceNo());
         verify(costTypeRepository, times(1)).save(any(CostType.class));
     }
@@ -79,7 +81,7 @@ class CostTypeServiceImplTest {
 
         // Assert
         assertTrue(result.isPresent());
-        assertEquals("Material", result.get().getType());
+        assertEquals(TYPE_TEST, result.get().getType());
         verify(costTypeRepository, times(1)).findById(1L);
     }
 
