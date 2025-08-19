@@ -35,9 +35,9 @@ public class Order extends BaseEntity{
     @JoinColumn(name = "approvalstatusid", referencedColumnName = "approvalstatusid")
     private ApprovalStatus approvalStatus;
     
-    // @ManyToOne(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "basiccontractid", referencedColumnName = "basiccontractid")
-    // private BasicContract basiccontract;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "basiccontractid", referencedColumnName = "basiccontractid")
+    private BasicContract basiccontract;
     
     @Column(name = "contractdata1", nullable = true, length = 255)
     private String contractData1;

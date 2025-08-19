@@ -120,6 +120,12 @@ public class OrderController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
+    @GetMapping("/by-basiccontract/{basiccontractId}")
+    public ResponseEntity<List<Order>> getByBasicContractId(@PathVariable Long basiccontractId) {
+        List<Order> orders = orderService.getByBasicContractId(basiccontractId);
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
     @GetMapping("/by-contractdata1/{contractData1}")
     public ResponseEntity<List<Order>> getByContractData1(@PathVariable String contractData1) {
         List<Order> orders = orderService.getByContractData1(contractData1);
