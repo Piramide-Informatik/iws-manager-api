@@ -1,9 +1,7 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
 
-import com.iws_manager.iws_manager_api.models.ApprovalStatus;
 import com.iws_manager.iws_manager_api.models.PublicHoliday;
-import com.iws_manager.iws_manager_api.repositories.ApprovalStatusRepository;
 import com.iws_manager.iws_manager_api.repositories.PublicHolidayRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
