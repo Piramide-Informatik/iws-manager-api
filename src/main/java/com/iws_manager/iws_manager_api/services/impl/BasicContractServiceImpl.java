@@ -143,7 +143,7 @@ public class BasicContractServiceImpl implements BasicContractService {
 
     @Override
     public List<BasicContract> getByContractStatusId(Long contractStatusId) {
-        return basicContractRepository.findByContractStatus_ContractStatusId(contractStatusId);
+        return basicContractRepository.findByContractStatusId(contractStatusId);
     }
 
     @Override
@@ -153,7 +153,7 @@ public class BasicContractServiceImpl implements BasicContractService {
 
     @Override
     public List<BasicContract> getByCustomerId(Long customerId) {
-        return basicContractRepository.findByCustomer_CustomerId(customerId);
+        return basicContractRepository.findByCustomerId(customerId);
     }
 
     @Override
@@ -163,12 +163,12 @@ public class BasicContractServiceImpl implements BasicContractService {
 
     @Override
     public List<BasicContract> getByFundingProgramId(Long fundingProgramId) {
-        return basicContractRepository.findByFundingProgram_FundingProgramId(fundingProgramId);
+        return basicContractRepository.findByFundingProgramId(fundingProgramId);
     }
 
     @Override
     public List<BasicContract> getByEmployeeIwsId(Long employeeIwsId) {
-        return basicContractRepository.findByEmployeeIws_EmployeeIwsId(employeeIwsId);
+        return basicContractRepository.findByEmployeeIwsId(employeeIwsId);
     }
 
     // customer finders
@@ -176,13 +176,13 @@ public class BasicContractServiceImpl implements BasicContractService {
     
     @Override
     public List<BasicContract> getByCustomerIdOrderByContractNoAsc(Long customerId) {
-        return basicContractRepository.findByCustomer_CustomerIdOrderByContractNoAsc(customerId);
+        return basicContractRepository.findByCustomerIdOrderByContractNoAsc(customerId);
     }
 
     
     @Override
     public List<BasicContract> getByCustomerIdOrderByContractLabelAsc(Long customerId) {
-        return basicContractRepository.findByCustomer_CustomerIdOrderByContractLabelAsc(customerId);
+        return basicContractRepository.findByCustomerIdOrderByContractLabelAsc(customerId);
     }
 
     // Date range
@@ -195,29 +195,5 @@ public class BasicContractServiceImpl implements BasicContractService {
     @Override
     public List<BasicContract> getByConfirmationDateBetween(LocalDate startDate, LocalDate endDate) {
         return basicContractRepository.findByConfirmationDateBetween(startDate, endDate);
-    }
-
-    //query wit custome jpql form complex scenarios
-    @Override
-    public List<BasicContract> findFilteredContracts(
-            Long customerId,
-            Long contractStatusId,
-            LocalDate startDate,
-            LocalDate endDate) {
-        
-        if (customerId == null) {
-            throw new IllegalArgumentException("Customer ID cannot be null");
-        }
-        
-        if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
-            throw new IllegalArgumentException("End date cannot be before start date");
-        }
-        
-        return basicContractRepository.findFilteredContracts(
-            customerId,
-            contractStatusId,
-            startDate,
-            endDate
-        );
     }
 }

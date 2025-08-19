@@ -132,7 +132,7 @@ class BasicContractServiceImplTest {
     @Test
     void testGetByCustomerId() {
         List<BasicContract> expected = List.of(sampleBasicContract);
-        when(basicContractRepository.findByCustomer_CustomerId(1L)).thenReturn(expected);
+        when(basicContractRepository.findByCustomerId(1L)).thenReturn(expected);
         List<BasicContract> result = basicContractService.getByCustomerId(1L);
         assertEquals(expected, result);
     }
@@ -140,7 +140,7 @@ class BasicContractServiceImplTest {
     @Test
     void testGetByCustomerIdOrderByContractNoAsc() {
         List<BasicContract> expected = List.of(sampleBasicContract);
-        when(basicContractRepository.findByCustomer_CustomerIdOrderByContractNoAsc(1L))
+        when(basicContractRepository.findByCustomerIdOrderByContractNoAsc(1L))
             .thenReturn(expected);
         List<BasicContract> result = basicContractService.getByCustomerIdOrderByContractNoAsc(1L);
         assertEquals(expected, result);
@@ -159,35 +159,4 @@ class BasicContractServiceImplTest {
         assertEquals(expected, result);
     }
 
-    @Test
-    void testFindFilteredContractsValid() {
-        Long customerId = 1L;
-        Long contractStatusId = 2L;
-        LocalDate startDate = LocalDate.now();
-        LocalDate endDate = LocalDate.now().plusDays(30);
-        List<BasicContract> expected = List.of(sampleBasicContract);
-
-        when(basicContractRepository.findFilteredContracts(customerId, contractStatusId, startDate, endDate))
-            .thenReturn(expected);
-
-        List<BasicContract> result = basicContractService.findFilteredContracts(
-            customerId, contractStatusId, startDate, endDate);
-
-        assertEquals(expected, result);
-    }
-
-    @Test
-    void testFindFilteredContractsNullCustomerIdThrowsException() {
-        assertThrows(IllegalArgumentException.class,
-            () -> basicContractService.findFilteredContracts(null, 1L, LocalDate.now(), LocalDate.now()));
-    }
-
-    @Test
-    void testFindFilteredContractsInvalidDateRangeThrowsException() {
-        LocalDate startDate = LocalDate.now();
-        LocalDate endDate = LocalDate.now().minusDays(1);
-
-        assertThrows(IllegalArgumentException.class,
-            () -> basicContractService.findFilteredContracts(1L, 2L, startDate, endDate));
-    }
 }

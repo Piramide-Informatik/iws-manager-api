@@ -31,10 +31,4 @@ public interface BasicContractService {
     // Date range queries
     List<BasicContract> getByDateBetween(LocalDate startDate, LocalDate endDate);
     List<BasicContract> getByConfirmationDateBetween(LocalDate startDate, LocalDate endDate);
-
-    List<BasicContract> findFilteredContracts(
-            Long customerId,
-            Long contractStatusId,
-            LocalDate startDate,
-            LocalDate endDate);
 }
