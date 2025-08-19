@@ -40,13 +40,17 @@ class CostTypeControllerTest {
     private CostType costType1;
     private CostType costType2;
 
+    private static final String TYPE1 = "Material";
+    private static final String TYPE_TEST = "$.type";
+    private static final String SEQNO_TEST = "$.sequenceNo";
+
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(costTypeController).build();
         
         costType1 = new CostType();
         costType1.setId(1L);
-        costType1.setType("Material");
+        costType1.setType(TYPE1);
         costType1.setSequenceNo(1);
 
         costType2 = new CostType();
@@ -64,8 +68,8 @@ class CostTypeControllerTest {
                 .content(objectMapper.writeValueAsString(costType1)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.type").value("Material"))
-                .andExpect(jsonPath("$.sequenceNo").value(1));
+                .andExpect(jsonPath(TYPE_TEST).value(TYPE1))
+                .andExpect(jsonPath(SEQNO_TEST).value(1));
     }
 
     @Test
@@ -100,8 +104,8 @@ class CostTypeControllerTest {
         mockMvc.perform(get(uri + "/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.type").value("Material"))
-                .andExpect(jsonPath("$.sequenceNo").value(1));
+                .andExpect(jsonPath(TYPE_TEST).value(TYPE1))
+                .andExpect(jsonPath(SEQNO_TEST).value(1));
     }
 
     @Test
@@ -120,7 +124,7 @@ class CostTypeControllerTest {
         mockMvc.perform(get(uri))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].type").value("Material"))
+                .andExpect(jsonPath("$[0].type").value(TYPE1))
                 .andExpect(jsonPath("$[0].sequenceNo").value(1))
                 .andExpect(jsonPath("$[1].id").value(2L))
                 .andExpect(jsonPath("$[1].type").value("Labor"))
@@ -148,8 +152,8 @@ class CostTypeControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatedCostType)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.type").value("Material Updated"))
-                .andExpect(jsonPath("$.sequenceNo").value(10));
+                .andExpect(jsonPath(TYPE_TEST).value("Material Updated"))
+                .andExpect(jsonPath(SEQNO_TEST).value(10));
     }
 
     @Test
@@ -174,7 +178,7 @@ class CostTypeControllerTest {
     @Test
     void createCostTypeShouldReturnCreatedCostType() throws Exception {
         CostType validCostType = new CostType();
-        validCostType.setType("Material");
+        validCostType.setType(TYPE1);
         validCostType.setSequenceNo(1);
         
         when(costTypeService.create(any(CostType.class))).thenReturn(costType1);
@@ -183,7 +187,7 @@ class CostTypeControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(validCostType)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.type").value("Material"))
-                .andExpect(jsonPath("$.sequenceNo").value(1));
+                .andExpect(jsonPath(TYPE_TEST).value(TYPE1))
+                .andExpect(jsonPath(SEQNO_TEST).value(1));
     }
 }
