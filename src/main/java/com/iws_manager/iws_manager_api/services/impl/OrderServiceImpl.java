@@ -160,6 +160,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> getByBasicContractId(Long basiccontractId){
+        return orderRepository.findByBasiccontractId(basiccontractId);
+    }
+
+    @Override
     public List<Order> getByContractData1(String contractData1) {
         return orderRepository.findByContractData1(contractData1);
     }

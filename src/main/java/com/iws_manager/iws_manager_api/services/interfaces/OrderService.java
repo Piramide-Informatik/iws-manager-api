@@ -21,6 +21,7 @@ public interface OrderService {
     List<Order> getByAcronym(String acronym);
     List<Order> getByApprovalDate(LocalDate approvalDate);
     List<Order> getByApprovalStatusId(Long approvalStatusId);
+    List<Order> getByBasicContractId(Long basiccontractId);
     List<Order> getByContractData1(String contractData1);
     List<Order> getByContractData2(String contractData2);
     List<Order> getByContractorId(Long contractorId);
