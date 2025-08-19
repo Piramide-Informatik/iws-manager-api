@@ -132,7 +132,7 @@ class BasicContractServiceImplTest {
     @Test
     void testGetByCustomerId() {
         List<BasicContract> expected = List.of(sampleBasicContract);
-        when(basicContractRepository.findByCustomer_CustomerId(1L)).thenReturn(expected);
+        when(basicContractRepository.findByCustomerId(1L)).thenReturn(expected);
         List<BasicContract> result = basicContractService.getByCustomerId(1L);
         assertEquals(expected, result);
     }
@@ -140,7 +140,7 @@ class BasicContractServiceImplTest {
     @Test
     void testGetByCustomerIdOrderByContractNoAsc() {
         List<BasicContract> expected = List.of(sampleBasicContract);
-        when(basicContractRepository.findByCustomer_CustomerIdOrderByContractNoAsc(1L))
+        when(basicContractRepository.findByCustomerIdOrderByContractNoAsc(1L))
             .thenReturn(expected);
         List<BasicContract> result = basicContractService.getByCustomerIdOrderByContractNoAsc(1L);
         assertEquals(expected, result);
