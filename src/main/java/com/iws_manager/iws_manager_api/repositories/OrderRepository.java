@@ -20,6 +20,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByAcronym(String acronym);
     List<Order> findByApprovalDate(LocalDate approvalDate);
     List<Order> findByApprovalStatusId(Long approvalStatusId);
+    List<Order> findByBasiccontractId(Long basiccontractId);
     List<Order> findByContractData1(String contractData1);
     List<Order> findByContractData2(String contractData2);
     List<Order> findByContractorId(Long contractorId);
