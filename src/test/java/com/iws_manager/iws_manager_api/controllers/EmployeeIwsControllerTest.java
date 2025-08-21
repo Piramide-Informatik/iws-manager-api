@@ -36,6 +36,7 @@ class EmployeeIwsControllerTest {
 
     // Test Data Constants
     private static final String BASE_URI = "/api/v1/employeesiws";
+    private static final String BASE_URI_ID = "/api/v1/employeesiws/{id}";
     private static final String FIRSTNAME_JOHN = "John";
     private static final String LASTNAME_DOE = "Doe";
     private static final String FIRSTNAME_JANE = "Jane";
@@ -138,7 +139,7 @@ class EmployeeIwsControllerTest {
     void findByIdShouldReturnEmployee() throws Exception {
         given(employeeIwsService.findById(EMPLOYEE_ID_1)).willReturn(Optional.of(employeeIws));
 
-        mockMvc.perform(get("/api/v1/employeesiws/{id}", EMPLOYEE_ID_1))
+        mockMvc.perform(get(BASE_URI_ID, EMPLOYEE_ID_1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(EMPLOYEE_ID_1))
                 .andExpect(jsonPath(FIRSTNAME_VAR).value(FIRSTNAME_JOHN));
@@ -148,7 +149,7 @@ class EmployeeIwsControllerTest {
     void findByIdShouldReturnNotFound() throws Exception {
         given(employeeIwsService.findById(NON_EXISTENT_ID)).willReturn(Optional.empty());
 
-        mockMvc.perform(get("/api/v1/employeesiws/{id}", NON_EXISTENT_ID))
+        mockMvc.perform(get(BASE_URI_ID, NON_EXISTENT_ID))
                 .andExpect(status().isNotFound());
     }
 
@@ -193,7 +194,7 @@ class EmployeeIwsControllerTest {
 
         given(employeeIwsService.update(eq(EMPLOYEE_ID_1), any(EmployeeIws.class))).willReturn(updatedEmployee);
 
-        mockMvc.perform(put("/api/v1/employeesiws/{id}", EMPLOYEE_ID_1)
+        mockMvc.perform(put(BASE_URI_ID, EMPLOYEE_ID_1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updateRequest)))
                 .andExpect(status().isOk())
@@ -205,7 +206,7 @@ class EmployeeIwsControllerTest {
     void deleteShouldReturnNoContent() throws Exception {
         doNothing().when(employeeIwsService).delete(EMPLOYEE_ID_1);
 
-        mockMvc.perform(delete("/api/v1/employeesiws/{id}", EMPLOYEE_ID_1))
+        mockMvc.perform(delete(BASE_URI_ID, EMPLOYEE_ID_1))
                 .andExpect(status().isNoContent());
     }
 
@@ -470,7 +471,7 @@ class EmployeeIwsControllerTest {
 
         given(employeeIwsService.update(eq(EMPLOYEE_ID_1), any(EmployeeIws.class))).willReturn(updatedResponse);
 
-        mockMvc.perform(put("/api/v1/employeesiws/{id}", EMPLOYEE_ID_1)
+        mockMvc.perform(put(BASE_URI_ID, EMPLOYEE_ID_1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(updateJson))
                 .andExpect(status().isOk())
