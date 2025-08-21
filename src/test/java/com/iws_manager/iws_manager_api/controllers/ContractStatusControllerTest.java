@@ -264,7 +264,7 @@ class ContractStatusControllerTest {
         List<ContractStatus> filteredList = Collections.singletonList(contractStatus1);
         given(contractStatusService.getByChanceBetween(CHANCE_50, CHANCE_80)).willReturn(filteredList);
 
-        mockMvc.perform(get(BASE_URI + BY_CHANCE_BETWEEN_PATH + "50.00/" + CHANCE_80))
+        mockMvc.perform(get(BASE_URI + "/by-chance-between/50.00/" + CHANCE_80))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].id").value(CONTRACT_STATUS_ID_1));
@@ -272,13 +272,13 @@ class ContractStatusControllerTest {
 
     @Test
     void getByChanceBetweenWithInvalidMinChanceShouldReturnBadRequest() throws Exception {
-        mockMvc.perform(get(BASE_URI + BY_CHANCE_BETWEEN_PATH + "invalid/80.00"))
+        mockMvc.perform(get(BASE_URI + "/by-chance-between/invalid/80.00"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void getByChanceBetweenWithInvalidMaxChanceShouldReturnBadRequest() throws Exception {
-        mockMvc.perform(get(BASE_URI + BY_CHANCE_BETWEEN_PATH + "50.00/invalid"))
+        mockMvc.perform(get(BASE_URI + "/by-chance-between/50.00/invalid"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -287,7 +287,7 @@ class ContractStatusControllerTest {
         given(contractStatusService.getByChanceBetween(CHANCE_80, CHANCE_50))
                 .willThrow(new IllegalArgumentException(MIN_GREATER_THAN_MAX_ERROR));
 
-        mockMvc.perform(get(BASE_URI + BY_CHANCE_BETWEEN_PATH + CHANCE_80 + "/50.00"))
+        mockMvc.perform(get(BASE_URI + "/by-chance-between/" + CHANCE_80 + "/50.00"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error").value(MIN_GREATER_THAN_MAX_ERROR));
     }
@@ -297,7 +297,7 @@ class ContractStatusControllerTest {
         given(contractStatusService.getByChanceBetween(CHANCE_10, CHANCE_20))
                 .willReturn(Collections.emptyList());
 
-        mockMvc.perform(get(BASE_URI + BY_CHANCE_BETWEEN_PATH + CHANCE_10 + "/" + CHANCE_20))
+        mockMvc.perform(get(BASE_URI + "/by-chance-between/" + CHANCE_10 + "/" + CHANCE_20))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$").isEmpty());

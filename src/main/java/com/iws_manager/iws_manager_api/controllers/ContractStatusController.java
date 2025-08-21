@@ -27,7 +27,7 @@ import java.math.BigDecimal;
 public class ContractStatusController {
 
     private final ContractStatusService contractStatusService;
-    private static final String errorStatus = "error";
+    private static final String ERROR_STATUS = "error";
 
     /**
      * Constructor-based dependency injection.
@@ -51,7 +51,7 @@ public class ContractStatusController {
         
         if (contractStatus.getStatus() == null || contractStatus.getStatus().trim().isEmpty()) {
             Map<String, String> error = new HashMap<>();
-            error.put(errorStatus, "Status is required");
+            error.put(ERROR_STATUS, "Status is required");
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
 
@@ -130,7 +130,7 @@ public class ContractStatusController {
             return new ResponseEntity<>(contractStatuses, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             Map<String, String> error = new HashMap<>();
-            error.put(errorStatus, e.getMessage());
+            error.put(ERROR_STATUS, e.getMessage());
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
     }
@@ -148,7 +148,7 @@ public class ContractStatusController {
             return new ResponseEntity<>(contractStatuses, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             Map<String, String> error = new HashMap<>();
-            error.put(errorStatus, e.getMessage());
+            error.put(ERROR_STATUS, e.getMessage());
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
     }
@@ -169,7 +169,7 @@ public class ContractStatusController {
             return new ResponseEntity<>(contractStatuses, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             Map<String, String> error = new HashMap<>();
-            error.put(errorStatus, e.getMessage());
+            error.put(ERROR_STATUS, e.getMessage());
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
     }
