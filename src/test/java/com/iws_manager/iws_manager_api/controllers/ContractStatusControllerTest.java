@@ -34,13 +34,13 @@ class ContractStatusControllerTest {
     private static final String ID_PATH_1 = "/1";
     private static final String ID_PATH_999 = "/999";
     private static final String BY_CHANCE_BETWEEN_PATH = "/by-chance-between/";
+    private static final String STATUS_TEST = "$.status";
+    private static final String ERROR_TEST = "$.error";
 
     private static final String STATUS_ACTIVE = "Active";
     private static final String STATUS_PENDING = "Pending";
     private static final String STATUS_CLOSED = "Closed";
     private static final String STATUS_REQUIRED_ERROR = "Status is required";
-    private static final String CHANCE_NULL_ERROR = "Chance cannot be null";
-    private static final String MIN_MAX_NULL_ERROR = "Min and max chance cannot be null";
     private static final String MIN_GREATER_THAN_MAX_ERROR = "Min chance cannot be greater than max chance";
 
     private static final BigDecimal CHANCE_25 = new BigDecimal("25.00");
@@ -105,7 +105,7 @@ class ContractStatusControllerTest {
                 .content(objectMapper.writeValueAsString(inputContractStatus)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(CONTRACT_STATUS_ID_1))
-                .andExpect(jsonPath("$.status").value(STATUS_ACTIVE))
+                .andExpect(jsonPath(STATUS_TEST).value(STATUS_ACTIVE))
                 .andExpect(jsonPath("$.chance").value(75.50));
     }
 
@@ -119,7 +119,7 @@ class ContractStatusControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(invalidContractStatus)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error").value(STATUS_REQUIRED_ERROR));
+                .andExpect(jsonPath(ERROR_TEST).value(STATUS_REQUIRED_ERROR));
     }
 
     @Test
@@ -132,7 +132,7 @@ class ContractStatusControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(invalidContractStatus)))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error").value(STATUS_REQUIRED_ERROR));
+                .andExpect(jsonPath(ERROR_TEST).value(STATUS_REQUIRED_ERROR));
     }
 
     // GET BY ID TESTS
@@ -143,7 +143,7 @@ class ContractStatusControllerTest {
         mockMvc.perform(get(BASE_URI + ID_PATH_1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(CONTRACT_STATUS_ID_1))
-                .andExpect(jsonPath("$.status").value(STATUS_ACTIVE))
+                .andExpect(jsonPath(STATUS_TEST).value(STATUS_ACTIVE))
                 .andExpect(jsonPath("$.chance").value(75.50));
     }
 
@@ -194,7 +194,7 @@ class ContractStatusControllerTest {
                 .content(objectMapper.writeValueAsString(updatedDetails)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(CONTRACT_STATUS_ID_1))
-                .andExpect(jsonPath("$.status").value(STATUS_ACTIVE));
+                .andExpect(jsonPath(STATUS_TEST).value(STATUS_ACTIVE));
     }
 
     @Test
@@ -289,7 +289,7 @@ class ContractStatusControllerTest {
 
         mockMvc.perform(get(BASE_URI + "/by-chance-between/" + CHANCE_80 + "/50.00"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error").value(MIN_GREATER_THAN_MAX_ERROR));
+                .andExpect(jsonPath(ERROR_TEST).value(MIN_GREATER_THAN_MAX_ERROR));
     }
 
     @Test
