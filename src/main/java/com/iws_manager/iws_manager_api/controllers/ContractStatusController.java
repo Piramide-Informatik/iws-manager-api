@@ -27,6 +27,7 @@ import java.math.BigDecimal;
 public class ContractStatusController {
 
     private final ContractStatusService contractStatusService;
+    private final String errorStatus = "error";
 
     /**
      * Constructor-based dependency injection.
@@ -50,7 +51,7 @@ public class ContractStatusController {
         
         if (contractStatus.getStatus() == null || contractStatus.getStatus().trim().isEmpty()) {
             Map<String, String> error = new HashMap<>();
-            error.put("error", "Status is required");
+            error.put(errorStatus, "Status is required");
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
 
@@ -129,7 +130,7 @@ public class ContractStatusController {
             return new ResponseEntity<>(contractStatuses, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             Map<String, String> error = new HashMap<>();
-            error.put("error", e.getMessage());
+            error.put(errorStatus, e.getMessage());
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
     }
@@ -147,7 +148,7 @@ public class ContractStatusController {
             return new ResponseEntity<>(contractStatuses, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             Map<String, String> error = new HashMap<>();
-            error.put("error", e.getMessage());
+            error.put(errorStatus, e.getMessage());
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
     }
@@ -168,7 +169,7 @@ public class ContractStatusController {
             return new ResponseEntity<>(contractStatuses, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             Map<String, String> error = new HashMap<>();
-            error.put("error", e.getMessage());
+            error.put(errorStatus, e.getMessage());
             return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
         }
     }
