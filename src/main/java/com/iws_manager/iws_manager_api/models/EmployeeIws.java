@@ -25,13 +25,13 @@ public class EmployeeIws extends BaseEntity{
     private Integer active;
     
     @Column(name = "employeelabel", nullable = true, length = 255)
-    private String employeelabel;
+    private String employeeLabel;
 
     @Column(name = "employeeno", nullable = true)
-    private Integer employeeno;
+    private Integer employeeNo;
     
     @Column(name = "enddate", nullable = true, columnDefinition = "DATE")
-    private LocalDate enddate;
+    private LocalDate endDate;
     
     @Column(name = "firstname", nullable = true, length = 255)
     private String firstname;
@@ -43,7 +43,7 @@ public class EmployeeIws extends BaseEntity{
     private String mail;
 
     @Column(name = "startdate", nullable = true, columnDefinition = "DATE")
-    private LocalDate startdate;
+    private LocalDate startDate;
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(
