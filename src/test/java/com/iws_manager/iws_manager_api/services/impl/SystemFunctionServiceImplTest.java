@@ -1,8 +1,6 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
-import com.iws_manager.iws_manager_api.models.ApprovalStatus;
 import com.iws_manager.iws_manager_api.models.SystemFunction;
-import com.iws_manager.iws_manager_api.repositories.ApprovalStatusRepository;
 import com.iws_manager.iws_manager_api.repositories.SystemFunctionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -131,7 +129,7 @@ class SystemFunctionServiceImplTest {
         when(systemFunctionRepository.findById(systemFunctionId)).thenReturn(Optional.of(currentSystemFunction));
         when(systemFunctionRepository.save(any(SystemFunction.class)))
                 .thenThrow(new ObjectOptimisticLockingFailureException("Concurrent modification detected",
-                        new ObjectOptimisticLockingFailureException(ApprovalStatus.class, systemFunctionId)));
+                        new ObjectOptimisticLockingFailureException(SystemFunction.class, systemFunctionId)));
 
         Exception exception = assertThrows(RuntimeException.class, () -> systemFunctionService.update(systemFunctionId,outSystemFunction));
 
