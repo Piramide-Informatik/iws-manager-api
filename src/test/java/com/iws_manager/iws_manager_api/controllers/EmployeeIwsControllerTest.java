@@ -461,9 +461,9 @@ class EmployeeIwsControllerTest {
         updatedResponse.setId(EMPLOYEE_ID_1);
         updatedResponse.setFirstname(UPDATED_FIRSTNAME);
         updatedResponse.setLastname(UPDATED_LASTNAME);
-        updatedResponse.setMail("john.updated@example.com");
+        updatedResponse.setMail(UPDATED_MAIL);
         updatedResponse.setActive(0);
-        updatedResponse.setEmployeeLabel("DEV002");
+        updatedResponse.setEmployeeLabel(UPDATED_LABEL);
         updatedResponse.setEmployeeNo(1002);
         updatedResponse.setStartDate(LocalDate.of(2024, 1, 1));
         updatedResponse.setEndDate(LocalDate.of(2026, 12, 31));
