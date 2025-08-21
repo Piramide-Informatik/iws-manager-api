@@ -33,8 +33,6 @@ class ContractStatusControllerTest {
     private static final String BASE_URI = "/api/v1/contractstatuses";
     private static final String ID_PATH_1 = "/1";
     private static final String ID_PATH_999 = "/999";
-    private static final String BY_CHANCE_GREATER_THAN_PATH = "/by-chance-greater-than/";
-    private static final String BY_CHANCE_LESS_THAN_PATH = "/by-chance-less-than/";
     private static final String BY_CHANCE_BETWEEN_PATH = "/by-chance-between/";
 
     private static final String STATUS_ACTIVE = "Active";
@@ -229,7 +227,7 @@ class ContractStatusControllerTest {
         List<ContractStatus> filteredList = Arrays.asList(contractStatus1, contractStatus3);
         given(contractStatusService.getByChanceGreaterThanEqual(CHANCE_50)).willReturn(filteredList);
 
-        mockMvc.perform(get(BASE_URI + BY_CHANCE_GREATER_THAN_PATH + CHANCE_50))
+        mockMvc.perform(get(BASE_URI + "/by-chance-greater-than/50.00"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].id").value(CONTRACT_STATUS_ID_1))
@@ -238,7 +236,7 @@ class ContractStatusControllerTest {
 
     @Test
     void getByChanceGreaterThanEqualWithInvalidChanceShouldReturnBadRequest() throws Exception {
-        mockMvc.perform(get(BASE_URI + BY_CHANCE_GREATER_THAN_PATH + "invalid"))
+        mockMvc.perform(get(BASE_URI + "/by-chance-greater-than/invalid"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -248,7 +246,7 @@ class ContractStatusControllerTest {
         List<ContractStatus> filteredList = Collections.singletonList(contractStatus2);
         given(contractStatusService.getByChanceLessThanEqual(CHANCE_30)).willReturn(filteredList);
 
-        mockMvc.perform(get(BASE_URI + BY_CHANCE_LESS_THAN_PATH + CHANCE_30))
+        mockMvc.perform(get(BASE_URI + "/by-chance-less-than/" + CHANCE_30))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].id").value(CONTRACT_STATUS_ID_2));
@@ -256,7 +254,7 @@ class ContractStatusControllerTest {
 
      @Test
     void getByChanceLessThanEqualWithInvalidChanceShouldReturnBadRequest() throws Exception {
-        mockMvc.perform(get(BASE_URI + BY_CHANCE_LESS_THAN_PATH + "invalid"))
+        mockMvc.perform(get(BASE_URI + "/by-chance-less-than/invalid"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -266,7 +264,7 @@ class ContractStatusControllerTest {
         List<ContractStatus> filteredList = Collections.singletonList(contractStatus1);
         given(contractStatusService.getByChanceBetween(CHANCE_50, CHANCE_80)).willReturn(filteredList);
 
-        mockMvc.perform(get(BASE_URI + BY_CHANCE_BETWEEN_PATH + CHANCE_50 + "/" + CHANCE_80))
+        mockMvc.perform(get(BASE_URI + BY_CHANCE_BETWEEN_PATH + "50.00/" + CHANCE_80))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].id").value(CONTRACT_STATUS_ID_1));
@@ -289,7 +287,7 @@ class ContractStatusControllerTest {
         given(contractStatusService.getByChanceBetween(CHANCE_80, CHANCE_50))
                 .willThrow(new IllegalArgumentException(MIN_GREATER_THAN_MAX_ERROR));
 
-        mockMvc.perform(get(BASE_URI + BY_CHANCE_BETWEEN_PATH + CHANCE_80 + "/" + CHANCE_50))
+        mockMvc.perform(get(BASE_URI + BY_CHANCE_BETWEEN_PATH + CHANCE_80 + "/50.00"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error").value(MIN_GREATER_THAN_MAX_ERROR));
     }

@@ -27,7 +27,7 @@ import java.math.BigDecimal;
 public class ContractStatusController {
 
     private final ContractStatusService contractStatusService;
-    private final String errorStatus = "error";
+    private static final String errorStatus = "error";
 
     /**
      * Constructor-based dependency injection.
