@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.iws_manager.iws_manager_api.models.base.BaseEntity;
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -51,6 +51,7 @@ public class EmployeeIws extends BaseEntity{
         referencedColumnName = "teamiwsid",
         foreignKey = @ForeignKey(name = "employeeiwsid_teamiwsid")
     )
+    @JsonManagedReference
     private TeamIws teamIws;
 
     @ManyToOne(fetch = FetchType.EAGER)
