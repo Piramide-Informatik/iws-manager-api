@@ -32,9 +32,9 @@ class EmployeeIwsServiceImplTest {
 
     private EmployeeIws employeeIws;
     private EmployeeIws employeeIws2;
-    private final Long EMPLOYEE_ID = 1L;
-    private final Long TEAM_IWS_ID = 2L;
-    private final Long USER_ID = 3L;
+    private static final Long EMPLOYEE_ID = 1L;
+    private static final Long TEAM_IWS_ID = 2L;
+    private static final Long USER_ID = 3L;
 
     @BeforeEach
     void setUp() {
