@@ -35,17 +35,19 @@ class EmployeeIwsServiceImplTest {
     private static final Long EMPLOYEE_ID = 1L;
     private static final Long TEAM_IWS_ID = 2L;
     private static final Long USER_ID = 3L;
+    private static final String LABEL = "DEV001";
+    private static final String EMAIL = "john.doe@example.com";
 
     @BeforeEach
     void setUp() {
         employeeIws = new EmployeeIws();
         employeeIws.setId(EMPLOYEE_ID);
         employeeIws.setActive(1);
-        employeeIws.setEmployeeLabel("DEV001");
+        employeeIws.setEmployeeLabel(LABEL);
         employeeIws.setEmployeeNo(1001);
         employeeIws.setFirstname("John");
         employeeIws.setLastname("Doe");
-        employeeIws.setMail("john.doe@example.com");
+        employeeIws.setMail(EMAIL);
         employeeIws.setStartDate(LocalDate.of(2023, 1, 1));
         employeeIws.setEndDate(LocalDate.of(2025, 12, 31));
 
@@ -237,12 +239,12 @@ class EmployeeIwsServiceImplTest {
     @Test
     void getByEmployeeLabelShouldReturnEmployees() {
         List<EmployeeIws> employees = List.of(employeeIws);
-        when(employeeIwsRepository.findByEmployeeLabel("DEV001")).thenReturn(employees);
+        when(employeeIwsRepository.findByEmployeeLabel(LABEL)).thenReturn(employees);
 
-        List<EmployeeIws> result = employeeIwsService.getByEmployeeLabel("DEV001");
+        List<EmployeeIws> result = employeeIwsService.getByEmployeeLabel(LABEL);
 
         assertEquals(1, result.size());
-        verify(employeeIwsRepository).findByEmployeeLabel("DEV001");
+        verify(employeeIwsRepository).findByEmployeeLabel(LABEL);
     }
 
     @Test
@@ -293,12 +295,12 @@ class EmployeeIwsServiceImplTest {
     @Test
     void getByMailShouldReturnEmployees() {
         List<EmployeeIws> employees = List.of(employeeIws);
-        when(employeeIwsRepository.findByMail("john.doe@example.com")).thenReturn(employees);
+        when(employeeIwsRepository.findByMail(EMAIL)).thenReturn(employees);
 
-        List<EmployeeIws> result = employeeIwsService.getByMail("john.doe@example.com");
+        List<EmployeeIws> result = employeeIwsService.getByMail(EMAIL);
 
         assertEquals(1, result.size());
-        verify(employeeIwsRepository).findByMail("john.doe@example.com");
+        verify(employeeIwsRepository).findByMail(EMAIL);
     }
 
     @Test
