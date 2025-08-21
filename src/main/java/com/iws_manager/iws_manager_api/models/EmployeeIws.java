@@ -6,13 +6,13 @@ import java.time.LocalDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.iws_manager.iws_manager_api.models.base.BaseEntity;
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"teamIws"}) 
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -45,10 +45,15 @@ public class EmployeeIws extends BaseEntity{
     @Column(name = "startdate", nullable = true, columnDefinition = "DATE")
     private LocalDate startdate;
     
-    // @ManyToOne(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "teamiwsid", referencedColumnName = "teamiwsid")
-    // private TeamIws teamiws;
-    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(
+        name = "teamiwsid", 
+        referencedColumnName = "teamiwsid",
+        foreignKey = @ForeignKey(name = "employeeiwsid_teamiwsid")
+    )
+    @JsonManagedReference
+    private TeamIws teamIws;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userid", referencedColumnName = "userid")
     private User user;
