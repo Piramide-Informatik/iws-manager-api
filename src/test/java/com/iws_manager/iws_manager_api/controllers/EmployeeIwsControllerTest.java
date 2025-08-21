@@ -35,6 +35,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 class EmployeeIwsControllerTest {
 
     // Test Data Constants
+    private static final String BASE_URI = "/api/v1/employeesiws";
     private static final String FIRSTNAME_JOHN = "John";
     private static final String LASTNAME_DOE = "Doe";
     private static final String FIRSTNAME_JANE = "Jane";
@@ -49,6 +50,8 @@ class EmployeeIwsControllerTest {
     private static final String UPDATED_MAIL = "john.updated@example.com";
     private static final String UPDATED_LABEL = "DEV002";
     private static final Integer UPDATED_EMPLOYEE_NO = 1002;
+    private static final String FIRSTNAME_VAR = "$.firstname";
+    private static final String LENGHT_VAR = "$.length()";
 
     // Test Dates
     private static final LocalDate START_DATE_2023 = LocalDate.of(2023, 1, 1);
@@ -123,12 +126,12 @@ class EmployeeIwsControllerTest {
 
         given(employeeIwsService.create(any(EmployeeIws.class))).willReturn(employeeIws);
 
-        mockMvc.perform(post("/api/v1/employeesiws")
+        mockMvc.perform(post(BASE_URI)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(inputEmployee)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(EMPLOYEE_ID_1))
-                .andExpect(jsonPath("$.firstname").value(FIRSTNAME_JOHN));
+                .andExpect(jsonPath(FIRSTNAME_VAR).value(FIRSTNAME_JOHN));
     }
 
     @Test
@@ -138,7 +141,7 @@ class EmployeeIwsControllerTest {
         mockMvc.perform(get("/api/v1/employeesiws/{id}", EMPLOYEE_ID_1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(EMPLOYEE_ID_1))
-                .andExpect(jsonPath("$.firstname").value(FIRSTNAME_JOHN));
+                .andExpect(jsonPath(FIRSTNAME_VAR).value(FIRSTNAME_JOHN));
     }
 
     @Test
@@ -154,9 +157,9 @@ class EmployeeIwsControllerTest {
         List<EmployeeIws> employees = Arrays.asList(employeeIws, employeeIws2);
         given(employeeIwsService.findAll()).willReturn(employees);
 
-        mockMvc.perform(get("/api/v1/employeesiws"))
+        mockMvc.perform(get(BASE_URI))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath(LENGHT_VAR).value(2))
                 .andExpect(jsonPath("$[0].firstname").value(FIRSTNAME_JOHN))
                 .andExpect(jsonPath("$[1].firstname").value(FIRSTNAME_JANE));
     }
@@ -195,7 +198,7 @@ class EmployeeIwsControllerTest {
                 .content(objectMapper.writeValueAsString(updateRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(EMPLOYEE_ID_1))
-                .andExpect(jsonPath("$.firstname").value(UPDATED_FIRSTNAME));
+                .andExpect(jsonPath(FIRSTNAME_VAR).value(UPDATED_FIRSTNAME));
     }
 
     @Test
@@ -214,7 +217,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/by-lastname/ordered-asc"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2));
+                .andExpect(jsonPath(LENGHT_VAR).value(2));
     }
 
     @Test
@@ -224,7 +227,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/by-firstname/ordered-asc"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2));
+                .andExpect(jsonPath(LENGHT_VAR).value(2));
     }
 
     // PROPERTIES Tests
@@ -235,7 +238,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/by-active/{active}", ACTIVE_STATUS))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2));
+                .andExpect(jsonPath(LENGHT_VAR).value(2));
     }
 
     @Test
@@ -245,7 +248,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/by-label/{employeeLabel}", EMPLOYEE_LABEL))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath(LENGHT_VAR).value(1));
     }
 
     @Test
@@ -255,7 +258,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/by-number/{employeeNo}", EMPLOYEE_NO))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath(LENGHT_VAR).value(1));
     }
 
     @Test
@@ -265,7 +268,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/by-enddate/{endDate}", END_DATE_2025))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath(LENGHT_VAR).value(1));
     }
 
     @Test
@@ -275,7 +278,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/by-firstname/{firstname}", FIRSTNAME_JOHN))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath(LENGHT_VAR).value(1));
     }
 
     @Test
@@ -285,7 +288,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/by-lastname/{lastname}", LASTNAME_DOE))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath(LENGHT_VAR).value(1));
     }
 
     @Test
@@ -295,7 +298,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/by-mail/{mail}", MAIL_JOHN))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath(LENGHT_VAR).value(1));
     }
 
     @Test
@@ -305,7 +308,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/by-startdate/{startDate}", START_DATE_2023))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath(LENGHT_VAR).value(1));
     }
 
     @Test
@@ -315,7 +318,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/by-team/{teamIwsId}", TEAM_IWS_ID))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath(LENGHT_VAR).value(1));
     }
 
     @Test
@@ -325,7 +328,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/by-user/{userId}", USER_ID))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath(LENGHT_VAR).value(1));
     }
 
     // HELPERS Tests
@@ -337,7 +340,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/by-startdate/after/{date}", date))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath(LENGHT_VAR).value(1));
     }
 
     @Test
@@ -348,7 +351,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/by-startdate/before/{date}", date))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath(LENGHT_VAR).value(1));
     }
 
     @Test
@@ -360,7 +363,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/by-startdate/between/{start}/{end}", start, end))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath(LENGHT_VAR).value(1));
     }
 
     @Test
@@ -371,7 +374,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/by-enddate/after/{date}", date))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath(LENGHT_VAR).value(1));
     }
 
     @Test
@@ -382,7 +385,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/by-enddate/before/{date}", date))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath(LENGHT_VAR).value(1));
     }
 
     @Test
@@ -394,7 +397,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/by-enddate/between/{start}/{end}", start, end))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1));
+                .andExpect(jsonPath(LENGHT_VAR).value(1));
     }
 
     // ACTIVE - ORDER Tests
@@ -405,7 +408,7 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/active/{active}/by-firstname/ordered-asc", ACTIVE_STATUS))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2));
+                .andExpect(jsonPath(LENGHT_VAR).value(2));
     }
 
     @Test
@@ -415,14 +418,14 @@ class EmployeeIwsControllerTest {
 
         mockMvc.perform(get("/api/v1/employeesiws/active/{active}/by-lastname/ordered-asc", ACTIVE_STATUS))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2));
+                .andExpect(jsonPath(LENGHT_VAR).value(2));
     }
 
     @Test
     void findAllWhenEmptyShouldReturnEmptyList() throws Exception {
         given(employeeIwsService.findAll()).willReturn(Collections.emptyList());
 
-        mockMvc.perform(get("/api/v1/employeesiws"))
+        mockMvc.perform(get(BASE_URI))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$").isEmpty());
@@ -456,8 +459,8 @@ class EmployeeIwsControllerTest {
 
         EmployeeIws updatedResponse = new EmployeeIws();
         updatedResponse.setId(EMPLOYEE_ID_1);
-        updatedResponse.setFirstname("JohnUpdated");
-        updatedResponse.setLastname("DoeUpdated");
+        updatedResponse.setFirstname(UPDATED_FIRSTNAME);
+        updatedResponse.setLastname(UPDATED_LASTNAME);
         updatedResponse.setMail("john.updated@example.com");
         updatedResponse.setActive(0);
         updatedResponse.setEmployeeLabel("DEV002");
@@ -472,6 +475,6 @@ class EmployeeIwsControllerTest {
                 .content(updateJson))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(EMPLOYEE_ID_1))
-                .andExpect(jsonPath("$.firstname").value("JohnUpdated"));
+                .andExpect(jsonPath(FIRSTNAME_VAR).value(UPDATED_FIRSTNAME));
     }
 }
