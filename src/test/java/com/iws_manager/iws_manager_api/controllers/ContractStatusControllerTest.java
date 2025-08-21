@@ -33,9 +33,10 @@ class ContractStatusControllerTest {
     private static final String BASE_URI = "/api/v1/contractstatuses";
     private static final String ID_PATH_1 = "/1";
     private static final String ID_PATH_999 = "/999";
-    private static final String BY_CHANCE_BETWEEN_PATH = "/by-chance-between/";
     private static final String STATUS_TEST = "$.status";
     private static final String ERROR_TEST = "$.error";
+    private static final String LENGTH_TEST = "$.length()";
+    private static final String ID_0_TEST = "$[0].id";
 
     private static final String STATUS_ACTIVE = "Active";
     private static final String STATUS_PENDING = "Pending";
@@ -163,8 +164,8 @@ class ContractStatusControllerTest {
 
         mockMvc.perform(get(BASE_URI))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(3))
-                .andExpect(jsonPath("$[0].id").value(CONTRACT_STATUS_ID_1))
+                .andExpect(jsonPath(LENGTH_TEST).value(3))
+                .andExpect(jsonPath(ID_0_TEST).value(CONTRACT_STATUS_ID_1))
                 .andExpect(jsonPath("$[1].id").value(CONTRACT_STATUS_ID_2))
                 .andExpect(jsonPath("$[2].id").value(CONTRACT_STATUS_ID_3));
     }
@@ -229,8 +230,8 @@ class ContractStatusControllerTest {
 
         mockMvc.perform(get(BASE_URI + "/by-chance-greater-than/50.00"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].id").value(CONTRACT_STATUS_ID_1))
+                .andExpect(jsonPath(LENGTH_TEST).value(2))
+                .andExpect(jsonPath(ID_0_TEST).value(CONTRACT_STATUS_ID_1))
                 .andExpect(jsonPath("$[1].id").value(CONTRACT_STATUS_ID_3));
     }
 
@@ -248,8 +249,8 @@ class ContractStatusControllerTest {
 
         mockMvc.perform(get(BASE_URI + "/by-chance-less-than/" + CHANCE_30))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].id").value(CONTRACT_STATUS_ID_2));
+                .andExpect(jsonPath(LENGTH_TEST).value(1))
+                .andExpect(jsonPath(ID_0_TEST).value(CONTRACT_STATUS_ID_2));
     }
 
      @Test
@@ -266,8 +267,8 @@ class ContractStatusControllerTest {
 
         mockMvc.perform(get(BASE_URI + "/by-chance-between/50.00/" + CHANCE_80))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].id").value(CONTRACT_STATUS_ID_1));
+                .andExpect(jsonPath(LENGTH_TEST).value(1))
+                .andExpect(jsonPath(ID_0_TEST).value(CONTRACT_STATUS_ID_1));
     }
 
     @Test
@@ -287,7 +288,7 @@ class ContractStatusControllerTest {
         given(contractStatusService.getByChanceBetween(CHANCE_80, CHANCE_50))
                 .willThrow(new IllegalArgumentException(MIN_GREATER_THAN_MAX_ERROR));
 
-        mockMvc.perform(get(BASE_URI + "/by-chance-between/" + CHANCE_80 + "/50.00"))
+        mockMvc.perform(get(BASE_URI + "/by-chance-between/80.00/50.00"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(ERROR_TEST).value(MIN_GREATER_THAN_MAX_ERROR));
     }
