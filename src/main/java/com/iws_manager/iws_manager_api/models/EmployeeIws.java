@@ -12,7 +12,7 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString(exclude = {"team"}) 
+@ToString(exclude = {"teamIws"}) 
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
