@@ -45,10 +45,14 @@ public class EmployeeIws extends BaseEntity{
     @Column(name = "startdate", nullable = true, columnDefinition = "DATE")
     private LocalDate startdate;
     
-    // @ManyToOne(fetch = FetchType.EAGER)
-    // @JoinColumn(name = "teamiwsid", referencedColumnName = "teamiwsid")
-    // private TeamIws teamiws;
-    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(
+        name = "teamiwsid", 
+        referencedColumnName = "teamiwsid",
+        foreignKey = @ForeignKey(name = "employeeiwsid_teamiwsid")
+    )
+    private TeamIws teamIws;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userid", referencedColumnName = "userid")
     private User user;
