@@ -15,24 +15,24 @@ public interface EmployeeIwsRepository extends JpaRepository<EmployeeIws, Long> 
     List<EmployeeIws> findAllByOrderByFirstnameAsc();
     //PROPERTIES
     List<EmployeeIws> findByActive(Integer active);
-    List<EmployeeIws> findByEmployeelabel(String employeelabel);
-    List<EmployeeIws> findByEmployeeno(Integer employeeno);
-    List<EmployeeIws> findByEnddate(LocalDate enddate);
+    List<EmployeeIws> findByEmployeeLabel(String employeelabel);
+    List<EmployeeIws> findByEmployeeNo(Integer employeeno);
+    List<EmployeeIws> findByEndDate(LocalDate enddate);
     List<EmployeeIws> findByFirstname(String firstname);
     List<EmployeeIws> findByLastname(String lastname);
     List<EmployeeIws> findByMail(String mail);
-    List<EmployeeIws> findByStartdate(LocalDate startdate);
+    List<EmployeeIws> findByStartDate(LocalDate startdate);
 
     List<EmployeeIws> findByTeamIwsId(Long teamIwsId);
     List<EmployeeIws> findByUserId(Long userId);
 
     //HELPERS
-    List<EmployeeIws> findByStartdateAfter(LocalDate date);
-    List<EmployeeIws> findByStartdateBefore(LocalDate date);
-    List<EmployeeIws> findByStartdateBetween(LocalDate start, LocalDate end);
-    List<EmployeeIws> findByEnddateAfter(LocalDate date);
-    List<EmployeeIws> findByEnddateBefore(LocalDate date);
-    List<EmployeeIws> findByEnddateBetween(LocalDate start, LocalDate end);
+    List<EmployeeIws> findByStartDateAfter(LocalDate date);
+    List<EmployeeIws> findByStartDateBefore(LocalDate date);
+    List<EmployeeIws> findByStartDateBetween(LocalDate start, LocalDate end);
+    List<EmployeeIws> findByEndDateAfter(LocalDate date);
+    List<EmployeeIws> findByEndDateBefore(LocalDate date);
+    List<EmployeeIws> findByEndDateBetween(LocalDate start, LocalDate end);
     
     // ACTIVE - ORDER
     List<EmployeeIws> findByActiveOrderByFirstnameAsc(Integer active);
