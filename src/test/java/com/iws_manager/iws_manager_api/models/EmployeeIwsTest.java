@@ -21,7 +21,7 @@ class EmployeeIwsTest {
         employee.setFirstname(firstName);
         employee.setLastname(lastName);
         employee.setMail(email);
-        employee.setStartdate(startDate);
+        employee.setStartDate(startDate);
         employee.setActive(active);
         
         // Assert
@@ -29,7 +29,7 @@ class EmployeeIwsTest {
             () -> assertEquals(firstName, employee.getFirstname()),
             () -> assertEquals(lastName, employee.getLastname()),
             () -> assertEquals(email, employee.getMail()),
-            () -> assertEquals(startDate, employee.getStartdate()),
+            () -> assertEquals(startDate, employee.getStartDate()),
             () -> assertEquals(active, employee.getActive())
         );
     }
