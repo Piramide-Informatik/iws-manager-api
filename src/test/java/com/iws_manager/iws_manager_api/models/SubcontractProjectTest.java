@@ -16,19 +16,15 @@ class SubcontractProjectTest {
     private static final Project MOCK_PROJECT = mock(Project.class);
     private static final Subcontract MOCK_SUBCONTRACT = mock(Subcontract.class);
     private static final BigDecimal AMOUNT_1 = new BigDecimal("1000.50");
-    private static final Integer MONTHS_1 = 6;
     private static final BigDecimal SHARE_1 = new BigDecimal("25.50");
-    private static final LocalDate YEAR_1 = LocalDate.of(2023, 1, 1);
     
     private SubcontractProject createSubcontractProject1() {
         SubcontractProject project = new SubcontractProject();
         project.setSubcontractYear(MOCK_SUBCONTRACT_YEAR);
         project.setAmount(AMOUNT_1);
-        project.setMonths(MONTHS_1);
         project.setProject(MOCK_PROJECT);
         project.setSubcontract(MOCK_SUBCONTRACT);
         project.setShare(SHARE_1);
-        project.setYear(YEAR_1);
         return project;
     }
 
@@ -38,11 +34,9 @@ class SubcontractProjectTest {
         
         assertNotNull(project);
         assertEquals(AMOUNT_1, project.getAmount());
-        assertEquals(MONTHS_1, project.getMonths());
         assertEquals(MOCK_PROJECT, project.getProject());
         assertEquals(MOCK_SUBCONTRACT, project.getSubcontract());
         assertEquals(SHARE_1, project.getShare());
-        assertEquals(YEAR_1, project.getYear());
         assertEquals(MOCK_SUBCONTRACT_YEAR, project.getSubcontractYear());
     }
 
@@ -96,7 +90,6 @@ class SubcontractProjectTest {
         
         assertTrue(toStringResult.contains("SubcontractProject"));
         assertTrue(toStringResult.contains("amount=" + AMOUNT_1));
-        assertTrue(toStringResult.contains("months=" + MONTHS_1));
         assertTrue(toStringResult.contains("share=" + SHARE_1));
     }
 }
