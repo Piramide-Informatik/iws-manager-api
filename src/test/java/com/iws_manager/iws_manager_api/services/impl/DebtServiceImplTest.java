@@ -95,7 +95,7 @@ class DebtServiceImplTest {
     @Test
     void findAllShouldReturnAllDebts() {
         List<Debt> debts = Arrays.asList(testDebt, new Debt());
-        when(debtRepository.findAll()).thenReturn(debts);
+        when(debtRepository.findAllByOrderByDebtNoAsc()).thenReturn(debts);
         
         List<Debt> result = debtService.findAll();
         
