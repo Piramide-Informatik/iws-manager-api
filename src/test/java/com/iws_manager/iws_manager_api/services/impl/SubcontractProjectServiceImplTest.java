@@ -37,17 +37,13 @@ class SubcontractProjectServiceImplTest {
     void setUp() {
         project1 = new SubcontractProject();
         project1.setId(1L);
-        project1.setMonths(6);
         project1.setAmount(TEST_AMOUNT);
         project1.setShare(TEST_SHARE);
-        project1.setYear(LocalDate.of(2023, 1, 1));
 
         project2 = new SubcontractProject();
         project2.setId(2L);
-        project2.setMonths(12);
         project2.setAmount(new BigDecimal("2000.00"));
         project2.setShare(new BigDecimal("75.00"));
-        project2.setYear(LocalDate.of(2024, 1, 1));
     }
 
     @Test
@@ -94,7 +90,6 @@ class SubcontractProjectServiceImplTest {
     @Test
     void updateShouldUpdateExistingProject() {
         SubcontractProject updatedDetails = new SubcontractProject();
-        updatedDetails.setMonths(24);
         updatedDetails.setAmount(new BigDecimal("3000.00"));
         updatedDetails.setShare(new BigDecimal("100.00"));
 
@@ -103,7 +98,6 @@ class SubcontractProjectServiceImplTest {
 
         SubcontractProject result = subcontractProjectService.update(1L, updatedDetails);
 
-        assertEquals(24, result.getMonths());
         assertEquals(new BigDecimal("3000.00"), result.getAmount());
         assertEquals(new BigDecimal("100.00"), result.getShare());
     }
@@ -125,17 +119,6 @@ class SubcontractProjectServiceImplTest {
         verify(subcontractProjectRepository).deleteById(1L);
     }
 
-    // Query methods tests
-    @Test
-    void getByMonthsShouldReturnMatchingProjects() {
-        when(subcontractProjectRepository.findByMonths(6)).thenReturn(Arrays.asList(project1));
-
-        List<SubcontractProject> result = subcontractProjectService.getByMonths(6);
-
-        assertEquals(1, result.size());
-        assertEquals(project1, result.get(0));
-    }
-
     @Test
     void getByAmountShouldReturnMatchingProjects() {
         when(subcontractProjectRepository.findByAmount(TEST_AMOUNT)).thenReturn(Arrays.asList(project1));
@@ -151,17 +134,6 @@ class SubcontractProjectServiceImplTest {
         when(subcontractProjectRepository.findByShare(TEST_SHARE)).thenReturn(Arrays.asList(project1));
 
         List<SubcontractProject> result = subcontractProjectService.getByShare(TEST_SHARE);
-
-        assertEquals(1, result.size());
-        assertEquals(project1, result.get(0));
-    }
-
-    @Test
-    void getByYearShouldReturnMatchingProjects() {
-        LocalDate year = LocalDate.of(2023, 1, 1);
-        when(subcontractProjectRepository.findByYear(year)).thenReturn(Arrays.asList(project1));
-
-        List<SubcontractProject> result = subcontractProjectService.getByYear(year);
 
         assertEquals(1, result.size());
         assertEquals(project1, result.get(0));
@@ -207,49 +179,5 @@ class SubcontractProjectServiceImplTest {
 
         assertEquals(1, result.size());
         assertEquals(project1, result.get(0));
-    }
-
-    @Test
-    void getByMonthsGreaterThanShouldReturnMatchingProjects() {
-        when(subcontractProjectRepository.findByMonthsGreaterThan(6)).thenReturn(Arrays.asList(project2));
-
-        List<SubcontractProject> result = subcontractProjectService.getByMonthsGreaterThan(6);
-
-        assertEquals(1, result.size());
-        assertEquals(project2, result.get(0));
-    }
-
-    @Test
-    void getByMonthsLessThanShouldReturnMatchingProjects() {
-        when(subcontractProjectRepository.findByMonthsLessThan(12)).thenReturn(Arrays.asList(project1));
-
-        List<SubcontractProject> result = subcontractProjectService.getByMonthsLessThan(12);
-
-        assertEquals(1, result.size());
-        assertEquals(project1, result.get(0));
-    }
-
-    @Test
-    void getByYearAfterShouldReturnMatchingProjects() {
-        LocalDate date = LocalDate.of(2022, 12, 31);
-        when(subcontractProjectRepository.findByYearAfter(date)).thenReturn(Arrays.asList(project1, project2));
-
-        List<SubcontractProject> result = subcontractProjectService.getByYearAfter(date);
-
-        assertEquals(2, result.size());
-        assertTrue(result.contains(project1));
-        assertTrue(result.contains(project2));
-    }
-
-    @Test
-    void getByYearBeforeShouldReturnMatchingProjects() {
-        LocalDate date = LocalDate.of(2024, 12, 31);
-        when(subcontractProjectRepository.findByYearBefore(date)).thenReturn(Arrays.asList(project1, project2));
-
-        List<SubcontractProject> result = subcontractProjectService.getByYearBefore(date);
-
-        assertEquals(2, result.size());
-        assertTrue(result.contains(project1));
-        assertTrue(result.contains(project2));
     }
 }
