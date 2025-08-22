@@ -12,6 +12,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DebtRepository extends JpaRepository<Debt, Long> {
+    //findAll
+    List<Debt> findAllByOrderByDebtNoAsc();
+
     //properties Methods
     List<Debt> findByBillingEnd(LocalDate billingEnd);
     List<Debt> findByBillingMonths(Integer billingMonths);
