@@ -29,10 +29,8 @@ class SubcontractProjectControllerTest {
 
     private SubcontractProject testProject;
     private static final Long TEST_ID = 1L;
-    private static final Integer TEST_MONTHS = 6;
     private static final BigDecimal TEST_AMOUNT = new BigDecimal("1000.50");
     private static final BigDecimal TEST_SHARE = new BigDecimal("25.50");
-    private static final LocalDate TEST_DATE = LocalDate.of(2023, 1, 1);
 
     @BeforeEach
     void setUp() {
