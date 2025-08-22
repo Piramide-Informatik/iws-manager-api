@@ -76,7 +76,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional(readOnly = true)
     public List<Project> findAll() {
-        return projectRepository.findAllByOrderByProjectNameAsc();
+        return projectRepository.findAllByOrderByProjectLabelAsc();
     }
 
     /**

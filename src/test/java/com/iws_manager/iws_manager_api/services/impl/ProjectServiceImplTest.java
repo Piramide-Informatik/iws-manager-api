@@ -81,14 +81,14 @@ class ProjectServiceImplTest {
     }
 
     @Test
-    void findAllShouldReturnAllProjectsOrderedByName() {
+    void findAllShouldReturnAllProjectsOrderedByLabel() {
         List<Project> projects = Arrays.asList(testProject);
-        when(projectRepository.findAllByOrderByProjectNameAsc()).thenReturn(projects);
+        when(projectRepository.findAllByOrderByProjectLabelAsc()).thenReturn(projects);
 
         List<Project> result = projectService.findAll();
 
         assertEquals(1, result.size());
-        verify(projectRepository).findAllByOrderByProjectNameAsc();
+        verify(projectRepository).findAllByOrderByProjectLabelAsc();
     }
 
     @Test
