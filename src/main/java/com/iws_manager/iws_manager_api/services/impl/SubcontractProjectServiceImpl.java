@@ -98,11 +98,9 @@ public class SubcontractProjectServiceImpl implements SubcontractProjectService 
                 .map(existingSubcontractProject -> {
                     existingSubcontractProject.setSubcontractYear(subcontractProjectDetails.getSubcontractYear());
                     existingSubcontractProject.setAmount(subcontractProjectDetails.getAmount());
-                    existingSubcontractProject.setMonths(subcontractProjectDetails.getMonths());
                     existingSubcontractProject.setProject(subcontractProjectDetails.getProject());
                     existingSubcontractProject.setSubcontract(subcontractProjectDetails.getSubcontract());
                     existingSubcontractProject.setShare(subcontractProjectDetails.getShare());
-                    existingSubcontractProject.setYear(subcontractProjectDetails.getYear());
         
                     return subcontractProjectRepository.save(existingSubcontractProject);
                 })
@@ -124,11 +122,6 @@ public class SubcontractProjectServiceImpl implements SubcontractProjectService 
     }
 
     @Override
-    public List<SubcontractProject> getByMonths(Integer months) {
-        return subcontractProjectRepository.findByMonths(months);
-    }
-
-    @Override
     public List<SubcontractProject> getByAmount(BigDecimal amount){
         return subcontractProjectRepository.findByAmount(amount);
     }
@@ -136,11 +129,6 @@ public class SubcontractProjectServiceImpl implements SubcontractProjectService 
     @Override
     public List<SubcontractProject> getByShare(BigDecimal share){
         return subcontractProjectRepository.findByShare(share);
-    }
-
-    @Override
-    public List<SubcontractProject> getByYear(LocalDate year){
-        return subcontractProjectRepository.findByYear(year);
     }
 
     @Override
@@ -163,23 +151,4 @@ public class SubcontractProjectServiceImpl implements SubcontractProjectService 
         return subcontractProjectRepository.findByShareBetween(start, end);
     }    
 
-    @Override
-    public List<SubcontractProject> getByMonthsGreaterThan(Integer months) {
-        return subcontractProjectRepository.findByMonthsGreaterThan(months);
-    }
-
-    @Override
-    public List<SubcontractProject> getByMonthsLessThan(Integer months) {
-        return subcontractProjectRepository.findByMonthsLessThan(months);
-    }
-
-    @Override
-    public List<SubcontractProject> getByYearAfter(LocalDate date) {
-        return subcontractProjectRepository.findByYearAfter(date);
-    }
-
-    @Override
-    public List<SubcontractProject> getByYearBefore(LocalDate date) {
-        return subcontractProjectRepository.findByYearBefore(date);
-    }
 }

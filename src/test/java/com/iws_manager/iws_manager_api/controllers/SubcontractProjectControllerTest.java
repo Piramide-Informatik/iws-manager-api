@@ -122,17 +122,6 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void getByMonthsShouldReturnProjects() {
-        List<SubcontractProject> projects = Arrays.asList(testProject);
-        when(subcontractProjectService.getByMonths(TEST_MONTHS)).thenReturn(projects);
-
-        ResponseEntity<List<SubcontractProject>> response = subcontractProjectController.getByMonths(TEST_MONTHS);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(projects, response.getBody());
-    }
-
-    @Test
     void getByAmountShouldReturnProjects() {
         List<SubcontractProject> projects = Arrays.asList(testProject);
         when(subcontractProjectService.getByAmount(TEST_AMOUNT)).thenReturn(projects);
@@ -149,17 +138,6 @@ class SubcontractProjectControllerTest {
         when(subcontractProjectService.getByShare(TEST_SHARE)).thenReturn(projects);
 
         ResponseEntity<List<SubcontractProject>> response = subcontractProjectController.getByShare(TEST_SHARE);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(projects, response.getBody());
-    }
-
-    @Test
-    void getByYearShouldReturnProjects() {
-        List<SubcontractProject> projects = Arrays.asList(testProject);
-        when(subcontractProjectService.getByYear(TEST_DATE)).thenReturn(projects);
-
-        ResponseEntity<List<SubcontractProject>> response = subcontractProjectController.getByYear(TEST_DATE);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(projects, response.getBody());
@@ -204,50 +182,6 @@ class SubcontractProjectControllerTest {
         when(subcontractProjectService.getByShareBetween(TEST_SHARE, TEST_SHARE.add(BigDecimal.ONE))).thenReturn(projects);
 
         ResponseEntity<List<SubcontractProject>> response = subcontractProjectController.getByShareBetween(TEST_SHARE, TEST_SHARE.add(BigDecimal.ONE));
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(projects, response.getBody());
-    }
-
-    @Test
-    void getByMonthsGreaterThanShouldReturnProjects() {
-        List<SubcontractProject> projects = Arrays.asList(testProject);
-        when(subcontractProjectService.getByMonthsGreaterThan(TEST_MONTHS)).thenReturn(projects);
-
-        ResponseEntity<List<SubcontractProject>> response = subcontractProjectController.getByMonthsGreaterThan(TEST_MONTHS);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(projects, response.getBody());
-    }
-
-    @Test
-    void getByMonthsLessThanShouldReturnProjects() {
-        List<SubcontractProject> projects = Arrays.asList(testProject);
-        when(subcontractProjectService.getByMonthsLessThan(TEST_MONTHS)).thenReturn(projects);
-
-        ResponseEntity<List<SubcontractProject>> response = subcontractProjectController.getByMonthsLessThan(TEST_MONTHS);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(projects, response.getBody());
-    }
-
-    @Test
-    void getByYearAfterShouldReturnProjects() {
-        List<SubcontractProject> projects = Arrays.asList(testProject);
-        when(subcontractProjectService.getByYearAfter(TEST_DATE)).thenReturn(projects);
-
-        ResponseEntity<List<SubcontractProject>> response = subcontractProjectController.getByYearAfter(TEST_DATE);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(projects, response.getBody());
-    }
-
-    @Test
-    void getByYearBeforeShouldReturnProjects() {
-        List<SubcontractProject> projects = Arrays.asList(testProject);
-        when(subcontractProjectService.getByYearBefore(TEST_DATE)).thenReturn(projects);
-
-        ResponseEntity<List<SubcontractProject>> response = subcontractProjectController.getByYearBefore(TEST_DATE);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(projects, response.getBody());

@@ -74,12 +74,6 @@ public class SubcontractProjectController {
         }
     }
 
-    @GetMapping("/months/{months}")
-    public ResponseEntity<List<SubcontractProject>> getByMonths(@PathVariable Integer months) {
-        List<SubcontractProject> subcontractProjects = subcontractProjectService.getByMonths(months);
-        return new ResponseEntity<>(subcontractProjects, HttpStatus.OK);
-    }
-
     @GetMapping("/amount/{amount}")
     public ResponseEntity<List<SubcontractProject>> getByAmount(@PathVariable BigDecimal amount) {
         List<SubcontractProject> subcontractProjects = subcontractProjectService.getByAmount(amount);
@@ -89,12 +83,6 @@ public class SubcontractProjectController {
     @GetMapping("/share/{share}")
     public ResponseEntity<List<SubcontractProject>> getByShare(@PathVariable BigDecimal share) {
         List<SubcontractProject> subcontractProjects = subcontractProjectService.getByShare(share);
-        return new ResponseEntity<>(subcontractProjects, HttpStatus.OK);
-    }
-
-    @GetMapping("/year/{year}")
-    public ResponseEntity<List<SubcontractProject>> getByYear(@PathVariable LocalDate year) {
-        List<SubcontractProject> subcontractProjects = subcontractProjectService.getByYear(year);
         return new ResponseEntity<>(subcontractProjects, HttpStatus.OK);
     }
 
@@ -119,30 +107,6 @@ public class SubcontractProjectController {
     @GetMapping("/share-between")
     public ResponseEntity<List<SubcontractProject>> getByShareBetween(@RequestParam BigDecimal start, @RequestParam BigDecimal end) {
         List<SubcontractProject> subcontractProjects = subcontractProjectService.getByShareBetween(start, end);
-        return new ResponseEntity<>(subcontractProjects, HttpStatus.OK);
-    }
-
-    @GetMapping("/months-greater-than/{months}")
-    public ResponseEntity<List<SubcontractProject>> getByMonthsGreaterThan(@PathVariable Integer months) {
-        List<SubcontractProject> subcontractProjects = subcontractProjectService.getByMonthsGreaterThan(months);
-        return new ResponseEntity<>(subcontractProjects, HttpStatus.OK);
-    }
-
-    @GetMapping("/months-less-than/{months}")
-    public ResponseEntity<List<SubcontractProject>> getByMonthsLessThan(@PathVariable Integer months) {
-        List<SubcontractProject> subcontractProjects = subcontractProjectService.getByMonthsLessThan(months);
-        return new ResponseEntity<>(subcontractProjects, HttpStatus.OK);
-    }
-
-    @GetMapping("/year-after/{date}")
-    public ResponseEntity<List<SubcontractProject>> getByYearAfter(@PathVariable LocalDate date) {
-        List<SubcontractProject> subcontractProjects = subcontractProjectService.getByYearAfter(date);
-        return new ResponseEntity<>(subcontractProjects, HttpStatus.OK);
-    }
-
-    @GetMapping("/year-before/{date}")
-    public ResponseEntity<List<SubcontractProject>> getByYearBefore(@PathVariable LocalDate date) {
-        List<SubcontractProject> subcontractProjects = subcontractProjectService.getByYearBefore(date);
         return new ResponseEntity<>(subcontractProjects, HttpStatus.OK);
     }
 }

@@ -27,9 +27,6 @@ public class SubcontractProject extends BaseEntity{
 
     @Column(name = "amount", nullable = true, columnDefinition = "DECIMAL(10,2)")
     private BigDecimal amount;
-
-    @Column(name = "months", nullable = true, columnDefinition = "TINYINT")
-    private Integer months;
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "projectid", referencedColumnName = "projectid")
@@ -41,7 +38,4 @@ public class SubcontractProject extends BaseEntity{
 
     @Column(name = "`share`", nullable = true, columnDefinition = "DECIMAL(5,2)")
     private BigDecimal share;
-    
-    @Column(name = "`year`", nullable = true, columnDefinition = "DATE")
-    private LocalDate year;
 }
