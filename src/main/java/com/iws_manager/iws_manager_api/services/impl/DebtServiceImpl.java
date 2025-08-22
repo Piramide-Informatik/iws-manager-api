@@ -75,7 +75,7 @@ public class DebtServiceImpl implements DebtService {
     @Override
     @Transactional(readOnly = true)
     public List<Debt> findAll() {
-        return debtRepository.findAll();
+        return debtRepository.findAllByOrderByDebtNoAsc();
     }
 
     /**
