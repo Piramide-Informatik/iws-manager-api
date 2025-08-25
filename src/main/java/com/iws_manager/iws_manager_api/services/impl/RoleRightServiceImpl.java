@@ -2,8 +2,10 @@ package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.models.Role;
 import com.iws_manager.iws_manager_api.models.RoleRight;
+import com.iws_manager.iws_manager_api.models.SystemFunction;
 import com.iws_manager.iws_manager_api.repositories.RoleRepository;
 import com.iws_manager.iws_manager_api.repositories.RoleRightRepository;
+import com.iws_manager.iws_manager_api.repositories.SystemFunctionRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.RoleRightService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,11 +19,13 @@ import java.util.Optional;
 public class RoleRightServiceImpl implements RoleRightService {
     private final RoleRightRepository roleRightRepository;
     private final RoleRepository roleRepository;
+    private final SystemFunctionRepository systemFunctionRepository;
 
     @Autowired
-    public RoleRightServiceImpl(RoleRightRepository roleRightRepository, RoleRepository roleRepository) {
+    public RoleRightServiceImpl(RoleRightRepository roleRightRepository, RoleRepository roleRepository, SystemFunctionRepository systemFunctionRepository) {
         this.roleRightRepository = roleRightRepository;
         this.roleRepository = roleRepository;
+        this.systemFunctionRepository = systemFunctionRepository;
     }
 
 
@@ -34,7 +38,12 @@ public class RoleRightServiceImpl implements RoleRightService {
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new RuntimeException("Role not found"));
 
+        Long functionId = roleRight.getSystemFunction().getId();
+        SystemFunction function = systemFunctionRepository.findById(functionId)
+                .orElseThrow(() -> new RuntimeException("SystemFunction not found"));
+
         roleRight.setRole(role);
+        roleRight.setSystemFunction(function);
 
         return roleRightRepository.save(roleRight);
     }
