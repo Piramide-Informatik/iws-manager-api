@@ -188,9 +188,8 @@ class OrderCommissionServiceImplTest {
         when(orderCommissionRepository.findById(999L)).thenReturn(Optional.empty());
 
         // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            orderCommissionService.update(999L, details);
-        });
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> 
+            orderCommissionService.update(999L, details));
         assertEquals("OrderCommission not found with id: 999", exception.getMessage());
         verify(orderCommissionRepository).findById(999L);
         verify(orderCommissionRepository, never()).save(any());
