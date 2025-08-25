@@ -98,12 +98,12 @@ public class UserServiceImplTest {
         user2.setId(2L);
         user2.setUsername(USERNAME_ANDRES);
 
-        when(userRepository.findAll()).thenReturn(Arrays.asList(sampleUser,user2));
+        when(userRepository.findAllByOrderByUsernameAsc()).thenReturn(Arrays.asList(sampleUser,user2));
 
         List<User> result = userService.findAll();
 
         assertEquals(2, result.size());
-        verify(userRepository, times(1)).findAll();
+        verify(userRepository, times(1)).findAllByOrderByUsernameAsc();
 
     }
 
