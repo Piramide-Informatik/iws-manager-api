@@ -21,6 +21,15 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class OrderCommissionServiceImplTest {
 
+    private static final String COMISSION_10 = "10.00";
+    private static final String COMISSION_15 = "15.00";
+    private static final String COMISSION_20 = "20.00";
+    private static final String ORDERVALUE_1000 = "1000.00";
+    private static final String ORDERVALUE_1500 = "1500.00";
+    private static final String ORDERVALUE_2000 = "2000.00";
+    private static final String MINCOMM_25 = "25.00";
+    private static final String MINCOMM_30 = "30.00";
+
     @Mock
     private OrderCommissionRepository orderCommissionRepository;
 
@@ -32,7 +41,7 @@ class OrderCommissionServiceImplTest {
     void createWithValidOrderCommissionShouldSaveAndReturn() {
         // Arrange
         OrderCommission commission = new OrderCommission();
-        commission.setCommission(new BigDecimal("10.00"));
+        commission.setCommission(new BigDecimal(COMISSION_10));
         
         when(orderCommissionRepository.save(any(OrderCommission.class))).thenReturn(commission);
 
@@ -41,16 +50,15 @@ class OrderCommissionServiceImplTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals(new BigDecimal("10.00"), result.getCommission());
+        assertEquals(new BigDecimal(COMISSION_10), result.getCommission());
         verify(orderCommissionRepository).save(commission);
     }
 
     @Test
     void createWithNullOrderCommissionShouldThrowIllegalArgumentException() {
         // Act & Assert
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            orderCommissionService.create(null);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> 
+            orderCommissionService.create(null));
         assertEquals("OrderCommission cannot be null", exception.getMessage());
         verify(orderCommissionRepository, never()).save(any());
     }
@@ -88,9 +96,7 @@ class OrderCommissionServiceImplTest {
     @Test
     void findByIdWithNullIdShouldThrowIllegalArgumentException() {
         // Act & Assert
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            orderCommissionService.findById(null);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> orderCommissionService.findById(null));
         assertEquals("ID cannot be null", exception.getMessage());
         verify(orderCommissionRepository, never()).findById(any());
     }
@@ -132,12 +138,12 @@ class OrderCommissionServiceImplTest {
         existing.setId(1L);
         existing.setCommission(new BigDecimal("5.00"));
         existing.setFromOrderValue(new BigDecimal("100.00"));
-        existing.setMinCommission(new BigDecimal("10.00"));
+        existing.setMinCommission(new BigDecimal(COMISSION_10));
         
         OrderCommission details = new OrderCommission();
-        details.setCommission(new BigDecimal("15.00"));
+        details.setCommission(new BigDecimal(COMISSION_15));
         details.setFromOrderValue(new BigDecimal("200.00"));
-        details.setMinCommission(new BigDecimal("20.00"));
+        details.setMinCommission(new BigDecimal(COMISSION_20));
         
         when(orderCommissionRepository.findById(1L)).thenReturn(Optional.of(existing));
         when(orderCommissionRepository.save(any(OrderCommission.class))).thenReturn(existing);
@@ -147,9 +153,9 @@ class OrderCommissionServiceImplTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals(new BigDecimal("15.00"), result.getCommission());
+        assertEquals(new BigDecimal(COMISSION_15), result.getCommission());
         assertEquals(new BigDecimal("200.00"), result.getFromOrderValue());
-        assertEquals(new BigDecimal("20.00"), result.getMinCommission());
+        assertEquals(new BigDecimal(COMISSION_20), result.getMinCommission());
         verify(orderCommissionRepository).findById(1L);
         verify(orderCommissionRepository).save(existing);
     }
@@ -160,9 +166,7 @@ class OrderCommissionServiceImplTest {
         OrderCommission details = new OrderCommission();
 
         // Act & Assert
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            orderCommissionService.update(null, details);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> orderCommissionService.update(null, details));
         assertEquals("ID and orderCommission details cannot be null", exception.getMessage());
         verify(orderCommissionRepository, never()).findById(any());
         verify(orderCommissionRepository, never()).save(any());
@@ -171,9 +175,7 @@ class OrderCommissionServiceImplTest {
     @Test
     void updateWithNullDetailsShouldThrowIllegalArgumentException() {
         // Act & Assert
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            orderCommissionService.update(1L, null);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> orderCommissionService.update(1L, null));
         assertEquals("ID and orderCommission details cannot be null", exception.getMessage());
         verify(orderCommissionRepository, never()).findById(any());
         verify(orderCommissionRepository, never()).save(any());
@@ -206,9 +208,8 @@ class OrderCommissionServiceImplTest {
     @Test
     void deleteWithNullIdShouldThrowIllegalArgumentException() {
         // Act & Assert
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            orderCommissionService.delete(null);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> 
+            orderCommissionService.delete(null));
         assertEquals("ID cannot be null", exception.getMessage());
         verify(orderCommissionRepository, never()).deleteById(any());
     }
@@ -218,54 +219,54 @@ class OrderCommissionServiceImplTest {
     void getByCommissionShouldReturnMatchingCommissions() {
         // Arrange
         OrderCommission commission = new OrderCommission();
-        commission.setCommission(new BigDecimal("10.00"));
+        commission.setCommission(new BigDecimal(COMISSION_10));
         List<OrderCommission> expected = Arrays.asList(commission);
         
-        when(orderCommissionRepository.findByCommission(new BigDecimal("10.00"))).thenReturn(expected);
+        when(orderCommissionRepository.findByCommission(new BigDecimal(COMISSION_10))).thenReturn(expected);
 
         // Act
-        List<OrderCommission> result = orderCommissionService.getByCommission(new BigDecimal("10.00"));
+        List<OrderCommission> result = orderCommissionService.getByCommission(new BigDecimal(COMISSION_10));
 
         // Assert
         assertEquals(1, result.size());
-        assertEquals(new BigDecimal("10.00"), result.get(0).getCommission());
-        verify(orderCommissionRepository).findByCommission(new BigDecimal("10.00"));
+        assertEquals(new BigDecimal(COMISSION_10), result.get(0).getCommission());
+        verify(orderCommissionRepository).findByCommission(new BigDecimal(COMISSION_10));
     }
 
     @Test
     void getByFromOrderValueShouldReturnMatchingCommissions() {
         // Arrange
         OrderCommission commission = new OrderCommission();
-        commission.setFromOrderValue(new BigDecimal("1000.00"));
+        commission.setFromOrderValue(new BigDecimal(ORDERVALUE_1000));
         List<OrderCommission> expected = Arrays.asList(commission);
         
-        when(orderCommissionRepository.findByFromOrderValue(new BigDecimal("1000.00"))).thenReturn(expected);
+        when(orderCommissionRepository.findByFromOrderValue(new BigDecimal(ORDERVALUE_1000))).thenReturn(expected);
 
         // Act
-        List<OrderCommission> result = orderCommissionService.getByFromOrderValue(new BigDecimal("1000.00"));
+        List<OrderCommission> result = orderCommissionService.getByFromOrderValue(new BigDecimal(ORDERVALUE_1000));
 
         // Assert
         assertEquals(1, result.size());
-        assertEquals(new BigDecimal("1000.00"), result.get(0).getFromOrderValue());
-        verify(orderCommissionRepository).findByFromOrderValue(new BigDecimal("1000.00"));
+        assertEquals(new BigDecimal(ORDERVALUE_1000), result.get(0).getFromOrderValue());
+        verify(orderCommissionRepository).findByFromOrderValue(new BigDecimal(ORDERVALUE_1000));
     }
 
     @Test
     void getByMinCommissionShouldReturnMatchingCommissions() {
         // Arrange
         OrderCommission commission = new OrderCommission();
-        commission.setMinCommission(new BigDecimal("25.00"));
+        commission.setMinCommission(new BigDecimal(MINCOMM_25));
         List<OrderCommission> expected = Arrays.asList(commission);
         
-        when(orderCommissionRepository.findByMinCommission(new BigDecimal("25.00"))).thenReturn(expected);
+        when(orderCommissionRepository.findByMinCommission(new BigDecimal(MINCOMM_25))).thenReturn(expected);
 
         // Act
-        List<OrderCommission> result = orderCommissionService.getByMinCommission(new BigDecimal("25.00"));
+        List<OrderCommission> result = orderCommissionService.getByMinCommission(new BigDecimal(MINCOMM_25));
 
         // Assert
         assertEquals(1, result.size());
-        assertEquals(new BigDecimal("25.00"), result.get(0).getMinCommission());
-        verify(orderCommissionRepository).findByMinCommission(new BigDecimal("25.00"));
+        assertEquals(new BigDecimal(MINCOMM_25), result.get(0).getMinCommission());
+        verify(orderCommissionRepository).findByMinCommission(new BigDecimal(MINCOMM_25));
     }
 
     @Test
@@ -294,51 +295,51 @@ class OrderCommissionServiceImplTest {
         commission.setCommission(new BigDecimal("7.50"));
         List<OrderCommission> expected = Arrays.asList(commission);
         
-        when(orderCommissionRepository.findByCommissionLessThanEqual(new BigDecimal("10.00"))).thenReturn(expected);
+        when(orderCommissionRepository.findByCommissionLessThanEqual(new BigDecimal(COMISSION_10))).thenReturn(expected);
 
         // Act
-        List<OrderCommission> result = orderCommissionService.getByCommissionLessThanEqual(new BigDecimal("10.00"));
+        List<OrderCommission> result = orderCommissionService.getByCommissionLessThanEqual(new BigDecimal(COMISSION_10));
 
         // Assert
         assertEquals(1, result.size());
         assertEquals(new BigDecimal("7.50"), result.get(0).getCommission());
-        verify(orderCommissionRepository).findByCommissionLessThanEqual(new BigDecimal("10.00"));
+        verify(orderCommissionRepository).findByCommissionLessThanEqual(new BigDecimal(COMISSION_10));
     }
 
     @Test
     void getByCommissionGreaterThanEqualShouldReturnFilteredResults() {
         // Arrange
         OrderCommission commission = new OrderCommission();
-        commission.setCommission(new BigDecimal("15.00"));
+        commission.setCommission(new BigDecimal(COMISSION_15));
         List<OrderCommission> expected = Arrays.asList(commission);
         
-        when(orderCommissionRepository.findByCommissionGreaterThanEqual(new BigDecimal("10.00"))).thenReturn(expected);
+        when(orderCommissionRepository.findByCommissionGreaterThanEqual(new BigDecimal(COMISSION_10))).thenReturn(expected);
 
         // Act
-        List<OrderCommission> result = orderCommissionService.getByCommissionGreaterThanEqual(new BigDecimal("10.00"));
+        List<OrderCommission> result = orderCommissionService.getByCommissionGreaterThanEqual(new BigDecimal(COMISSION_10));
 
         // Assert
         assertEquals(1, result.size());
-        assertEquals(new BigDecimal("15.00"), result.get(0).getCommission());
-        verify(orderCommissionRepository).findByCommissionGreaterThanEqual(new BigDecimal("10.00"));
+        assertEquals(new BigDecimal(COMISSION_15), result.get(0).getCommission());
+        verify(orderCommissionRepository).findByCommissionGreaterThanEqual(new BigDecimal(COMISSION_10));
     }
 
     @Test
     void getByCommissionBetweenShouldReturnFilteredResults() {
         // Arrange
         OrderCommission commission = new OrderCommission();
-        commission.setCommission(new BigDecimal("15.00"));
+        commission.setCommission(new BigDecimal(COMISSION_15));
         List<OrderCommission> expected = Arrays.asList(commission);
         
-        when(orderCommissionRepository.findByCommissionBetween(new BigDecimal("10.00"), new BigDecimal("20.00"))).thenReturn(expected);
+        when(orderCommissionRepository.findByCommissionBetween(new BigDecimal(COMISSION_10), new BigDecimal(COMISSION_20))).thenReturn(expected);
 
         // Act
-        List<OrderCommission> result = orderCommissionService.getByCommissionBetween(new BigDecimal("10.00"), new BigDecimal("20.00"));
+        List<OrderCommission> result = orderCommissionService.getByCommissionBetween(new BigDecimal(COMISSION_10), new BigDecimal(COMISSION_20));
 
         // Assert
         assertEquals(1, result.size());
-        assertEquals(new BigDecimal("15.00"), result.get(0).getCommission());
-        verify(orderCommissionRepository).findByCommissionBetween(new BigDecimal("10.00"), new BigDecimal("20.00"));
+        assertEquals(new BigDecimal(COMISSION_15), result.get(0).getCommission());
+        verify(orderCommissionRepository).findByCommissionBetween(new BigDecimal(COMISSION_10), new BigDecimal(COMISSION_20));
     }
 
     @Test
@@ -348,69 +349,69 @@ class OrderCommissionServiceImplTest {
         commission.setFromOrderValue(new BigDecimal("500.00"));
         List<OrderCommission> expected = Arrays.asList(commission);
         
-        when(orderCommissionRepository.findByFromOrderValueLessThanEqual(new BigDecimal("1000.00"))).thenReturn(expected);
+        when(orderCommissionRepository.findByFromOrderValueLessThanEqual(new BigDecimal(ORDERVALUE_1000))).thenReturn(expected);
 
         // Act
-        List<OrderCommission> result = orderCommissionService.getByFromOrderValueLessThanEqual(new BigDecimal("1000.00"));
+        List<OrderCommission> result = orderCommissionService.getByFromOrderValueLessThanEqual(new BigDecimal(ORDERVALUE_1000));
 
         // Assert
         assertEquals(1, result.size());
         assertEquals(new BigDecimal("500.00"), result.get(0).getFromOrderValue());
-        verify(orderCommissionRepository).findByFromOrderValueLessThanEqual(new BigDecimal("1000.00"));
+        verify(orderCommissionRepository).findByFromOrderValueLessThanEqual(new BigDecimal(ORDERVALUE_1000));
     }
 
     @Test
     void getByFromOrderValueGreaterThanEqualShouldReturnFilteredResults() {
         // Arrange
         OrderCommission commission = new OrderCommission();
-        commission.setFromOrderValue(new BigDecimal("1500.00"));
+        commission.setFromOrderValue(new BigDecimal(ORDERVALUE_1500));
         List<OrderCommission> expected = Arrays.asList(commission);
         
-        when(orderCommissionRepository.findByFromOrderValueGreaterThanEqual(new BigDecimal("1000.00"))).thenReturn(expected);
+        when(orderCommissionRepository.findByFromOrderValueGreaterThanEqual(new BigDecimal(ORDERVALUE_1000))).thenReturn(expected);
 
         // Act
-        List<OrderCommission> result = orderCommissionService.getByFromOrderValueGreaterThanEqual(new BigDecimal("1000.00"));
+        List<OrderCommission> result = orderCommissionService.getByFromOrderValueGreaterThanEqual(new BigDecimal(ORDERVALUE_1000));
 
         // Assert
         assertEquals(1, result.size());
-        assertEquals(new BigDecimal("1500.00"), result.get(0).getFromOrderValue());
-        verify(orderCommissionRepository).findByFromOrderValueGreaterThanEqual(new BigDecimal("1000.00"));
+        assertEquals(new BigDecimal(ORDERVALUE_1500), result.get(0).getFromOrderValue());
+        verify(orderCommissionRepository).findByFromOrderValueGreaterThanEqual(new BigDecimal(ORDERVALUE_1000));
     }
 
     @Test
     void getByFromOrderValueBetweenShouldReturnFilteredResults() {
         // Arrange
         OrderCommission commission = new OrderCommission();
-        commission.setFromOrderValue(new BigDecimal("1500.00"));
+        commission.setFromOrderValue(new BigDecimal(ORDERVALUE_1500));
         List<OrderCommission> expected = Arrays.asList(commission);
         
-        when(orderCommissionRepository.findByFromOrderValueBetween(new BigDecimal("1000.00"), new BigDecimal("2000.00"))).thenReturn(expected);
+        when(orderCommissionRepository.findByFromOrderValueBetween(new BigDecimal(ORDERVALUE_1000), new BigDecimal(ORDERVALUE_2000))).thenReturn(expected);
 
         // Act
-        List<OrderCommission> result = orderCommissionService.getByFromOrderValueBetween(new BigDecimal("1000.00"), new BigDecimal("2000.00"));
+        List<OrderCommission> result = orderCommissionService.getByFromOrderValueBetween(new BigDecimal(ORDERVALUE_1000), new BigDecimal(ORDERVALUE_2000));
 
         // Assert
         assertEquals(1, result.size());
-        assertEquals(new BigDecimal("1500.00"), result.get(0).getFromOrderValue());
-        verify(orderCommissionRepository).findByFromOrderValueBetween(new BigDecimal("1000.00"), new BigDecimal("2000.00"));
+        assertEquals(new BigDecimal(ORDERVALUE_1500), result.get(0).getFromOrderValue());
+        verify(orderCommissionRepository).findByFromOrderValueBetween(new BigDecimal(ORDERVALUE_1000), new BigDecimal(ORDERVALUE_2000));
     }
 
     @Test
     void getByMinCommissionLessThanEqualShouldReturnFilteredResults() {
         // Arrange
         OrderCommission commission = new OrderCommission();
-        commission.setMinCommission(new BigDecimal("20.00"));
+        commission.setMinCommission(new BigDecimal(COMISSION_20));
         List<OrderCommission> expected = Arrays.asList(commission);
         
-        when(orderCommissionRepository.findByMinCommissionLessThanEqual(new BigDecimal("30.00"))).thenReturn(expected);
+        when(orderCommissionRepository.findByMinCommissionLessThanEqual(new BigDecimal(MINCOMM_30))).thenReturn(expected);
 
         // Act
-        List<OrderCommission> result = orderCommissionService.getByMinCommissionLessThanEqual(new BigDecimal("30.00"));
+        List<OrderCommission> result = orderCommissionService.getByMinCommissionLessThanEqual(new BigDecimal(MINCOMM_30));
 
         // Assert
         assertEquals(1, result.size());
-        assertEquals(new BigDecimal("20.00"), result.get(0).getMinCommission());
-        verify(orderCommissionRepository).findByMinCommissionLessThanEqual(new BigDecimal("30.00"));
+        assertEquals(new BigDecimal(COMISSION_20), result.get(0).getMinCommission());
+        verify(orderCommissionRepository).findByMinCommissionLessThanEqual(new BigDecimal(MINCOMM_30));
     }
 
     @Test
@@ -420,33 +421,33 @@ class OrderCommissionServiceImplTest {
         commission.setMinCommission(new BigDecimal("40.00"));
         List<OrderCommission> expected = Arrays.asList(commission);
         
-        when(orderCommissionRepository.findByMinCommissionGreaterThanEqual(new BigDecimal("30.00"))).thenReturn(expected);
+        when(orderCommissionRepository.findByMinCommissionGreaterThanEqual(new BigDecimal(MINCOMM_30))).thenReturn(expected);
 
         // Act
-        List<OrderCommission> result = orderCommissionService.getByMinCommissionGreaterThanEqual(new BigDecimal("30.00"));
+        List<OrderCommission> result = orderCommissionService.getByMinCommissionGreaterThanEqual(new BigDecimal(MINCOMM_30));
 
         // Assert
         assertEquals(1, result.size());
         assertEquals(new BigDecimal("40.00"), result.get(0).getMinCommission());
-        verify(orderCommissionRepository).findByMinCommissionGreaterThanEqual(new BigDecimal("30.00"));
+        verify(orderCommissionRepository).findByMinCommissionGreaterThanEqual(new BigDecimal(MINCOMM_30));
     }
 
     @Test
     void getByMinCommissionBetweenShouldReturnFilteredResults() {
         // Arrange
         OrderCommission commission = new OrderCommission();
-        commission.setMinCommission(new BigDecimal("25.00"));
+        commission.setMinCommission(new BigDecimal(MINCOMM_25));
         List<OrderCommission> expected = Arrays.asList(commission);
         
-        when(orderCommissionRepository.findByMinCommissionBetween(new BigDecimal("20.00"), new BigDecimal("30.00"))).thenReturn(expected);
+        when(orderCommissionRepository.findByMinCommissionBetween(new BigDecimal(COMISSION_20), new BigDecimal(MINCOMM_30))).thenReturn(expected);
 
         // Act
-        List<OrderCommission> result = orderCommissionService.getByMinCommissionBetween(new BigDecimal("20.00"), new BigDecimal("30.00"));
+        List<OrderCommission> result = orderCommissionService.getByMinCommissionBetween(new BigDecimal(COMISSION_20), new BigDecimal(MINCOMM_30));
 
         // Assert
         assertEquals(1, result.size());
-        assertEquals(new BigDecimal("25.00"), result.get(0).getMinCommission());
-        verify(orderCommissionRepository).findByMinCommissionBetween(new BigDecimal("20.00"), new BigDecimal("30.00"));
+        assertEquals(new BigDecimal(MINCOMM_25), result.get(0).getMinCommission());
+        verify(orderCommissionRepository).findByMinCommissionBetween(new BigDecimal(COMISSION_20), new BigDecimal(MINCOMM_30));
     }
 
     @Test
@@ -458,9 +459,9 @@ class OrderCommissionServiceImplTest {
         when(orderCommissionRepository.findByOrderId(any())).thenReturn(Collections.emptyList());
 
         // Act & Assert
-        assertTrue(orderCommissionService.getByCommission(new BigDecimal("10.00")).isEmpty());
-        assertTrue(orderCommissionService.getByFromOrderValue(new BigDecimal("1000.00")).isEmpty());
-        assertTrue(orderCommissionService.getByMinCommission(new BigDecimal("25.00")).isEmpty());
+        assertTrue(orderCommissionService.getByCommission(new BigDecimal(COMISSION_10)).isEmpty());
+        assertTrue(orderCommissionService.getByFromOrderValue(new BigDecimal(ORDERVALUE_1000)).isEmpty());
+        assertTrue(orderCommissionService.getByMinCommission(new BigDecimal(MINCOMM_25)).isEmpty());
         assertTrue(orderCommissionService.getByOrderId(1L).isEmpty());
     }
 }
