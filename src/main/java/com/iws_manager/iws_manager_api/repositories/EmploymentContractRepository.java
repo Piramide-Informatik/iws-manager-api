@@ -26,4 +26,17 @@ public interface EmploymentContractRepository extends JpaRepository<EmploymentCo
      */
     List<EmploymentContract> findByCustomerId(Long customerId);
 
+     /**
+     * Finds all EmploymentContracts for a given customer ID, ordered by the employee number ascending.
+     *
+     * @param customerId ID of the customer
+     * @return List of EmploymentContracts sorted by employee number
+     */
+    @Query("""
+        SELECT ec FROM EmploymentContract ec
+        JOIN ec.employee e
+        WHERE ec.customer.id = :customerId
+        ORDER BY e.employeeno ASC
+    """)
+    List<EmploymentContract> findByCustomerIdOrderByEmployeenoAsc(@Param("customerId") Long customerId);
 }
