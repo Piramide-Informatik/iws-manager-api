@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findAllByOrderByProjectNameAsc();   
+    List<Project> findAllByOrderByProjectLabelAsc();   
 
     /* ==================== */
     /* PROPERTIES - BASICOS */

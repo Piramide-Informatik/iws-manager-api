@@ -96,12 +96,12 @@ public class RoleServiceImplTest {
         role2.setId(2L);
         role2.setName(SECOND_ROLE);
 
-        when(roleRepository.findAll()).thenReturn(Arrays.asList(sampleRole, role2));
+        when(roleRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(sampleRole, role2));
 
         List<Role> result = roleService.findAll();
 
         assertEquals(2, result.size());
-        verify(roleRepository, times(1)).findAll();
+        verify(roleRepository, times(1)).findAllByOrderByNameAsc();
     }
 
     @Test
