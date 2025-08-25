@@ -1,7 +1,9 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.models.SystemFunction;
+import com.iws_manager.iws_manager_api.models.SystemModule;
 import com.iws_manager.iws_manager_api.repositories.SystemFunctionRepository;
+import com.iws_manager.iws_manager_api.repositories.SystemModuleRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.SystemFunctionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +16,12 @@ import java.util.Optional;
 @Transactional
 public class SystemFunctionServiceImpl implements SystemFunctionService {
     private final SystemFunctionRepository systemFunctionRepository;
+    private final SystemModuleRepository systemModuleRepository;
 
     @Autowired
-    public SystemFunctionServiceImpl(SystemFunctionRepository systemFunctionRepository) {
+    public SystemFunctionServiceImpl(SystemFunctionRepository systemFunctionRepository, SystemModuleRepository systemModuleRepository) {
         this.systemFunctionRepository = systemFunctionRepository;
+        this.systemModuleRepository = systemModuleRepository;
     }
 
     @Override
@@ -25,6 +29,11 @@ public class SystemFunctionServiceImpl implements SystemFunctionService {
         if (systemFunction == null) {
             throw new IllegalArgumentException("SystemFunction cannot be null");
         }
+
+        Long moduleId = systemFunction.getModule().getId();
+        SystemModule module = systemModuleRepository.findById(moduleId)
+                .orElseThrow(() -> new RuntimeException("Module not found"));
+        systemFunction.setModule(module);
         return systemFunctionRepository.save(systemFunction);
     }
 
