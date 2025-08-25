@@ -1,6 +1,8 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
+import com.iws_manager.iws_manager_api.models.Role;
 import com.iws_manager.iws_manager_api.models.RoleRight;
+import com.iws_manager.iws_manager_api.repositories.RoleRepository;
 import com.iws_manager.iws_manager_api.repositories.RoleRightRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.RoleRightService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +16,12 @@ import java.util.Optional;
 @Transactional
 public class RoleRightServiceImpl implements RoleRightService {
     private final RoleRightRepository roleRightRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public RoleRightServiceImpl(RoleRightRepository roleRightRepository) {
+    public RoleRightServiceImpl(RoleRightRepository roleRightRepository, RoleRepository roleRepository) {
         this.roleRightRepository = roleRightRepository;
+        this.roleRepository = roleRepository;
     }
 
 
@@ -26,6 +30,12 @@ public class RoleRightServiceImpl implements RoleRightService {
         if (roleRight == null) {
             throw new IllegalArgumentException("RoleRight cannot be null");
         }
+        Long roleId = roleRight.getRole().getId();
+        Role role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new RuntimeException("Role not found"));
+
+        roleRight.setRole(role);
+
         return roleRightRepository.save(roleRight);
     }
 
