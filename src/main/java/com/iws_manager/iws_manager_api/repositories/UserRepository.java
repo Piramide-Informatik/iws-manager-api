@@ -13,4 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT COUNT(u) FROM User u WHERE u.active = true")
     long countActiveUsers();
     List<User> findByRolesId(Long roleId);
+
+    List<User> findAllByOrderByUsernameAsc();
 }

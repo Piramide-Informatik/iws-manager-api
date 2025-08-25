@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public List<User> findAll() {
-        return userRepository.findAll();
+        return userRepository.findAllByOrderByUsernameAsc();
     }
 
     @Override
