@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 
 class OrderCommissionTest {
 
+    private static final BigDecimal COMMISSION = new BigDecimal("10.50");
+
     @Test
     void testOrderCommissionCreation() {
         // Arrange
@@ -46,12 +48,12 @@ class OrderCommissionTest {
         // Arrange
         OrderCommission orderCommission1 = new OrderCommission();
         orderCommission1.setId(1L);
-        orderCommission1.setCommission(new BigDecimal("10.50"));
+        orderCommission1.setCommission(COMMISSION);
         orderCommission1.setFromOrderValue(new BigDecimal("500.00"));
         
         OrderCommission orderCommission2 = new OrderCommission();
         orderCommission2.setId(1L);
-        orderCommission2.setCommission(new BigDecimal("10.50"));
+        orderCommission2.setCommission(COMMISSION);
         orderCommission2.setFromOrderValue(new BigDecimal("500.00"));
         
         // Assert
@@ -64,11 +66,11 @@ class OrderCommissionTest {
         // Arrange
         OrderCommission orderCommission1 = new OrderCommission();
         orderCommission1.setId(1L);
-        orderCommission1.setCommission(new BigDecimal("10.50"));
+        orderCommission1.setCommission(COMMISSION);
         
         OrderCommission orderCommission2 = new OrderCommission();
         orderCommission2.setId(2L);
-        orderCommission2.setCommission(new BigDecimal("10.50"));
+        orderCommission2.setCommission(COMMISSION);
         
         // Assert
         assertNotEquals(orderCommission1, orderCommission2);
