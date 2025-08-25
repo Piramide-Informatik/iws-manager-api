@@ -28,7 +28,10 @@ class OrderCommissionControllerTest {
     private static final String COMMISSION_20 = "20.00";
     private static final String COMMISSION_30 = "30.00";
     private static final String FROMORDERVALUE_1000 = "1000.00";
+    private static final String FROMORDERVALUE_1500 = "1500.00";
     private static final String FROMORDERVALUE_2000 = "2000.00";
+    private static final String MINCOMMISSION_25 = "25.00";
+
 
     @Mock
     private OrderCommissionService orderCommissionService;
@@ -226,19 +229,19 @@ class OrderCommissionControllerTest {
     void getByMinCommissionShouldReturnMatchingCommissions() {
         // Arrange
         OrderCommission commission = new OrderCommission();
-        commission.setMinCommission(new BigDecimal("25.00"));
+        commission.setMinCommission(new BigDecimal(MINCOMMISSION_25));
         List<OrderCommission> expected = Arrays.asList(commission);
         
-        when(orderCommissionService.getByMinCommission(new BigDecimal("25.00"))).thenReturn(expected);
+        when(orderCommissionService.getByMinCommission(new BigDecimal(MINCOMMISSION_25))).thenReturn(expected);
 
         // Act
-        ResponseEntity<List<OrderCommission>> response = orderCommissionController.getByMinCommission(new BigDecimal("25.00"));
+        ResponseEntity<List<OrderCommission>> response = orderCommissionController.getByMinCommission(new BigDecimal(MINCOMMISSION_25));
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().size());
-        assertEquals(new BigDecimal("25.00"), response.getBody().get(0).getMinCommission());
-        verify(orderCommissionService).getByMinCommission(new BigDecimal("25.00"));
+        assertEquals(new BigDecimal(MINCOMMISSION_25), response.getBody().get(0).getMinCommission());
+        verify(orderCommissionService).getByMinCommission(new BigDecimal(MINCOMMISSION_25));
     }
 
     @Test
@@ -356,7 +359,7 @@ class OrderCommissionControllerTest {
     void getByFromOrderValueGreaterThanEqualShouldReturnFilteredResults() {
         // Arrange
         OrderCommission commission = new OrderCommission();
-        commission.setFromOrderValue(new BigDecimal("1500.00"));
+        commission.setFromOrderValue(new BigDecimal(FROMORDERVALUE_1500));
         List<OrderCommission> expected = Arrays.asList(commission);
         
         when(orderCommissionService.getByFromOrderValueGreaterThanEqual(new BigDecimal(FROMORDERVALUE_1000))).thenReturn(expected);
@@ -367,7 +370,7 @@ class OrderCommissionControllerTest {
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().size());
-        assertEquals(new BigDecimal("1500.00"), response.getBody().get(0).getFromOrderValue());
+        assertEquals(new BigDecimal(FROMORDERVALUE_1500), response.getBody().get(0).getFromOrderValue());
         verify(orderCommissionService).getByFromOrderValueGreaterThanEqual(new BigDecimal(FROMORDERVALUE_1000));
     }
 
@@ -375,7 +378,7 @@ class OrderCommissionControllerTest {
     void getByFromOrderValueBetweenShouldReturnFilteredResults() {
         // Arrange
         OrderCommission commission = new OrderCommission();
-        commission.setFromOrderValue(new BigDecimal("1500.00"));
+        commission.setFromOrderValue(new BigDecimal(FROMORDERVALUE_1500));
         List<OrderCommission> expected = Arrays.asList(commission);
         
         when(orderCommissionService.getByFromOrderValueBetween(new BigDecimal(FROMORDERVALUE_1000), new BigDecimal(FROMORDERVALUE_2000))).thenReturn(expected);
@@ -386,7 +389,7 @@ class OrderCommissionControllerTest {
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().size());
-        assertEquals(new BigDecimal("1500.00"), response.getBody().get(0).getFromOrderValue());
+        assertEquals(new BigDecimal(FROMORDERVALUE_1500), response.getBody().get(0).getFromOrderValue());
         verify(orderCommissionService).getByFromOrderValueBetween(new BigDecimal(FROMORDERVALUE_1000), new BigDecimal(FROMORDERVALUE_2000));
     }
 
@@ -433,7 +436,7 @@ class OrderCommissionControllerTest {
     void getByMinCommissionBetweenShouldReturnFilteredResults() {
         // Arrange
         OrderCommission commission = new OrderCommission();
-        commission.setMinCommission(new BigDecimal("25.00"));
+        commission.setMinCommission(new BigDecimal(MINCOMMISSION_25));
         List<OrderCommission> expected = Arrays.asList(commission);
         
         when(orderCommissionService.getByMinCommissionBetween(new BigDecimal(COMMISSION_20), new BigDecimal(COMMISSION_30))).thenReturn(expected);
@@ -444,7 +447,7 @@ class OrderCommissionControllerTest {
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().size());
-        assertEquals(new BigDecimal("25.00"), response.getBody().get(0).getMinCommission());
+        assertEquals(new BigDecimal(MINCOMMISSION_25), response.getBody().get(0).getMinCommission());
         verify(orderCommissionService).getByMinCommissionBetween(new BigDecimal(COMMISSION_20), new BigDecimal(COMMISSION_30));
     }
 
