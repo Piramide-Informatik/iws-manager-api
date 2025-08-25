@@ -102,6 +102,18 @@ public class OrderController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
+    /**
+     * Gets all the orders by customer ordered by label.
+     * @param customerId customer ID.
+     * @return Ordered list.
+     */
+    @GetMapping("/customer/{customerId}/sort-by-orderno")
+    public ResponseEntity<List<Order>> getByCustomerIdOrderByOrderNoAsc(
+            @PathVariable Long customerId) {
+        List<Order> orders = orderService.getByCustomerIdOrderByOrderNoAsc(customerId);
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
     @GetMapping("/by-acronym/{acronym}")
     public ResponseEntity<List<Order>> getByAcronym(@PathVariable String acronym) {
         List<Order> orders = orderService.getByAcronym(acronym);
