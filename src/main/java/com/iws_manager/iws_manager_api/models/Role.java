@@ -1,5 +1,7 @@
 package com.iws_manager.iws_manager_api.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.iws_manager.iws_manager_api.models.base.BaseEntity;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
@@ -34,4 +36,9 @@ public class Role extends BaseEntity {
 
     @Column(name = "role", length = 255)
     private String name;
+
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<RoleRight> roleRights;
+
 }

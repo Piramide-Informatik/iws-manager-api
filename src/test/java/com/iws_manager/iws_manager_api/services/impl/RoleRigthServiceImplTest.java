@@ -1,7 +1,9 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.models.ApprovalStatus;
+import com.iws_manager.iws_manager_api.models.Role;
 import com.iws_manager.iws_manager_api.models.RoleRight;
+import com.iws_manager.iws_manager_api.repositories.RoleRepository;
 import com.iws_manager.iws_manager_api.repositories.RoleRightRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,20 +31,31 @@ public class RoleRigthServiceImplTest {
     @Mock
     private RoleRightRepository roleRightRepository;
 
+    @Mock
+    private RoleRepository roleRepository;
+
     @InjectMocks
     private RoleRightServiceImpl roleRightService;
     private RoleRight sampleRoleRight;
+    private Role sampleRole;
 
     @BeforeEach
     void setUp() {
+        sampleRole = new Role();
+        sampleRole.setId(1L);
+        sampleRole.setName("Admin");
+
         sampleRoleRight = new RoleRight();
         sampleRoleRight.setId(1L);
         sampleRoleRight.setAccessRight(NUM_ACCESSA);
+        sampleRoleRight.setRole(sampleRole);
     }
 
     @Test
     @DisplayName("Should save approvalstatus successfully")
     void creatShouldReturnSavedApprovalStatus(){
+
+        when(roleRepository.findById(1L)).thenReturn(Optional.of(sampleRole));
         when(roleRightRepository.save(any(RoleRight.class))).thenReturn(sampleRoleRight);
 
         RoleRight result = roleRightService.create(sampleRoleRight);
