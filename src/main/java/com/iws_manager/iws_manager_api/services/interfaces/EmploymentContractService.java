@@ -14,4 +14,5 @@ public interface EmploymentContractService {
 
     List<EmploymentContract> findByEmployeeId(Long employeeId);
     List<EmploymentContract> findByCustomerId(Long customerId);
+    List<EmploymentContract> getByCustomerIdOrderByEmployeenoAsc(Long customerId);
 }
