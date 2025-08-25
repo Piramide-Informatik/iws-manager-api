@@ -3,8 +3,11 @@ package com.iws_manager.iws_manager_api.services.impl;
 import com.iws_manager.iws_manager_api.models.ApprovalStatus;
 import com.iws_manager.iws_manager_api.models.Role;
 import com.iws_manager.iws_manager_api.models.RoleRight;
+import com.iws_manager.iws_manager_api.models.SystemFunction;
+
 import com.iws_manager.iws_manager_api.repositories.RoleRepository;
 import com.iws_manager.iws_manager_api.repositories.RoleRightRepository;
+import com.iws_manager.iws_manager_api.repositories.SystemFunctionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,10 +37,15 @@ public class RoleRigthServiceImplTest {
     @Mock
     private RoleRepository roleRepository;
 
+    @Mock
+    private SystemFunctionRepository systemFunctionRepository;
+
     @InjectMocks
     private RoleRightServiceImpl roleRightService;
     private RoleRight sampleRoleRight;
     private Role sampleRole;
+    private SystemFunction sampleFunciton;
+
 
     @BeforeEach
     void setUp() {
@@ -45,10 +53,16 @@ public class RoleRigthServiceImplTest {
         sampleRole.setId(1L);
         sampleRole.setName("Admin");
 
+
+        sampleFunciton = new SystemFunction();
+        sampleFunciton.setId(1L);
+        sampleFunciton.setFunctionName("Function 1");
+
         sampleRoleRight = new RoleRight();
         sampleRoleRight.setId(1L);
         sampleRoleRight.setAccessRight(NUM_ACCESSA);
         sampleRoleRight.setRole(sampleRole);
+        sampleRoleRight.setSystemFunction(sampleFunciton);
     }
 
     @Test
@@ -56,6 +70,8 @@ public class RoleRigthServiceImplTest {
     void creatShouldReturnSavedApprovalStatus(){
 
         when(roleRepository.findById(1L)).thenReturn(Optional.of(sampleRole));
+        when(systemFunctionRepository.findById(1L)).thenReturn(Optional.of(sampleFunciton));
+
         when(roleRightRepository.save(any(RoleRight.class))).thenReturn(sampleRoleRight);
 
         RoleRight result = roleRightService.create(sampleRoleRight);
