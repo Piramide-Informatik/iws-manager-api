@@ -1,8 +1,10 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.models.Role;
+import com.iws_manager.iws_manager_api.models.RoleRight;
 import com.iws_manager.iws_manager_api.models.User;
 import com.iws_manager.iws_manager_api.repositories.RoleRepository;
+import com.iws_manager.iws_manager_api.repositories.RoleRightRepository;
 import com.iws_manager.iws_manager_api.repositories.UserRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,6 @@ import java.util.Optional;
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
-
     @Autowired
     public RoleServiceImpl(RoleRepository roleRepository, UserRepository userRepository) {
         this.roleRepository = roleRepository;
@@ -46,7 +47,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional(readOnly = true)
     public List<Role> findAll() {
-        return roleRepository.findAll();
+        return roleRepository.findAllByOrderByNameAsc();
     }
 
     @Override
