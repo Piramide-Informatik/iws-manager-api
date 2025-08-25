@@ -36,8 +36,7 @@ public class RoleRight extends BaseEntity {
     @JsonBackReference
     private Role role;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "systemfunctionid")
-//    private SystemFunction systemFunction;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "systemfunctionid")
+    private SystemFunction systemFunction;
 }
