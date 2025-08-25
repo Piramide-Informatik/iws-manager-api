@@ -10,4 +10,7 @@ public interface ContractorRepository extends JpaRepository<Contractor,Long> {
     List<Contractor> findAllByOrderByNameAsc();
     List<Contractor> findByCustomerId(Long customerId);
     List<Contractor> findByCountryId(Long countryId);
+
+    List<Contractor> findByCustomerIdOrderByLabelAsc(Long customerId);
+
 }
