@@ -16,6 +16,7 @@ public interface OrderService {
 
     List<Order> getByCustomerIdOrderByOrderTitleAsc(Long customerId);
     List<Order> getByCustomerIdOrderByOrderLabelAsc(Long customerId);
+    List<Order> getByCustomerIdOrderByOrderNoAsc(Long customerId);
 
     //PROPERTIES
     List<Order> getByAcronym(String acronym);
