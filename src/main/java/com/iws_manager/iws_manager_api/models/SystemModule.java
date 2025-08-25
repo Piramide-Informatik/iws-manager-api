@@ -11,8 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-import javax.sound.sampled.AudioFileFormat;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Setter
@@ -20,11 +19,11 @@ import javax.sound.sampled.AudioFileFormat;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@EntityListeners(AudioFileFormat.class)
-@Table(name="roleright")
+@EntityListeners(AuditingEntityListener.class)
+@Table(name="systemmodule")
 @AttributeOverride(name = "id", column = @Column(name = "moduleid"))
 public class SystemModule extends BaseEntity {
 
-    @Column(name = "module", length = 255)
+    @Column(name = "module", length = 255, nullable = false)
     private String name;
 }

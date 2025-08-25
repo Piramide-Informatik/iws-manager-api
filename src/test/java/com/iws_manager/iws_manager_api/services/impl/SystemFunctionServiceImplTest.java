@@ -1,7 +1,9 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.models.SystemFunction;
+import com.iws_manager.iws_manager_api.models.SystemModule;
 import com.iws_manager.iws_manager_api.repositories.SystemFunctionRepository;
+import com.iws_manager.iws_manager_api.repositories.SystemModuleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,8 @@ class SystemFunctionServiceImplTest {
 
     @Mock
     private SystemFunctionRepository systemFunctionRepository;
+    @Mock
+    private SystemModuleRepository systemModuleRepository;
 
     @InjectMocks
     private SystemFunctionServiceImpl systemFunctionService;
@@ -35,20 +39,28 @@ class SystemFunctionServiceImplTest {
 
     @BeforeEach
     void setUp() {
+        SystemModule sampleModule = new SystemModule();
+        sampleModule.setId(1L);
+        sampleModule.setName("User Management");
+
         sampleSystemFunction = new SystemFunction();
         sampleSystemFunction.setId(1L);
         sampleSystemFunction.setFunctionName(FUNCTION_A);
+        sampleSystemFunction.setModule(sampleModule);
+
     }
 
     @Test
     @DisplayName("Should save SystemFunction successfully")
     void creatShouldReturnSavedSystemFunction(){
+        when(systemModuleRepository.findById(1L)).thenReturn(Optional.of(sampleSystemFunction.getModule()));
         when(systemFunctionRepository.save(any(SystemFunction.class))).thenReturn(sampleSystemFunction);
 
         SystemFunction result = systemFunctionService.create(sampleSystemFunction);
 
         assertNotNull(result);
         assertEquals(FUNCTION_A, result.getFunctionName());
+        verify(systemModuleRepository, times(1)).findById(1L);
         verify(systemFunctionRepository, times(1)).save(any(SystemFunction.class));
     }
 
@@ -57,7 +69,6 @@ class SystemFunctionServiceImplTest {
     void createShouldThrowExceptionWhenSystemFunctionIsNull() {
         assertThrows(IllegalArgumentException.class, () -> systemFunctionService.create(null));
         verify(systemFunctionRepository, never()).save(any());
-
     }
 
     @Test
