@@ -21,5 +21,5 @@ public class PayCondition extends BaseEntity {
     private Integer deadline;
 
     @Column(name = "paycondition", nullable = true, length = 255)
-    private String payConditionName;
+    private String name;
 }
