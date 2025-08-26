@@ -189,7 +189,7 @@ class BasicContractServiceImplTest {
     }
 
     @Test
-    void getNextContractNo_WhenMaxContractNoIsNull_ShouldReturnOne() {
+    void getNextContractNoWhenMaxContractNoIsNullShouldReturnOne() {
         // Arrange
         when(basicContractRepository.findMaxContractNoOptional())
             .thenReturn(Optional.ofNullable(null));
@@ -203,7 +203,7 @@ class BasicContractServiceImplTest {
     }
 
     @Test
-    void getNextContractNo_WhenMaxContractNoIsZero_ShouldReturnOne() {
+    void getNextContractNoWhenMaxContractNoIsZeroShouldReturnOne() {
         // Arrange
         when(basicContractRepository.findMaxContractNoOptional())
             .thenReturn(Optional.of(0));
