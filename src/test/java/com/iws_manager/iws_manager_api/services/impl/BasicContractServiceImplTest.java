@@ -159,4 +159,60 @@ class BasicContractServiceImplTest {
         assertEquals(expected, result);
     }
 
+    @Test
+    void getNextContractNoWhenMaxContractNoExistsShouldReturnMaxPlusOne() {
+        // Arrange
+        Integer maxContractNo = 100;
+        when(basicContractRepository.findMaxContractNoOptional())
+            .thenReturn(Optional.of(maxContractNo));
+
+        // Act
+        Integer result = basicContractService.getNextContractNo();
+
+        // Assert
+        assertEquals(101, result);
+        verify(basicContractRepository, times(1)).findMaxContractNoOptional();
+    }
+
+    @Test
+    void getNextContractNoWhenNoContractsExistShouldReturnOne() {
+        // Arrange
+        when(basicContractRepository.findMaxContractNoOptional())
+            .thenReturn(Optional.empty());
+
+        // Act
+        Integer result = basicContractService.getNextContractNo();
+
+        // Assert
+        assertEquals(1, result);
+        verify(basicContractRepository, times(1)).findMaxContractNoOptional();
+    }
+
+    @Test
+    void getNextContractNo_WhenMaxContractNoIsNull_ShouldReturnOne() {
+        // Arrange
+        when(basicContractRepository.findMaxContractNoOptional())
+            .thenReturn(Optional.ofNullable(null));
+
+        // Act
+        Integer result = basicContractService.getNextContractNo();
+
+        // Assert
+        assertEquals(1, result);
+        verify(basicContractRepository, times(1)).findMaxContractNoOptional();
+    }
+
+    @Test
+    void getNextContractNo_WhenMaxContractNoIsZero_ShouldReturnOne() {
+        // Arrange
+        when(basicContractRepository.findMaxContractNoOptional())
+            .thenReturn(Optional.of(0));
+
+        // Act
+        Integer result = basicContractService.getNextContractNo();
+
+        // Assert
+        assertEquals(1, result);
+        verify(basicContractRepository, times(1)).findMaxContractNoOptional();
+    }
 }
