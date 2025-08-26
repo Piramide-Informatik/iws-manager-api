@@ -36,9 +36,9 @@ public class Invoice extends BaseEntity {
     @Column(name = "amounttax", nullable = true, columnDefinition = "DECIMAL(10,2)")
     private BigDecimal amountTax;
 
-    // @ManyToOne
-    // @JoinColumn(name = "billerid", referencedColumnName = "billerid", nullable = true)
-    // private Biller biller;
+    @ManyToOne
+    @JoinColumn(name = "billerid", referencedColumnName = "billerid", nullable = true)
+    private Biller biller;
 
     @ManyToOne
     @JoinColumn(name = "cancelledinvoiceid", referencedColumnName = "invoiceid", nullable = true)
@@ -64,16 +64,16 @@ public class Invoice extends BaseEntity {
     @Column(name = "invoicetitle", nullable = true, length = 255)
     private String invoiceTitle;
 
-    // @ManyToOne
-    // @JoinColumn(name = "invoicetypeid", referencedColumnName = "invoicetypeid", nullable = true)
-    // private InvoiceType invoiceType;
+    @ManyToOne
+    @JoinColumn(name = "invoicetypeid", referencedColumnName = "invoicetypeid", nullable = true)
+    private InvoiceType invoiceType;
 
     @Column(name = "iscancellation", nullable = true, columnDefinition = "SMALLINT")
     private Short isCancellation;
 
-    // @ManyToOne
-    // @JoinColumn(name = "networkid", referencedColumnName = "networkid", nullable = true)
-    // private Network network;
+    @ManyToOne
+    @JoinColumn(name = "networkid", referencedColumnName = "networkid", nullable = true)
+    private Network network;
 
     @Column(name = "note", columnDefinition = "TEXT", nullable = true)
     private String note;
@@ -82,9 +82,9 @@ public class Invoice extends BaseEntity {
     @JoinColumn(name = "orderid", referencedColumnName = "orderid", nullable = true)
     private Order order;
 
-    // @ManyToOne
-    // @JoinColumn(name = "payconditionid", referencedColumnName = "payconditionid", nullable = true)
-    // private PayCondition payCondition;
+    @ManyToOne
+    @JoinColumn(name = "payconditionid", referencedColumnName = "payconditionid", nullable = true)
+    private PayCondition payCondition;
 
     @Column(name = "paydeadline", nullable = true, columnDefinition = "DATE")
     private LocalDate payDeadline;
@@ -95,7 +95,7 @@ public class Invoice extends BaseEntity {
     @Column(name = "taxrate", nullable = true, columnDefinition = "DECIMAL(5,2)")
     private BigDecimal taxRate;
 
-    // @ManyToOne
-    // @JoinColumn(name = "vatid", referencedColumnName = "vatid", nullable = true)
-    // private Vat vat;
+    @ManyToOne
+    @JoinColumn(name = "vatid", referencedColumnName = "vatid", nullable = true)
+    private Vat vat;
 }
