@@ -28,6 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class InvoiceController {
     private final InvoiceService invoiceService;
 
+    private static final String ERROR_MESSAGE = "Invalid parameters";
+    private static final String ERROR_TITLE = "error"; 
+    private static final String MESSAGE_TITLE = "message";
+
     @Autowired
     public InvoiceController(InvoiceService invoiceService) {
         this.invoiceService = invoiceService;
@@ -259,8 +263,8 @@ public class InvoiceController {
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(
                 Map.of(
-                    "error", "Invalid parameters",
-                    "message", ex.getMessage()
+                    ERROR_TITLE, ERROR_MESSAGE,
+                    MESSAGE_TITLE, ex.getMessage()
                 )
             );
         }
@@ -297,8 +301,8 @@ public class InvoiceController {
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(
                 Map.of(
-                    "error", "Invalid parameters",
-                    "message", ex.getMessage()
+                    ERROR_TITLE, ERROR_MESSAGE,
+                    MESSAGE_TITLE, ex.getMessage()
                 )
             );
         }
@@ -387,8 +391,8 @@ public class InvoiceController {
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(
                 Map.of(
-                    "error", "Invalid parameters",
-                    "message", ex.getMessage()
+                    ERROR_TITLE, ERROR_MESSAGE,
+                    MESSAGE_TITLE, ex.getMessage()
                 )
             );
         }
