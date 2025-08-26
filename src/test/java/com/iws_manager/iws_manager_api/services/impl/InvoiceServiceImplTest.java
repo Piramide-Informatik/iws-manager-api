@@ -23,6 +23,9 @@ import com.iws_manager.iws_manager_api.repositories.InvoiceRepository;
 @ExtendWith(MockitoExtension.class)
 class InvoiceServiceImplTest {
 
+    private static final String INVOICE_TITLE = "Test Invoice";
+    private static final String INVOICE_TEXT = "invoice";
+
     @Mock
     private InvoiceRepository invoiceRepository;
 
@@ -36,7 +39,7 @@ class InvoiceServiceImplTest {
         testInvoice = new Invoice();
         testInvoice.setId(1L);
         testInvoice.setInvoiceNo(1001);
-        testInvoice.setInvoiceTitle("Test Invoice");
+        testInvoice.setInvoiceTitle(INVOICE_TITLE);
         testInvoice.setAmountGross(new BigDecimal("1000.00"));
         testInvoice.setAmountNet(new BigDecimal("800.00"));
         testInvoice.setComment("Test comment");
@@ -170,12 +173,12 @@ class InvoiceServiceImplTest {
     @Test
     void testGetByInvoiceTitle() {
         List<Invoice> invoices = Arrays.asList(testInvoice);
-        when(invoiceRepository.findByInvoiceTitle("Test Invoice")).thenReturn(invoices);
+        when(invoiceRepository.findByInvoiceTitle(INVOICE_TITLE)).thenReturn(invoices);
 
-        List<Invoice> result = invoiceService.getByInvoiceTitle("Test Invoice");
+        List<Invoice> result = invoiceService.getByInvoiceTitle(INVOICE_TITLE);
 
         assertEquals(1, result.size());
-        verify(invoiceRepository, times(1)).findByInvoiceTitle("Test Invoice");
+        verify(invoiceRepository, times(1)).findByInvoiceTitle(INVOICE_TITLE);
     }
 
     @Test
@@ -275,12 +278,12 @@ class InvoiceServiceImplTest {
     @Test
     void testGetByInvoiceTitleContainingIgnoreCase() {
         List<Invoice> invoices = Arrays.asList(testInvoice);
-        when(invoiceRepository.findByInvoiceTitleContainingIgnoreCase("invoice")).thenReturn(invoices);
+        when(invoiceRepository.findByInvoiceTitleContainingIgnoreCase(INVOICE_TEXT)).thenReturn(invoices);
 
-        List<Invoice> result = invoiceService.getByInvoiceTitleContainingIgnoreCase("invoice");
+        List<Invoice> result = invoiceService.getByInvoiceTitleContainingIgnoreCase(INVOICE_TEXT);
 
         assertEquals(1, result.size());
-        verify(invoiceRepository, times(1)).findByInvoiceTitleContainingIgnoreCase("invoice");
+        verify(invoiceRepository, times(1)).findByInvoiceTitleContainingIgnoreCase(INVOICE_TEXT);
     }
 
     @Test
