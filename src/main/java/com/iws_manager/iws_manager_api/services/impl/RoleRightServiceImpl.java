@@ -2,7 +2,9 @@ package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.models.Role;
 import com.iws_manager.iws_manager_api.models.RoleRight;
+
 import com.iws_manager.iws_manager_api.models.SystemFunction;
+
 import com.iws_manager.iws_manager_api.repositories.RoleRepository;
 import com.iws_manager.iws_manager_api.repositories.RoleRightRepository;
 import com.iws_manager.iws_manager_api.repositories.SystemFunctionRepository;
@@ -26,6 +28,7 @@ public class RoleRightServiceImpl implements RoleRightService {
         this.roleRightRepository = roleRightRepository;
         this.roleRepository = roleRepository;
         this.systemFunctionRepository = systemFunctionRepository;
+
     }
 
 
@@ -38,12 +41,14 @@ public class RoleRightServiceImpl implements RoleRightService {
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new RuntimeException("Role not found"));
 
+
         Long functionId = roleRight.getSystemFunction().getId();
         SystemFunction function = systemFunctionRepository.findById(functionId)
                 .orElseThrow(() -> new RuntimeException("SystemFunction not found"));
 
         roleRight.setRole(role);
         roleRight.setSystemFunction(function);
+
 
         return roleRightRepository.save(roleRight);
     }

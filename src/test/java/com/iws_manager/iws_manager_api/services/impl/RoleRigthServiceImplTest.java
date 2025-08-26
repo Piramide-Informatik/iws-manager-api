@@ -4,6 +4,7 @@ import com.iws_manager.iws_manager_api.models.ApprovalStatus;
 import com.iws_manager.iws_manager_api.models.Role;
 import com.iws_manager.iws_manager_api.models.RoleRight;
 import com.iws_manager.iws_manager_api.models.SystemFunction;
+
 import com.iws_manager.iws_manager_api.repositories.RoleRepository;
 import com.iws_manager.iws_manager_api.repositories.RoleRightRepository;
 import com.iws_manager.iws_manager_api.repositories.SystemFunctionRepository;
@@ -45,11 +46,13 @@ public class RoleRigthServiceImplTest {
     private Role sampleRole;
     private SystemFunction sampleFunciton;
 
+
     @BeforeEach
     void setUp() {
         sampleRole = new Role();
         sampleRole.setId(1L);
         sampleRole.setName("Admin");
+
 
         sampleFunciton = new SystemFunction();
         sampleFunciton.setId(1L);
@@ -68,6 +71,7 @@ public class RoleRigthServiceImplTest {
 
         when(roleRepository.findById(1L)).thenReturn(Optional.of(sampleRole));
         when(systemFunctionRepository.findById(1L)).thenReturn(Optional.of(sampleFunciton));
+
         when(roleRightRepository.save(any(RoleRight.class))).thenReturn(sampleRoleRight);
 
         RoleRight result = roleRightService.create(sampleRoleRight);

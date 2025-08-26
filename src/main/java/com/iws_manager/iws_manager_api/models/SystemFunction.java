@@ -35,6 +35,4 @@ public class SystemFunction extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "moduleid", nullable = false)
     private SystemModule module;
-
-
 }
