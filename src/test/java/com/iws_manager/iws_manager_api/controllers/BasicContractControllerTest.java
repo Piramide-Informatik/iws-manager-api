@@ -2,6 +2,7 @@ package com.iws_manager.iws_manager_api.controllers;
 
 import com.iws_manager.iws_manager_api.models.BasicContract;
 import com.iws_manager.iws_manager_api.services.interfaces.BasicContractService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 class BasicContractControllerTest {
@@ -278,5 +281,52 @@ class BasicContractControllerTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(list, response.getBody());
+    }
+
+     @Test
+    void getNextContractNoWhenServiceReturnsValueShouldReturnOkWithValue() {
+        // Arrange
+        Integer expectedContractNo = 101;
+        when(basicContractService.getNextContractNo()).thenReturn(expectedContractNo);
+
+        // Act
+        ResponseEntity<Integer> response = basicContractController.getNextContractNo();
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expectedContractNo, response.getBody());
+        verify(basicContractService, times(1)).getNextContractNo();
+    }
+
+    @Test
+    void getNextContractNoWhenServiceReturnsOneShouldReturnOkWithOne() {
+        // Arrange
+        when(basicContractService.getNextContractNo()).thenReturn(1);
+
+        // Act
+        ResponseEntity<Integer> response = basicContractController.getNextContractNo();
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(1, response.getBody());
+        verify(basicContractService, times(1)).getNextContractNo();
+    }
+
+    @Test
+    void getNextContractNoWhenServiceThrowsExceptionShouldReturnInternalServerError() {
+        // Arrange
+        when(basicContractService.getNextContractNo())
+            .thenThrow(new RuntimeException("Database error"));
+
+        // Act
+        ResponseEntity<Integer> response = basicContractController.getNextContractNo();
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertNull(response.getBody());
+        verify(basicContractService, times(1)).getNextContractNo();
     }
 }
