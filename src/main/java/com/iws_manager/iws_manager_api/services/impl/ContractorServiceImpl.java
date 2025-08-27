@@ -82,4 +82,9 @@ public class ContractorServiceImpl implements ContractorService {
     public List<Contractor> getContractorsByCountryId(Long countryId) {
         return contractorRepository.findByCountryId(countryId);
     }
+
+    @Override
+    public List<Contractor> getByCustomerIdOrderByLabelAsc(Long customerId) {
+        return contractorRepository.findByCustomerIdOrderByLabelAsc(customerId);
+    }
 }

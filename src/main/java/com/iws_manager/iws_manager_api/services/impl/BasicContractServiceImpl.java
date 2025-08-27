@@ -196,4 +196,12 @@ public class BasicContractServiceImpl implements BasicContractService {
     public List<BasicContract> getByConfirmationDateBetween(LocalDate startDate, LocalDate endDate) {
         return basicContractRepository.findByConfirmationDateBetween(startDate, endDate);
     }
+
+    // other queries
+    @Override
+    public Integer getNextContractNo() {
+        return basicContractRepository.findMaxContractNoOptional()
+            .map(max -> max + 1)
+            .orElse(1);
+    }
 }

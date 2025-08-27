@@ -1,6 +1,7 @@
 package com.iws_manager.iws_manager_api.repositories;
 
 import java.util.List;
+import java.util.Optional;
 import java.time.LocalDate;
 
 import com.iws_manager.iws_manager_api.models.BasicContract;
@@ -31,4 +32,8 @@ public interface BasicContractRepository extends JpaRepository<BasicContract, Lo
     // Date range queries
     List<BasicContract> findByDateBetween(LocalDate startDate, LocalDate endDate);
     List<BasicContract> findByConfirmationDateBetween(LocalDate startDate, LocalDate endDate);
+
+    // Other Queries
+    @Query("SELECT MAX(b.contractNo) FROM BasicContract b")
+    Optional<Integer> findMaxContractNoOptional();
 }

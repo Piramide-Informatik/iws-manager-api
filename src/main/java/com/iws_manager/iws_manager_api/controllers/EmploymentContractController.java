@@ -117,4 +117,10 @@ public class EmploymentContractController {
         List<EmploymentContract> contracts = employmentContractService.findByCustomerId(customerId);
         return ResponseEntity.ok(contracts);
     }
+
+    @GetMapping("/customer/{customerId}/ordered-by-employeeno-asc")
+    public ResponseEntity<List<EmploymentContract>> getByCustomerIdOrderByEmployeenoAsc(@PathVariable Long customerId) {
+        List<EmploymentContract> contracts = employmentContractService.getByCustomerIdOrderByEmployeenoAsc(customerId);
+        return ResponseEntity.ok(contracts);
+    }
 }

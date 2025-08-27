@@ -137,4 +137,9 @@ public class EmploymentContractServiceImpl implements EmploymentContractService 
     public List<EmploymentContract> findByCustomerId(Long customerId) {
         return employmentContractRepository.findByCustomerId(customerId);
     }
+
+    @Override
+    public List<EmploymentContract> getByCustomerIdOrderByEmployeenoAsc(Long customerId) {
+        return employmentContractRepository.findByCustomerIdOrderByEmployeenoAsc(customerId);
+    }
 }

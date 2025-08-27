@@ -16,4 +16,6 @@ public interface ContractorService {
 
     List<Contractor> getContractorsByCustomerId(Long customerId);
     List<Contractor> getContractorsByCountryId(Long countryId);
+    List<Contractor> getByCustomerIdOrderByLabelAsc(Long customerId);
+
 }
