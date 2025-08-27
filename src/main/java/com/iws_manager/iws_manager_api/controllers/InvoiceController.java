@@ -397,4 +397,10 @@ public class InvoiceController {
             );
         }
     }
+
+    @GetMapping("/by-customer/{customerId}/sort-by-invoiceno")
+    public ResponseEntity<List<Invoice>> getByCustomerIdOrderByInvoiceNoAsc(@PathVariable Long customerId) {
+        List<Invoice> invoices = invoiceService.getByCustomerIdOrderByInvoiceNoAsc(customerId);
+        return new ResponseEntity<>(invoices, HttpStatus.OK);
+    }
 }

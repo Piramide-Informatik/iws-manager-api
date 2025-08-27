@@ -496,4 +496,10 @@ public class InvoiceServiceImpl implements InvoiceService {
     public List<Invoice> getByNoteContainingIgnoreCase(String note) {
         return invoiceRepository.findByNoteContainingIgnoreCase(note);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Invoice> getByCustomerIdOrderByInvoiceNoAsc(Long customerId) {
+        return invoiceRepository.findByCustomerIdOrderByInvoiceNoAsc(customerId);
+    }
 }
