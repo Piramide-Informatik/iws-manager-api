@@ -1,5 +1,6 @@
 package com.iws_manager.iws_manager_api.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.iws_manager.iws_manager_api.models.base.BaseEntity;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
@@ -25,6 +26,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="systemfunction")
 @AttributeOverride(name = "id", column = @Column(name = "functionid"))
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class SystemFunction extends BaseEntity {
     @Column(name = "function", nullable = false)
     private String functionName;
