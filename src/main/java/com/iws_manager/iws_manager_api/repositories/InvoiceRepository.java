@@ -94,4 +94,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     List<Invoice> findByCommentContainingIgnoreCase(String comment);
     List<Invoice> findByInvoiceTitleContainingIgnoreCase(String invoiceTitle);
     List<Invoice> findByNoteContainingIgnoreCase(String note);
+
+    List<Invoice> findByCustomerIdOrderByInvoiceNoAsc(Long customerId);
 }

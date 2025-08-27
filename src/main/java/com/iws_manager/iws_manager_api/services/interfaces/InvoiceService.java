@@ -96,4 +96,7 @@ public interface InvoiceService {
     List<Invoice> getByCommentContainingIgnoreCase(String comment);
     List<Invoice> getByInvoiceTitleContainingIgnoreCase(String invoiceTitle);
     List<Invoice> getByNoteContainingIgnoreCase(String note);
+
+    List<Invoice> getByCustomerIdOrderByInvoiceNoAsc(Long customerId);
+
 }
