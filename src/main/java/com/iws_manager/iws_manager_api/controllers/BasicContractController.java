@@ -160,4 +160,15 @@ public class BasicContractController {
         return new ResponseEntity<>(contracts, HttpStatus.OK);
     }
 
+    // other Functions
+    @GetMapping("/next-contractno")
+    public ResponseEntity<Integer> getNextContractNo() {
+        try {
+            Integer nextContractNo = basicContractService.getNextContractNo();
+            return ResponseEntity.ok(nextContractNo);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
 }

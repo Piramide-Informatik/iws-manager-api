@@ -340,4 +340,13 @@ public class OrderServiceImpl implements OrderService {
         }
         return orderRepository.findByCustomerIdOrderByOrderLabelAsc(customerId);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Order> getByCustomerIdOrderByOrderNoAsc(Long customerId) {
+        if (customerId == null) {
+            throw new IllegalArgumentException("Customer ID cannot be null");
+        }
+        return orderRepository.findByCustomerIdOrderByOrderNoAsc(customerId);
+    }
 }
