@@ -70,4 +70,9 @@ public class SystemFunctionServiceImpl implements SystemFunctionService {
         }
         systemFunctionRepository.deleteById(id);
     }
+
+    @Override
+    public List<SystemFunction> getFunctionsByModuleId(Long moduleId) {
+        return systemFunctionRepository.findByModuleId(moduleId);
+    }
 }

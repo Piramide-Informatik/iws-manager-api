@@ -11,4 +11,5 @@ public interface SystemFunctionService {
     List<SystemFunction> findAll();
     SystemFunction update(Long id, SystemFunction systemFunctionDetails);
     void delete(Long id);
+    List<SystemFunction> getFunctionsByModuleId(Long moduleId);
 }

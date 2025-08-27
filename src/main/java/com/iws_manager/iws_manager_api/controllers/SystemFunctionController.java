@@ -73,4 +73,13 @@ public class SystemFunctionController {
         systemFunctionService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/module/{moduleId}")
+    public ResponseEntity<List<SystemFunction>> getFunctionsByModule(@PathVariable Long moduleId) {
+        List<SystemFunction> functions = systemFunctionService.getFunctionsByModuleId(moduleId);
+        if (functions.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(functions, HttpStatus.OK);
+    }
 }
