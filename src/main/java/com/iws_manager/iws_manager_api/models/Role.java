@@ -1,6 +1,7 @@
 package com.iws_manager.iws_manager_api.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.iws_manager.iws_manager_api.models.base.BaseEntity;
 import jakarta.persistence.AttributeOverride;
@@ -32,6 +33,7 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="role")
 @AttributeOverride(name = "id", column = @Column(name = "roleid"))
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Role extends BaseEntity {
 
     @Column(name = "role", length = 255)
