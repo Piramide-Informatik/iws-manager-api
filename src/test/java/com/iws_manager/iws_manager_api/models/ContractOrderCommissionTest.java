@@ -110,7 +110,7 @@ class ContractOrderCommissionTest {
         
         // Assert
         assertEquals(COMMISSION, commission.getCommission());
-        assertNull(commission.getContract());
+        assertNull(commission.getEmploymentContract());
         assertEquals(FROM_ORDER_VALUE, commission.getFromOrderValue());
         assertEquals(MIN_COMMISSION, commission.getMinCommission());
     }
