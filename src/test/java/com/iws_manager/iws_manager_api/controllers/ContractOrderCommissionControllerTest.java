@@ -46,6 +46,8 @@ public class ContractOrderCommissionControllerTest {
     private static final BigDecimal FROM_ORDER_VALUE_2000 = new BigDecimal("2000.00");
     private static final BigDecimal MIN_COMMISSION_50 = new BigDecimal("50.00");
     private static final BigDecimal MIN_COMMISSION_75 = new BigDecimal("75.00");
+    private static final String SCOMMISSION_10_50 = "10.50";
+    private static final String SCOMMISSION_15_75 = "15.75";
     private static final String JSON_COMMISSION_PATH = "$.commission";
     private static final String JSON_FROM_ORDER_VALUE_PATH = "$.fromOrderValue";
     private static final String JSON_MIN_COMMISSION_PATH = "$.minCommission";
@@ -253,8 +255,8 @@ public class ContractOrderCommissionControllerTest {
             .willReturn(Collections.singletonList(commission1));
 
         mockMvc.perform(get(BASE_URI + BY_COMMISSION_BETWEEN_PATH)
-                .param("minCommission", "10.50")
-                .param("maxCommission", "15.75"))
+                .param("minCommission", SCOMMISSION_10_50)
+                .param("maxCommission", SCOMMISSION_15_75))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(COMMISSION_ID_1))
                 .andExpect(jsonPath("$[0].commission").value(10.50));
@@ -266,8 +268,8 @@ public class ContractOrderCommissionControllerTest {
             .willThrow(new IllegalArgumentException(ERROR_MESSAGE_RANGE));
 
         mockMvc.perform(get(BASE_URI + BY_COMMISSION_BETWEEN_PATH)
-                .param("minCommission", "15.75")
-                .param("maxCommission", "10.50"))
+                .param("minCommission", SCOMMISSION_15_75)
+                .param("maxCommission", SCOMMISSION_10_50))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(JSON_ERROR_PATH).exists())
                 .andExpect(jsonPath(JSON_MESSAGE_PATH).value(ERROR_MESSAGE_RANGE));
@@ -348,8 +350,8 @@ public class ContractOrderCommissionControllerTest {
             .willReturn(Collections.singletonList(commission1));
 
         mockMvc.perform(get(BASE_URI + "/by-employment-contract/10/commission-between")
-                .param("minCommission", "10.50")
-                .param("maxCommission", "15.75"))
+                .param("minCommission", SCOMMISSION_10_50)
+                .param("maxCommission", SCOMMISSION_15_75))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(COMMISSION_ID_1))
                 .andExpect(jsonPath("$[0].commission").value(10.50));

@@ -31,6 +31,10 @@ public class ContractOrderCommissionController {
     
     private final ContractOrderCommissionService contractOrderCommissionService;
 
+    private static final String ERROR_MESSAGE = "Invalid parameters";
+    private static final String ERROR_TITLE = "error";
+    private static final String MESSAGE_TITLE = "message";
+
     @Autowired
     public ContractOrderCommissionController(ContractOrderCommissionService contractOrderCommissionService) {
         this.contractOrderCommissionService = contractOrderCommissionService;
@@ -234,8 +238,8 @@ public class ContractOrderCommissionController {
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(
                 Map.of(
-                    "error", "Invalid parameters",
-                    "message", ex.getMessage()
+                    ERROR_TITLE, ERROR_MESSAGE,
+                    MESSAGE_TITLE, ex.getMessage()
                 )
             );
         }
@@ -253,8 +257,8 @@ public class ContractOrderCommissionController {
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(
                 Map.of(
-                    "error", "Invalid parameters",
-                    "message", ex.getMessage()
+                    ERROR_TITLE, ERROR_MESSAGE,
+                    MESSAGE_TITLE, ex.getMessage()
                 )
             );
         }
@@ -272,8 +276,8 @@ public class ContractOrderCommissionController {
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(
                 Map.of(
-                    "error", "Invalid parameters",
-                    "message", ex.getMessage()
+                    ERROR_TITLE, ERROR_MESSAGE,
+                    MESSAGE_TITLE, ex.getMessage()
                 )
             );
         }
@@ -294,8 +298,8 @@ public class ContractOrderCommissionController {
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(
                 Map.of(
-                    "error", "Invalid parameters",
-                    "message", ex.getMessage()
+                    ERROR_TITLE, ERROR_MESSAGE,
+                    MESSAGE_TITLE, ex.getMessage()
                 )
             );
         }
@@ -314,8 +318,8 @@ public class ContractOrderCommissionController {
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(
                 Map.of(
-                    "error", "Invalid parameters",
-                    "message", ex.getMessage()
+                    ERROR_TITLE, ERROR_MESSAGE,
+                    MESSAGE_TITLE, ex.getMessage()
                 )
             );
         }
@@ -334,8 +338,8 @@ public class ContractOrderCommissionController {
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(
                 Map.of(
-                    "error", "Invalid parameters",
-                    "message", ex.getMessage()
+                    ERROR_TITLE, ERROR_MESSAGE,
+                    MESSAGE_TITLE, ex.getMessage()
                 )
             );
         }
