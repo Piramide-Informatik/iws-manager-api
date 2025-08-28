@@ -80,9 +80,8 @@ class ContractOrderCommissionServiceImplTest {
 
     @Test
     void testCreateNullCommissionThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            contractOrderCommissionService.create(null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> 
+            contractOrderCommissionService.create(null));
     }
 
     @Test
@@ -97,9 +96,8 @@ class ContractOrderCommissionServiceImplTest {
 
     @Test
     void testFindByIdNullIdThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            contractOrderCommissionService.findById(null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> 
+            contractOrderCommissionService.findById(null));
     }
 
     @Test
@@ -141,25 +139,22 @@ class ContractOrderCommissionServiceImplTest {
 
     @Test
     void testUpdateNullIdThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            contractOrderCommissionService.update(null, commission);
-        });
+        assertThrows(IllegalArgumentException.class, () -> 
+            contractOrderCommissionService.update(null, commission));
     }
 
     @Test
     void testUpdateNullDetailsThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            contractOrderCommissionService.update(CONTRACT_ID_1, null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> 
+            contractOrderCommissionService.update(CONTRACT_ID_1, null));
     }
 
     @Test
     void testUpdateNotFound() {
         when(contractOrderCommissionRepository.findById(CONTRACT_ID_999)).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> {
-            contractOrderCommissionService.update(CONTRACT_ID_999, commission);
-        });
+        assertThrows(RuntimeException.class, () -> 
+            contractOrderCommissionService.update(CONTRACT_ID_999, commission));
     }
 
     @Test
@@ -173,9 +168,8 @@ class ContractOrderCommissionServiceImplTest {
 
     @Test
     void testDeleteNullIdThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            contractOrderCommissionService.delete(null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> 
+            contractOrderCommissionService.delete(null));
     }
 
     // Property-based tests
@@ -192,9 +186,8 @@ class ContractOrderCommissionServiceImplTest {
 
     @Test
     void testGetByCommissionNullValueThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            contractOrderCommissionService.getByCommission(null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> 
+            contractOrderCommissionService.getByCommission(null));
     }
 
     @Test
@@ -210,9 +203,8 @@ class ContractOrderCommissionServiceImplTest {
 
     @Test
     void testGetByFromOrderValueNullValueThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            contractOrderCommissionService.getByFromOrderValue(null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> 
+            contractOrderCommissionService.getByFromOrderValue(null));
     }
 
     @Test
@@ -228,9 +220,8 @@ class ContractOrderCommissionServiceImplTest {
 
     @Test
     void testGetByMinCommissionNullValueThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            contractOrderCommissionService.getByMinCommission(null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> 
+            contractOrderCommissionService.getByMinCommission(null));
     }
 
     @Test
@@ -246,9 +237,8 @@ class ContractOrderCommissionServiceImplTest {
 
     @Test
     void testGetByEmploymentContractIdNullValueThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            contractOrderCommissionService.getByEmploymentContractId(null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> 
+            contractOrderCommissionService.getByEmploymentContractId(null));
     }
 
     // Greater than or equal tests
@@ -327,13 +317,11 @@ class ContractOrderCommissionServiceImplTest {
 
     @Test
     void testGetByEmploymentContractIdAndCommissionGreaterThanEqualNullValuesThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            contractOrderCommissionService.getByEmploymentContractIdAndCommissionGreaterThanEqual(null, VALUE_10_00);
-        });
+        assertThrows(IllegalArgumentException.class, () -> 
+            contractOrderCommissionService.getByEmploymentContractIdAndCommissionGreaterThanEqual(null, VALUE_10_00));
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            contractOrderCommissionService.getByEmploymentContractIdAndCommissionGreaterThanEqual(CONTRACT_ID_1, null);
-        });
+        assertThrows(IllegalArgumentException.class, () -> 
+            contractOrderCommissionService.getByEmploymentContractIdAndCommissionGreaterThanEqual(CONTRACT_ID_1, null));
     }
 
     @Test
@@ -411,9 +399,8 @@ class ContractOrderCommissionServiceImplTest {
 
     @Test
     void testGetByCommissionBetweenInvalidRangeThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            contractOrderCommissionService.getByCommissionBetween(VALUE_15_00, VALUE_5_00);
-        });
+        assertThrows(IllegalArgumentException.class, () -> 
+            contractOrderCommissionService.getByCommissionBetween(VALUE_15_00, VALUE_5_00));
     }
 
     @Test
@@ -479,15 +466,13 @@ class ContractOrderCommissionServiceImplTest {
 
     @Test
     void testGetByEmploymentContractIdAndCommissionBetweenNullValuesThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            contractOrderCommissionService.getByEmploymentContractIdAndCommissionBetween(null, VALUE_5_00, VALUE_15_00);
-        });
+        assertThrows(IllegalArgumentException.class, () -> 
+            contractOrderCommissionService.getByEmploymentContractIdAndCommissionBetween(null, VALUE_5_00, VALUE_15_00));
     }
 
     @Test
     void testGetByEmploymentContractIdAndCommissionBetweenInvalidRangeThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            contractOrderCommissionService.getByEmploymentContractIdAndCommissionBetween(CONTRACT_ID_1, VALUE_15_00, VALUE_5_00);
-        });
+        assertThrows(IllegalArgumentException.class, () -> 
+            contractOrderCommissionService.getByEmploymentContractIdAndCommissionBetween(CONTRACT_ID_1, VALUE_15_00, VALUE_5_00));
     }
 }
