@@ -48,9 +48,13 @@ public class ContractOrderCommissionControllerTest {
     private static final BigDecimal MIN_COMMISSION_75 = new BigDecimal("75.00");
     private static final String SCOMMISSION_10_50 = "10.50";
     private static final String SCOMMISSION_15_75 = "15.75";
+    private static final String MAX_COMM = "maxCommission";
+    private static final String MIN_COMM = "minCommission";
     private static final String JSON_COMMISSION_PATH = "$.commission";
     private static final String JSON_FROM_ORDER_VALUE_PATH = "$.fromOrderValue";
     private static final String JSON_MIN_COMMISSION_PATH = "$.minCommission";
+    private static final String JSON_COMMISSION_PATH_0 = "$[0].commission";
+    private static final String JSON_ID_PATH_0 = "$[0].id";
     private static final String JSON_ID_PATH = "$.id";
     private static final String JSON_ERROR_PATH = "$.error";
     private static final String JSON_MESSAGE_PATH = "$.message";
@@ -74,13 +78,12 @@ public class ContractOrderCommissionControllerTest {
 
     private ContractOrderCommission commission1;
     private ContractOrderCommission commission2;
-    private EmploymentContract employmentContract;
+    private EmploymentContract employmentContract = new EmploymentContract();
 
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(contractOrderCommissionController).build();
 
-        employmentContract = new EmploymentContract();
         employmentContract.setId(EMPLOYMENT_CONTRACT_ID_1);
 
         commission1 = new ContractOrderCommission();
@@ -143,8 +146,8 @@ public class ContractOrderCommissionControllerTest {
 
         mockMvc.perform(get(BASE_URI))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(COMMISSION_ID_1))
-                .andExpect(jsonPath("$[0].commission").value(10.50))
+                .andExpect(jsonPath(JSON_ID_PATH_0).value(COMMISSION_ID_1))
+                .andExpect(jsonPath(JSON_COMMISSION_PATH_0).value(10.50))
                 .andExpect(jsonPath("$[1].id").value(COMMISSION_ID_2))
                 .andExpect(jsonPath("$[1].commission").value(15.75));
     }
@@ -190,8 +193,8 @@ public class ContractOrderCommissionControllerTest {
 
         mockMvc.perform(get(BASE_URI + "/by-commission/10.50"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(COMMISSION_ID_1))
-                .andExpect(jsonPath("$[0].commission").value(10.50));
+                .andExpect(jsonPath(JSON_ID_PATH_0).value(COMMISSION_ID_1))
+                .andExpect(jsonPath(JSON_COMMISSION_PATH_0).value(10.50));
     }
 
     @Test
@@ -201,7 +204,7 @@ public class ContractOrderCommissionControllerTest {
 
         mockMvc.perform(get(BASE_URI + "/by-from-order-value/1000.00"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(COMMISSION_ID_1))
+                .andExpect(jsonPath(JSON_ID_PATH_0).value(COMMISSION_ID_1))
                 .andExpect(jsonPath("$[0].fromOrderValue").value(1000.00));
     }
 
@@ -212,7 +215,7 @@ public class ContractOrderCommissionControllerTest {
 
         mockMvc.perform(get(BASE_URI + "/by-min-commission/50.00"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(COMMISSION_ID_1))
+                .andExpect(jsonPath(JSON_ID_PATH_0).value(COMMISSION_ID_1))
                 .andExpect(jsonPath("$[0].minCommission").value(50.00));
     }
 
@@ -223,7 +226,7 @@ public class ContractOrderCommissionControllerTest {
 
         mockMvc.perform(get(BASE_URI + "/by-employment-contract/10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(COMMISSION_ID_1))
+                .andExpect(jsonPath(JSON_ID_PATH_0).value(COMMISSION_ID_1))
                 .andExpect(jsonPath("$[0].employmentContract.id").value(10));
     }
 
@@ -234,8 +237,8 @@ public class ContractOrderCommissionControllerTest {
 
         mockMvc.perform(get(BASE_URI + "/by-commission-greater-than/10.50"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(COMMISSION_ID_1))
-                .andExpect(jsonPath("$[0].commission").value(10.50));
+                .andExpect(jsonPath(JSON_ID_PATH_0).value(COMMISSION_ID_1))
+                .andExpect(jsonPath(JSON_COMMISSION_PATH_0).value(10.50));
     }
 
     @Test
@@ -245,8 +248,8 @@ public class ContractOrderCommissionControllerTest {
 
         mockMvc.perform(get(BASE_URI + "/by-commission-less-than/15.75"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(COMMISSION_ID_1))
-                .andExpect(jsonPath("$[0].commission").value(10.50));
+                .andExpect(jsonPath(JSON_ID_PATH_0).value(COMMISSION_ID_1))
+                .andExpect(jsonPath(JSON_COMMISSION_PATH_0).value(10.50));
     }
 
     @Test
@@ -255,11 +258,11 @@ public class ContractOrderCommissionControllerTest {
             .willReturn(Collections.singletonList(commission1));
 
         mockMvc.perform(get(BASE_URI + BY_COMMISSION_BETWEEN_PATH)
-                .param("minCommission", SCOMMISSION_10_50)
-                .param("maxCommission", SCOMMISSION_15_75))
+                .param(MIN_COMM, SCOMMISSION_10_50)
+                .param(MAX_COMM, SCOMMISSION_15_75))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(COMMISSION_ID_1))
-                .andExpect(jsonPath("$[0].commission").value(10.50));
+                .andExpect(jsonPath(JSON_ID_PATH_0).value(COMMISSION_ID_1))
+                .andExpect(jsonPath(JSON_COMMISSION_PATH_0).value(10.50));
     }
 
     @Test
@@ -268,8 +271,8 @@ public class ContractOrderCommissionControllerTest {
             .willThrow(new IllegalArgumentException(ERROR_MESSAGE_RANGE));
 
         mockMvc.perform(get(BASE_URI + BY_COMMISSION_BETWEEN_PATH)
-                .param("minCommission", SCOMMISSION_15_75)
-                .param("maxCommission", SCOMMISSION_10_50))
+                .param(MIN_COMM, SCOMMISSION_15_75)
+                .param(MAX_COMM, SCOMMISSION_10_50))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(JSON_ERROR_PATH).exists())
                 .andExpect(jsonPath(JSON_MESSAGE_PATH).value(ERROR_MESSAGE_RANGE));
@@ -284,7 +287,7 @@ public class ContractOrderCommissionControllerTest {
                 .param("minFromOrderValue", "1000.00")
                 .param("maxFromOrderValue", "2000.00"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(COMMISSION_ID_1))
+                .andExpect(jsonPath(JSON_ID_PATH_0).value(COMMISSION_ID_1))
                 .andExpect(jsonPath("$[0].fromOrderValue").value(1000.00));
     }
 
@@ -297,7 +300,7 @@ public class ContractOrderCommissionControllerTest {
                 .param("minMinCommission", "50.00")
                 .param("maxMinCommission", "75.00"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(COMMISSION_ID_1))
+                .andExpect(jsonPath(JSON_ID_PATH_0).value(COMMISSION_ID_1))
                 .andExpect(jsonPath("$[0].minCommission").value(50.00));
     }
 
@@ -308,8 +311,8 @@ public class ContractOrderCommissionControllerTest {
 
         mockMvc.perform(get(BASE_URI + "/by-employment-contract/10/commission-greater-than/10.50"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(COMMISSION_ID_1))
-                .andExpect(jsonPath("$[0].commission").value(10.50));
+                .andExpect(jsonPath(JSON_ID_PATH_0).value(COMMISSION_ID_1))
+                .andExpect(jsonPath(JSON_COMMISSION_PATH_0).value(10.50));
     }
 
     @Test
@@ -319,8 +322,8 @@ public class ContractOrderCommissionControllerTest {
 
         mockMvc.perform(get(BASE_URI + "/by-employment-contract/10/commission-less-than/15.75"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(COMMISSION_ID_1))
-                .andExpect(jsonPath("$[0].commission").value(10.50));
+                .andExpect(jsonPath(JSON_ID_PATH_0).value(COMMISSION_ID_1))
+                .andExpect(jsonPath(JSON_COMMISSION_PATH_0).value(10.50));
     }
 
     @Test
@@ -350,10 +353,10 @@ public class ContractOrderCommissionControllerTest {
             .willReturn(Collections.singletonList(commission1));
 
         mockMvc.perform(get(BASE_URI + "/by-employment-contract/10/commission-between")
-                .param("minCommission", SCOMMISSION_10_50)
-                .param("maxCommission", SCOMMISSION_15_75))
+                .param(MIN_COMM, SCOMMISSION_10_50)
+                .param(MAX_COMM, SCOMMISSION_15_75))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(COMMISSION_ID_1))
-                .andExpect(jsonPath("$[0].commission").value(10.50));
+                .andExpect(jsonPath(JSON_ID_PATH_0).value(COMMISSION_ID_1))
+                .andExpect(jsonPath(JSON_COMMISSION_PATH_0).value(10.50));
     }
 }
