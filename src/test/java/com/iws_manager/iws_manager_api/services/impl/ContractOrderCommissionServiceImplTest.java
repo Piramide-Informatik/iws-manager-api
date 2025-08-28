@@ -52,11 +52,10 @@ class ContractOrderCommissionServiceImplTest {
     private static final Long CONTRACT_ID_999 = 999L;
 
     private ContractOrderCommission commission;
-    private EmploymentContract employmentContract;
+    private EmploymentContract employmentContract = new EmploymentContract();
 
     @BeforeEach
     void setUp() {
-        employmentContract = new EmploymentContract();
         employmentContract.setId(CONTRACT_ID_1);
 
         commission = new ContractOrderCommission();
