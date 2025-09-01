@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.iws_manager.iws_manager_api.models.Subcontract;
+import com.iws_manager.iws_manager_api.models.SubcontractProject;
 
 public interface SubcontractService {
 
@@ -16,4 +17,8 @@ public interface SubcontractService {
     List<Subcontract> findByContractorId(Long contractorId);
     List<Subcontract> findByCustomerId(Long customerId);
     List<Subcontract> findByProjectCostCenterId(Long projectCostCenterId);
+
+    //calculation of amount
+    List<SubcontractProject> recalculateSubcontractProjects(Long subcontractId);
+    Subcontract updateAndRecalculate(Long id, Subcontract changes);
 }

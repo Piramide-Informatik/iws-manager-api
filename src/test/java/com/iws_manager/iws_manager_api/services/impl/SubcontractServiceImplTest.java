@@ -1,7 +1,9 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.models.Subcontract;
+import com.iws_manager.iws_manager_api.models.SubcontractProject;
 import com.iws_manager.iws_manager_api.repositories.SubcontractRepository;
+import com.iws_manager.iws_manager_api.repositories.SubcontractProjectRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
@@ -16,9 +18,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class SubcontractServiceImplTest {
+    private static final String AMOUNT_250 = "250.00";
 
     @Mock
     private SubcontractRepository subcontractRepository;
+
+    @Mock
+    private SubcontractProjectRepository subcontractProjectRepository;
 
     @InjectMocks
     private SubcontractServiceImpl subcontractService;
@@ -139,4 +145,73 @@ class SubcontractServiceImplTest {
         List<Subcontract> result = subcontractService.findByProjectCostCenterId(1L);
         assertEquals(expected, result);
     }
+
+    @Test
+    void testRecalculateWhenNetOrGrossTrue() {
+        sampleSubcontract.setNetOrGross(true);
+        sampleSubcontract.setInvoiceGross(new BigDecimal("500.00")); // init value
+
+        SubcontractProject project1 = new SubcontractProject();
+        project1.setId(101L);
+        project1.setShare(new BigDecimal("0.5"));
+        project1.setAmount(new BigDecimal(AMOUNT_250));
+
+        SubcontractProject project2 = new SubcontractProject();
+        project2.setId(102L);
+        project2.setShare(new BigDecimal("0.5"));
+        project2.setAmount(new BigDecimal(AMOUNT_250));
+
+        List<SubcontractProject> projects = Arrays.asList(project1, project2);
+
+        when(subcontractRepository.findById(1L)).thenReturn(Optional.of(sampleSubcontract));
+        when(subcontractProjectRepository.findBySubcontractId(1L)).thenReturn(projects);
+
+        subcontractService.recalculateSubcontractProjects(1L);
+
+        // invoiceGross should be 0
+        assertEquals(BigDecimal.ZERO, sampleSubcontract.getInvoiceGross());
+
+        // All amounts should be 0
+        assertEquals(BigDecimal.ZERO, project1.getAmount());
+        assertEquals(BigDecimal.ZERO, project2.getAmount());
+
+        verify(subcontractRepository).save(sampleSubcontract);
+        verify(subcontractProjectRepository).saveAll(projects);
+    }
+
+    @Test
+    void testRecalculateWhenNetOrGrossFalse() {
+        sampleSubcontract.setNetOrGross(false);
+        sampleSubcontract.setInvoiceGross(new BigDecimal("1000.00"));
+
+        SubcontractProject project1 = new SubcontractProject();
+        project1.setId(101L);
+        project1.setShare(new BigDecimal("0.25"));
+
+        SubcontractProject project2 = new SubcontractProject();
+        project2.setId(102L);
+        project2.setShare(new BigDecimal("0.75"));
+
+        List<SubcontractProject> projects = Arrays.asList(project1, project2);
+
+        when(subcontractRepository.findById(1L)).thenReturn(Optional.of(sampleSubcontract));
+        when(subcontractProjectRepository.findBySubcontractId(1L)).thenReturn(projects);
+
+        subcontractService.recalculateSubcontractProjects(1L);
+
+        // amount debe ser invoiceGross * share
+        assertEquals(0, project1.getAmount().compareTo(new BigDecimal(AMOUNT_250)));
+        assertEquals(0, project2.getAmount().compareTo(new BigDecimal("750.00")));
+
+        verify(subcontractRepository).save(sampleSubcontract);
+        verify(subcontractProjectRepository).saveAll(projects);
+    }
+
+    @Test
+    void testRecalculateSubcontractNotFoundThrowsException() {
+        when(subcontractRepository.findById(1L)).thenReturn(Optional.empty());
+        assertThrows(RuntimeException.class, () -> subcontractService.recalculateSubcontractProjects(1L));
+        verify(subcontractProjectRepository, never()).findBySubcontractId(anyLong());
+    }
+
 }

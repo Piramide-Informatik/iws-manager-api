@@ -71,8 +71,4 @@ public class Subcontract extends BaseEntity{
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "projectcostcenterid", referencedColumnName = "projectcostcenterid")
     private ProjectCostCenter projectCostCenter;
-
-    // @OneToMany(mappedBy = "subcontract", cascade = CascadeType.ALL)
-    // @ToString.Exclude
-    // private List<SubcontractProject> subcontractProjects = new ArrayList<>();
 }

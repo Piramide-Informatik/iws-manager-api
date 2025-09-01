@@ -1,5 +1,6 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.iws_manager.iws_manager_api.models.Subcontract;
+import com.iws_manager.iws_manager_api.models.SubcontractProject;
 import com.iws_manager.iws_manager_api.repositories.SubcontractRepository;
+import com.iws_manager.iws_manager_api.repositories.SubcontractProjectRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.SubcontractService;
 
 /**
@@ -23,6 +26,7 @@ import com.iws_manager.iws_manager_api.services.interfaces.SubcontractService;
 public class SubcontractServiceImpl implements SubcontractService {
 
     private final SubcontractRepository subcontractRepository;
+    private final SubcontractProjectRepository subcontractProjectRepository;
     
     /**
      * Constructs a new SubcontractService with the required repository dependency.
@@ -30,8 +34,9 @@ public class SubcontractServiceImpl implements SubcontractService {
      * @param subcontractRepository the repository for Subcontract entity operations
      */
     @Autowired
-    public SubcontractServiceImpl(SubcontractRepository subcontractRepository) {
+    public SubcontractServiceImpl(SubcontractRepository subcontractRepository, SubcontractProjectRepository subcontractProjectRepository) {
         this.subcontractRepository = subcontractRepository;
+        this.subcontractProjectRepository = subcontractProjectRepository;
     }
 
 
@@ -143,4 +148,52 @@ public class SubcontractServiceImpl implements SubcontractService {
     public List<Subcontract> findByProjectCostCenterId(Long projectCostCenterId) {
         return subcontractRepository.findByProjectCostCenterId(projectCostCenterId);
     }
+
+    @Override
+    public Subcontract updateAndRecalculate(Long id, Subcontract changes) {
+        if (id == null || changes == null) {
+            throw new IllegalArgumentException("ID and changes cannot be null");
+        }
+
+        // 🔹 Reutilizamos update(...) que ya hace applyChanges + save
+        Subcontract saved = update(id, changes);
+
+        // 🔹 Luego recalculemos con el estado guardado en BD
+        recalculateSubcontractProjects(saved.getId());
+
+        // 🔹 Retornamos el Subcontract recalculado (opcional: recargar de BD)
+        return saved;
+    }
+
+    @Override
+    public List<SubcontractProject> recalculateSubcontractProjects(Long subcontractId) {
+        Subcontract subcontract = subcontractRepository.findById(subcontractId)
+                .orElseThrow(() -> new RuntimeException("Subcontract not found with id: " + subcontractId));
+
+        List<SubcontractProject> projects = subcontractProjectRepository.findBySubcontractId(subcontractId);
+
+        if (Boolean.TRUE.equals(subcontract.getNetOrGross())) {
+            // Case: netOrGross = true → invoiceNet se mantiene, invoiceGross = 0 y projects.amount = 0
+            subcontract.setInvoiceGross(BigDecimal.ZERO);
+
+            for (SubcontractProject project : projects) {
+                project.setAmount(BigDecimal.ZERO);
+            }
+        } else {
+            // Case: netOrGross = false → recalculate with invoiceGross * share
+            BigDecimal invoiceGross = subcontract.getInvoiceGross() != null
+                    ? subcontract.getInvoiceGross()
+                    : BigDecimal.ZERO;
+
+            for (SubcontractProject project : projects) {
+                BigDecimal share = project.getShare() != null ? project.getShare() : BigDecimal.ZERO;
+                project.setAmount(invoiceGross.multiply(share));
+            }
+        }
+
+        subcontractRepository.save(subcontract);
+        subcontractProjectRepository.saveAll(projects);
+
+        return projects;
+    }   
 }
