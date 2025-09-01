@@ -100,8 +100,8 @@ public class SubcontractController {
     }
 
     @GetMapping("/{id}/recalculate-subcontractproject")
-    public ResponseEntity<List<SubcontractProject>> recalculateSubcontractProjects(@PathVariable Long subcontractId) {
-        List<SubcontractProject> projects = subcontractService.recalculateSubcontractProjects(subcontractId);
+    public ResponseEntity<List<SubcontractProject>> recalculateSubcontractProjects(@PathVariable Long id) {
+        List<SubcontractProject> projects = subcontractService.recalculateSubcontractProjects(id);
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 }
