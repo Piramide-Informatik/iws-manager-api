@@ -75,13 +75,13 @@ class FundingProgramServiceImplTest {
      * Test retrieval of all FundingProgram entities.
      */
     @Test
-    @DisplayName("Should find all funding programs")
+    @DisplayName("Should find all funding programs ordered by name")
     void testFindAll() {
         // Arrange
         FundingProgram fp2 = new FundingProgram();
         fp2.setId(2L);
         fp2.setName(FUNDING_PROGRAM_NAME);
-        when(fundingProgramRepository.findAll()).thenReturn(Arrays.asList(sampleFundingProgram, fp2));
+        when(fundingProgramRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(sampleFundingProgram, fp2));
         // Act
         List<FundingProgram> result = fundingProgramService.findAll();
         // Assert
