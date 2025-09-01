@@ -13,4 +13,7 @@ public interface SubcontractYearRepository extends JpaRepository<SubcontractYear
     List<SubcontractYear> findByMonths(Integer months);
     List<SubcontractYear> findBySubcontractId(Long subcontractId);
     List<SubcontractYear> findByYear(LocalDate year);
+
+    List<SubcontractYear> findBySubcontractIdOrderByYearAsc(Long subcontractId);
+
 }
