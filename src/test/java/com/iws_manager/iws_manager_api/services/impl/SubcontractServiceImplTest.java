@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class SubcontractServiceImplTest {
+    private static final String AMOUNT_250 = "250.00";
 
     @Mock
     private SubcontractRepository subcontractRepository;
@@ -153,12 +154,12 @@ class SubcontractServiceImplTest {
         SubcontractProject project1 = new SubcontractProject();
         project1.setId(101L);
         project1.setShare(new BigDecimal("0.5"));
-        project1.setAmount(new BigDecimal("250.00"));
+        project1.setAmount(new BigDecimal(AMOUNT_250));
 
         SubcontractProject project2 = new SubcontractProject();
         project2.setId(102L);
         project2.setShare(new BigDecimal("0.5"));
-        project2.setAmount(new BigDecimal("250.00"));
+        project2.setAmount(new BigDecimal(AMOUNT_250));
 
         List<SubcontractProject> projects = Arrays.asList(project1, project2);
 
@@ -199,7 +200,7 @@ class SubcontractServiceImplTest {
         subcontractService.recalculateSubcontractProjects(1L);
 
         // amount debe ser invoiceGross * share
-        assertEquals(0, project1.getAmount().compareTo(new BigDecimal("250.00")));
+        assertEquals(0, project1.getAmount().compareTo(new BigDecimal(AMOUNT_250)));
         assertEquals(0, project2.getAmount().compareTo(new BigDecimal("750.00")));
 
         verify(subcontractRepository).save(sampleSubcontract);
@@ -207,7 +208,7 @@ class SubcontractServiceImplTest {
     }
 
     @Test
-    void testRecalculateSubcontractNotFoundThrows_Exception() {
+    void testRecalculateSubcontractNotFoundThrowsException() {
         when(subcontractRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(RuntimeException.class, () -> subcontractService.recalculateSubcontractProjects(1L));
         verify(subcontractProjectRepository, never()).findBySubcontractId(anyLong());
