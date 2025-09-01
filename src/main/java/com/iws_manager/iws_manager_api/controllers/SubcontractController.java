@@ -2,6 +2,7 @@ package com.iws_manager.iws_manager_api.controllers;
 
 import com.iws_manager.iws_manager_api.models.Subcontract;
 import com.iws_manager.iws_manager_api.services.interfaces.SubcontractService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.iws_manager.iws_manager_api.models.SubcontractProject;
 
 @RestController
 @RequestMapping("/api/v1/subcontracts")
@@ -85,5 +88,20 @@ public class SubcontractController {
     public ResponseEntity<List<Subcontract>> getSubcontractsByProjectCostCenterId(@PathVariable Long projectcostcenterId) {
         List<Subcontract> subcontracts = subcontractService.findByProjectCostCenterId(projectcostcenterId);
         return new ResponseEntity<>(subcontracts, HttpStatus.OK);
+    }
+
+   @PutMapping("/{id}/recalculate-subcontractproject")
+    public ResponseEntity<Subcontract> updateAndRecalculate(
+            @PathVariable Long id,
+            @RequestBody Subcontract body
+    ) {
+        Subcontract result = subcontractService.updateAndRecalculate(id, body);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/{id}/recalculate-subcontractproject")
+    public ResponseEntity<List<SubcontractProject>> recalculateSubcontractProjects(@PathVariable Long subcontractId) {
+        List<SubcontractProject> projects = subcontractService.recalculateSubcontractProjects(subcontractId);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 }
