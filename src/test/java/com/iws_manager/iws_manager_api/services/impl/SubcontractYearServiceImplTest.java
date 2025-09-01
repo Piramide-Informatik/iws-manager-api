@@ -211,20 +211,21 @@ public class SubcontractYearServiceImplTest {
         year2022.setId(10L);
         year2022.setYear(LocalDate.of(2022, 1, 1));
 
-        SubcontractYear year2023 = new SubcontractYear();
-        year2023.setId(11L);
-        year2023.setYear(LocalDate.of(2023, 1, 1));
+        SubcontractYear year2025 = new SubcontractYear();
+        year2025.setId(11L);
+        year2025.setYear(LocalDate.of(2025, 1, 1));
 
-        List<SubcontractYear> orderedList = List.of(year2022, year2023);
+        List<SubcontractYear> orderedList = List.of(year2022, testSubcontractYear, year2025);
 
         when(subcontractYearRepository.findBySubcontractIdOrderByYearAsc(SUBCONTRACT_ID))
                 .thenReturn(orderedList);
 
         List<SubcontractYear> result = subcontractYearService.getBySubcontractIdOrderByYearAsc(SUBCONTRACT_ID);
 
-        assertEquals(2, result.size());
+        assertEquals(3, result.size());
         assertEquals(LocalDate.of(2022, 1, 1), result.get(0).getYear());
         assertEquals(LocalDate.of(2023, 1, 1), result.get(1).getYear());
+        assertEquals(LocalDate.of(2025, 1, 1), result.get(2).getYear());
 
         verify(subcontractYearRepository, times(1))
                 .findBySubcontractIdOrderByYearAsc(SUBCONTRACT_ID);
