@@ -150,7 +150,23 @@ public class SubcontractServiceImpl implements SubcontractService {
     }
 
     @Override
-    public void recalculateSubcontractProjects(Long subcontractId) {
+    public Subcontract updateAndRecalculate(Long id, Subcontract changes) {
+        if (id == null || changes == null) {
+            throw new IllegalArgumentException("ID and changes cannot be null");
+        }
+
+        // 🔹 Reutilizamos update(...) que ya hace applyChanges + save
+        Subcontract saved = update(id, changes);
+
+        // 🔹 Luego recalculemos con el estado guardado en BD
+        recalculateSubcontractProjects(saved.getId());
+
+        // 🔹 Retornamos el Subcontract recalculado (opcional: recargar de BD)
+        return saved;
+    }
+
+    @Override
+    public List<SubcontractProject> recalculateSubcontractProjects(Long subcontractId) {
         Subcontract subcontract = subcontractRepository.findById(subcontractId)
                 .orElseThrow(() -> new RuntimeException("Subcontract not found with id: " + subcontractId));
 
@@ -177,5 +193,7 @@ public class SubcontractServiceImpl implements SubcontractService {
 
         subcontractRepository.save(subcontract);
         subcontractProjectRepository.saveAll(projects);
+
+        return projects;
     }   
 }
