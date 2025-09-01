@@ -17,4 +17,6 @@ public interface SubcontractYearService {
     List<SubcontractYear> findByMonths(Integer months);
     List<SubcontractYear> findBySubcontractId(Long subcontractId);
     List<SubcontractYear> findByYear(LocalDate year);
+
+    List<SubcontractYear> getBySubcontractIdOrderByYearAsc(Long subcontractId);
 }

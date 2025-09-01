@@ -206,12 +206,41 @@ public class SubcontractYearServiceImplTest {
     }
 
     @Test
-    public void findByYearShouldWorkWithNullParameter() {
-        when(subcontractYearRepository.findByYear(null)).thenReturn(Collections.emptyList());
+    public void getBySubcontractIdOrderByYearAscShouldReturnOrderedList() {
+        SubcontractYear year2022 = new SubcontractYear();
+        year2022.setId(10L);
+        year2022.setYear(LocalDate.of(2022, 1, 1));
 
-        List<SubcontractYear> result = subcontractYearService.findByYear(null);
+        SubcontractYear year2025 = new SubcontractYear();
+        year2025.setId(11L);
+        year2025.setYear(LocalDate.of(2025, 1, 1));
+
+        List<SubcontractYear> orderedList = List.of(year2022, testSubcontractYear, year2025);
+
+        when(subcontractYearRepository.findBySubcontractIdOrderByYearAsc(SUBCONTRACT_ID))
+                .thenReturn(orderedList);
+
+        List<SubcontractYear> result = subcontractYearService.getBySubcontractIdOrderByYearAsc(SUBCONTRACT_ID);
+
+        assertEquals(3, result.size());
+        assertEquals(LocalDate.of(2022, 1, 1), result.get(0).getYear());
+        assertEquals(LocalDate.of(2023, 1, 1), result.get(1).getYear());
+        assertEquals(LocalDate.of(2025, 1, 1), result.get(2).getYear());
+
+        verify(subcontractYearRepository, times(1))
+                .findBySubcontractIdOrderByYearAsc(SUBCONTRACT_ID);
+    }
+
+    @Test
+    public void getBySubcontractIdOrderByYearAscShouldReturnEmptyListWhenNull() {
+        when(subcontractYearRepository.findBySubcontractIdOrderByYearAsc(null))
+                .thenReturn(Collections.emptyList());
+
+        List<SubcontractYear> result = subcontractYearService.getBySubcontractIdOrderByYearAsc(null);
 
         assertTrue(result.isEmpty());
-        verify(subcontractYearRepository, times(1)).findByYear(null);
+        verify(subcontractYearRepository, times(1))
+                .findBySubcontractIdOrderByYearAsc(null);
     }
+
 }

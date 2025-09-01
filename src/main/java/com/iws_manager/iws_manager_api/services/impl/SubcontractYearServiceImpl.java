@@ -132,4 +132,9 @@ public class SubcontractYearServiceImpl implements SubcontractYearService {
     public List<SubcontractYear> findByYear(LocalDate year) {
         return subcontractYearRepository.findByYear(year);
     }
+
+    @Override
+    public List<SubcontractYear> getBySubcontractIdOrderByYearAsc(Long subcontractId) {
+        return subcontractYearRepository.findBySubcontractIdOrderByYearAsc(subcontractId);
+    }
 }

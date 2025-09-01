@@ -89,4 +89,10 @@ public class SubcontractYearController {
         List<SubcontractYear> subcontractYears = subcontractYearService.findByYear(year);
         return new ResponseEntity<>(subcontractYears, HttpStatus.OK);
     }
+
+    @GetMapping("/subcontract/{subcontractId}/sort-by-year")
+    public ResponseEntity<List<SubcontractYear>> getBySubcontractIdOrderByYearAsc(@PathVariable Long subcontractId) {
+        List<SubcontractYear> subcontractYears = subcontractYearService.getBySubcontractIdOrderByYearAsc(subcontractId);
+        return new ResponseEntity<>(subcontractYears, HttpStatus.OK);
+    }
 }
