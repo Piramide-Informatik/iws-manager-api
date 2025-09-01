@@ -73,7 +73,7 @@ public class FundingProgramServiceImpl implements FundingProgramService {
     @Override
     @Transactional(readOnly = true)
     public List<FundingProgram> findAll() {
-        return fundingProgramRepository.findAll();
+        return fundingProgramRepository.findAllByOrderByNameAsc();
     }
 
     /**
