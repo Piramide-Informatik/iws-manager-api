@@ -2,7 +2,7 @@ package com.iws_manager.iws_manager_api.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iws_manager.iws_manager_api.models.ContractOrderCommission;
-import com.iws_manager.iws_manager_api.models.EmploymentContract;
+import com.iws_manager.iws_manager_api.models.BasicContract;
 import com.iws_manager.iws_manager_api.services.interfaces.ContractOrderCommissionService;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -63,7 +63,7 @@ public class ContractOrderCommissionControllerTest {
     // Test IDs
     private static final Long COMMISSION_ID_1 = 1L;
     private static final Long COMMISSION_ID_2 = 2L;
-    private static final Long EMPLOYMENT_CONTRACT_ID_1 = 10L;
+    private static final Long BASIC_CONTRACT_ID_1 = 10L;
     private static final Long NON_EXISTENT_ID = 999L;
 
     private MockMvc mockMvc;
@@ -78,27 +78,27 @@ public class ContractOrderCommissionControllerTest {
 
     private ContractOrderCommission commission1;
     private ContractOrderCommission commission2;
-    private EmploymentContract employmentContract = new EmploymentContract();
+    private BasicContract basicContract = new BasicContract();
 
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(contractOrderCommissionController).build();
 
-        employmentContract.setId(EMPLOYMENT_CONTRACT_ID_1);
+        basicContract.setId(BASIC_CONTRACT_ID_1);
 
         commission1 = new ContractOrderCommission();
         commission1.setId(COMMISSION_ID_1);
         commission1.setCommission(COMMISSION_10_50);
         commission1.setFromOrderValue(FROM_ORDER_VALUE_1000);
         commission1.setMinCommission(MIN_COMMISSION_50);
-        commission1.setEmploymentContract(employmentContract);
+        commission1.setBasicContract(basicContract);
 
         commission2 = new ContractOrderCommission();
         commission2.setId(COMMISSION_ID_2);
         commission2.setCommission(COMMISSION_15_75);
         commission2.setFromOrderValue(FROM_ORDER_VALUE_2000);
         commission2.setMinCommission(MIN_COMMISSION_75);
-        commission2.setEmploymentContract(employmentContract);
+        commission2.setBasicContract(basicContract);
     }
 
     @Test
@@ -220,14 +220,14 @@ public class ContractOrderCommissionControllerTest {
     }
 
     @Test
-    void getByEmploymentContractIdShouldReturnList() throws Exception {
-        given(contractOrderCommissionService.getByEmploymentContractId(EMPLOYMENT_CONTRACT_ID_1))
+    void getByBasicContractIdShouldReturnList() throws Exception {
+        given(contractOrderCommissionService.getByBasicContractId(BASIC_CONTRACT_ID_1))
             .willReturn(Collections.singletonList(commission1));
 
-        mockMvc.perform(get(BASE_URI + "/by-employment-contract/10"))
+        mockMvc.perform(get(BASE_URI + "/by-basic-contract/10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(JSON_ID_PATH_0).value(COMMISSION_ID_1))
-                .andExpect(jsonPath("$[0].employmentContract.id").value(10));
+                .andExpect(jsonPath("$[0].basicContract.id").value(10));
     }
 
     @Test
@@ -305,22 +305,22 @@ public class ContractOrderCommissionControllerTest {
     }
 
     @Test
-    void getByEmploymentContractIdAndCommissionGreaterThanEqualShouldReturnList() throws Exception {
-        given(contractOrderCommissionService.getByEmploymentContractIdAndCommissionGreaterThanEqual(EMPLOYMENT_CONTRACT_ID_1, COMMISSION_10_50))
+    void getByBasicContractIdAndCommissionGreaterThanEqualShouldReturnList() throws Exception {
+        given(contractOrderCommissionService.getByBasicContractIdAndCommissionGreaterThanEqual(BASIC_CONTRACT_ID_1, COMMISSION_10_50))
             .willReturn(Collections.singletonList(commission1));
 
-        mockMvc.perform(get(BASE_URI + "/by-employment-contract/10/commission-greater-than/10.50"))
+        mockMvc.perform(get(BASE_URI + "/by-basic-contract/10/commission-greater-than/10.50"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(JSON_ID_PATH_0).value(COMMISSION_ID_1))
                 .andExpect(jsonPath(JSON_COMMISSION_PATH_0).value(10.50));
     }
 
     @Test
-    void getByEmploymentContractIdAndCommissionLessThanEqualShouldReturnList() throws Exception {
-        given(contractOrderCommissionService.getByEmploymentContractIdAndCommissionLessThanEqual(EMPLOYMENT_CONTRACT_ID_1, COMMISSION_15_75))
+    void getByBasicContractIdAndCommissionLessThanEqualShouldReturnList() throws Exception {
+        given(contractOrderCommissionService.getByBasicContractIdAndCommissionLessThanEqual(BASIC_CONTRACT_ID_1, COMMISSION_15_75))
             .willReturn(Collections.singletonList(commission1));
 
-        mockMvc.perform(get(BASE_URI + "/by-employment-contract/10/commission-less-than/15.75"))
+        mockMvc.perform(get(BASE_URI + "/by-basic-contract/10/commission-less-than/15.75"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(JSON_ID_PATH_0).value(COMMISSION_ID_1))
                 .andExpect(jsonPath(JSON_COMMISSION_PATH_0).value(10.50));
@@ -348,11 +348,11 @@ public class ContractOrderCommissionControllerTest {
     }
 
     @Test
-    void getByEmploymentContractIdAndCommissionBetweenShouldReturnList() throws Exception {
-        given(contractOrderCommissionService.getByEmploymentContractIdAndCommissionBetween(EMPLOYMENT_CONTRACT_ID_1, COMMISSION_10_50, COMMISSION_15_75))
+    void getByBasicContractIdAndCommissionBetweenShouldReturnList() throws Exception {
+        given(contractOrderCommissionService.getByBasicContractIdAndCommissionBetween(BASIC_CONTRACT_ID_1, COMMISSION_10_50, COMMISSION_15_75))
             .willReturn(Collections.singletonList(commission1));
 
-        mockMvc.perform(get(BASE_URI + "/by-employment-contract/10/commission-between")
+        mockMvc.perform(get(BASE_URI + "/by-basic-contract/10/commission-between")
                 .param(MIN_COMM, SCOMMISSION_10_50)
                 .param(MAX_COMM, SCOMMISSION_15_75))
                 .andExpect(status().isOk())
