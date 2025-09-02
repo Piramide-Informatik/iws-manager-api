@@ -95,7 +95,7 @@ public class ContractOrderCommissionServiceImpl implements ContractOrderCommissi
         return contractOrderCommissionRepository.findById(id)
                 .map(existingCommission -> {
                     existingCommission.setCommission(contractOrderCommissionDetails.getCommission());
-                    existingCommission.setEmploymentContract(contractOrderCommissionDetails.getEmploymentContract());
+                    existingCommission.setBasicContract(contractOrderCommissionDetails.getBasicContract());
                     existingCommission.setFromOrderValue(contractOrderCommissionDetails.getFromOrderValue());
                     existingCommission.setMinCommission(contractOrderCommissionDetails.getMinCommission());
                     
@@ -148,11 +148,11 @@ public class ContractOrderCommissionServiceImpl implements ContractOrderCommissi
 
     @Override
     @Transactional(readOnly = true)
-    public List<ContractOrderCommission> getByEmploymentContractId(Long employmentContractId) {
-        if (employmentContractId == null) {
-            throw new IllegalArgumentException("EmploymentContractId cannot be null");
+    public List<ContractOrderCommission> getByBasicContractId(Long basicContractId) {
+        if (basicContractId == null) {
+            throw new IllegalArgumentException("BasicContractId cannot be null");
         }
-        return contractOrderCommissionRepository.findByEmploymentContractId(employmentContractId);
+        return contractOrderCommissionRepository.findByBasicContractId(basicContractId);
     }
 
     // Commission - Greater than or equal/Less than or equal
@@ -212,73 +212,73 @@ public class ContractOrderCommissionServiceImpl implements ContractOrderCommissi
         return contractOrderCommissionRepository.findByMinCommissionLessThanEqual(minCommission);
     }
 
-    // Commission by employmentContract - Greater than or equal/Less than or equal
+    // Commission by basicContract - Greater than or equal/Less than or equal
     @Override
     @Transactional(readOnly = true)
-    public List<ContractOrderCommission> getByEmploymentContractIdAndCommissionGreaterThanEqual(
-            Long employmentContractId, BigDecimal commission) {
-        if (employmentContractId == null || commission == null) {
-            throw new IllegalArgumentException("EmploymentContractId and Commission cannot be null");
+    public List<ContractOrderCommission> getByBasicContractIdAndCommissionGreaterThanEqual(
+            Long basicContractId, BigDecimal commission) {
+        if (basicContractId == null || commission == null) {
+            throw new IllegalArgumentException("BasicContractId and Commission cannot be null");
         }
-        return contractOrderCommissionRepository.findByEmploymentContractIdAndCommissionGreaterThanEqual(
-                employmentContractId, commission);
+        return contractOrderCommissionRepository.findByBasicContractIdAndCommissionGreaterThanEqual(
+                basicContractId, commission);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ContractOrderCommission> getByEmploymentContractIdAndCommissionLessThanEqual(
-            Long employmentContractId, BigDecimal commission) {
-        if (employmentContractId == null || commission == null) {
-            throw new IllegalArgumentException("EmploymentContractId and Commission cannot be null");
+    public List<ContractOrderCommission> getByBasicContractIdAndCommissionLessThanEqual(
+            Long basicContractId, BigDecimal commission) {
+        if (basicContractId == null || commission == null) {
+            throw new IllegalArgumentException("BasicContractId and Commission cannot be null");
         }
-        return contractOrderCommissionRepository.findByEmploymentContractIdAndCommissionLessThanEqual(
-                employmentContractId, commission);
+        return contractOrderCommissionRepository.findByBasicContractIdAndCommissionLessThanEqual(
+                basicContractId, commission);
     }
 
-    // FromOrderValue by employmentContract - Greater than or equal/Less than or equal
+    // FromOrderValue by basicContract - Greater than or equal/Less than or equal
     @Override
     @Transactional(readOnly = true)
-    public List<ContractOrderCommission> getByEmploymentContractIdAndFromOrderValueGreaterThanEqual(
-            Long employmentContractId, BigDecimal fromOrderValue) {
-        if (employmentContractId == null || fromOrderValue == null) {
-            throw new IllegalArgumentException("EmploymentContractId and FromOrderValue cannot be null");
+    public List<ContractOrderCommission> getByBasicContractIdAndFromOrderValueGreaterThanEqual(
+            Long basicContractId, BigDecimal fromOrderValue) {
+        if (basicContractId == null || fromOrderValue == null) {
+            throw new IllegalArgumentException("BasicContractId and FromOrderValue cannot be null");
         }
-        return contractOrderCommissionRepository.findByEmploymentContractIdAndFromOrderValueGreaterThanEqual(
-                employmentContractId, fromOrderValue);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<ContractOrderCommission> getByEmploymentContractIdAndFromOrderValueLessThanEqual(
-            Long employmentContractId, BigDecimal fromOrderValue) {
-        if (employmentContractId == null || fromOrderValue == null) {
-            throw new IllegalArgumentException("EmploymentContractId and FromOrderValue cannot be null");
-        }
-        return contractOrderCommissionRepository.findByEmploymentContractIdAndFromOrderValueLessThanEqual(
-                employmentContractId, fromOrderValue);
-    }
-
-    // MinCommission by employmentContract - Greater than or equal/Less than or equal
-    @Override
-    @Transactional(readOnly = true)
-    public List<ContractOrderCommission> getByEmploymentContractIdAndMinCommissionGreaterThanEqual(
-            Long employmentContractId, BigDecimal minCommission) {
-        if (employmentContractId == null || minCommission == null) {
-            throw new IllegalArgumentException("EmploymentContractId and MinCommission cannot be null");
-        }
-        return contractOrderCommissionRepository.findByEmploymentContractIdAndMinCommissionGreaterThanEqual(
-                employmentContractId, minCommission);
+        return contractOrderCommissionRepository.findByBasicContractIdAndFromOrderValueGreaterThanEqual(
+                basicContractId, fromOrderValue);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ContractOrderCommission> getByEmploymentContractIdAndMinCommissionLessThanEqual(
-            Long employmentContractId, BigDecimal minCommission) {
-        if (employmentContractId == null || minCommission == null) {
-            throw new IllegalArgumentException("EmploymentContractId and MinCommission cannot be null");
+    public List<ContractOrderCommission> getByBasicContractIdAndFromOrderValueLessThanEqual(
+            Long basicContractId, BigDecimal fromOrderValue) {
+        if (basicContractId == null || fromOrderValue == null) {
+            throw new IllegalArgumentException("BasicContractId and FromOrderValue cannot be null");
         }
-        return contractOrderCommissionRepository.findByEmploymentContractIdAndMinCommissionLessThanEqual(
-                employmentContractId, minCommission);
+        return contractOrderCommissionRepository.findByBasicContractIdAndFromOrderValueLessThanEqual(
+                basicContractId, fromOrderValue);
+    }
+
+    // MinCommission by basicContract - Greater than or equal/Less than or equal
+    @Override
+    @Transactional(readOnly = true)
+    public List<ContractOrderCommission> getByBasicContractIdAndMinCommissionGreaterThanEqual(
+            Long basicContractId, BigDecimal minCommission) {
+        if (basicContractId == null || minCommission == null) {
+            throw new IllegalArgumentException("BasicContractId and MinCommission cannot be null");
+        }
+        return contractOrderCommissionRepository.findByBasicContractIdAndMinCommissionGreaterThanEqual(
+                basicContractId, minCommission);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ContractOrderCommission> getByBasicContractIdAndMinCommissionLessThanEqual(
+            Long basicContractId, BigDecimal minCommission) {
+        if (basicContractId == null || minCommission == null) {
+            throw new IllegalArgumentException("BasicContractId and MinCommission cannot be null");
+        }
+        return contractOrderCommissionRepository.findByBasicContractIdAndMinCommissionLessThanEqual(
+                basicContractId, minCommission);
     }
 
     // Additional useful methods with ranges
@@ -318,46 +318,46 @@ public class ContractOrderCommissionServiceImpl implements ContractOrderCommissi
         return contractOrderCommissionRepository.findByMinCommissionBetween(minMinCommission, maxMinCommission);
     }
 
-    // Methods with employmentContract and ranges
+    // Methods with basicContract and ranges
     @Override
     @Transactional(readOnly = true)
-    public List<ContractOrderCommission> getByEmploymentContractIdAndCommissionBetween(
-            Long employmentContractId, BigDecimal minCommission, BigDecimal maxCommission) {
-        if (employmentContractId == null || minCommission == null || maxCommission == null) {
-            throw new IllegalArgumentException("EmploymentContractId, MinCommission and MaxCommission cannot be null");
+    public List<ContractOrderCommission> getByBasicContractIdAndCommissionBetween(
+            Long basicContractId, BigDecimal minCommission, BigDecimal maxCommission) {
+        if (basicContractId == null || minCommission == null || maxCommission == null) {
+            throw new IllegalArgumentException("BasicContractId, MinCommission and MaxCommission cannot be null");
         }
         if (minCommission.compareTo(maxCommission) > 0) {
             throw new IllegalArgumentException("MinCommission must be less than or equal to MaxCommission");
         }
-        return contractOrderCommissionRepository.findByEmploymentContractIdAndCommissionBetween(
-                employmentContractId, minCommission, maxCommission);
+        return contractOrderCommissionRepository.findByBasicContractIdAndCommissionBetween(
+                basicContractId, minCommission, maxCommission);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ContractOrderCommission> getByEmploymentContractIdAndFromOrderValueBetween(
-            Long employmentContractId, BigDecimal minFromOrderValue, BigDecimal maxFromOrderValue) {
-        if (employmentContractId == null || minFromOrderValue == null || maxFromOrderValue == null) {
-            throw new IllegalArgumentException("EmploymentContractId, MinFromOrderValue and MaxFromOrderValue cannot be null");
+    public List<ContractOrderCommission> getByBasicContractIdAndFromOrderValueBetween(
+            Long basicContractId, BigDecimal minFromOrderValue, BigDecimal maxFromOrderValue) {
+        if (basicContractId == null || minFromOrderValue == null || maxFromOrderValue == null) {
+            throw new IllegalArgumentException("BasicContractId, MinFromOrderValue and MaxFromOrderValue cannot be null");
         }
         if (minFromOrderValue.compareTo(maxFromOrderValue) > 0) {
             throw new IllegalArgumentException("MinFromOrderValue must be less than or equal to MaxFromOrderValue");
         }
-        return contractOrderCommissionRepository.findByEmploymentContractIdAndFromOrderValueBetween(
-                employmentContractId, minFromOrderValue, maxFromOrderValue);
+        return contractOrderCommissionRepository.findByBasicContractIdAndFromOrderValueBetween(
+                basicContractId, minFromOrderValue, maxFromOrderValue);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ContractOrderCommission> getByEmploymentContractIdAndMinCommissionBetween(
-            Long employmentContractId, BigDecimal minMinCommission, BigDecimal maxMinCommission) {
-        if (employmentContractId == null || minMinCommission == null || maxMinCommission == null) {
-            throw new IllegalArgumentException("EmploymentContractId, MinMinCommission and MaxMinCommission cannot be null");
+    public List<ContractOrderCommission> getByBasicContractIdAndMinCommissionBetween(
+            Long basicContractId, BigDecimal minMinCommission, BigDecimal maxMinCommission) {
+        if (basicContractId == null || minMinCommission == null || maxMinCommission == null) {
+            throw new IllegalArgumentException("BasicContractId, MinMinCommission and MaxMinCommission cannot be null");
         }
         if (minMinCommission.compareTo(maxMinCommission) > 0) {
             throw new IllegalArgumentException("MinMinCommission must be less than or equal to MaxMinCommission");
         }
-        return contractOrderCommissionRepository.findByEmploymentContractIdAndMinCommissionBetween(
-                employmentContractId, minMinCommission, maxMinCommission);
+        return contractOrderCommissionRepository.findByBasicContractIdAndMinCommissionBetween(
+                basicContractId, minMinCommission, maxMinCommission);
     }
 }
