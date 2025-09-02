@@ -17,7 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.iws_manager.iws_manager_api.models.ContractOrderCommission;
-import com.iws_manager.iws_manager_api.models.EmploymentContract;
+import com.iws_manager.iws_manager_api.models.BasicContract;
 import com.iws_manager.iws_manager_api.repositories.ContractOrderCommissionRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,16 +52,16 @@ class ContractOrderCommissionServiceImplTest {
     private static final Long CONTRACT_ID_999 = 999L;
 
     private ContractOrderCommission commission;
-    private EmploymentContract employmentContract = new EmploymentContract();
+    private BasicContract basicContract = new BasicContract();
 
     @BeforeEach
     void setUp() {
-        employmentContract.setId(CONTRACT_ID_1);
+        basicContract.setId(CONTRACT_ID_1);
 
         commission = new ContractOrderCommission();
         commission.setId(CONTRACT_ID_1);
         commission.setCommission(COMMISSION_10_50);
-        commission.setEmploymentContract(employmentContract);
+        commission.setBasicContract(basicContract);
         commission.setFromOrderValue(FROM_ORDER_VALUE_1000_00);
         commission.setMinCommission(MIN_COMMISSION_50_00);
     }
@@ -224,20 +224,20 @@ class ContractOrderCommissionServiceImplTest {
     }
 
     @Test
-    void testGetByEmploymentContractId() {
+    void testGetByBasicContractId() {
         List<ContractOrderCommission> commissions = Arrays.asList(commission);
-        when(contractOrderCommissionRepository.findByEmploymentContractId(CONTRACT_ID_1)).thenReturn(commissions);
+        when(contractOrderCommissionRepository.findByBasicContractId(CONTRACT_ID_1)).thenReturn(commissions);
 
-        List<ContractOrderCommission> result = contractOrderCommissionService.getByEmploymentContractId(CONTRACT_ID_1);
+        List<ContractOrderCommission> result = contractOrderCommissionService.getByBasicContractId(CONTRACT_ID_1);
 
         assertEquals(1, result.size());
-        assertEquals(CONTRACT_ID_1, result.get(0).getEmploymentContract().getId());
+        assertEquals(CONTRACT_ID_1, result.get(0).getBasicContract().getId());
     }
 
     @Test
-    void testGetByEmploymentContractIdNullValueThrowsException() {
+    void testGetByBasicContractIdNullValueThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> 
-            contractOrderCommissionService.getByEmploymentContractId(null));
+            contractOrderCommissionService.getByBasicContractId(null));
     }
 
     // Greater than or equal tests
@@ -301,84 +301,84 @@ class ContractOrderCommissionServiceImplTest {
         assertEquals(1, result.size());
     }
 
-    // EmploymentContract with conditions tests
+    // BasicContract with conditions tests
     @Test
-    void testGetByEmploymentContractIdAndCommissionGreaterThanEqual() {
+    void testGetByBasicContractIdAndCommissionGreaterThanEqual() {
         List<ContractOrderCommission> commissions = Arrays.asList(commission);
-        when(contractOrderCommissionRepository.findByEmploymentContractIdAndCommissionGreaterThanEqual(CONTRACT_ID_1, VALUE_10_00))
+        when(contractOrderCommissionRepository.findByBasicContractIdAndCommissionGreaterThanEqual(CONTRACT_ID_1, VALUE_10_00))
             .thenReturn(commissions);
 
         List<ContractOrderCommission> result = contractOrderCommissionService
-            .getByEmploymentContractIdAndCommissionGreaterThanEqual(CONTRACT_ID_1, VALUE_10_00);
+            .getByBasicContractIdAndCommissionGreaterThanEqual(CONTRACT_ID_1, VALUE_10_00);
 
         assertEquals(1, result.size());
     }
 
     @Test
-    void testGetByEmploymentContractIdAndCommissionGreaterThanEqualNullValuesThrowsException() {
+    void testGetByBasicContractIdAndCommissionGreaterThanEqualNullValuesThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> 
-            contractOrderCommissionService.getByEmploymentContractIdAndCommissionGreaterThanEqual(null, VALUE_10_00));
+            contractOrderCommissionService.getByBasicContractIdAndCommissionGreaterThanEqual(null, VALUE_10_00));
 
         assertThrows(IllegalArgumentException.class, () -> 
-            contractOrderCommissionService.getByEmploymentContractIdAndCommissionGreaterThanEqual(CONTRACT_ID_1, null));
+            contractOrderCommissionService.getByBasicContractIdAndCommissionGreaterThanEqual(CONTRACT_ID_1, null));
     }
 
     @Test
-    void testGetByEmploymentContractIdAndCommissionLessThanEqual() {
+    void testGetByBasicContractIdAndCommissionLessThanEqual() {
         List<ContractOrderCommission> commissions = Arrays.asList(commission);
-        when(contractOrderCommissionRepository.findByEmploymentContractIdAndCommissionLessThanEqual(CONTRACT_ID_1, VALUE_20_00))
+        when(contractOrderCommissionRepository.findByBasicContractIdAndCommissionLessThanEqual(CONTRACT_ID_1, VALUE_20_00))
             .thenReturn(commissions);
 
         List<ContractOrderCommission> result = contractOrderCommissionService
-            .getByEmploymentContractIdAndCommissionLessThanEqual(CONTRACT_ID_1, VALUE_20_00);
+            .getByBasicContractIdAndCommissionLessThanEqual(CONTRACT_ID_1, VALUE_20_00);
 
         assertEquals(1, result.size());
     }
 
     @Test
-    void testGetByEmploymentContractIdAndFromOrderValueGreaterThanEqual() {
+    void testGetByBasicContractIdAndFromOrderValueGreaterThanEqual() {
         List<ContractOrderCommission> commissions = Arrays.asList(commission);
-        when(contractOrderCommissionRepository.findByEmploymentContractIdAndFromOrderValueGreaterThanEqual(CONTRACT_ID_1, VALUE_500_00))
+        when(contractOrderCommissionRepository.findByBasicContractIdAndFromOrderValueGreaterThanEqual(CONTRACT_ID_1, VALUE_500_00))
             .thenReturn(commissions);
 
         List<ContractOrderCommission> result = contractOrderCommissionService
-            .getByEmploymentContractIdAndFromOrderValueGreaterThanEqual(CONTRACT_ID_1, VALUE_500_00);
+            .getByBasicContractIdAndFromOrderValueGreaterThanEqual(CONTRACT_ID_1, VALUE_500_00);
 
         assertEquals(1, result.size());
     }
 
     @Test
-    void testGetByEmploymentContractIdAndFromOrderValueLessThanEqual() {
+    void testGetByBasicContractIdAndFromOrderValueLessThanEqual() {
         List<ContractOrderCommission> commissions = Arrays.asList(commission);
-        when(contractOrderCommissionRepository.findByEmploymentContractIdAndFromOrderValueLessThanEqual(CONTRACT_ID_1, VALUE_1500_00))
+        when(contractOrderCommissionRepository.findByBasicContractIdAndFromOrderValueLessThanEqual(CONTRACT_ID_1, VALUE_1500_00))
             .thenReturn(commissions);
 
         List<ContractOrderCommission> result = contractOrderCommissionService
-            .getByEmploymentContractIdAndFromOrderValueLessThanEqual(CONTRACT_ID_1, VALUE_1500_00);
+            .getByBasicContractIdAndFromOrderValueLessThanEqual(CONTRACT_ID_1, VALUE_1500_00);
 
         assertEquals(1, result.size());
     }
 
     @Test
-    void testGetByEmploymentContractIdAndMinCommissionGreaterThanEqual() {
+    void testGetByBasicContractIdAndMinCommissionGreaterThanEqual() {
         List<ContractOrderCommission> commissions = Arrays.asList(commission);
-        when(contractOrderCommissionRepository.findByEmploymentContractIdAndMinCommissionGreaterThanEqual(CONTRACT_ID_1, VALUE_25_00))
+        when(contractOrderCommissionRepository.findByBasicContractIdAndMinCommissionGreaterThanEqual(CONTRACT_ID_1, VALUE_25_00))
             .thenReturn(commissions);
 
         List<ContractOrderCommission> result = contractOrderCommissionService
-            .getByEmploymentContractIdAndMinCommissionGreaterThanEqual(CONTRACT_ID_1, VALUE_25_00);
+            .getByBasicContractIdAndMinCommissionGreaterThanEqual(CONTRACT_ID_1, VALUE_25_00);
 
         assertEquals(1, result.size());
     }
 
     @Test
-    void testGetByEmploymentContractIdAndMinCommissionLessThanEqual() {
+    void testGetByBasicContractIdAndMinCommissionLessThanEqual() {
         List<ContractOrderCommission> commissions = Arrays.asList(commission);
-        when(contractOrderCommissionRepository.findByEmploymentContractIdAndMinCommissionLessThanEqual(CONTRACT_ID_1, VALUE_100_00))
+        when(contractOrderCommissionRepository.findByBasicContractIdAndMinCommissionLessThanEqual(CONTRACT_ID_1, VALUE_100_00))
             .thenReturn(commissions);
 
         List<ContractOrderCommission> result = contractOrderCommissionService
-            .getByEmploymentContractIdAndMinCommissionLessThanEqual(CONTRACT_ID_1, VALUE_100_00);
+            .getByBasicContractIdAndMinCommissionLessThanEqual(CONTRACT_ID_1, VALUE_100_00);
 
         assertEquals(1, result.size());
     }
@@ -426,52 +426,52 @@ class ContractOrderCommissionServiceImplTest {
         assertEquals(1, result.size());
     }
 
-    // EmploymentContract with range tests
+    // BasicContract with range tests
     @Test
-    void testGetByEmploymentContractIdAndCommissionBetween() {
+    void testGetByBasicContractIdAndCommissionBetween() {
         List<ContractOrderCommission> commissions = Arrays.asList(commission);
-        when(contractOrderCommissionRepository.findByEmploymentContractIdAndCommissionBetween(CONTRACT_ID_1, VALUE_5_00, VALUE_15_00))
+        when(contractOrderCommissionRepository.findByBasicContractIdAndCommissionBetween(CONTRACT_ID_1, VALUE_5_00, VALUE_15_00))
             .thenReturn(commissions);
 
         List<ContractOrderCommission> result = contractOrderCommissionService
-            .getByEmploymentContractIdAndCommissionBetween(CONTRACT_ID_1, VALUE_5_00, VALUE_15_00);
+            .getByBasicContractIdAndCommissionBetween(CONTRACT_ID_1, VALUE_5_00, VALUE_15_00);
 
         assertEquals(1, result.size());
     }
 
     @Test
-    void testGetByEmploymentContractIdAndFromOrderValueBetween() {
+    void testGetByBasicContractIdAndFromOrderValueBetween() {
         List<ContractOrderCommission> commissions = Arrays.asList(commission);
-        when(contractOrderCommissionRepository.findByEmploymentContractIdAndFromOrderValueBetween(CONTRACT_ID_1, VALUE_500_00, VALUE_1500_00))
+        when(contractOrderCommissionRepository.findByBasicContractIdAndFromOrderValueBetween(CONTRACT_ID_1, VALUE_500_00, VALUE_1500_00))
             .thenReturn(commissions);
 
         List<ContractOrderCommission> result = contractOrderCommissionService
-            .getByEmploymentContractIdAndFromOrderValueBetween(CONTRACT_ID_1, VALUE_500_00, VALUE_1500_00);
+            .getByBasicContractIdAndFromOrderValueBetween(CONTRACT_ID_1, VALUE_500_00, VALUE_1500_00);
 
         assertEquals(1, result.size());
     }
 
     @Test
-    void testGetByEmploymentContractIdAndMinCommissionBetween() {
+    void testGetByBasicContractIdAndMinCommissionBetween() {
         List<ContractOrderCommission> commissions = Arrays.asList(commission);
-        when(contractOrderCommissionRepository.findByEmploymentContractIdAndMinCommissionBetween(CONTRACT_ID_1, VALUE_25_00, VALUE_75_00))
+        when(contractOrderCommissionRepository.findByBasicContractIdAndMinCommissionBetween(CONTRACT_ID_1, VALUE_25_00, VALUE_75_00))
             .thenReturn(commissions);
 
         List<ContractOrderCommission> result = contractOrderCommissionService
-            .getByEmploymentContractIdAndMinCommissionBetween(CONTRACT_ID_1, VALUE_25_00, VALUE_75_00);
+            .getByBasicContractIdAndMinCommissionBetween(CONTRACT_ID_1, VALUE_25_00, VALUE_75_00);
 
         assertEquals(1, result.size());
     }
 
     @Test
-    void testGetByEmploymentContractIdAndCommissionBetweenNullValuesThrowsException() {
+    void testGetByBasicContractIdAndCommissionBetweenNullValuesThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> 
-            contractOrderCommissionService.getByEmploymentContractIdAndCommissionBetween(null, VALUE_5_00, VALUE_15_00));
+            contractOrderCommissionService.getByBasicContractIdAndCommissionBetween(null, VALUE_5_00, VALUE_15_00));
     }
 
     @Test
-    void testGetByEmploymentContractIdAndCommissionBetweenInvalidRangeThrowsException() {
+    void testGetByBasicContractIdAndCommissionBetweenInvalidRangeThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> 
-            contractOrderCommissionService.getByEmploymentContractIdAndCommissionBetween(CONTRACT_ID_1, VALUE_15_00, VALUE_5_00));
+            contractOrderCommissionService.getByBasicContractIdAndCommissionBetween(CONTRACT_ID_1, VALUE_15_00, VALUE_5_00));
     }
 }
