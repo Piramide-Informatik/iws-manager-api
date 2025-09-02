@@ -1,8 +1,13 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.models.PublicHoliday;
+import com.iws_manager.iws_manager_api.models.State;
+import com.iws_manager.iws_manager_api.models.StateHoliday;
 import com.iws_manager.iws_manager_api.repositories.PublicHolidayRepository;
+import com.iws_manager.iws_manager_api.repositories.StateHolidayRepository;
+import com.iws_manager.iws_manager_api.repositories.StateRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.PublicHolidayService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,10 +19,14 @@ import java.util.Optional;
 @Transactional
 public class PublicHolidayServiceImpl implements PublicHolidayService {
     private final PublicHolidayRepository publicHolidayRepository;
+    private final StateRepository stateRepository;
+    private final StateHolidayRepository stateHolidayRepository;
 
     @Autowired
-    public PublicHolidayServiceImpl(PublicHolidayRepository publicHolidayRepository) {
+    public PublicHolidayServiceImpl(PublicHolidayRepository publicHolidayRepository, StateRepository stateRepository, StateHolidayRepository stateHolidayRepository) {
         this.publicHolidayRepository = publicHolidayRepository;
+        this.stateRepository = stateRepository;
+        this.stateHolidayRepository = stateHolidayRepository;
     }
 
     @Override
@@ -54,7 +63,6 @@ public class PublicHolidayServiceImpl implements PublicHolidayService {
                     exisitingPublicHoliday.setDate(publicHolidayDetails.getDate());
                     exisitingPublicHoliday.setIsFixedDate(publicHolidayDetails.getIsFixedDate());
                     exisitingPublicHoliday.setSequenceNo(publicHolidayDetails.getSequenceNo());
-                    exisitingPublicHoliday.setStates(publicHolidayDetails.getStates());
                     return publicHolidayRepository.save(exisitingPublicHoliday);
                 }).orElseThrow(()-> new RuntimeException("PublicHoliday not found with id: "+ id));
     }
@@ -66,4 +74,41 @@ public class PublicHolidayServiceImpl implements PublicHolidayService {
         }
         publicHolidayRepository.deleteById(id);
     }
+
+    @Override
+    public List<State> getStatesWithSelection(Long publicHolidayId) {
+        List<State> allStates = stateRepository.findAll();
+        List<StateHoliday> links = stateHolidayRepository.findByPublicHoliday_Id(publicHolidayId);
+        for (State st : allStates) {
+            boolean selected = links.stream()
+                    .anyMatch(sh -> sh.getState().getId().equals(st.getId())
+                            && Boolean.TRUE.equals(sh.getIsholiday()));
+            st.setSelected(selected);
+        }
+        return allStates;
+    }
+
+    @Override
+    @Transactional
+    public void saveStateSelections(Long publicHolidayId, List<Long> selectedStateIds) {
+        stateHolidayRepository.deleteByPublicHoliday_Id(publicHolidayId);
+
+        PublicHoliday ph = publicHolidayRepository.findById(publicHolidayId)
+                .orElseThrow(() -> new EntityNotFoundException("PublicHoliday not found"));
+
+        List<StateHoliday> newSelections = selectedStateIds.stream().map(stateId -> {
+            StateHoliday sh = new StateHoliday();
+            sh.setPublicHoliday(ph);
+
+            State st = stateRepository.findById(stateId)
+                    .orElseThrow(() -> new EntityNotFoundException("State not found: " + stateId));
+            sh.setState(st);
+
+            sh.setIsholiday(true);
+            return sh;
+        }).toList();
+
+        stateHolidayRepository.saveAll(newSelections);
+    }
+
 }
