@@ -24,7 +24,7 @@ public class ContractOrderCommission extends BaseEntity {
     private BigDecimal commission;
     
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "contractid", referencedColumnName = "contractid")
+    @JoinColumn(name = "basiccontractid", referencedColumnName = "basiccontractid")
     private BasicContract basicContract;
     
     @Column(name = "fromordervalue", nullable = true, columnDefinition = "DECIMAL(10,2)")
