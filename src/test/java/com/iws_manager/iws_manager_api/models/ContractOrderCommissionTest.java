@@ -103,14 +103,14 @@ class ContractOrderCommissionTest {
         // Arrange & Act
         ContractOrderCommission commission = new ContractOrderCommission(
             COMMISSION,
-            null,  // employmentContract null
+            null,  // basicContract null
             FROM_ORDER_VALUE,
             MIN_COMMISSION
         );
         
         // Assert
         assertEquals(COMMISSION, commission.getCommission());
-        assertNull(commission.getEmploymentContract());
+        assertNull(commission.getBasicContract());
         assertEquals(FROM_ORDER_VALUE, commission.getFromOrderValue());
         assertEquals(MIN_COMMISSION, commission.getMinCommission());
     }

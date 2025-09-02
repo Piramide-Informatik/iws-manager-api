@@ -1,7 +1,7 @@
 package com.iws_manager.iws_manager_api.repositories;
 
 import com.iws_manager.iws_manager_api.models.ContractOrderCommission;
-import com.iws_manager.iws_manager_api.models.EmploymentContract;
+import com.iws_manager.iws_manager_api.models.BasicContract;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,7 +17,7 @@ public interface ContractOrderCommissionRepository extends JpaRepository<Contrac
     List<ContractOrderCommission> findByCommission(BigDecimal commission);
     List<ContractOrderCommission> findByFromOrderValue(BigDecimal fromOrderValue);
     List<ContractOrderCommission> findByMinCommission(BigDecimal minCommission);
-    List<ContractOrderCommission> findByEmploymentContractId(Long employmentContractId);
+    List<ContractOrderCommission> findByBasicContractId(Long basicContractId);
     
     // Commission 
     List<ContractOrderCommission> findByCommissionGreaterThanEqual(BigDecimal commission);
@@ -31,34 +31,34 @@ public interface ContractOrderCommissionRepository extends JpaRepository<Contrac
     List<ContractOrderCommission> findByMinCommissionGreaterThanEqual(BigDecimal minCommission);
     List<ContractOrderCommission> findByMinCommissionLessThanEqual(BigDecimal minCommission);
     
-    // Commission BY employmentContract 
-    List<ContractOrderCommission> findByEmploymentContractIdAndCommissionGreaterThanEqual(
-        Long employmentContractId, BigDecimal commission);
-    List<ContractOrderCommission> findByEmploymentContractIdAndCommissionLessThanEqual(
-        Long employmentContractId, BigDecimal commission);
+    // Commission BY BasicContract 
+    List<ContractOrderCommission> findByBasicContractIdAndCommissionGreaterThanEqual(
+        Long basicContractId, BigDecimal commission);
+    List<ContractOrderCommission> findByBasicContractIdAndCommissionLessThanEqual(
+        Long basicContractId, BigDecimal commission);
     
-    // FromOrderValue BY employmentContract 
-    List<ContractOrderCommission> findByEmploymentContractIdAndFromOrderValueGreaterThanEqual(
-        Long employmentContractId, BigDecimal fromOrderValue);
-    List<ContractOrderCommission> findByEmploymentContractIdAndFromOrderValueLessThanEqual(
-        Long employmentContractId, BigDecimal fromOrderValue);
+    // FromOrderValue BY basicContract 
+    List<ContractOrderCommission> findByBasicContractIdAndFromOrderValueGreaterThanEqual(
+        Long basicContractId, BigDecimal fromOrderValue);
+    List<ContractOrderCommission> findByBasicContractIdAndFromOrderValueLessThanEqual(
+        Long basicContractId, BigDecimal fromOrderValue);
     
-    // MinCommission BY employmentContract 
-    List<ContractOrderCommission> findByEmploymentContractIdAndMinCommissionGreaterThanEqual(
-        Long employmentContractId, BigDecimal minCommission);
-    List<ContractOrderCommission> findByEmploymentContractIdAndMinCommissionLessThanEqual(
-        Long employmentContractId, BigDecimal minCommission);
+    // MinCommission BY basicContract 
+    List<ContractOrderCommission> findByBasicContractIdAndMinCommissionGreaterThanEqual(
+        Long basicContractId, BigDecimal minCommission);
+    List<ContractOrderCommission> findByBasicContractIdAndMinCommissionLessThanEqual(
+        Long basicContractId, BigDecimal minCommission);
     
     // RANGE
     List<ContractOrderCommission> findByCommissionBetween(BigDecimal minCommission, BigDecimal maxCommission);
     List<ContractOrderCommission> findByFromOrderValueBetween(BigDecimal minFromOrderValue, BigDecimal maxFromOrderValue);
     List<ContractOrderCommission> findByMinCommissionBetween(BigDecimal minMinCommission, BigDecimal maxMinCommission);
     
-    // RANGE BY EMPLOYMENT CONTRACT
-    List<ContractOrderCommission> findByEmploymentContractIdAndCommissionBetween(
-        Long employmentContract, BigDecimal minCommission, BigDecimal maxCommission);
-    List<ContractOrderCommission> findByEmploymentContractIdAndFromOrderValueBetween(
-        Long employmentContract, BigDecimal minFromOrderValue, BigDecimal maxFromOrderValue);
-    List<ContractOrderCommission> findByEmploymentContractIdAndMinCommissionBetween(
-        Long employmentContract, BigDecimal minMinCommission, BigDecimal maxMinCommission);
+    // RANGE BY BASIC CONTRACT
+    List<ContractOrderCommission> findByBasicContractIdAndCommissionBetween(
+        Long basicContract, BigDecimal minCommission, BigDecimal maxCommission);
+    List<ContractOrderCommission> findByBasicContractIdAndFromOrderValueBetween(
+        Long basicContract, BigDecimal minFromOrderValue, BigDecimal maxFromOrderValue);
+    List<ContractOrderCommission> findByBasicContractIdAndMinCommissionBetween(
+        Long basicContract, BigDecimal minMinCommission, BigDecimal maxMinCommission);
 }
