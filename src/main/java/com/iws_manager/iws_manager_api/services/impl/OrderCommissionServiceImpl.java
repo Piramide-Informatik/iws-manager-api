@@ -189,4 +189,11 @@ public class OrderCommissionServiceImpl implements OrderCommissionService {
         return orderCommissionRepository.findByMinCommissionBetween(startValue, endValue);
     }
 
+    // SORTS
+
+    @Override
+    public List<OrderCommission> getByOrderIdOrderByFromOrderValueAsc(Long orderId) {
+        return orderCommissionRepository.findByOrderIdOrderByFromOrderValueAsc(orderId);
+    }
+
 }
