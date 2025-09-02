@@ -5,6 +5,7 @@ import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -13,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 
@@ -22,7 +24,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@EntityListeners(AutoCloseable.class)
+@EntityListeners(AuditingEntityListener.class)
 @Table(name="publicholiday")
 @AttributeOverride(name = "id", column = @Column(name = "publicholidayid"))
 public class PublicHoliday extends BaseEntity {
@@ -39,7 +41,4 @@ public class PublicHoliday extends BaseEntity {
     @Column(name = "sequenceno",columnDefinition = "INT")
     private Integer sequenceNo;
 
-    @ManyToOne
-    @JoinColumn(name="stateid")
-    private State states;
 }

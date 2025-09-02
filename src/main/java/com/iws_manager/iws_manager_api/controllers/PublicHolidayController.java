@@ -1,6 +1,7 @@
 package com.iws_manager.iws_manager_api.controllers;
 
 import com.iws_manager.iws_manager_api.models.PublicHoliday;
+import com.iws_manager.iws_manager_api.models.State;
 import com.iws_manager.iws_manager_api.services.interfaces.PublicHolidayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -72,5 +73,17 @@ public class PublicHolidayController {
     public ResponseEntity<Void> deletePublicHoliday(@PathVariable Long id) {
         publicHolidayService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/{id}/states")
+    @ResponseStatus(HttpStatus.OK)
+    public List<State> getStates(@PathVariable Long id) {
+        return publicHolidayService.getStatesWithSelection(id);
+    }
+
+    @PostMapping("/{id}/states")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void saveSelections(@PathVariable Long id, @RequestBody List<Long> selectedStates) {
+        publicHolidayService.saveStateSelections(id, selectedStates);
     }
 }
