@@ -17,7 +17,6 @@ import lombok.ToString;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
-
 @Getter
 @Setter
 @ToString
@@ -25,20 +24,19 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name="publicholiday")
-@AttributeOverride(name = "id", column = @Column(name = "publicholidayid"))
-public class PublicHoliday extends BaseEntity {
-
+@Table(name="holidayyear")
+@AttributeOverride(name = "id", column = @Column(name = "holidayyearid"))
+public class HolidayYear extends BaseEntity {
     @Column(name = "date", columnDefinition = "DATE")
     private LocalDate date;
 
-    @Column(name = "publicholiday", length = 255)
-    private String name;
+    @Column(name = "weekday", columnDefinition = "TINYINT")
+    private Integer weekday;
 
-    @Column(name="fixdate", columnDefinition = "TINYINT")
-    private Boolean isFixedDate;
+    @Column(name = "year", columnDefinition = "DATE")
+    private LocalDate year;
 
-    @Column(name = "sequenceno",columnDefinition = "INT")
-    private Integer sequenceNo;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "publicholidayid")
+    private PublicHoliday publicHoliday;
 }
