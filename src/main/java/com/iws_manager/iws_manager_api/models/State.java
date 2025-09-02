@@ -26,4 +26,8 @@ public class State extends BaseEntity{
      */
     @Column(name = "statename", nullable = true, length = 255)
     private String name;
+
+    // NOT saved in DB, only to show in response
+    @Transient
+    private boolean selected;
 }
