@@ -32,4 +32,7 @@ public interface OrderCommissionService {
     List<OrderCommission> getByMinCommissionLessThanEqual(BigDecimal value);
     List<OrderCommission> getByMinCommissionGreaterThanEqual(BigDecimal value);
     List<OrderCommission> getByMinCommissionBetween(BigDecimal startValue, BigDecimal endValue);
+
+    //SORTS
+    List<OrderCommission> getByOrderIdOrderByFromOrderValueAsc(Long orderId);
 }
