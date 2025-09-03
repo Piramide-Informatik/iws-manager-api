@@ -22,7 +22,7 @@ public interface ContractOrderCommissionService {
     List<ContractOrderCommission> getByCommission(BigDecimal commission);
     List<ContractOrderCommission> getByFromOrderValue(BigDecimal fromOrderValue);
     List<ContractOrderCommission> getByMinCommission(BigDecimal minCommission);
-    List<ContractOrderCommission> getByEmploymentContractId(Long employmentContractId);
+    List<ContractOrderCommission> getByBasicContractId(Long basicContractId);
     
     // Commission - Greater than or equal/Less than or equal
     List<ContractOrderCommission> getByCommissionGreaterThanEqual(BigDecimal commission);
@@ -36,34 +36,34 @@ public interface ContractOrderCommissionService {
     List<ContractOrderCommission> getByMinCommissionGreaterThanEqual(BigDecimal minCommission);
     List<ContractOrderCommission> getByMinCommissionLessThanEqual(BigDecimal minCommission);
     
-    // Commission by employmentContract - Greater than or equal/Less than or equal
-    List<ContractOrderCommission> getByEmploymentContractIdAndCommissionGreaterThanEqual(
-        Long employmentContractId, BigDecimal commission);
-    List<ContractOrderCommission> getByEmploymentContractIdAndCommissionLessThanEqual(
-        Long employmentContractId, BigDecimal commission);
+    // Commission by basicContract - Greater than or equal/Less than or equal
+    List<ContractOrderCommission> getByBasicContractIdAndCommissionGreaterThanEqual(
+        Long basicContractId, BigDecimal commission);
+    List<ContractOrderCommission> getByBasicContractIdAndCommissionLessThanEqual(
+        Long basicContractId, BigDecimal commission);
     
-    // FromOrderValue by employmentContract - Greater than or equal/Less than or equal
-    List<ContractOrderCommission> getByEmploymentContractIdAndFromOrderValueGreaterThanEqual(
-        Long employmentContractId, BigDecimal fromOrderValue);
-    List<ContractOrderCommission> getByEmploymentContractIdAndFromOrderValueLessThanEqual(
-        Long employmentContractId, BigDecimal fromOrderValue);
+    // FromOrderValue by basicContract - Greater than or equal/Less than or equal
+    List<ContractOrderCommission> getByBasicContractIdAndFromOrderValueGreaterThanEqual(
+        Long basicContractId, BigDecimal fromOrderValue);
+    List<ContractOrderCommission> getByBasicContractIdAndFromOrderValueLessThanEqual(
+        Long basicContractId, BigDecimal fromOrderValue);
     
-    // MinCommission by employmentContract - Greater than or equal/Less than or equal
-    List<ContractOrderCommission> getByEmploymentContractIdAndMinCommissionGreaterThanEqual(
-        Long employmentContractId, BigDecimal minCommission);
-    List<ContractOrderCommission> getByEmploymentContractIdAndMinCommissionLessThanEqual(
-        Long employmentContractId, BigDecimal minCommission);
+    // MinCommission by basicContract - Greater than or equal/Less than or equal
+    List<ContractOrderCommission> getByBasicContractIdAndMinCommissionGreaterThanEqual(
+        Long basicContractId, BigDecimal minCommission);
+    List<ContractOrderCommission> getByBasicContractIdAndMinCommissionLessThanEqual(
+        Long basicContractId, BigDecimal minCommission);
     
     // Additional useful methods with ranges
     List<ContractOrderCommission> getByCommissionBetween(BigDecimal minCommission, BigDecimal maxCommission);
     List<ContractOrderCommission> getByFromOrderValueBetween(BigDecimal minFromOrderValue, BigDecimal maxFromOrderValue);
     List<ContractOrderCommission> getByMinCommissionBetween(BigDecimal minMinCommission, BigDecimal maxMinCommission);
     
-    // Methods with employmentContract and ranges
-    List<ContractOrderCommission> getByEmploymentContractIdAndCommissionBetween(
-        Long employmentContractId, BigDecimal minCommission, BigDecimal maxCommission);
-    List<ContractOrderCommission> getByEmploymentContractIdAndFromOrderValueBetween(
-        Long employmentContractId, BigDecimal minFromOrderValue, BigDecimal maxFromOrderValue);
-    List<ContractOrderCommission> getByEmploymentContractIdAndMinCommissionBetween(
-        Long employmentContractId, BigDecimal minMinCommission, BigDecimal maxMinCommission);
+    // Methods with basicContract and ranges
+    List<ContractOrderCommission> getByBasicContractIdAndCommissionBetween(
+        Long basicContractId, BigDecimal minCommission, BigDecimal maxCommission);
+    List<ContractOrderCommission> getByBasicContractIdAndFromOrderValueBetween(
+        Long basicContractId, BigDecimal minFromOrderValue, BigDecimal maxFromOrderValue);
+    List<ContractOrderCommission> getByBasicContractIdAndMinCommissionBetween(
+        Long basicContractId, BigDecimal minMinCommission, BigDecimal maxMinCommission);
 }

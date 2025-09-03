@@ -160,4 +160,11 @@ public class OrderCommissionController {
         List<OrderCommission> orderCommissions = orderCommissionService.getByMinCommissionBetween(startValue, endValue);
         return new ResponseEntity<>(orderCommissions, HttpStatus.OK);
     }
+
+    // SORT
+    @GetMapping("/by-order/{orderId}/sort-by-from-order-value")
+    public ResponseEntity<List<OrderCommission>> getByOrderIdOrderByFromOrderValueAsc(@PathVariable Long orderId) {
+        List<OrderCommission> orderCommissions = orderCommissionService.getByOrderIdOrderByFromOrderValueAsc(orderId);
+        return new ResponseEntity<>(orderCommissions, HttpStatus.OK);
+    }
 }
