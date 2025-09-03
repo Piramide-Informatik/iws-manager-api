@@ -49,7 +49,7 @@ public class PublicHolidayServiceImpl implements PublicHolidayService {
     @Override
     @Transactional(readOnly = true)
     public List<PublicHoliday> findAll() {
-        return publicHolidayRepository.findAll();
+        return publicHolidayRepository.findAllByOrderByNameAsc();
     }
 
     @Override
@@ -77,7 +77,7 @@ public class PublicHolidayServiceImpl implements PublicHolidayService {
 
     @Override
     public List<State> getStatesWithSelection(Long publicHolidayId) {
-        List<State> allStates = stateRepository.findAll();
+        List<State> allStates = stateRepository.findAllByOrderByNameAsc();
         List<StateHoliday> links = stateHolidayRepository.findByPublicHoliday_Id(publicHolidayId);
         for (State st : allStates) {
             boolean selected = links.stream()

@@ -78,12 +78,12 @@ public class PublicHolidayServiceImplTest {
         publicHoliday2.setId(2L);
         publicHoliday2.setName(NAME_INDAY);
 
-        when(publicHolidayRepository.findAll()).thenReturn(Arrays.asList(samplePublicHoliday,publicHoliday2));
+        when(publicHolidayRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(samplePublicHoliday,publicHoliday2));
 
         List<PublicHoliday> result = publicHolidayService.findAll();
 
         assertEquals(2, result.size());
-        verify(publicHolidayRepository, times(1)).findAll();
+        verify(publicHolidayRepository, times(1)).findAllByOrderByNameAsc();
     }
 
     @Test
