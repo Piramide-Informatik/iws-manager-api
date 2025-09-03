@@ -66,4 +66,7 @@ public interface ContractOrderCommissionService {
         Long basicContractId, BigDecimal minFromOrderValue, BigDecimal maxFromOrderValue);
     List<ContractOrderCommission> getByBasicContractIdAndMinCommissionBetween(
         Long basicContractId, BigDecimal minMinCommission, BigDecimal maxMinCommission);
+
+    //SORTING
+    List<ContractOrderCommission> getByBasicContractIdOrderByFromOrderValueAsc(Long basicContractId);
 }
