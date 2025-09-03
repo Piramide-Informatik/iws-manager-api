@@ -344,4 +344,11 @@ public class ContractOrderCommissionController {
             );
         }
     }
+
+    // SORTING
+    @GetMapping("/by-basic-contract/{basicContractId}/sort-by-from-order-value")
+    public ResponseEntity<List<ContractOrderCommission>> getByBasicContractIdOrderByFromOrderValueAsc(@PathVariable Long basicContractId) {
+        List<ContractOrderCommission> commissions = contractOrderCommissionService.getByBasicContractIdOrderByFromOrderValueAsc(basicContractId);
+        return new ResponseEntity<>(commissions, HttpStatus.OK);
+    }
 }

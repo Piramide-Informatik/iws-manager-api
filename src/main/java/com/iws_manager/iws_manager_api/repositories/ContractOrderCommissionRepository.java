@@ -61,4 +61,7 @@ public interface ContractOrderCommissionRepository extends JpaRepository<Contrac
         Long basicContract, BigDecimal minFromOrderValue, BigDecimal maxFromOrderValue);
     List<ContractOrderCommission> findByBasicContractIdAndMinCommissionBetween(
         Long basicContract, BigDecimal minMinCommission, BigDecimal maxMinCommission);
+
+    //SORTING
+    List<ContractOrderCommission> findByBasicContractIdOrderByFromOrderValueAsc(Long basicContractId);
 }
