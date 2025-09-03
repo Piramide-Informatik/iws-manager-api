@@ -8,5 +8,6 @@ public interface HolidayYearService {
     List<HolidayYear> getAll();
     List<HolidayYear> getByPublicHolidayId(Long publicHolidayId);
     HolidayYear createNextYear(Long publicHolidayId);
+    void delete(Long id);
 
 }

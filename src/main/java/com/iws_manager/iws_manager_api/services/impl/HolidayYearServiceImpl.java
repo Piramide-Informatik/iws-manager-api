@@ -58,4 +58,13 @@ public class HolidayYearServiceImpl implements HolidayYearService {
 
         return holidayYearRepository.save(hy);
     }
+
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID cannot be null");
+        }
+        holidayYearRepository.deleteById(id);
+    }
 }
