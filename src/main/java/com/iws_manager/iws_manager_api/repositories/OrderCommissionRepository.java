@@ -29,4 +29,8 @@ public interface OrderCommissionRepository extends JpaRepository<OrderCommission
     List<OrderCommission> findByMinCommissionLessThanEqual(BigDecimal value);
     List<OrderCommission> findByMinCommissionGreaterThanEqual(BigDecimal value);
     List<OrderCommission> findByMinCommissionBetween(BigDecimal startValue, BigDecimal endValue);
+
+    //SORTS
+    List<OrderCommission> findByOrderIdOrderByFromOrderValueAsc(Long orderId);
+
 }

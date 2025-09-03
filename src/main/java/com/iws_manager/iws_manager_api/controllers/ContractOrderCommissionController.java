@@ -130,9 +130,9 @@ public class ContractOrderCommissionController {
         return new ResponseEntity<>(commissions, HttpStatus.OK);
     }
 
-    @GetMapping("/by-employment-contract/{employmentContractId}")
-    public ResponseEntity<List<ContractOrderCommission>> getByEmploymentContractId(@PathVariable Long employmentContractId) {
-        List<ContractOrderCommission> commissions = contractOrderCommissionService.getByEmploymentContractId(employmentContractId);
+    @GetMapping("/by-basic-contract/{basicContractId}")
+    public ResponseEntity<List<ContractOrderCommission>> getByBasicContractId(@PathVariable Long basicContractId) {
+        List<ContractOrderCommission> commissions = contractOrderCommissionService.getByBasicContractId(basicContractId);
         return new ResponseEntity<>(commissions, HttpStatus.OK);
     }
 
@@ -174,53 +174,53 @@ public class ContractOrderCommissionController {
         return new ResponseEntity<>(commissions, HttpStatus.OK);
     }
 
-    // EMPLOYMENT CONTRACT WITH CONDITIONS ENDPOINTS
+    // BASIC CONTRACT WITH CONDITIONS ENDPOINTS
 
-    @GetMapping("/by-employment-contract/{employmentContractId}/commission-greater-than/{commission}")
-    public ResponseEntity<List<ContractOrderCommission>> getByEmploymentContractIdAndCommissionGreaterThanEqual(
-            @PathVariable Long employmentContractId, @PathVariable BigDecimal commission) {
+    @GetMapping("/by-basic-contract/{basicContractId}/commission-greater-than/{commission}")
+    public ResponseEntity<List<ContractOrderCommission>> getByBasicContractIdAndCommissionGreaterThanEqual(
+            @PathVariable Long basicContractId, @PathVariable BigDecimal commission) {
         List<ContractOrderCommission> commissions = contractOrderCommissionService
-                .getByEmploymentContractIdAndCommissionGreaterThanEqual(employmentContractId, commission);
+                .getByBasicContractIdAndCommissionGreaterThanEqual(basicContractId, commission);
         return new ResponseEntity<>(commissions, HttpStatus.OK);
     }
 
-    @GetMapping("/by-employment-contract/{employmentContractId}/commission-less-than/{commission}")
-    public ResponseEntity<List<ContractOrderCommission>> getByEmploymentContractIdAndCommissionLessThanEqual(
-            @PathVariable Long employmentContractId, @PathVariable BigDecimal commission) {
+    @GetMapping("/by-basic-contract/{basicContractId}/commission-less-than/{commission}")
+    public ResponseEntity<List<ContractOrderCommission>> getByBasicContractIdAndCommissionLessThanEqual(
+            @PathVariable Long basicContractId, @PathVariable BigDecimal commission) {
         List<ContractOrderCommission> commissions = contractOrderCommissionService
-                .getByEmploymentContractIdAndCommissionLessThanEqual(employmentContractId, commission);
+                .getByBasicContractIdAndCommissionLessThanEqual(basicContractId, commission);
         return new ResponseEntity<>(commissions, HttpStatus.OK);
     }
 
-    @GetMapping("/by-employment-contract/{employmentContractId}/from-order-value-greater-than/{fromOrderValue}")
-    public ResponseEntity<List<ContractOrderCommission>> getByEmploymentContractIdAndFromOrderValueGreaterThanEqual(
-            @PathVariable Long employmentContractId, @PathVariable BigDecimal fromOrderValue) {
+    @GetMapping("/by-basic-contract/{basicContractId}/from-order-value-greater-than/{fromOrderValue}")
+    public ResponseEntity<List<ContractOrderCommission>> getByBasicContractIdAndFromOrderValueGreaterThanEqual(
+            @PathVariable Long basicContractId, @PathVariable BigDecimal fromOrderValue) {
         List<ContractOrderCommission> commissions = contractOrderCommissionService
-                .getByEmploymentContractIdAndFromOrderValueGreaterThanEqual(employmentContractId, fromOrderValue);
+                .getByBasicContractIdAndFromOrderValueGreaterThanEqual(basicContractId, fromOrderValue);
         return new ResponseEntity<>(commissions, HttpStatus.OK);
     }
 
-    @GetMapping("/by-employment-contract/{employmentContractId}/from-order-value-less-than/{fromOrderValue}")
-    public ResponseEntity<List<ContractOrderCommission>> getByEmploymentContractIdAndFromOrderValueLessThanEqual(
-            @PathVariable Long employmentContractId, @PathVariable BigDecimal fromOrderValue) {
+    @GetMapping("/by-basic-contract/{basicContractId}/from-order-value-less-than/{fromOrderValue}")
+    public ResponseEntity<List<ContractOrderCommission>> getByBasicContractIdAndFromOrderValueLessThanEqual(
+            @PathVariable Long basicContractId, @PathVariable BigDecimal fromOrderValue) {
         List<ContractOrderCommission> commissions = contractOrderCommissionService
-                .getByEmploymentContractIdAndFromOrderValueLessThanEqual(employmentContractId, fromOrderValue);
+                .getByBasicContractIdAndFromOrderValueLessThanEqual(basicContractId, fromOrderValue);
         return new ResponseEntity<>(commissions, HttpStatus.OK);
     }
 
-    @GetMapping("/by-employment-contract/{employmentContractId}/min-commission-greater-than/{minCommission}")
-    public ResponseEntity<List<ContractOrderCommission>> getByEmploymentContractIdAndMinCommissionGreaterThanEqual(
-            @PathVariable Long employmentContractId, @PathVariable BigDecimal minCommission) {
+    @GetMapping("/by-basic-contract/{basicContractId}/min-commission-greater-than/{minCommission}")
+    public ResponseEntity<List<ContractOrderCommission>> getByBasicContractIdAndMinCommissionGreaterThanEqual(
+            @PathVariable Long basicContractId, @PathVariable BigDecimal minCommission) {
         List<ContractOrderCommission> commissions = contractOrderCommissionService
-                .getByEmploymentContractIdAndMinCommissionGreaterThanEqual(employmentContractId, minCommission);
+                .getByBasicContractIdAndMinCommissionGreaterThanEqual(basicContractId, minCommission);
         return new ResponseEntity<>(commissions, HttpStatus.OK);
     }
 
-    @GetMapping("/by-employment-contract/{employmentContractId}/min-commission-less-than/{minCommission}")
-    public ResponseEntity<List<ContractOrderCommission>> getByEmploymentContractIdAndMinCommissionLessThanEqual(
-            @PathVariable Long employmentContractId, @PathVariable BigDecimal minCommission) {
+    @GetMapping("/by-basic-contract/{basicContractId}/min-commission-less-than/{minCommission}")
+    public ResponseEntity<List<ContractOrderCommission>> getByBasicContractIdAndMinCommissionLessThanEqual(
+            @PathVariable Long basicContractId, @PathVariable BigDecimal minCommission) {
         List<ContractOrderCommission> commissions = contractOrderCommissionService
-                .getByEmploymentContractIdAndMinCommissionLessThanEqual(employmentContractId, minCommission);
+                .getByBasicContractIdAndMinCommissionLessThanEqual(basicContractId, minCommission);
         return new ResponseEntity<>(commissions, HttpStatus.OK);
     }
 
@@ -283,17 +283,17 @@ public class ContractOrderCommissionController {
         }
     }
 
-    // EMPLOYMENT CONTRACT WITH RANGE ENDPOINTS
+    // BASIC CONTRACT WITH RANGE ENDPOINTS
 
-    @GetMapping("/by-employment-contract/{employmentContractId}/commission-between")
-    public ResponseEntity<?> getByEmploymentContractIdAndCommissionBetween(
-            @PathVariable Long employmentContractId,
+    @GetMapping("/by-basic-contract/{basicContractId}/commission-between")
+    public ResponseEntity<?> getByBasicContractIdAndCommissionBetween(
+            @PathVariable Long basicContractId,
             @RequestParam("minCommission") BigDecimal minCommission,
             @RequestParam("maxCommission") BigDecimal maxCommission) {
         
         try {
             List<ContractOrderCommission> commissions = contractOrderCommissionService
-                    .getByEmploymentContractIdAndCommissionBetween(employmentContractId, minCommission, maxCommission);
+                    .getByBasicContractIdAndCommissionBetween(basicContractId, minCommission, maxCommission);
             return ResponseEntity.ok(commissions);
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(
@@ -305,15 +305,15 @@ public class ContractOrderCommissionController {
         }
     }
 
-    @GetMapping("/by-employment-contract/{employmentContractId}/from-order-value-between")
-    public ResponseEntity<?> getByEmploymentContractIdAndFromOrderValueBetween(
-            @PathVariable Long employmentContractId,
+    @GetMapping("/by-basic-contract/{basicContractId}/from-order-value-between")
+    public ResponseEntity<?> getByBasicContractIdAndFromOrderValueBetween(
+            @PathVariable Long basicContractId,
             @RequestParam("minFromOrderValue") BigDecimal minFromOrderValue,
             @RequestParam("maxFromOrderValue") BigDecimal maxFromOrderValue) {
         
         try {
             List<ContractOrderCommission> commissions = contractOrderCommissionService
-                    .getByEmploymentContractIdAndFromOrderValueBetween(employmentContractId, minFromOrderValue, maxFromOrderValue);
+                    .getByBasicContractIdAndFromOrderValueBetween(basicContractId, minFromOrderValue, maxFromOrderValue);
             return ResponseEntity.ok(commissions);
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(
@@ -325,15 +325,15 @@ public class ContractOrderCommissionController {
         }
     }
 
-    @GetMapping("/by-employment-contract/{employmentContractId}/min-commission-between")
-    public ResponseEntity<?> getByEmploymentContractIdAndMinCommissionBetween(
-            @PathVariable Long employmentContractId,
+    @GetMapping("/by-basic-contract/{basicContractId}/min-commission-between")
+    public ResponseEntity<?> getByBasicContractIdAndMinCommissionBetween(
+            @PathVariable Long basicContractId,
             @RequestParam("minMinCommission") BigDecimal minMinCommission,
             @RequestParam("maxMinCommission") BigDecimal maxMinCommission) {
         
         try {
             List<ContractOrderCommission> commissions = contractOrderCommissionService
-                    .getByEmploymentContractIdAndMinCommissionBetween(employmentContractId, minMinCommission, maxMinCommission);
+                    .getByBasicContractIdAndMinCommissionBetween(basicContractId, minMinCommission, maxMinCommission);
             return ResponseEntity.ok(commissions);
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(
