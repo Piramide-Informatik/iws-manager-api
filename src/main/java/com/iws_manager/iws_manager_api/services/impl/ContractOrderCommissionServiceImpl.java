@@ -360,4 +360,14 @@ public class ContractOrderCommissionServiceImpl implements ContractOrderCommissi
         return contractOrderCommissionRepository.findByBasicContractIdAndMinCommissionBetween(
                 basicContractId, minMinCommission, maxMinCommission);
     }
+
+    //SORTING
+    @Override
+    @Transactional(readOnly = true)
+    public List<ContractOrderCommission> getByBasicContractIdOrderByFromOrderValueAsc(Long basicContractId) {
+        if (basicContractId == null) {
+            throw new IllegalArgumentException("BasicContractId cannot be null");
+        }
+        return contractOrderCommissionRepository.findByBasicContractIdOrderByFromOrderValueAsc(basicContractId);
+    }
 }
