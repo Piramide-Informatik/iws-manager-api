@@ -118,7 +118,7 @@ class EmployeeServiceImplTest {
 
     @Test
     void testDelete() {
-        doNothing().when(employeeRepository).deleteById(1L);
+        when(employeeRepository.existsById(1L)).thenReturn(true);
         employeeService.delete(1L);
         verify(employeeRepository, times(1)).deleteById(1L);
     }
