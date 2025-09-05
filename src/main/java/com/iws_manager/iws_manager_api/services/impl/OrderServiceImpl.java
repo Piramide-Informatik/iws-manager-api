@@ -13,6 +13,8 @@ import com.iws_manager.iws_manager_api.models.Order;
 import com.iws_manager.iws_manager_api.repositories.OrderRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.OrderService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 /**
  * Implementation of the {@link OrderService} interface for managing Branch entities.
  * Provides CRUD operations and business logic for Order management.
@@ -139,6 +141,9 @@ public class OrderServiceImpl implements OrderService {
     public void delete(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
+        }
+        if (!orderRepository.existsById(id)) {  
+            throw new EntityNotFoundException("EmploymentContract not found with id: " + id);
         }
         orderRepository.deleteById(id);
     }
