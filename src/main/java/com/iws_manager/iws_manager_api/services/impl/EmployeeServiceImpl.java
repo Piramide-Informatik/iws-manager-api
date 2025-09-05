@@ -11,6 +11,8 @@ import com.iws_manager.iws_manager_api.models.Employee;
 import com.iws_manager.iws_manager_api.repositories.EmployeeRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.EmployeeService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 /**
  * Implementation of the {@link EmployeeService} interface for managing Branch entities.
  * Provides CRUD operations and business logic for Employee management.
@@ -125,6 +127,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void delete(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
+        }
+         if (!employeeRepository.existsById(id)) {  
+            throw new EntityNotFoundException("Customer not found with id: " + id);
         }
         employeeRepository.deleteById(id);
     }
