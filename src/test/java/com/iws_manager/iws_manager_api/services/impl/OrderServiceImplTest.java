@@ -113,7 +113,7 @@ public class OrderServiceImplTest {
 
     @Test
     void deleteShouldInvokeDelete() {
-        doNothing().when(orderRepository).deleteById(ORDER_1_ID);
+        when(orderRepository.existsById(ORDER_1_ID)).thenReturn(true);
         orderService.delete(ORDER_1_ID);
         verify(orderRepository, times(1)).deleteById(ORDER_1_ID);
     }
