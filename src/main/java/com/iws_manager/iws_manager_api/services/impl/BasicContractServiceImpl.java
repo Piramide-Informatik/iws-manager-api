@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.iws_manager.iws_manager_api.models.BasicContract;
 import com.iws_manager.iws_manager_api.repositories.BasicContractRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.BasicContractService;
+import jakarta.persistence.EntityNotFoundException;
 
 /**
  * Implementation of the {@link BasicContractService} interface for managing Branch entities.
@@ -121,6 +122,10 @@ public class BasicContractServiceImpl implements BasicContractService {
     public void delete(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
+        }
+
+        if (!basicContractRepository.existsById(id)) {  
+            throw new EntityNotFoundException("ContactPerson not found with id: " + id);
         }
         basicContractRepository.deleteById(id);
     }
