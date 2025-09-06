@@ -113,8 +113,9 @@ class SubcontractServiceImplTest {
 
     @Test
     void testDeleteValid() {
-        assertDoesNotThrow(() -> subcontractService.delete(1L));
-        verify(subcontractRepository).deleteById(1L);
+        when(subcontractRepository.existsById(1L)).thenReturn(true);
+        subcontractService.delete(1L);
+        verify(subcontractRepository, times(1)).deleteById(1L);
     }
 
     @Test
