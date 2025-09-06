@@ -119,8 +119,11 @@ class BasicContractServiceImplTest {
 
     @Test
     void testDeleteValid() {
-        assertDoesNotThrow(() -> basicContractService.delete(1L));
-        verify(basicContractRepository).deleteById(1L);
+        when(basicContractRepository.existsById(1L)).thenReturn(true);
+        
+        basicContractService.delete(1L);
+        
+        verify(basicContractRepository, times(1)).deleteById(1L);
     }
 
     @Test
