@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 
 import com.iws_manager.iws_manager_api.models.PayCondition;
 import com.iws_manager.iws_manager_api.repositories.PayConditionRepository;
@@ -114,6 +115,10 @@ public class PayConditionServiceImpl implements PayConditionService {
     public void delete(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
+        }
+
+        if (!payConditionRepository.existsById(id)) {  
+            throw new EntityNotFoundException("Pay Condition not found with id: " + id);
         }
         payConditionRepository.deleteById(id);
     }
