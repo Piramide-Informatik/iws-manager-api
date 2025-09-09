@@ -74,7 +74,7 @@ public class BillerServiceImpl implements BillerService {
     @Override
     @Transactional(readOnly = true)
     public List<Biller> findAll() {
-        return billerRepository.findAll();
+        return billerRepository.findAllByOrderByNameAsc();
     }
 
     /**
