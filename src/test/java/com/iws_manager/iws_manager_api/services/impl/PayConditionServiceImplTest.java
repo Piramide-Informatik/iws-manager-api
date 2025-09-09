@@ -110,8 +110,11 @@ class PayConditionServiceImplTest {
 
     @Test
     void deleteShouldCallRepository() {
+        when(payConditionRepository.existsById(1L)).thenReturn(true);
+        
         payConditionService.delete(1L);
-        verify(payConditionRepository).deleteById(1L);
+        
+        verify(payConditionRepository, times(1)).deleteById(1L);
     }
 
     @Test
