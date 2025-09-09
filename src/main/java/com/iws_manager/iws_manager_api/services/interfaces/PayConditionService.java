@@ -11,8 +11,6 @@ public interface PayConditionService {
     List<PayCondition> findAll();
     PayCondition update(Long id, PayCondition payConditionDetails);
     void delete(Long id);
-
-    List<PayCondition> getAllByOrderByNameAsc();
     
     List<PayCondition> getByName(String name);
     List<PayCondition> getByDeadline(Integer deadline);
