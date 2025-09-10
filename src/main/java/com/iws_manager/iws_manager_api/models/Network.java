@@ -18,5 +18,5 @@ import lombok.*;
 public class Network extends BaseEntity {
 
     @Column(name = "network", nullable = true, length = 255)
-    private String networkName;
+    private String name;
 }

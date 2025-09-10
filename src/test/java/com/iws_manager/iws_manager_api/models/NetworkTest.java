@@ -14,17 +14,17 @@ class NetworkTest {
         
         // Act
         Network network = new Network();
-        network.setNetworkName(networkName);
+        network.setName(networkName);
         
         // Assert
-        assertEquals(networkName, network.getNetworkName());
+        assertEquals(networkName, network.getName());
     }
 
     @Test
     void testNetworkWithAuditFields() {
         // Arrange
         Network network = new Network();
-        network.setNetworkName("Regional Network");
+        network.setName("Regional Network");
         LocalDateTime now = LocalDateTime.now();
         
         // Act
@@ -41,15 +41,15 @@ class NetworkTest {
         // Arrange
         Network network1 = new Network();
         network1.setId(1L);
-        network1.setNetworkName("Main Network");
+        network1.setName("Main Network");
         
         Network network2 = new Network();
         network2.setId(1L);
-        network2.setNetworkName("Main Network");
+        network2.setName("Main Network");
         
         Network network3 = new Network();
         network3.setId(2L);
-        network3.setNetworkName("Backup Network");
+        network3.setName("Backup Network");
         
         // Assert
         assertEquals(network1, network2);
