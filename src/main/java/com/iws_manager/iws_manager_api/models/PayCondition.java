@@ -23,6 +23,6 @@ public class PayCondition extends BaseEntity {
     @Column(name = "paycondition", nullable = true, length = 255)
     private String name;
 
-    @Column(name = "invoicetext", nullable = true, length = 255)
-    private String invoiceText;
+    @Column(name = "text", nullable = true, length = 255)
+    private String text;
 }
