@@ -9,18 +9,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
+// import java.util.Optional;
 
-import org.springframework.data.jpa.repository.EntityGraph;
+// import org.springframework.data.jpa.repository.EntityGraph;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     
-     @EntityGraph(attributePaths = {"branch", "companytype", "country", "state"})
-    List<Customer> findAll();
+//      @EntityGraph(attributePaths = {"branch", "companytype", "country", "state"})
+//     List<Customer> findAll();
 
-    @EntityGraph(attributePaths = {"branch", "companytype", "country", "state"})
-    Optional<Customer> findById(Long id);
+//     @EntityGraph(attributePaths = {"branch", "companytype", "country", "state"})
+//     Optional<Customer> findById(Long id);
     
     @Query("SELECT cp FROM ContactPerson cp " +
            "LEFT JOIN FETCH cp.salutation " +
