@@ -99,6 +99,7 @@ public class PayConditionServiceImpl implements PayConditionService {
                 .map(existingPayCondition -> {
                     existingPayCondition.setName(payConditionDetails.getName());
                     existingPayCondition.setDeadline(payConditionDetails.getDeadline());
+                    existingPayCondition.setText(payConditionDetails.getText());
                     
                     return payConditionRepository.save(existingPayCondition);
                 })
