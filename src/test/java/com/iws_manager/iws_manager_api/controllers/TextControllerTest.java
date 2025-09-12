@@ -28,9 +28,13 @@ class TextControllerTest {
     private static final String BASE_URL = "/api/v1/texts";
     private static final String TEXT_LABEL = "Welcome Message";
     private static final String TEXT_CONTENT = "Welcome to our application!";
+    private static final String TEXT_CONTENT2 = "New content";
+    private static final String TEXT_LABEL2 = "New Label";
+    private static final String TEXT_LABEL3 = "Long Content";
     private static final String LABEL_JSON_PATH = "$.label";
     private static final String CONTENT_JSON_PATH = "$.content";
     private static final String ERROR_JSON_PATH = "$.error";
+    private static final String LENGHT_JSON_PATH = "$.length()";
     private static final String ID = "/{id}";
     private static final long VALID_ID = 1L;
     private static final long INVALID_ID = 99L;
@@ -128,7 +132,7 @@ class TextControllerTest {
 
         mockMvc.perform(get(BASE_URL))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath(LENGHT_JSON_PATH).value(2))
                 .andExpect(jsonPath("$[0]" + LABEL_JSON_PATH.substring(1)).value(TEXT_LABEL))
                 .andExpect(jsonPath("$[0]" + CONTENT_JSON_PATH.substring(1)).value(TEXT_CONTENT))
                 .andExpect(jsonPath("$[1]" + LABEL_JSON_PATH.substring(1)).value("Farewell Message"));
@@ -140,7 +144,7 @@ class TextControllerTest {
 
         mockMvc.perform(get(BASE_URL))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(0));
+                .andExpect(jsonPath(LENGHT_JSON_PATH).value(0));
     }
 
     // ------------------- UPDATE TESTS -------------------
@@ -169,15 +173,15 @@ class TextControllerTest {
 
     @Test
     void updateTextShouldUpdateBothLabelAndContent() throws Exception {
-        Text updatedText = createTestText(VALID_ID, "New Label", "New content");
+        Text updatedText = createTestText(VALID_ID, TEXT_LABEL2, TEXT_CONTENT2);
         when(textService.update(eq(VALID_ID), any(Text.class))).thenReturn(updatedText);
 
         mockMvc.perform(put(BASE_URL + ID, VALID_ID)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(buildTextJson("New Label", "New content")))
+                .content(buildTextJson(TEXT_LABEL2, TEXT_CONTENT2)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath(LABEL_JSON_PATH).value("New Label"))
-                .andExpect(jsonPath(CONTENT_JSON_PATH).value("New content"));
+                .andExpect(jsonPath(LABEL_JSON_PATH).value(TEXT_LABEL2))
+                .andExpect(jsonPath(CONTENT_JSON_PATH).value(TEXT_CONTENT2));
     }
 
     // ------------------- DELETE TESTS -------------------
@@ -200,7 +204,7 @@ class TextControllerTest {
 
         mockMvc.perform(get(BASE_URL))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(3))
+                .andExpect(jsonPath(LENGHT_JSON_PATH).value(3))
                 .andExpect(jsonPath("$[0].label").value("A Message"))
                 .andExpect(jsonPath("$[1].label").value("B Message"))
                 .andExpect(jsonPath("$[2].label").value("C Message"));
@@ -213,13 +217,13 @@ class TextControllerTest {
                            "of text data without issues. This is important for storing " +
                            "templates, messages, and other lengthy content.";
         
-        Text textWithLongContent = createTestText(VALID_ID, "Long Content", longContent);
+        Text textWithLongContent = createTestText(VALID_ID, TEXT_LABEL3, longContent);
         when(textService.create(any(Text.class))).thenReturn(textWithLongContent);
 
         mockMvc.perform(post(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(buildTextJson("Long Content", longContent)))
+                .content(buildTextJson(TEXT_LABEL3, longContent)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath(LABEL_JSON_PATH).value("Long Content"));
+                .andExpect(jsonPath(LABEL_JSON_PATH).value(TEXT_LABEL3));
     }
 }
