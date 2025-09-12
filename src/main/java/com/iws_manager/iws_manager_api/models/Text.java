@@ -17,7 +17,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@EqualsAndHashCode(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "`text`")
 @AttributeOverride(name = "id", column = @Column(name = "textid"))
