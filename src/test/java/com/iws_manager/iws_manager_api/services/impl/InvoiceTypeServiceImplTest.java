@@ -273,7 +273,6 @@ public class InvoiceTypeServiceImplTest {
     @Test
     void testFindAllOrderVerification() {
         // Arrange
-        List<InvoiceType> invoiceTypeList = Arrays.asList(invoiceType2, invoiceType); // Orden inverso
         when(invoiceTypeRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(invoiceType, invoiceType2));
 
         // Act
