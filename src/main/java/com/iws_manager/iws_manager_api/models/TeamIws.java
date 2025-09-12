@@ -1,5 +1,6 @@
 package com.iws_manager.iws_manager_api.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.iws_manager.iws_manager_api.models.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -26,6 +27,6 @@ public class TeamIws extends BaseEntity {
         referencedColumnName = "employeeiwsid",
         foreignKey = @ForeignKey(name = "employeeiwsid_teamleaderid")
     )
-    @JsonBackReference // BREAK RECURSION
+    @JsonIgnoreProperties({"teamIws", "user", "hibernateLazyInitializer", "handler"})
     private EmployeeIws teamLeader;
 }
