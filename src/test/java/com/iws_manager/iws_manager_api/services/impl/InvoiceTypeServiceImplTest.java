@@ -23,6 +23,9 @@ import jakarta.persistence.EntityNotFoundException;
 @ExtendWith(MockitoExtension.class)
 public class InvoiceTypeServiceImplTest {
 
+    private static final String TEST_NAME1 = "Direct Billing";
+    private static final String TEST_NAME2 = "Network Billing";
+
     @Mock
     private InvoiceTypeRepository invoiceTypeRepository;
 
@@ -36,11 +39,11 @@ public class InvoiceTypeServiceImplTest {
     void setUp() {
         invoiceType = new InvoiceType();
         invoiceType.setId(1L);
-        invoiceType.setName("Direct Billing");
+        invoiceType.setName(TEST_NAME1);
 
         invoiceType2 = new InvoiceType();
         invoiceType2.setId(2L);
-        invoiceType2.setName("Network Billing");
+        invoiceType2.setName(TEST_NAME2);
     }
 
     @Test
@@ -118,8 +121,8 @@ public class InvoiceTypeServiceImplTest {
         // Assert
         assertNotNull(result);
         assertEquals(2, result.size());
-        assertEquals("Direct Billing", result.get(0).getName());
-        assertEquals("Network Billing", result.get(1).getName());
+        assertEquals(TEST_NAME1, result.get(0).getName());
+        assertEquals(TEST_NAME2, result.get(1).getName());
         verify(invoiceTypeRepository, times(1)).findAllByOrderByNameAsc();
     }
 
@@ -277,8 +280,8 @@ public class InvoiceTypeServiceImplTest {
         List<InvoiceType> result = invoiceTypeService.findAll();
 
         // Assert
-        assertEquals("Direct Billing", result.get(0).getName()); 
-        assertEquals("Network Billing", result.get(1).getName()); 
+        assertEquals(TEST_NAME1, result.get(0).getName()); 
+        assertEquals(TEST_NAME2, result.get(1).getName()); 
         verify(invoiceTypeRepository, times(1)).findAllByOrderByNameAsc();
     }
 }
