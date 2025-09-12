@@ -23,6 +23,9 @@ import jakarta.persistence.EntityNotFoundException;
 @ExtendWith(MockitoExtension.class)
 public class TextServiceImplTest {
 
+    private static final String TEST_LABEL1 = "Welcome Message";
+    private static final String TEST_LABEL2 = "Farewell Message";
+
     @Mock
     private TextRepository textRepository;
 
@@ -36,12 +39,12 @@ public class TextServiceImplTest {
     void setUp() {
         text = new Text();
         text.setId(1L);
-        text.setLabel("Welcome Message");
+        text.setLabel(TEST_LABEL1);
         text.setContent("Welcome to our application!");
 
         text2 = new Text();
         text2.setId(2L);
-        text2.setLabel("Farewell Message");
+        text2.setLabel(TEST_LABEL2);
         text2.setContent("Thank you for using our service!");
     }
 
@@ -122,8 +125,8 @@ public class TextServiceImplTest {
         // Assert
         assertNotNull(result);
         assertEquals(2, result.size());
-        assertEquals("Welcome Message", result.get(0).getLabel());
-        assertEquals("Farewell Message", result.get(1).getLabel());
+        assertEquals(TEST_LABEL1, result.get(0).getLabel());
+        assertEquals(TEST_LABEL2, result.get(1).getLabel());
         verify(textRepository, times(1)).findAllByOrderByLabelAsc();
     }
 
@@ -278,15 +281,14 @@ public class TextServiceImplTest {
     @Test
     void testFindAllOrderVerification() {
         // Arrange
-        List<Text> textList = Arrays.asList(text2, text);
         when(textRepository.findAllByOrderByLabelAsc()).thenReturn(Arrays.asList(text, text2));
 
         // Act
         List<Text> result = textService.findAll();
 
         // Assert
-        assertEquals("Welcome Message", result.get(0).getLabel()); 
-        assertEquals("Farewell Message", result.get(1).getLabel());
+        assertEquals(TEST_LABEL1, result.get(0).getLabel()); 
+        assertEquals(TEST_LABEL2, result.get(1).getLabel());
         verify(textRepository, times(1)).findAllByOrderByLabelAsc();
     }
 
