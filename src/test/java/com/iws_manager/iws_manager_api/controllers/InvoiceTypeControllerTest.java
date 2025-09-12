@@ -29,6 +29,7 @@ class InvoiceTypeControllerTest {
     private static final String INVOICE_TYPE_NAME = "Direct Billing";
     private static final String NAME_JSON_PATH = "$.name";
     private static final String ERROR_JSON_PATH = "$.error";
+    private static final String JSON_LENGTH_PATH = "$.length()";
     private static final String ID = "/{id}";
     private static final long VALID_ID = 1L;
     private static final long INVALID_ID = 99L;
@@ -121,7 +122,7 @@ class InvoiceTypeControllerTest {
 
         mockMvc.perform(get(BASE_URL))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath(JSON_LENGTH_PATH).value(2))
                 .andExpect(jsonPath("$[0]" + NAME_JSON_PATH.substring(1)).value(INVOICE_TYPE_NAME))
                 .andExpect(jsonPath("$[1]" + NAME_JSON_PATH.substring(1)).value("Network Billing"));
     }
@@ -132,7 +133,7 @@ class InvoiceTypeControllerTest {
 
         mockMvc.perform(get(BASE_URL))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(0));
+                .andExpect(jsonPath(JSON_LENGTH_PATH).value(0));
     }
 
     // ------------------- UPDATE TESTS -------------------
@@ -177,7 +178,7 @@ class InvoiceTypeControllerTest {
 
         mockMvc.perform(get(BASE_URL))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(3))
+                .andExpect(jsonPath(JSON_LENGTH_PATH).value(3))
                 .andExpect(jsonPath("$[0].name").value("A Type"))
                 .andExpect(jsonPath("$[1].name").value("B Type"))
                 .andExpect(jsonPath("$[2].name").value("C Type"));
