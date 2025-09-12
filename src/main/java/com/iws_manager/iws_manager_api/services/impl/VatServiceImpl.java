@@ -74,7 +74,7 @@ public class VatServiceImpl implements VatService {
     @Override
     @Transactional(readOnly = true)
     public List<Vat> findAll() {
-        return vatRepository.findAll();
+        return vatRepository.findAllByOrderByLabelAsc();
     }
 
     /**
