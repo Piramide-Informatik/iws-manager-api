@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 
 class ReminderLevelTest {
 
+    private static final String TEST_TITLE = "1. Mahnung";
+
     @Test
     void testReminderLevelCreation() {
         // Arrange
@@ -63,7 +65,7 @@ class ReminderLevelTest {
     void testReminderLevelWithAuditFields() {
         // Arrange
         ReminderLevel reminderLevel = new ReminderLevel();
-        reminderLevel.setReminderTitle("1. Mahnung");
+        reminderLevel.setReminderTitle(TEST_TITLE);
         LocalDateTime now = LocalDateTime.now();
         
         // Act
@@ -79,11 +81,11 @@ class ReminderLevelTest {
     void testEqualsAndHashCode() {
         // Arrange
         ReminderLevel reminderLevel1 = new ReminderLevel();
-        reminderLevel1.setReminderTitle("1. Mahnung");
+        reminderLevel1.setReminderTitle(TEST_TITLE);
         reminderLevel1.setId(1L);
         
         ReminderLevel reminderLevel2 = new ReminderLevel();
-        reminderLevel2.setReminderTitle("1. Mahnung");
+        reminderLevel2.setReminderTitle(TEST_TITLE);
         reminderLevel2.setId(1L);
         
         // Assert
