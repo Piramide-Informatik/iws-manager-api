@@ -28,7 +28,7 @@ import java.math.BigDecimal;
 @AttributeOverride(name = "id", column = @Column(name = "reminderlevelid"))
 public class ReminderLevel extends BaseEntity {
 
-    @Column(name = "fee", columnDefinition = "ECIMAL(10,2)")
+    @Column(name = "fee", columnDefinition = "DECIMAL(10,2)")
     private BigDecimal fee;
 
     @Column(name = "interestrate", columnDefinition = "DECIMAL(5,2)")
