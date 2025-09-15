@@ -103,7 +103,7 @@ class ReminderLevelTest {
         reminderLevel.setReminderText(null);
         reminderLevel.setReminderTitle(null);
         
-        // Assert - Todos los campos deben aceptar null según la estructura de la BD
+        // Assert
         assertAll("ReminderLevel with null values",
             () -> assertEquals(1L, reminderLevel.getId()),
             () -> assertNull(reminderLevel.getFee()),
