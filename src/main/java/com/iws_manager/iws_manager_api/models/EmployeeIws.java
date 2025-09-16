@@ -16,6 +16,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "employeeiws")
 @AttributeOverride(name = "id", column = @Column(name = "employeeiwsid"))
@@ -47,11 +48,8 @@ public class EmployeeIws extends BaseEntity{
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(
-        name = "teamiwsid", 
-        referencedColumnName = "teamiwsid",
-        foreignKey = @ForeignKey(name = "employeeiwsid_teamiwsid")
+        name = "teamiwsid"
     )
-    @JsonManagedReference
     private TeamIws teamIws;
 
     @ManyToOne(fetch = FetchType.EAGER)
