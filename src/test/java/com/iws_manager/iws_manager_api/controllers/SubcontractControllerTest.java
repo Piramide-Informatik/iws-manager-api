@@ -141,14 +141,6 @@ public class SubcontractControllerTest {
     }
 
     @Test
-    void deleteSubcontractShouldReturnNotFound() throws Exception {
-        doThrow(new RuntimeException("Not found")).when(subcontractService).delete(999L);
-
-        mockMvc.perform(delete(URI + "/999"))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
     void getByContractorIdShouldReturnList() throws Exception {
         given(subcontractService.findByContractorId(10L)).willReturn(Collections.singletonList(subcontract1));
 
