@@ -124,16 +124,6 @@ class SystemParameterControllerTest {
         verify(systemParameterService, times(1)).delete(ID);
     }
 
-    // Test eliminado ya que el controlador ya no maneja excepciones en delete
-    // @Test
-    // void deleteNotFound() {
-    //     doThrow(new RuntimeException("Not found")).when(systemParameterService).delete(ID);
-    // 
-    //     ResponseEntity<Void> response = systemParameterController.delete(ID);
-    // 
-    //     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    // }
-
     @Test
     void createValidatesAllFields() {
         SystemParameter newParameter = new SystemParameter();
