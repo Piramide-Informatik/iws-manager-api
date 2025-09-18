@@ -13,7 +13,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@EqualsAndHashCode(callSuper = true, exclude = {"contactperson", "partner", "network"})
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "networkpartner")
 @AttributeOverride(name = "id", column = @Column(name = "networkpartnerid"))
