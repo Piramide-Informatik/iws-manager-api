@@ -28,7 +28,7 @@ public class NetworkPartner extends BaseEntity {
         nullable = true,
         foreignKey = @ForeignKey(name = "contactid_contactpersonid") 
     )
-    private ContactPerson contactperson;
+    private ContactPerson contact;
 
     @ManyToOne
     @JoinColumn(

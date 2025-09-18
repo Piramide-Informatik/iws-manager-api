@@ -21,7 +21,7 @@ class NetworkPartnerTest {
         // Act
         NetworkPartner networkPartner = new NetworkPartner();
         networkPartner.setComment("Test comment");
-        networkPartner.setContactperson(contactPerson);
+        networkPartner.setContact(contactPerson);
         networkPartner.setPartner(partner);
         networkPartner.setNetwork(network);
         networkPartner.setPartnerno(123);
@@ -29,7 +29,7 @@ class NetworkPartnerTest {
         // Assert
         assertNotNull(networkPartner);
         assertEquals("Test comment", networkPartner.getComment());
-        assertEquals(contactPerson, networkPartner.getContactperson());
+        assertEquals(contactPerson, networkPartner.getContact());
         assertEquals(partner, networkPartner.getPartner());
         assertEquals(network, networkPartner.getNetwork());
         assertEquals(123, networkPartner.getPartnerno());
@@ -40,7 +40,7 @@ class NetworkPartnerTest {
         // Act
         NetworkPartner networkPartner = new NetworkPartner();
         networkPartner.setComment(null);
-        networkPartner.setContactperson(null);
+        networkPartner.setContact(null);
         networkPartner.setPartner(null);
         networkPartner.setNetwork(null);
         networkPartner.setPartnerno(null);
@@ -48,7 +48,7 @@ class NetworkPartnerTest {
         // Assert
         assertNotNull(networkPartner);
         assertNull(networkPartner.getComment());
-        assertNull(networkPartner.getContactperson());
+        assertNull(networkPartner.getContact());
         assertNull(networkPartner.getPartner());
         assertNull(networkPartner.getNetwork());
         assertNull(networkPartner.getPartnerno());
