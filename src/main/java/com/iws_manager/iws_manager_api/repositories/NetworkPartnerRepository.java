@@ -15,7 +15,7 @@ public interface NetworkPartnerRepository extends JpaRepository<NetworkPartner, 
     
     List<NetworkPartner> findByPartnerId(Long partnerId);
     
-    List<NetworkPartner> findByContactpersonId(Long contactPersonId);
+    List<NetworkPartner> findByContactId(Long contactId);
     
     List<NetworkPartner> findByNetworkIdOrderByPartnernoAsc(Long networkId);
     List<NetworkPartner> findByPartnerIdOrderByPartnernoAsc(Long partnerId);
