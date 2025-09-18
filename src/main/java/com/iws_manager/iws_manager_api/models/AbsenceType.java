@@ -36,11 +36,4 @@ public class AbsenceType  extends BaseEntity{
     @Column(name = "shareofday", columnDefinition = "DECIMAL(2,1)")
     private BigDecimal shareOfDay;
 
-    /**
-     * Relación temporalmente comentada porque se necesita implementar absenceType
-     * TODO: Implementar cuando se complete absenceType
-     */
-    // @OneToMany(mappedBy = "absenceType", fetch = FetchType.LAZY)
-    // @ToString.Exclude
-    // private Set<AbsenceDay> absenceDays = new HashSet<>();
 }
