@@ -19,7 +19,7 @@ import lombok.*;
 @AttributeOverride(name = "id", column = @Column(name = "networkpartnerid"))
 public class NetworkPartner extends BaseEntity {
 
-    @Column(name = "comment", length = 255, nullable = true)
+    @Column(name = "`comment`", length = 255, nullable = true)
     private String comment;
 
     @ManyToOne
