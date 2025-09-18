@@ -15,16 +15,15 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@EqualsAndHashCode(callSuper = true, exclude = {"vat"})
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "vatrate")
 @AttributeOverride(name = "id", column = @Column(name = "vatrateid"))
 public class VatRate extends BaseEntity {
 
-    @Column(name = "fromdate", nullable = true)
+    @Column(name = "fromdate", nullable = true, columnDefinition = "DATE")
     private LocalDate fromdate;
 
-    @Column(name = "rate", nullable = true, precision = 5, scale = 2)
+    @Column(name = "rate", nullable = true, columnDefinition = "DECIMAL(5,2)")
     private BigDecimal rate;
 
     @ManyToOne
