@@ -1,6 +1,7 @@
 package com.iws_manager.iws_manager_api.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.iws_manager.iws_manager_api.models.base.BaseEntity;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
@@ -33,7 +34,7 @@ public class RoleRight extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "roleid", referencedColumnName = "roleid")
-    @JsonBackReference
+    @JsonIgnoreProperties({"roleRights", "role", "hibernateLazyInitializer", "handler"})
     private Role role;
 
     @ManyToOne(fetch = FetchType.LAZY)

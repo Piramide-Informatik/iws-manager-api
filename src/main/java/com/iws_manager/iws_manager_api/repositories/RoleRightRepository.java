@@ -11,4 +11,11 @@ import java.util.Optional;
 
 public interface RoleRightRepository extends JpaRepository<RoleRight, Long> {
     List<RoleRight> findByRoleId(Long roleId);
+
+    @Query("SELECT rr FROM RoleRight rr " +
+            "JOIN rr.systemFunction sf " +
+            "JOIN sf.module sm " +
+            "WHERE sm.id = :moduleId AND rr.role.id = :roleId")
+    List<RoleRight> findByModuleIdAndRoleId(@Param("moduleId") Long moduleId,
+                                            @Param("roleId") Long roleId);
 }
