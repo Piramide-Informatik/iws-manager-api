@@ -89,4 +89,9 @@ public class RoleRightServiceImpl implements RoleRightService {
         roleRightRepository.deleteById(id);
 
     }
+
+    @Override
+    public List<RoleRight> getRightRolesByModuleId(Long moduleId, Long roleId) {
+        return roleRightRepository.findByModuleIdAndRoleId(moduleId, roleId);
+    }
 }

@@ -73,4 +73,13 @@ public class RoleRightController {
         roleRightService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
+    @GetMapping("/module/{moduleId}/role/{roleId}")
+    public ResponseEntity<List<RoleRight>> getRightRolesByModuleIdAndRoleId(
+            @PathVariable Long moduleId,
+            @PathVariable Long roleId) {
+        List<RoleRight> result = roleRightService.getRightRolesByModuleId(moduleId, roleId);
+        return ResponseEntity.ok(result);
+    }
 }
