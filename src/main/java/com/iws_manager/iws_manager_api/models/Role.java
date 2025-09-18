@@ -38,8 +38,7 @@ public class Role extends BaseEntity {
     @Column(name = "role", length = 255)
     private String name;
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
     private List<RoleRight> roleRights = new ArrayList<>();
 
 }
