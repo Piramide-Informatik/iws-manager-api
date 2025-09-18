@@ -11,14 +11,8 @@ public interface NetworkPartnerRepository extends JpaRepository<NetworkPartner, 
     
     List<NetworkPartner> findAllByOrderByPartnernoAsc();
     
-    List<NetworkPartner> findByNetworkId(Long networkId);
-    
-    List<NetworkPartner> findByPartnerId(Long partnerId);
-    
-    List<NetworkPartner> findByContactId(Long contactId);
-    
     List<NetworkPartner> findByNetworkIdOrderByPartnernoAsc(Long networkId);
     List<NetworkPartner> findByPartnerIdOrderByPartnernoAsc(Long partnerId);
-    List<NetworkPartner> findByContactpersonIdOrderByPartnernoAsc(Long contactPersonId);
+    List<NetworkPartner> findByContactIdOrderByPartnernoAsc(Long contactPersonId);
 
 }
