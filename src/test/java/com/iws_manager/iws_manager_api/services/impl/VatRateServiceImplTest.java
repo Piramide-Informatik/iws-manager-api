@@ -25,6 +25,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public class VatRateServiceImplTest {
 
+    private static final String TEST_RATE = "19.00";
+
     @Mock
     private VatRateRepository vatRateRepository;
 
@@ -32,21 +34,20 @@ public class VatRateServiceImplTest {
     private VatRateServiceImpl vatRateService;
 
     private VatRate testVatRate;
-    private Vat testVat;
+    private Vat testVat = new Vat();
 
     @BeforeEach
     public void setUp() {
-        testVat = new Vat();
         testVat.setId(1L);
         
         testVatRate = new VatRate();
         testVatRate.setId(1L);
         testVatRate.setFromdate(LocalDate.of(2024, 1, 1));
-        testVatRate.setRate(new BigDecimal("19.00"));
+        testVatRate.setRate(new BigDecimal(TEST_RATE));
         testVatRate.setVat(testVat);
     }
 
-    // Test para create()
+    // Test - create()
     @Test
     public void createShouldSaveAndReturnVatRate() {
         when(vatRateRepository.save(any(VatRate.class))).thenReturn(testVatRate);
@@ -55,7 +56,7 @@ public class VatRateServiceImplTest {
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
-        assertEquals(new BigDecimal("19.00"), result.getRate());
+        assertEquals(new BigDecimal(TEST_RATE), result.getRate());
         verify(vatRateRepository, times(1)).save(testVatRate);
     }
 
@@ -65,7 +66,7 @@ public class VatRateServiceImplTest {
         verify(vatRateRepository, never()).save(any());
     }
 
-    // Test para findById()
+    // Test - findById()
     @Test
     public void findByIdShouldReturnVatRateWhenExists() {
         when(vatRateRepository.findById(1L)).thenReturn(Optional.of(testVatRate));
@@ -73,7 +74,7 @@ public class VatRateServiceImplTest {
         Optional<VatRate> result = vatRateService.findById(1L);
 
         assertTrue(result.isPresent());
-        assertEquals(new BigDecimal("19.00"), result.get().getRate());
+        assertEquals(new BigDecimal(TEST_RATE), result.get().getRate());
         verify(vatRateRepository, times(1)).findById(1L);
     }
 
@@ -93,7 +94,7 @@ public class VatRateServiceImplTest {
         verify(vatRateRepository, never()).findById(any());
     }
 
-    // Test para findAll()
+    // Test - findAll()
     @Test
     public void findAllShouldReturnAllVatRatesOrderedByFromdate() {
         VatRate secondVatRate = new VatRate();
@@ -120,7 +121,7 @@ public class VatRateServiceImplTest {
         verify(vatRateRepository, times(1)).findAllByOrderByFromdateAsc();
     }
 
-    // Test para update()
+    // Test - update()
     @Test
     public void updateShouldUpdateVatRate() {
         VatRate updatedDetails = new VatRate();
@@ -170,7 +171,7 @@ public class VatRateServiceImplTest {
         verify(vatRateRepository, never()).findById(any());
     }
 
-    // Test para delete()
+    // Test - delete()
     @Test
     public void deleteShouldDeleteVatRate() {
         when(vatRateRepository.existsById(1L)).thenReturn(true);
@@ -197,7 +198,7 @@ public class VatRateServiceImplTest {
         verify(vatRateRepository, never()).deleteById(any());
     }
 
-    // Test para getByVatId()
+    // Test - getByVatId()
     @Test
     public void getByVatIdShouldReturnVatRatesOrderedByFromdate() {
         when(vatRateRepository.findByVatIdOrderByFromdateAsc(1L))
@@ -225,7 +226,7 @@ public class VatRateServiceImplTest {
         verify(vatRateRepository, never()).findByVatIdOrderByFromdateAsc(any());
     }
 
-    // Test para verificar que se usan los métodos ordenados del repositorio
+    // Test - verificar que se usan los métodos ordenados del repositorio
     @Test
     public void shouldUseOrderedRepositoryMethods() {
         when(vatRateRepository.findAllByOrderByFromdateAsc()).thenReturn(List.of(testVatRate));
@@ -240,14 +241,14 @@ public class VatRateServiceImplTest {
         verify(vatRateRepository, never()).findByVatId(any());
     }
 
-    // Test para verificar el constructor con dependencias
+    // Test - verificar el constructor con dependencias
     @Test
     public void shouldInitializeWithRepositoryDependency() {
         assertNotNull(vatRateService);
         assertNotNull(vatRateRepository);
     }
 
-    // Test para verificar el comportamiento con valores null en campos
+    // Test - verificar el comportamiento con valores null en campos
     @Test
     public void updateShouldHandleNullFieldsCorrectly() {
         VatRate updatedDetails = new VatRate();
