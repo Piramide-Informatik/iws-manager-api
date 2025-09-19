@@ -12,4 +12,5 @@ public interface RoleRightService {
     RoleRight update(Long id, RoleRight roleRightDetails);
     void delete(Long id);
     List<RoleRight> getRightRolesByModuleId(Long moduleId, Long roleId);
+    List<RoleRight> saveAll(List<RoleRight> rights);
 }
