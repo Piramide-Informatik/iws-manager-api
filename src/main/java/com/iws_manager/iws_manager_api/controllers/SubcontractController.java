@@ -64,12 +64,8 @@ public class SubcontractController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
-        try {
-            subcontractService.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+         subcontractService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/contractor/{contractorId}")
