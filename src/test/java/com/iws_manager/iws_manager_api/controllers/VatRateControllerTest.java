@@ -32,11 +32,10 @@ class VatRateControllerTest {
     private VatRateController vatRateController;
 
     private VatRate testVatRate;
-    private Vat testVat;
+    private Vat testVat = new Vat();;
 
     @BeforeEach
     void setUp() {
-        testVat = new Vat();
         testVat.setId(1L);
         
         testVatRate = new VatRate();
