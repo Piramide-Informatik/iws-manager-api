@@ -82,4 +82,14 @@ public class RoleRightController {
         List<RoleRight> result = roleRightService.getRightRolesByModuleId(moduleId, roleId);
         return ResponseEntity.ok(result);
     }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<List<RoleRight>> saveAll(@RequestBody List<RoleRight> rights) {
+        if (rights == null || rights.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        List<RoleRight> saved = roleRightService.saveAll(rights);
+        return ResponseEntity.ok(saved);
+    }
 }
