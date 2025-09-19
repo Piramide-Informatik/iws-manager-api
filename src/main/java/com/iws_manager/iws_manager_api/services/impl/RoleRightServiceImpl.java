@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,5 +94,39 @@ public class RoleRightServiceImpl implements RoleRightService {
     @Override
     public List<RoleRight> getRightRolesByModuleId(Long moduleId, Long roleId) {
         return roleRightRepository.findByModuleIdAndRoleId(moduleId, roleId);
+    }
+
+    @Override
+    @Transactional
+    public List<RoleRight> saveAll(List<RoleRight> rights) {
+        if (rights == null || rights.isEmpty()) {
+            throw new IllegalArgumentException("Rights list cannot be null or empty");
+        }
+
+        List<RoleRight> savedRights = new ArrayList<>();
+
+        for (RoleRight roleRight : rights) {
+            if (roleRight == null) {
+                throw new IllegalArgumentException("RoleRight in list cannot be null");
+            }
+
+            // Validate and get Role
+            Long roleId = roleRight.getRole().getId();
+            Role role = roleRepository.findById(roleId)
+                    .orElseThrow(() -> new RuntimeException("Role not found with id: " + roleId));
+
+            // Validate and get System Function
+            Long functionId = roleRight.getSystemFunction().getId();
+            SystemFunction function = systemFunctionRepository.findById(functionId)
+                    .orElseThrow(() -> new RuntimeException("SystemFunction not found with id: " + functionId));
+
+            roleRight.setRole(role);
+            roleRight.setSystemFunction(function);
+
+            // Add to saved list
+            savedRights.add(roleRight);
+        }
+
+        return roleRightRepository.saveAll(savedRights);
     }
 }
