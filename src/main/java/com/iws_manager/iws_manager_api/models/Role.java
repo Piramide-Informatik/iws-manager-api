@@ -38,7 +38,7 @@ public class Role extends BaseEntity {
     @Column(name = "role", length = 255)
     private String name;
 
-    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<RoleRight> roleRights = new ArrayList<>();
 
 }
