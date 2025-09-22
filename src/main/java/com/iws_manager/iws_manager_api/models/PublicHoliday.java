@@ -46,11 +46,11 @@ public class PublicHoliday extends BaseEntity {
     private Integer sequenceNo;
 
     @OneToMany(mappedBy = "publicHoliday", cascade = CascadeType.REMOVE)
-    @JsonIgnoreProperties({"publicHoliday", "publicHoliday", "hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties("publicHoliday")
     private List<StateHoliday> stateHolidays;
 
     @OneToMany(mappedBy = "publicHoliday", cascade = CascadeType.REMOVE)
-    @JsonIgnoreProperties({"publicHoliday", "publicHoliday", "hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties("publicHoliday")
     private List<HolidayYear> holidayYears;
 
 }

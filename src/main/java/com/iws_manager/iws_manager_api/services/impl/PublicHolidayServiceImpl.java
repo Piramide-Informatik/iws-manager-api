@@ -22,15 +22,11 @@ public class PublicHolidayServiceImpl implements PublicHolidayService {
     private final PublicHolidayRepository publicHolidayRepository;
     private final StateRepository stateRepository;
     private final StateHolidayRepository stateHolidayRepository;
-
-    private final HolidayYearRepository holidayYearRepository;
-
     @Autowired
-    public PublicHolidayServiceImpl(PublicHolidayRepository publicHolidayRepository, StateRepository stateRepository, StateHolidayRepository stateHolidayRepository, HolidayYearRepository holidayYearRepository) {
+    public PublicHolidayServiceImpl(PublicHolidayRepository publicHolidayRepository, StateRepository stateRepository, StateHolidayRepository stateHolidayRepository) {
         this.publicHolidayRepository = publicHolidayRepository;
         this.stateRepository = stateRepository;
         this.stateHolidayRepository = stateHolidayRepository;
-        this.holidayYearRepository = holidayYearRepository;
     }
 
     @Override
