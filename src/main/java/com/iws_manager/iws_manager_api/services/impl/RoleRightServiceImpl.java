@@ -75,9 +75,22 @@ public class RoleRightServiceImpl implements RoleRightService {
             throw new IllegalArgumentException("ID and roleRight details cannot be null");
         }
         return roleRightRepository.findById(id)
-                .map(existingRole -> {
-                    existingRole.setAccessRight(roleRightDetails.getAccessRight());
-                    return roleRightRepository.save(existingRole);
+                .map(existingRoleRight -> {
+                    existingRoleRight.setAccessRight(roleRightDetails.getAccessRight());
+
+                    if (roleRightDetails.getRole() != null && roleRightDetails.getRole().getId() != null) {
+                        Role role = roleRepository.findById(roleRightDetails.getRole().getId())
+                                .orElseThrow(() -> new RuntimeException("Role not found with id: " + roleRightDetails.getRole().getId()));
+                        existingRoleRight.setRole(role);
+                    }
+
+                    if (roleRightDetails.getSystemFunction() != null && roleRightDetails.getSystemFunction().getId() != null) {
+                        SystemFunction systemFunction = systemFunctionRepository.findById(roleRightDetails.getSystemFunction().getId())
+                                .orElseThrow(() -> new RuntimeException("SystemFunction not found with id: " + roleRightDetails.getSystemFunction().getId()));
+                        existingRoleRight.setSystemFunction(systemFunction);
+                    }
+
+                    return roleRightRepository.save(existingRoleRight);
                 })
                 .orElseThrow(()-> new RuntimeException("roleRight not found with id: "+id));
     }
