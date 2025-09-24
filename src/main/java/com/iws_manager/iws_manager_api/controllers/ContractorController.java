@@ -32,11 +32,6 @@ public class ContractorController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createContractor(@RequestBody Contractor contractor){
-        if (contractor.getName() == null || contractor.getName().trim().isEmpty()){
-            Map<String, String> error = new HashMap<>();
-            error.put("error","Name is required");
-            return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
-        }
         Contractor createContractor = contractorService.create(contractor);
         return new ResponseEntity<>(createContractor, HttpStatus.CREATED);
     }
