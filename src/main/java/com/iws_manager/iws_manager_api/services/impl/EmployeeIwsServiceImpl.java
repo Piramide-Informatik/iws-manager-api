@@ -48,6 +48,10 @@ public class EmployeeIwsServiceImpl implements EmployeeIwsService {
         if (employeeIws == null) {
             throw new IllegalArgumentException("EmployeeIws cannot be null");
         }
+        if (employeeIws.getEmployeeNo() == null) {
+            Integer maxSeq = employeeIwsRepository.findMaxEmployeeNo();
+            employeeIws.setEmployeeNo(maxSeq + 1);
+        }
         return employeeIwsRepository.save(employeeIws);
     }
 
