@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import com.iws_manager.iws_manager_api.models.EmployeeIws;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -38,4 +39,6 @@ public interface EmployeeIwsRepository extends JpaRepository<EmployeeIws, Long> 
     List<EmployeeIws> findByActiveOrderByFirstnameAsc(Integer active);
     List<EmployeeIws> findByActiveOrderByLastnameAsc(Integer active);
 
+    @Query("SELECT COALESCE(MAX(e.employeeNo), 0) FROM EmployeeIws e")
+    Integer findMaxEmployeeNo();
 }
