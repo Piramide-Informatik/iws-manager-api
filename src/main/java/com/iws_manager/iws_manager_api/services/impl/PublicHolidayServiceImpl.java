@@ -3,7 +3,6 @@ package com.iws_manager.iws_manager_api.services.impl;
 import com.iws_manager.iws_manager_api.models.PublicHoliday;
 import com.iws_manager.iws_manager_api.models.State;
 import com.iws_manager.iws_manager_api.models.StateHoliday;
-import com.iws_manager.iws_manager_api.repositories.HolidayYearRepository;
 import com.iws_manager.iws_manager_api.repositories.PublicHolidayRepository;
 import com.iws_manager.iws_manager_api.repositories.StateHolidayRepository;
 import com.iws_manager.iws_manager_api.repositories.StateRepository;
@@ -34,6 +33,11 @@ public class PublicHolidayServiceImpl implements PublicHolidayService {
         if (publicHoliday == null) {
             throw new IllegalArgumentException("PublicHoliday cannot be null");
         }
+        if (publicHoliday.getSequenceNo() == null) {
+            Integer maxSeq = publicHolidayRepository.findMaxSequenceNo();
+            publicHoliday.setSequenceNo(maxSeq + 1);
+        }
+
         return publicHolidayRepository.save(publicHoliday);
     }
 
@@ -109,6 +113,11 @@ public class PublicHolidayServiceImpl implements PublicHolidayService {
         }).toList();
 
         stateHolidayRepository.saveAll(newSelections);
+    }
+
+    @Override
+    public List<PublicHoliday> findAllByOrderBySequenceNo() {
+        return publicHolidayRepository.findAllByOrderBySequenceNo();
     }
 
 }

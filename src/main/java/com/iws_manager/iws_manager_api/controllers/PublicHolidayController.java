@@ -86,4 +86,10 @@ public class PublicHolidayController {
     public void saveSelections(@PathVariable Long id, @RequestBody List<Long> selectedStates) {
         publicHolidayService.saveStateSelections(id, selectedStates);
     }
+
+    @GetMapping("/by-sequenceno")
+    public ResponseEntity<List<PublicHoliday>> getAllByOrderBySequenceNo() {
+        List<PublicHoliday> publicHolidays = publicHolidayService.findAllByOrderBySequenceNo();
+        return new ResponseEntity<>(publicHolidays,HttpStatus.OK);
+    }
 }
