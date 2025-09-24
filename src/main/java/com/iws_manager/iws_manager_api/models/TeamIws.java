@@ -22,8 +22,8 @@ public class TeamIws extends BaseEntity {
     @Column(name = "teamiws", nullable = true, length = 255)
     private String name;
 
-    @OneToOne
-    @JoinColumn(name = "teamleaderid")
+    @ManyToOne
+    @JoinColumn(name = "teamleaderid", nullable = true)
     @JsonIgnoreProperties({"teamIws", "team", "hibernateLazyInitializer", "handler"})
     private EmployeeIws teamLeader;
 }
