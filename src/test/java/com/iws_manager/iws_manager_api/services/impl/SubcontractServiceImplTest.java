@@ -214,30 +214,4 @@ class SubcontractServiceImplTest {
         assertThrows(RuntimeException.class, () -> subcontractService.recalculateSubcontractProjects(1L));
         verify(subcontractProjectRepository, never()).findBySubcontractId(anyLong());
     }
-
-        @Test
-    void testGetByContractorIdOrderByContractorNameAscReturnsData() {
-        List<Subcontract> expected = List.of(sampleSubcontract);
-
-        when(subcontractRepository.findByContractorIdOrderByContractorNameAsc(1L))
-                .thenReturn(expected);
-
-        List<Subcontract> result = subcontractService.getByContractorIdOrderByContractorNameAsc(1L);
-
-        assertEquals(expected, result);
-        verify(subcontractRepository, times(1))
-                .findByContractorIdOrderByContractorNameAsc(1L);
-    }
-
-    @Test
-    void testGetByContractorIdOrderByContractorNameAscReturnsEmptyList() {
-        when(subcontractRepository.findByContractorIdOrderByContractorNameAsc(1L))
-                .thenReturn(Collections.emptyList());
-
-        List<Subcontract> result = subcontractService.getByContractorIdOrderByContractorNameAsc(1L);
-
-        assertTrue(result.isEmpty());
-        verify(subcontractRepository, times(1))
-                .findByContractorIdOrderByContractorNameAsc(1L);
-    }
 }

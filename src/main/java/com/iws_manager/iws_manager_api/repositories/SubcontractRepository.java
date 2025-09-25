@@ -17,10 +17,5 @@ public interface SubcontractRepository extends JpaRepository<Subcontract, Long> 
     //find by customer id
     List<Subcontract> findByCustomerIdOrderByContractTitleAsc(Long customerId);
 
-    @Query("""
-        SELECT s FROM Subcontract s
-        WHERE s.contractor.id = :contractorId
-        ORDER BY s.contractor.name ASC
-        """)
-    List<Subcontract> findByContractorIdOrderByContractorNameAsc(Long contractorId);
+    List<Subcontract> findByCustomerIdOrderByContractor_NameAsc(Long customerId);
 }
