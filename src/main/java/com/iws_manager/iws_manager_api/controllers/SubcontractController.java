@@ -86,6 +86,14 @@ public class SubcontractController {
         return new ResponseEntity<>(subcontracts, HttpStatus.OK);
     }
 
+    @GetMapping("/customer/{customerId}/sort-by-contractor-name")
+    public ResponseEntity<List<Subcontract>> getByCustomerIdOrderByContractorNameAsc(
+            @PathVariable Long customerId) {
+        List<Subcontract> subcontracts = subcontractService.getByCustomerIdOrderByContractorNameAsc(customerId);
+        return ResponseEntity.ok(subcontracts);
+    }
+
+
    @PutMapping("/{id}/recalculate-subcontractproject")
     public ResponseEntity<Subcontract> updateAndRecalculate(
             @PathVariable Long id,
