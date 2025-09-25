@@ -17,6 +17,8 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import com.iws_manager.iws_manager_api.models.Contractor;
+
 class SubcontractServiceImplTest {
     private static final String AMOUNT_250 = "250.00";
 
@@ -213,6 +215,46 @@ class SubcontractServiceImplTest {
         when(subcontractRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(RuntimeException.class, () -> subcontractService.recalculateSubcontractProjects(1L));
         verify(subcontractProjectRepository, never()).findBySubcontractId(anyLong());
+    }
+
+    @Test
+    void testGetByCustomerIdOrderByContractorNameAscReturnsData() {
+        Long customerId = 1L;
+
+        // Reutilizamos sampleSubcontract del setup
+        Contractor contractor = new Contractor();
+        contractor.setName("ABC Contractor");
+        sampleSubcontract.setContractor(contractor);
+
+        List<Subcontract> expectedList = List.of(sampleSubcontract);
+
+        when(subcontractRepository.findByCustomerIdOrderByContractor_NameAsc(customerId))
+                .thenReturn(expectedList);
+
+        List<Subcontract> result = subcontractService.getByCustomerIdOrderByContractorNameAsc(customerId);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(sampleSubcontract, result.get(0));
+
+        verify(subcontractRepository, times(1))
+                .findByCustomerIdOrderByContractor_NameAsc(customerId);
+    }
+
+    @Test
+    void testGetByCustomerIdOrderByContractorNameAscReturnsEmptyList() {
+        Long customerId = 1L;
+
+        when(subcontractRepository.findByCustomerIdOrderByContractor_NameAsc(customerId))
+                .thenReturn(Collections.emptyList());
+
+        List<Subcontract> result = subcontractService.getByCustomerIdOrderByContractorNameAsc(customerId);
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+
+        verify(subcontractRepository, times(1))
+                .findByCustomerIdOrderByContractor_NameAsc(customerId);
     }
 
 }

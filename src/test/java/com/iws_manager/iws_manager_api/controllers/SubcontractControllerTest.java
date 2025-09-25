@@ -30,6 +30,8 @@ import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.iws_manager.iws_manager_api.models.Contractor;
+
 @ExtendWith(MockitoExtension.class)
 public class SubcontractControllerTest {
 
@@ -166,4 +168,32 @@ public class SubcontractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L));
     }
+
+    @Test
+    void getByCustomerIdOrderByContractorNameAscShouldReturnList() throws Exception {
+        subcontract1.setContractor(new Contractor());
+        subcontract1.getContractor().setName("Alpha Contractor");
+
+        subcontract2.setContractor(new Contractor());
+        subcontract2.getContractor().setName("Beta Contractor");
+
+        given(subcontractService.getByCustomerIdOrderByContractorNameAsc(20L))
+                .willReturn(Arrays.asList(subcontract1, subcontract2));
+
+        mockMvc.perform(get(URI + "/customer/20/sort-by-contractor-name"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].contractTitle").value(CONTRACT_TITLE))
+                .andExpect(jsonPath("$[1].contractTitle").value("Second Contract"));
+    }
+
+    @Test
+    void getByCustomerIdOrderByContractorNameAscShouldReturnEmptyList() throws Exception {
+        given(subcontractService.getByCustomerIdOrderByContractorNameAsc(99L))
+                .willReturn(Collections.emptyList());
+
+        mockMvc.perform(get(URI + "/customer/99/sort-by-contractor-name"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+    }
+
 }
