@@ -84,4 +84,10 @@ public class ContractorController {
         List<Contractor> contractors = contractorService.getByCustomerIdOrderByLabelAsc(customerId);
         return new ResponseEntity<>(contractors, HttpStatus.OK);
     }
+
+    @GetMapping("/customer/{customerId}/ordered-by-name")
+    public ResponseEntity<List<Contractor>> getByCustomerIdOrderByNameAsc(@PathVariable Long customerId) {
+        List<Contractor> contractors = contractorService.getByCustomerIdOrderByNameAsc(customerId);
+        return new ResponseEntity<>(contractors, HttpStatus.OK);
+    }
 }
