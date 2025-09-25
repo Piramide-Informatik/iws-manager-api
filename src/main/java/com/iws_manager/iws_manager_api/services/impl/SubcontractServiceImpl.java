@@ -156,6 +156,12 @@ public class SubcontractServiceImpl implements SubcontractService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<Subcontract> getByContractorIdOrderByContractorNameAsc(Long contractorId) {
+        return subcontractRepository.findByContractorIdOrderByContractorNameAsc(contractorId);
+    }
+
+    @Override
     public Subcontract updateAndRecalculate(Long id, Subcontract changes) {
         if (id == null || changes == null) {
             throw new IllegalArgumentException("ID and changes cannot be null");
