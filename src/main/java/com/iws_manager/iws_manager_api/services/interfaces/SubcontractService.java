@@ -17,6 +17,7 @@ public interface SubcontractService {
     List<Subcontract> findByContractorId(Long contractorId);
     List<Subcontract> findByCustomerId(Long customerId);
     List<Subcontract> findByProjectCostCenterId(Long projectCostCenterId);
+    List<Subcontract> getByCustomerIdOrderByContractorNameAsc(Long customerId);
 
     //calculation of amount
     List<SubcontractProject> recalculateSubcontractProjects(Long subcontractId);
