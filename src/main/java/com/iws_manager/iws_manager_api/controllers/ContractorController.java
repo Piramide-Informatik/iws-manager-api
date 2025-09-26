@@ -32,11 +32,6 @@ public class ContractorController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createContractor(@RequestBody Contractor contractor){
-        if (contractor.getName() == null || contractor.getName().trim().isEmpty()){
-            Map<String, String> error = new HashMap<>();
-            error.put("error","Name is required");
-            return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
-        }
         Contractor createContractor = contractorService.create(contractor);
         return new ResponseEntity<>(createContractor, HttpStatus.CREATED);
     }
@@ -87,6 +82,12 @@ public class ContractorController {
     @GetMapping("/customer/{customerId}/ordered-by-label")
     public ResponseEntity<List<Contractor>> getByCustomerIdOrderByLabelAsc(@PathVariable Long customerId) {
         List<Contractor> contractors = contractorService.getByCustomerIdOrderByLabelAsc(customerId);
+        return new ResponseEntity<>(contractors, HttpStatus.OK);
+    }
+
+    @GetMapping("/customer/{customerId}/ordered-by-name")
+    public ResponseEntity<List<Contractor>> getByCustomerIdOrderByNameAsc(@PathVariable Long customerId) {
+        List<Contractor> contractors = contractorService.getByCustomerIdOrderByNameAsc(customerId);
         return new ResponseEntity<>(contractors, HttpStatus.OK);
     }
 }
