@@ -40,7 +40,7 @@ public class IwsCommissionServiceImpl implements IwsCommissionService {
     @Override
     @Transactional(readOnly = true)
     public List<IwsCommission> findAll() {
-        return iwsCommissionRepository.findAll();
+        return iwsCommissionRepository.findAllByOrderByFromOrderValueAsc();
     }
 
     @Override

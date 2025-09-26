@@ -112,14 +112,14 @@ class IwsCommissionServiceImplTest {
         iwsCommission2.setId(2L);
         iwsCommission2.setCommission(commission);
 
-        when(iwsCommissionRepository.findAll()).thenReturn(Arrays.asList(sampleIwsCommission, iwsCommission2));
+        when(iwsCommissionRepository.findAllByOrderByFromOrderValueAsc()).thenReturn(Arrays.asList(sampleIwsCommission, iwsCommission2));
 
         // Act
         List<IwsCommission> result = iwsCommissionService.findAll();
 
         // Assert
         assertEquals(2, result.size());
-        verify(iwsCommissionRepository, times(1)).findAll();
+        verify(iwsCommissionRepository, times(1)).findAllByOrderByFromOrderValueAsc();
     }
 
     @Test
