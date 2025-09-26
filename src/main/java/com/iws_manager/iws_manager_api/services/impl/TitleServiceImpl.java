@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.iws_manager.iws_manager_api.models.Title;
 import com.iws_manager.iws_manager_api.repositories.TitleRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.TitleService;
+import jakarta.persistence.EntityNotFoundException;
 
 /**
  * Implementation of the {@link TitleService} interface for managing Title entities.
@@ -109,6 +110,10 @@ public class TitleServiceImpl implements TitleService {
     public void delete(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
+        }
+
+        if (!titleRepository.existsById(id)) {  
+            throw new EntityNotFoundException("Title not found with id: " + id);
         }
         titleRepository.deleteById(id);
     }

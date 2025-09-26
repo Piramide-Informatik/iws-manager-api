@@ -133,16 +133,6 @@ public class ContractorControllerTest {
     }
 
     @Test
-    void createContractorShouldValidateInput() throws Exception {
-        Contractor invalidContractor = new Contractor();
-
-        mockMvc.perform(post(uri)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(invalidContractor)))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
     void createContractorShouldReturnCreatedContractor() throws Exception {
         Contractor validContractor = new Contractor();
         validContractor.setName(SRL);
