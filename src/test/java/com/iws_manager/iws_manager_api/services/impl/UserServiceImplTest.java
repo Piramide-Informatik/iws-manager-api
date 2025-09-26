@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +25,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @DisplayName("User Service Implementation Tests")
 public class UserServiceImplTest {
-    private PasswordEncoder passwordEncoder;
     private static final String FIRSTNAME_ROGER = "Roger";
     private static final String USERNAME_ROGER = "the_roger";
     private static final String USERNAME_ANDRES = "andy123";
@@ -41,7 +40,6 @@ public class UserServiceImplTest {
     @BeforeEach
     void setUp() {
         userRepository = mock(UserRepository.class);
-        passwordEncoder = new BCryptPasswordEncoder();
         userService = new UserServiceImpl(userRepository, roleRepository);
 
         sampleUser=new User();
