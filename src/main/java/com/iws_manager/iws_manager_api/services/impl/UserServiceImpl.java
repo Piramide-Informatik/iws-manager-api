@@ -21,13 +21,11 @@ public class UserServiceImpl implements UserService {
     private static final String USERNOTFOUND = "User not found";
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -35,8 +33,6 @@ public class UserServiceImpl implements UserService {
         if(user == null) {
             throw new IllegalArgumentException("User cannot be null");
         }
-        // Encrypt the password before saving
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -66,7 +62,7 @@ public class UserServiceImpl implements UserService {
                     existingUser.setLastName(userDetails.getLastName());
                     existingUser.setActive(userDetails.isActive());
                     existingUser.setEmail(userDetails.getEmail());
-                    existingUser.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+                    existingUser.setPassword(userDetails.getPassword());
                     existingUser.setUsername(userDetails.getUsername());
                     return userRepository.save(existingUser);
                 }).orElseThrow(() -> new RuntimeException("User not found with id: "+id));
