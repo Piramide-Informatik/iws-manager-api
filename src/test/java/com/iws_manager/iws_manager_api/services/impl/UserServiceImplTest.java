@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +25,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @DisplayName("User Service Implementation Tests")
 public class UserServiceImplTest {
-    private PasswordEncoder passwordEncoder;
     private static final String FIRSTNAME_ROGER = "Roger";
     private static final String USERNAME_ROGER = "the_roger";
     private static final String USERNAME_ANDRES = "andy123";
@@ -41,8 +40,7 @@ public class UserServiceImplTest {
     @BeforeEach
     void setUp() {
         userRepository = mock(UserRepository.class);
-        passwordEncoder = new BCryptPasswordEncoder();
-        userService = new UserServiceImpl(userRepository, roleRepository, passwordEncoder);
+        userService = new UserServiceImpl(userRepository, roleRepository);
 
         sampleUser=new User();
         sampleUser.setId(1L);
@@ -54,7 +52,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("Should save user successfully with encrypted password")
+    @DisplayName("Should save user successfully")
     void creatShouldReturnSavedUser(){
         // Simulates saving what is passed (do not overwrite the password here)
      when(userRepository.save(any(User.class))).thenReturn(sampleUser).thenAnswer(invocation -> invocation.getArgument(0));
@@ -66,8 +64,6 @@ public class UserServiceImplTest {
      assertEquals("Lopez", result.getLastName());
      assertEquals(USERNAME_ROGER, result.getUsername());
      assertEquals("roger@mail.com", result.getEmail());
-     // Verify that it has been encrypted correctly
-     assertTrue(passwordEncoder.matches("roger123", result.getPassword()));
 
      verify(userRepository, times(1)).save(any(User.class));
     }
@@ -112,13 +108,11 @@ public class UserServiceImplTest {
     void updateShouldReturnUpdatedUser() {
         User updatedDetails = new User();
         updatedDetails.setUsername(USERNAME_ROGER+" Updated");
-        updatedDetails.setPassword("newPassword123");
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(sampleUser));
         when(userRepository.save(any(User.class))).thenAnswer(inv -> inv.getArgument(0));
 
         User result = userService.update(1L, updatedDetails);
-        assertTrue(passwordEncoder.matches("newPassword123", result.getPassword()));
 
         assertEquals("the_roger Updated", result.getUsername());
         verify(userRepository, times(1)).findById(1L);
