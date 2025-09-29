@@ -14,6 +14,8 @@ public interface EmployeeIwsRepository extends JpaRepository<EmployeeIws, Long> 
     // FIND ALL
     List<EmployeeIws> findAllByOrderByLastnameAsc();
     List<EmployeeIws> findAllByOrderByFirstnameAsc();
+
+    List<EmployeeIws> findAllByOrderByIdDesc();
     //PROPERTIES
     List<EmployeeIws> findByActive(Integer active);
     List<EmployeeIws> findByEmployeeLabel(String employeelabel);

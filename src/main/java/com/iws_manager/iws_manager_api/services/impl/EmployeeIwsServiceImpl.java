@@ -143,6 +143,11 @@ public class EmployeeIwsServiceImpl implements EmployeeIwsService {
         return employeeIwsRepository.findAllByOrderByFirstnameAsc();
     }
 
+    @Override
+    public List<EmployeeIws> getAllByOrderByIdDesc() {
+        return employeeIwsRepository.findAllByOrderByIdDesc();
+    }
+
     // PROPERTIES METHODS - ACTUALIZADOS con los nuevos nombres de métodos
     @Override
     @Transactional(readOnly = true)
