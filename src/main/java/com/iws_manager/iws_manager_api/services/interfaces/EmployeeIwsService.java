@@ -17,6 +17,8 @@ public interface EmployeeIwsService {
     // FIND ALL
     List<EmployeeIws> getAllByOrderByLastnameAsc();
     List<EmployeeIws> getAllByOrderByFirstnameAsc();
+
+    List<EmployeeIws> getAllByOrderByIdDesc();
     //PROPERTIES
     List<EmployeeIws> getByActive(Integer active);
     List<EmployeeIws> getByEmployeeLabel(String employeelabel);

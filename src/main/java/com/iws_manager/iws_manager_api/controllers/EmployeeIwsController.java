@@ -68,6 +68,12 @@ public class EmployeeIwsController {
         return ResponseEntity.ok(employees);
     }
 
+    @GetMapping("/by-id/ordered-desc")
+    public ResponseEntity<List<EmployeeIws>> getAllByOrderByIdDesc() {
+        List<EmployeeIws> employees = employeeIwsService.getAllByOrderByIdDesc();
+        return ResponseEntity.ok(employees);
+    }
+
     // PROPERTIES endpoints (MEJORADOS)
     @GetMapping("/by-active/{active}")
     public ResponseEntity<List<EmployeeIws>> getByActive(@PathVariable Integer active) {
