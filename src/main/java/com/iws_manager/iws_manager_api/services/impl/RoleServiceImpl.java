@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -65,14 +66,13 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void delete(Long id) {
-        int userCount = userRepository.findByRolesId(id).size();
-
-        if (userCount > 0) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    "Role is assigned to " + userCount + " user(s) and cannot be deleted"
-            );
+        if (id == null) {
+            throw new IllegalArgumentException("ID cannot be null");
         }
+        if (!roleRepository.existsById(id)) {  
+            throw new EntityNotFoundException("Role not found with id: " + id);
+        }
+
         roleRepository.deleteById(id);
     }
 
