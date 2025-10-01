@@ -51,10 +51,12 @@ public class PublicHolidayControllerTest {
         publicHoliday1 = new PublicHoliday();
         publicHoliday1.setId(1L);
         publicHoliday1.setName(FIRST_NAME);
+        publicHoliday1.setSequenceNo(1);
 
         publicHoliday2 = new PublicHoliday();
         publicHoliday2.setId(2L);
         publicHoliday2.setName(SECOND_NAME);
+        publicHoliday2.setSequenceNo(2);
     }
 
     @Test
@@ -91,15 +93,15 @@ public class PublicHolidayControllerTest {
     @Test
     void getAllPublicHolidayShouldReturnAllPublicHoliday() throws Exception {
         List<PublicHoliday> publicHolidays = Arrays.asList(publicHoliday1, publicHoliday2);
-        given(publicHolidayService.findAll()).willReturn(publicHolidays);
+        given(publicHolidayService.findAllByOrderBySequenceNo()).willReturn(publicHolidays);
 
         mockMvc.perform(get(uri))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].name").value(FIRST_NAME
+                .andExpect(jsonPath("$[0].sequenceNo").value(1
                 ))
                 .andExpect(jsonPath("$[1].id").value(2L))
-                .andExpect(jsonPath("$[1].name").value(SECOND_NAME));
+                .andExpect(jsonPath("$[1].sequenceNo").value(2));
     }
 
     @Test

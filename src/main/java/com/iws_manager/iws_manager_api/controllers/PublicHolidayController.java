@@ -51,8 +51,8 @@ public class PublicHolidayController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PublicHoliday>> getAllPublicHoliday() {
-        List<PublicHoliday> publicHolidays = publicHolidayService.findAll();
+    public ResponseEntity<List<PublicHoliday>> getAllByOrderBySequenceNo() {
+        List<PublicHoliday> publicHolidays = publicHolidayService.findAllByOrderBySequenceNo();
         return new ResponseEntity<>(publicHolidays,HttpStatus.OK);
     }
 
@@ -87,9 +87,15 @@ public class PublicHolidayController {
         publicHolidayService.saveStateSelections(id, selectedStates);
     }
 
-    @GetMapping("/by-sequenceno")
-    public ResponseEntity<List<PublicHoliday>> getAllByOrderBySequenceNo() {
-        List<PublicHoliday> publicHolidays = publicHolidayService.findAllByOrderBySequenceNo();
+    @GetMapping("/by-name-asc")
+    public ResponseEntity<List<PublicHoliday>> getAll() {
+        List<PublicHoliday> publicHolidays = publicHolidayService.findAll();
+        return new ResponseEntity<>(publicHolidays,HttpStatus.OK);
+    }
+
+    @GetMapping("/by-sequenceno-desc")
+    public ResponseEntity<List<PublicHoliday>> getAllByOrderBySequenceNoDesc() {
+        List<PublicHoliday> publicHolidays = publicHolidayService.findAllByOrderBySequenceNoDesc();
         return new ResponseEntity<>(publicHolidays,HttpStatus.OK);
     }
 }
