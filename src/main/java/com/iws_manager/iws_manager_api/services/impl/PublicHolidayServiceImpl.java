@@ -116,8 +116,15 @@ public class PublicHolidayServiceImpl implements PublicHolidayService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<PublicHoliday> findAllByOrderBySequenceNo() {
-        return publicHolidayRepository.findAllByOrderBySequenceNo();
+        return publicHolidayRepository.findAllByOrderBySequenceNoAsc();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PublicHoliday> findAllByOrderBySequenceNoDesc() {
+        return publicHolidayRepository.findAllByOrderBySequenceNoDesc();
     }
 
 }
