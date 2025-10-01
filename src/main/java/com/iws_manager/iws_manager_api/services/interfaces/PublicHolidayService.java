@@ -17,5 +17,6 @@ public interface PublicHolidayService {
     void saveStateSelections(Long publicHolidayId, List<Long> selectedStateIds);
 
     List<PublicHoliday> findAllByOrderBySequenceNo();
+    List<PublicHoliday> findAllByOrderBySequenceNoDesc();
 
 }

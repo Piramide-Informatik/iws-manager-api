@@ -10,7 +10,8 @@ import java.util.List;
 @Repository
 public interface PublicHolidayRepository extends JpaRepository<PublicHoliday, Long> {
     List<PublicHoliday> findAllByOrderByNameAsc();
-    List<PublicHoliday> findAllByOrderBySequenceNo();
+    List<PublicHoliday> findAllByOrderBySequenceNoAsc();
+    List<PublicHoliday> findAllByOrderBySequenceNoDesc();
 
     @Query("SELECT COALESCE(MAX(p.sequenceNo), 0) FROM PublicHoliday p")
     Integer findMaxSequenceNo();
