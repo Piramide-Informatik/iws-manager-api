@@ -80,7 +80,7 @@ class PromoterServiceImplTest {
 
     @Test
     void findAllShouldReturnList() {
-        when(promoterRepository.findAllByOrderByProjectPromoterAsc()).thenReturn(List.of(promoter));
+        when(promoterRepository.findAllByOrderByPromoterNoAsc()).thenReturn(List.of(promoter));
 
         List<Promoter> result = promoterService.findAll();
 

@@ -76,7 +76,7 @@ public class PromoterServiceImpl implements PromoterService {
     @Override
     @Transactional(readOnly = true)
     public List<Promoter> findAll() {
-        return promoterRepository.findAllByOrderByProjectPromoterAsc();
+        return promoterRepository.findAllByOrderByPromoterNoAsc();
     }
 
     /**
