@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PromoterRepository extends JpaRepository<Promoter, Long> {
     
-    List<Promoter> findAllByOrderByProjectPromoterAsc();
+    List<Promoter> findAllByOrderByPromoterNoAsc();
     
     List<Promoter> findByCity(String city);
     List<Promoter> findByCountryId(Long countryId);
