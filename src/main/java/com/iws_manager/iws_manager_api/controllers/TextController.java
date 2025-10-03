@@ -46,12 +46,6 @@ public class TextController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createText(@RequestBody Text text) {
-        if (text.getLabel() == null || text.getLabel().trim().isEmpty()) {
-            Map<String, String> error = new HashMap<>();
-            error.put("error", "Label is required");
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-        }
-
         Text createdText = textService.create(text);
         return new ResponseEntity<>(createdText, HttpStatus.CREATED);
     }
