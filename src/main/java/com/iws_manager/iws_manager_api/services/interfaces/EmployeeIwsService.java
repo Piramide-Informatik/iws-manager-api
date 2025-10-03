@@ -43,4 +43,6 @@ public interface EmployeeIwsService {
     // ACTIVE - ORDER
     List<EmployeeIws> getByActiveOrderByFirstnameAsc(Integer active);
     List<EmployeeIws> getByActiveOrderByLastnameAsc(Integer active);
+
+    Integer getNextEmployeeNo();
 }

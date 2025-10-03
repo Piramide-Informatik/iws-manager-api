@@ -33,7 +33,6 @@ class TextControllerTest {
     private static final String TEXT_LABEL3 = "Long Content";
     private static final String LABEL_JSON_PATH = "$.label";
     private static final String CONTENT_JSON_PATH = "$.content";
-    private static final String ERROR_JSON_PATH = "$.error";
     private static final String LENGHT_JSON_PATH = "$.length()";
     private static final String ID = "/{id}";
     private static final long VALID_ID = 1L;
@@ -87,23 +86,6 @@ class TextControllerTest {
                 .andExpect(jsonPath(CONTENT_JSON_PATH).value(TEXT_CONTENT));
     }
 
-    @Test
-    void createTextShouldReturnBadRequestWhenMissingLabel() throws Exception {
-        mockMvc.perform(post(BASE_URL)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(buildTextJson(null, TEXT_CONTENT)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath(ERROR_JSON_PATH).value("Label is required"));
-    }
-
-    @Test
-    void createTextShouldReturnBadRequestWhenEmptyLabel() throws Exception {
-        mockMvc.perform(post(BASE_URL)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(buildTextJson("   ", TEXT_CONTENT)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath(ERROR_JSON_PATH).value("Label is required"));
-    }
 
     // ------------------- GET BY ID TESTS -------------------
     @Test

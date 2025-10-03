@@ -258,4 +258,11 @@ public class EmployeeIwsServiceImpl implements EmployeeIwsService {
     public List<EmployeeIws> getByActiveOrderByLastnameAsc(Integer active) {
         return employeeIwsRepository.findByActiveOrderByLastnameAsc(active);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Integer getNextEmployeeNo() {
+        Integer maxSeq = employeeIwsRepository.findMaxEmployeeNo();
+        return (maxSeq == null ? 1 : maxSeq + 1);
+    }
 }

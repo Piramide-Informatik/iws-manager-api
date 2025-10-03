@@ -188,4 +188,10 @@ public class EmployeeIwsController {
         List<EmployeeIws> employees = employeeIwsService.getByActiveOrderByLastnameAsc(active);
         return ResponseEntity.ok(employees);
     }
+
+    @GetMapping("/next-employee-no")
+    public ResponseEntity<Integer> getNextEmployeeNo() {
+        Integer next = employeeIwsService.getNextEmployeeNo();
+        return ResponseEntity.ok(next);
+    }
 }
