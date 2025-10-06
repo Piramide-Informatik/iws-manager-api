@@ -228,7 +228,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     // PROPERTIES - Campos de fecha
     @Override
     @Transactional(readOnly = true)
-    public List<Invoice> getByInvoiceDate(Integer invoiceDate) {
+    public List<Invoice> getByInvoiceDate(LocalDate invoiceDate) {
         return invoiceRepository.findByInvoiceDate(invoiceDate);
     }
 
@@ -406,19 +406,19 @@ public class InvoiceServiceImpl implements InvoiceService {
     // HELPERS - Rangos para invoiceDate
     @Override
     @Transactional(readOnly = true)
-    public List<Invoice> getByInvoiceDateLessThanEqual(Integer invoiceDate) {
+    public List<Invoice> getByInvoiceDateLessThanEqual(LocalDate invoiceDate) {
         return invoiceRepository.findByInvoiceDateLessThanEqual(invoiceDate);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Invoice> getByInvoiceDateGreaterThanEqual(Integer invoiceDate) {
+    public List<Invoice> getByInvoiceDateGreaterThanEqual(LocalDate invoiceDate) {
         return invoiceRepository.findByInvoiceDateGreaterThanEqual(invoiceDate);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Invoice> getByInvoiceDateBetween(Integer startDate, Integer endDate) {
+    public List<Invoice> getByInvoiceDateBetween(LocalDate startDate, LocalDate endDate) {
         return invoiceRepository.findByInvoiceDateBetween(startDate, endDate);
     }
 

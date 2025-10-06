@@ -33,7 +33,7 @@ public interface InvoiceService {
     List<Invoice> getByAmountTax(BigDecimal amountTax);
 
     // PROPERTIES - Campos de fecha
-    List<Invoice> getByInvoiceDate(Integer invoiceDate);
+    List<Invoice> getByInvoiceDate(LocalDate invoiceDate);
     List<Invoice> getByPayDeadline(LocalDate payDeadline);
     List<Invoice> getByPaymentDate(LocalDate paymentDate);
 
@@ -74,9 +74,9 @@ public interface InvoiceService {
     List<Invoice> getByInvoiceNoBetween(Integer startInvoiceNo, Integer endInvoiceNo);
 
     // HELPERS - Rangos para invoiceDate
-    List<Invoice> getByInvoiceDateLessThanEqual(Integer invoiceDate);
-    List<Invoice> getByInvoiceDateGreaterThanEqual(Integer invoiceDate);
-    List<Invoice> getByInvoiceDateBetween(Integer startDate, Integer endDate);
+    List<Invoice> getByInvoiceDateLessThanEqual(LocalDate invoiceDate);
+    List<Invoice> getByInvoiceDateGreaterThanEqual(LocalDate invoiceDate);
+    List<Invoice> getByInvoiceDateBetween(LocalDate startDate, LocalDate endDate);
 
     // HELPERS - Rangos para taxRate
     List<Invoice> getByTaxRateLessThanEqual(BigDecimal taxRate);
