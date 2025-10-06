@@ -51,8 +51,8 @@ public class Invoice extends BaseEntity {
     @JoinColumn(name = "customerid", referencedColumnName = "customerid", nullable = true)
     private Customer customer;
 
-    @Column(name = "invoicedate", nullable = true)
-    private Integer invoiceDate;
+    @Column(name = "invoicedate", nullable = true, columnDefinition = "DATE")
+    private LocalDate invoiceDate;
 
     @Column(name = "invoiceno", nullable = true)
     private Integer invoiceNo;
