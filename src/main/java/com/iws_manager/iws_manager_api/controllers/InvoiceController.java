@@ -166,7 +166,7 @@ public class InvoiceController {
 
     // PROPERTIES - Campos de fecha
     @GetMapping("/by-invoicedate/{invoiceDate}")
-    public ResponseEntity<List<Invoice>> getByInvoiceDate(@PathVariable Integer invoiceDate) {
+    public ResponseEntity<List<Invoice>> getByInvoiceDate(@PathVariable LocalDate invoiceDate) {
         List<Invoice> invoices = invoiceService.getByInvoiceDate(invoiceDate);
         return new ResponseEntity<>(invoices, HttpStatus.OK);
     }
