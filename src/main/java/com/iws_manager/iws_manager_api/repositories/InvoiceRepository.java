@@ -31,7 +31,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     List<Invoice> findByAmountTax(BigDecimal amountTax);
 
     // PROPERTIES - Campos de fecha
-    List<Invoice> findByInvoiceDate(Integer invoiceDate);
+    List<Invoice> findByInvoiceDate(LocalDate invoiceDate);
     List<Invoice> findByPayDeadline(LocalDate payDeadline);
     List<Invoice> findByPaymentDate(LocalDate paymentDate);
 
@@ -72,9 +72,9 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     List<Invoice> findByInvoiceNoBetween(Integer startInvoiceNo, Integer endInvoiceNo);
 
     // HELPERS - Rangos para invoiceDate
-    List<Invoice> findByInvoiceDateLessThanEqual(Integer invoiceDate);
-    List<Invoice> findByInvoiceDateGreaterThanEqual(Integer invoiceDate);
-    List<Invoice> findByInvoiceDateBetween(Integer startDate, Integer endDate);
+    List<Invoice> findByInvoiceDateLessThanEqual(LocalDate invoiceDate);
+    List<Invoice> findByInvoiceDateGreaterThanEqual(LocalDate invoiceDate);
+    List<Invoice> findByInvoiceDateBetween(LocalDate startDate, LocalDate endDate);
 
     // HELPERS - Rangos para taxRate
     List<Invoice> findByTaxRateLessThanEqual(BigDecimal taxRate);
