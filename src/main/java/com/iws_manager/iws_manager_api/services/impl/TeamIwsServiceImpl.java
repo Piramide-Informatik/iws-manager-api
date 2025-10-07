@@ -6,6 +6,7 @@ import com.iws_manager.iws_manager_api.services.interfaces.TeamIwsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -61,6 +62,9 @@ public class TeamIwsServiceImpl implements TeamIwsService {
     public void delete(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
+        }
+        if (!teamIwsRepository.existsById(id)) {
+            throw new EntityNotFoundException("TeamIws not found with id: " + id);
         }
         teamIwsRepository.deleteById(id);
     }
