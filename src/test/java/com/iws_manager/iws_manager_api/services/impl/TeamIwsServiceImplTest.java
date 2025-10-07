@@ -183,7 +183,7 @@ class TeamIwsServiceImplTest {
     @DisplayName("Should delete TeamIws successfully")
     void deleteShouldExecuteDelete() {
         // Arrange
-        doNothing().when(teamIwsRepository).deleteById(1L);
+        when(teamIwsRepository.existsById(1L)).thenReturn(true);
 
         // Act
         teamIwsService.delete(1L);
