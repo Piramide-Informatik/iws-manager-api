@@ -6,6 +6,7 @@ import com.iws_manager.iws_manager_api.services.interfaces.EmployeeCategoryServi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +60,10 @@ public class EmployeeCategoryServiceImpl implements EmployeeCategoryService {
     public void delete(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
+        }
+
+        if (!categoryRepository.existsById(id)) {
+            throw new EntityNotFoundException("EmployeeCategory not found with id: " + id);
         }
         categoryRepository.deleteById(id);
     }
