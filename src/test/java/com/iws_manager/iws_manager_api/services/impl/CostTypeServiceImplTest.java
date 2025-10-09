@@ -192,6 +192,7 @@ class CostTypeServiceImplTest {
     @DisplayName("Should delete cost type successfully")
     void deleteShouldRemoveCostType() {
         // Act
+        when(costTypeRepository.existsById(1L)).thenReturn(true);
         costTypeService.delete(1L);
 
         // Assert
