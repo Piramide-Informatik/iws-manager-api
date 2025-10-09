@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.iws_manager.iws_manager_api.models.CostType;
 import com.iws_manager.iws_manager_api.repositories.CostTypeRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.CostTypeService;
+import jakarta.persistence.EntityNotFoundException;
 
 /**
  * Implementation of the {@link CostTypeService} interface for managing CostType entities.
@@ -112,6 +113,10 @@ public class CostTypeServiceImpl implements CostTypeService {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
         }
+        if (!costTypeRepository.existsById(id)) {
+            throw new EntityNotFoundException("CostType not found with id: " + id);
+        }
+
         costTypeRepository.deleteById(id);
     }
 }
