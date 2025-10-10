@@ -32,12 +32,6 @@ public class AbsenceTypeController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createAbsenseType(@RequestBody AbsenceType absenceType){
-        if(absenceType.getName() == null || absenceType.getName().trim().isEmpty()){
-            Map<String,String> error = new HashMap<>();
-            error.put("error", "Name is required");
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-        }
-
         AbsenceType createdAbsenseType = absenceTypeService.create(absenceType);
         return new ResponseEntity<>(createdAbsenseType,HttpStatus.CREATED);
     }

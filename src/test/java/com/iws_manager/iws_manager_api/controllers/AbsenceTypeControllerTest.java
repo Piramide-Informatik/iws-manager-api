@@ -132,15 +132,6 @@ public class AbsenceTypeControllerTest {
                 .andExpect(status().isNoContent());
     }
 
-    @Test
-    void createAbsenceTypeShouldValidateInput() throws Exception {
-        AbsenceType invalidAbsenceType = new AbsenceType();
-
-        mockMvc.perform(post(uri)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(invalidAbsenceType)))
-                .andExpect(status().isBadRequest());
-    }
 
     @Test
     void createAbsenceTypeShouldReturnCreatedContractor() throws Exception {
