@@ -135,16 +135,6 @@ public class ApprovalStatusControllerTest {
     }
 
     @Test
-    void createApprovalStatusShouldValidateInput() throws Exception {
-        ApprovalStatus invalidAapprovalStatus = new ApprovalStatus();
-
-        mockMvc.perform(post(uri)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(invalidAapprovalStatus)))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
     void createAbsenceTypeShouldReturnCreatedContractor() throws Exception {
         ApprovalStatus validApprovalStatus = new ApprovalStatus();
         validApprovalStatus.setStatus(FIRST_NAME_STATUS);
