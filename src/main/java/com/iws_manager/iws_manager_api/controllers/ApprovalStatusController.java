@@ -32,12 +32,6 @@ public class ApprovalStatusController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createApprovalStatus(@RequestBody ApprovalStatus approvalStatus) {
-        if (approvalStatus.getStatus() == null || approvalStatus.getStatus().trim().isEmpty()) {
-            Map<String, String> error = new HashMap<>();
-            error.put("error","Status is required");
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-        }
-
         ApprovalStatus createdApprovalStatus = approvalStatusService.create(approvalStatus);
         return new ResponseEntity<>(createdApprovalStatus, HttpStatus.CREATED);
     }

@@ -42,7 +42,7 @@ public class User extends BaseEntity{
      * User's email address (used as username). Must be unique.
      * Example: "user@company.com"
      */
-    @Column(name = "mail", length = 255 ,unique = true, nullable = false)
+    @Column(name = "mail", length = 255, nullable = false)
     private String email;
 
     /**
