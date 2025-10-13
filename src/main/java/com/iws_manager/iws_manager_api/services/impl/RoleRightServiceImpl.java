@@ -16,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import jakarta.persistence.EntityNotFoundException;
+
+import javax.swing.text.html.parser.Entity;
 
 @Service
 @Transactional
@@ -100,6 +103,11 @@ public class RoleRightServiceImpl implements RoleRightService {
         if (id == null ) {
             throw new IllegalArgumentException("ID cannot be null");
         }
+
+        if (!roleRightRepository.existsById(id)) {
+            throw new EntityNotFoundException("RoleRight not found with id: " + id);
+        }
+
         roleRightRepository.deleteById(id);
 
     }
