@@ -42,13 +42,13 @@ public class User extends BaseEntity{
      * User's email address (used as username). Must be unique.
      * Example: "user@company.com"
      */
-    @Column(name = "mail", length = 255, nullable = false)
+    @Column(name = "mail", length = 255, nullable = true)
     private String email;
 
     /**
      * Encrypted user password (using BCrypt hashing).
      */
-    @Column(name = "password", length = 255,nullable = false)
+    @Column(name = "password", length = 255,nullable = true)
     private String password;
 
     @Column(name = "username", length = 255)
