@@ -74,7 +74,7 @@ public class CostTypeServiceImpl implements CostTypeService {
     @Override
     @Transactional(readOnly = true)
     public List<CostType> findAll() {
-        return costTypeRepository.findAll();
+        return costTypeRepository.findAllByOrderByTypeAsc();
     }
 
     /**

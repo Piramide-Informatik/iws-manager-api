@@ -111,28 +111,28 @@ class CostTypeServiceImplTest {
     @DisplayName("Should return all cost types")
     void findAllShouldReturnAllCostTypes() {
         // Arrange
-        when(costTypeRepository.findAll()).thenReturn(Arrays.asList(sampleCostType, sampleCostType2));
+        when(costTypeRepository.findAllByOrderByTypeAsc()).thenReturn(Arrays.asList(sampleCostType, sampleCostType2));
 
         // Act
         List<CostType> result = costTypeService.findAll();
 
         // Assert
         assertEquals(2, result.size());
-        verify(costTypeRepository, times(1)).findAll();
+        verify(costTypeRepository, times(1)).findAllByOrderByTypeAsc();
     }
 
     @Test
     @DisplayName("Should return empty list when no cost types exist")
     void findAllShouldReturnEmptyListWhenNoCostTypes() {
         // Arrange
-        when(costTypeRepository.findAll()).thenReturn(Arrays.asList());
+        when(costTypeRepository.findAllByOrderByTypeAsc()).thenReturn(Arrays.asList());
 
         // Act
         List<CostType> result = costTypeService.findAll();
 
         // Assert
         assertTrue(result.isEmpty());
-        verify(costTypeRepository, times(1)).findAll();
+        verify(costTypeRepository, times(1)).findAllByOrderByTypeAsc();
     }
 
     @Test
