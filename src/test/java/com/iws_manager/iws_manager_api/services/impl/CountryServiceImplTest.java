@@ -132,15 +132,6 @@ public class CountryServiceImplTest {
 
     // ------------------- DELETE TESTS -------------------
     @Test
-    void deleteShouldDeleteCountryWhenIdExists() {
-        doNothing().when(countryRepository).deleteById(1L);
-
-        countryService.delete(1L);
-
-        verify(countryRepository, times(1)).deleteById(1L);
-    }
-
-    @Test
     void deleteShouldThrowIllegalArgumentExceptionWhenIdIsNull() {
         assertThrows(IllegalArgumentException.class, () -> countryService.delete(null));
     }

@@ -3,6 +3,7 @@ package com.iws_manager.iws_manager_api.services.impl;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -111,6 +112,9 @@ public class CountryServiceImpl implements CountryService {
     public void delete(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
+        }
+        if (!countryRepository.existsById(id)) {
+            throw new EntityNotFoundException("country not found with id: " + id);
         }
         countryRepository.deleteById(id);
     }
