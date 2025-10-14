@@ -185,11 +185,11 @@ class EmployeeIwsServiceImplTest {
 
     @Test
     void deleteShouldDeleteEmployeeIws() {
-        doNothing().when(employeeIwsRepository).deleteById(EMPLOYEE_ID);
+        when(employeeIwsRepository.existsById(EMPLOYEE_ID)).thenReturn(true);
 
         employeeIwsService.delete(EMPLOYEE_ID);
 
-        verify(employeeIwsRepository).deleteById(EMPLOYEE_ID);
+        verify(employeeIwsRepository, times(1)).deleteById(EMPLOYEE_ID);
     }
 
     @Test

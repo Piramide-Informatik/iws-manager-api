@@ -6,6 +6,7 @@ import com.iws_manager.iws_manager_api.services.interfaces.IwsCommissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,7 @@ public class IwsCommissionServiceImpl implements IwsCommissionService {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
         }
+
         return iwsCommissionRepository.findById(id);
     }
 
@@ -63,6 +65,10 @@ public class IwsCommissionServiceImpl implements IwsCommissionService {
     public void delete(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
+        }
+
+        if (!iwsCommissionRepository.existsById(id)) {
+            throw new EntityNotFoundException("IwsCommission not found with id: " + id);
         }
         iwsCommissionRepository.deleteById(id);
     }

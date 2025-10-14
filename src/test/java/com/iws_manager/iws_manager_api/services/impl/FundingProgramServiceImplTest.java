@@ -120,7 +120,7 @@ class FundingProgramServiceImplTest {
     @DisplayName("Should delete funding program")
     void testDeleteFundingProgram() {
         // Arrange
-        doNothing().when(fundingProgramRepository).deleteById(1L);
+        when(fundingProgramRepository.existsById(1L)).thenReturn(true);
         // Act
         fundingProgramService.delete(1L);
         // Assert

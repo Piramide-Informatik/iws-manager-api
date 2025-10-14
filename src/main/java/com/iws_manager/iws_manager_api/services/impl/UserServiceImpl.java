@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -70,6 +71,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Long id) {
         int roleCount = roleRepository.findByUserId(id).size();
+
+        if (id == null) {
+            throw new IllegalArgumentException("ID cannot be null");
+        }
+
+        if (!userRepository.existsById(id)) {
+            throw new EntityNotFoundException("User not found with id: " + id);
+        }
 
         if (roleCount > 0) {
             throw new ResponseStatusException(
