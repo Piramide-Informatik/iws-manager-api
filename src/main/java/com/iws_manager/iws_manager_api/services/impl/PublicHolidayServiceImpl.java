@@ -76,6 +76,11 @@ public class PublicHolidayServiceImpl implements PublicHolidayService {
         if (id == null){
             throw new IllegalArgumentException("Id cannot be null");
         }
+
+        if (!publicHolidayRepository.existsById(id)) {
+            throw new EntityNotFoundException("PublicHoliday not found with id: " + id);
+        }
+        
         publicHolidayRepository.deleteById(id);
     }
 
