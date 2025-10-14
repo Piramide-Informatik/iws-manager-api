@@ -148,6 +148,20 @@ class ProjectStatusServiceImplTest {
     }
 
     @Test
+    @DisplayName("Should delete projectStatus successfully")
+    void deleteShouldExecuteDelete() {
+        // Arrange
+        when(projectStatusRepository.existsById(1L)).thenReturn(true);
+        doNothing().when(projectStatusRepository).deleteById(1L);
+
+        // Act
+        projectStatusService.delete(1L);
+
+        // Assert
+        verify(projectStatusRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
     @DisplayName("Should throw exception when deleting with null ID")
     void deleteShouldThrowExceptionWhenIdIsNull() {
         // Act & Assert
