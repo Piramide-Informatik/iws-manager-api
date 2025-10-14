@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.iws_manager.iws_manager_api.models.FundingProgram;
 import com.iws_manager.iws_manager_api.repositories.FundingProgramRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.FundingProgramService;
+import jakarta.persistence.EntityNotFoundException;
 
 /**
  * Implementation of the {@link FundingProgramService} interface for managing FundingProgram entities.
@@ -113,6 +114,11 @@ public class FundingProgramServiceImpl implements FundingProgramService {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
         }
+
+        if (!fundingProgramRepository.existsById(id)) {
+            throw new EntityNotFoundException("FundingProgram not found with id: " + id);
+        }
+        
         fundingProgramRepository.deleteById(id);
     }
 }

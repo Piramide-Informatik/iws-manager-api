@@ -209,11 +209,11 @@ class ContractStatusServiceImplTest {
     // DELETE TESTS
     @Test
     void deleteWithExistingIdShouldDeleteContractStatus() {
-        doNothing().when(contractStatusRepository).deleteById(EXISTING_ID);
+        when(contractStatusRepository.existsById(EXISTING_ID)).thenReturn(true);
 
         contractStatusService.delete(EXISTING_ID);
 
-        verify(contractStatusRepository).deleteById(EXISTING_ID);
+        verify(contractStatusRepository, times(1)).deleteById(EXISTING_ID);
     }
 
     @Test

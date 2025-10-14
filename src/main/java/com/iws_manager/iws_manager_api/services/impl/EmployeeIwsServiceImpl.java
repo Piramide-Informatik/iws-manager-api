@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.iws_manager.iws_manager_api.models.EmployeeIws;
 import com.iws_manager.iws_manager_api.repositories.EmployeeIwsRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.EmployeeIwsService;
+import jakarta.persistence.EntityNotFoundException;
 
 /**
  * Implementation of the {@link EmployeeIwsService} interface for managing EmployeeIws entities.
@@ -125,6 +126,10 @@ public class EmployeeIwsServiceImpl implements EmployeeIwsService {
     public void delete(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
+        }
+
+        if (!employeeIwsRepository.existsById(id)) {
+            throw new EntityNotFoundException("EmployeeIws not found with id: " + id);
         }
         employeeIwsRepository.deleteById(id);
     }

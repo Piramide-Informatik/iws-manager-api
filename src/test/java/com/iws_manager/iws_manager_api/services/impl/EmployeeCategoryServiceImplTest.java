@@ -183,7 +183,7 @@ class EmployeeCategoryServiceImplTest {
     @DisplayName("Should delete EmployeeCategory successfully")
     void deleteShouldExecuteDelete() {
         // Arrange
-        doNothing().when(categoryRepository).deleteById(1L);
+        when(categoryRepository.existsById(1L)).thenReturn(true);
 
         // Act
         categoryService.delete(1L);

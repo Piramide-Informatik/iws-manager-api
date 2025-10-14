@@ -6,6 +6,7 @@ import com.iws_manager.iws_manager_api.services.interfaces.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -108,6 +109,10 @@ public class StateServiceImpl implements StateService {
     public void delete(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
+        }
+
+        if(!stateRepository.existsById(id)){
+            throw new EntityNotFoundException("State not found with id: "+ id);
         }
         stateRepository.deleteById(id);
     }
