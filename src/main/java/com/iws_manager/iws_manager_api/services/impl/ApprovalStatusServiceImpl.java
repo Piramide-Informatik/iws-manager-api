@@ -6,6 +6,7 @@ import com.iws_manager.iws_manager_api.services.interfaces.ApprovalStatusService
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,6 +65,11 @@ public class ApprovalStatusServiceImpl implements ApprovalStatusService {
         if (id == null ) {
             throw new IllegalArgumentException("ID cannot be null");
         }
+
+        if (!approvalStatusRepository.existsById(id)) {
+            throw new EntityNotFoundException("ApprovalStatus not found with id: " + id);
+        }
+
         approvalStatusRepository.deleteById(id);
     }
 }

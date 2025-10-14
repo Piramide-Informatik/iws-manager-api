@@ -179,7 +179,7 @@ class StateServiceImplTest {
     @DisplayName("Should delete state successfully")
     void deleteShouldExecuteDelete() {
         // Arrange
-        doNothing().when(stateRepository).deleteById(1L);
+        when(stateRepository.existsById(1L)).thenReturn(true);
 
         // Act
         stateService.delete(1L);
