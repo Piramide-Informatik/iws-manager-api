@@ -151,6 +151,7 @@ class ProjectStatusServiceImplTest {
     @DisplayName("Should delete projectStatus successfully")
     void deleteShouldExecuteDelete() {
         // Arrange
+        when(projectStatusRepository.existsById(1L)).thenReturn(true);
         doNothing().when(projectStatusRepository).deleteById(1L);
 
         // Act
