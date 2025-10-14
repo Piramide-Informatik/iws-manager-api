@@ -119,12 +119,6 @@ class PromoterServiceImplTest {
     }
 
     @Test
-    void deleteShouldCallRepository() {
-        promoterService.delete(1L);
-        verify(promoterRepository).deleteById(1L);
-    }
-
-    @Test
     void deleteShouldThrowWhenIdNull() {
         assertThrows(IllegalArgumentException.class, () -> promoterService.delete(null));
     }

@@ -181,7 +181,7 @@ class CompanyTypeServiceImplTest {
     @DisplayName("Should delete companyType successfully")
     void deleteShouldExecuteDelete() {
         // Arrange
-        doNothing().when(companyTypeRepository).deleteById(1L);
+        when(companyTypeRepository.existsById(1L)).thenReturn(true);
 
         // Act
         companyTypeService.delete(1L);
