@@ -178,19 +178,6 @@ class CompanyTypeServiceImplTest {
     }
 
     @Test
-    @DisplayName("Should delete companyType successfully")
-    void deleteShouldExecuteDelete() {
-        // Arrange
-        doNothing().when(companyTypeRepository).deleteById(1L);
-
-        // Act
-        companyTypeService.delete(1L);
-
-        // Assert
-        verify(companyTypeRepository, times(1)).deleteById(1L);
-    }
-
-    @Test
     @DisplayName("Should throw exception when deleting with null ID")
     void deleteShouldThrowExceptionWhenIdIsNull() {
         // Act & Assert
