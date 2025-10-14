@@ -157,7 +157,7 @@ class IwsCommissionServiceImplTest {
     @DisplayName("Should delete state successfully")
     void deleteShouldExecuteDelete() {
         // Arrange
-        doNothing().when(iwsCommissionRepository).deleteById(1L);
+        when(iwsCommissionRepository.existsById(1L)).thenReturn(true);
 
         // Act
         iwsCommissionService.delete(1L);

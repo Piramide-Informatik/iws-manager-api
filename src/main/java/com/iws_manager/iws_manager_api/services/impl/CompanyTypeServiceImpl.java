@@ -12,6 +12,8 @@ import com.iws_manager.iws_manager_api.models.CompanyType;
 import com.iws_manager.iws_manager_api.repositories.CompanyTypeRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.CompanyTypeService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 /**
  * Implementation of the {@link CompanyTypeService} interface for managing CompanyType entities.
  * Provides CRUD operations and business logic for CompanyType management.

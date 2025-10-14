@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.iws_manager.iws_manager_api.models.ContractStatus;
 import com.iws_manager.iws_manager_api.repositories.ContractStatusRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.ContractStatusService;
+import jakarta.persistence.EntityNotFoundException;
+
 
 /**
  * Implementation of the {@link ContractStatusService} interface for managing ContractStatus entities.
@@ -113,6 +115,11 @@ public class ContractStatusServiceImpl implements ContractStatusService {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
         }
+
+        if (!contractStatusRepository.existsById(id)) {
+            throw new EntityNotFoundException("ContractStatus not found with id: " + id);
+        }
+
         contractStatusRepository.deleteById(id);
     }
 
