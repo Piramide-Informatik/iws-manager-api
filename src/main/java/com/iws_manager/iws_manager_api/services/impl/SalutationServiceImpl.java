@@ -3,6 +3,7 @@ package com.iws_manager.iws_manager_api.services.impl;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -109,6 +110,9 @@ public class SalutationServiceImpl implements SalutationService {
     public void delete(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
+        }
+        if (!salutationRepository.existsById(id)) {
+            throw new EntityNotFoundException("salutation not found with id: " + id);
         }
         salutationRepository.deleteById(id);
     }
