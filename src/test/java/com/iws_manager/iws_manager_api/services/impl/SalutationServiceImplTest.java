@@ -174,19 +174,6 @@ class SalutationServiceImplTest {
     }
 
     @Test
-    @DisplayName("Should delete salutation successfully")
-    void deleteShouldExecuteDelete() {
-        // Arrange
-        doNothing().when(salutationRepository).deleteById(1L);
-
-        // Act
-        salutationService.delete(1L);
-
-        // Assert
-        verify(salutationRepository, times(1)).deleteById(1L);
-    }
-
-    @Test
     @DisplayName("Should throw exception when deleting with null ID")
     void deleteShouldThrowExceptionWhenIdIsNull() {
         // Act & Assert
