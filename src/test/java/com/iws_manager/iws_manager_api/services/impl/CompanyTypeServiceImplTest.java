@@ -176,7 +176,6 @@ class CompanyTypeServiceImplTest {
             () -> companyTypeService.update(99L, new CompanyType()));
         verify(companyTypeRepository, never()).save(any());
     }
-
     @Test
     @DisplayName("Should delete companyType successfully")
     void deleteShouldExecuteDelete() {
@@ -189,7 +188,6 @@ class CompanyTypeServiceImplTest {
         // Assert
         verify(companyTypeRepository, times(1)).deleteById(1L);
     }
-
     @Test
     @DisplayName("Should throw exception when deleting with null ID")
     void deleteShouldThrowExceptionWhenIdIsNull() {

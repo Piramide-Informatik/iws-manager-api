@@ -3,6 +3,7 @@ package com.iws_manager.iws_manager_api.services.impl;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -112,11 +113,9 @@ public class CompanyTypeServiceImpl implements CompanyTypeService {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
         }
-
         if (!companyTypeRepository.existsById(id)) {
-            throw new EntityNotFoundException("CompanyType not found with id: " + id);
+            throw new EntityNotFoundException("companyType not found with id: " + id);
         }
-
         companyTypeRepository.deleteById(id);
     }
 }
