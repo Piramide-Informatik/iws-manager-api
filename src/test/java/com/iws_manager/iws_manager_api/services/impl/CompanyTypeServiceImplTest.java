@@ -176,7 +176,18 @@ class CompanyTypeServiceImplTest {
             () -> companyTypeService.update(99L, new CompanyType()));
         verify(companyTypeRepository, never()).save(any());
     }
+    @Test
+    @DisplayName("Should delete companyType successfully")
+    void deleteShouldExecuteDelete() {
+        // Arrange
+        when(companyTypeRepository.existsById(1L)).thenReturn(true);
 
+        // Act
+        companyTypeService.delete(1L);
+
+        // Assert
+        verify(companyTypeRepository, times(1)).deleteById(1L);
+    }
     @Test
     @DisplayName("Should throw exception when deleting with null ID")
     void deleteShouldThrowExceptionWhenIdIsNull() {
