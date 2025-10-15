@@ -46,14 +46,6 @@ public class CountryController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createCountry(@RequestBody Country country) {
-        if (country.getName() == null || country.getName().trim().isEmpty() ||
-            country.getLabel() == null || country.getLabel().trim().isEmpty()) {
-            
-            Map<String, String> error = new HashMap<>();
-            error.put("error", "Both name and label are required");
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-        }
-
         Country createdCountry = countryService.create(country);
         return new ResponseEntity<>(createdCountry, HttpStatus.CREATED);
     }
