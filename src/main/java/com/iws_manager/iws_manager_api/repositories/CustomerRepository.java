@@ -16,16 +16,13 @@ import java.util.List;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
     
-//      @EntityGraph(attributePaths = {"branch", "companytype", "country", "state"})
-//     List<Customer> findAll();
-
-//     @EntityGraph(attributePaths = {"branch", "companytype", "country", "state"})
-//     Optional<Customer> findById(Long id);
-    
     @Query("SELECT cp FROM ContactPerson cp " +
            "LEFT JOIN FETCH cp.salutation " +
            "LEFT JOIN FETCH cp.title " +
            "WHERE cp.customer.id = :customerId " +
            "ORDER BY cp.lastName ASC, cp.firstName ASC")
     List<ContactPerson> findByCustomerId(@Param("customerId") Long customerId);
+
+    @Query("SELECT MAX(c.customerno) FROM Customer c")
+    Long findMaxCustomerNo();
 }

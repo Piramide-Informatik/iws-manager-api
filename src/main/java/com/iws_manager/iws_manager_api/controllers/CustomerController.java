@@ -127,4 +127,10 @@ public class CustomerController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @GetMapping("/next-customer-no")
+    public ResponseEntity<Long> getNextCustomerNo() {
+        Long nextCustomerNo = customerService.getNextCustomerNo();
+        return new ResponseEntity<>(nextCustomerNo, HttpStatus.OK);
+    }
 }
