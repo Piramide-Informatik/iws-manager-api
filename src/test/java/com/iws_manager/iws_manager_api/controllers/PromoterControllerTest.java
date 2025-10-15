@@ -26,7 +26,7 @@ class PromoterControllerTest {
     private static final String PROJECT_PROMOTER = "ProjectX";
     private static final String PROMOTER1 = "Juan";
     private static final String PROMOTER2 = "Pedro";
-    private static final String PROMOTER_NO = "P123";
+    private static final Integer PROMOTER_NO = 123;
     private static final String STREET = "Main Street";
     private static final String ZIP_CODE = "12345";
 

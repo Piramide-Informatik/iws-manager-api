@@ -72,7 +72,7 @@ class PromoterTest {
         promoter.setProjectPromoter("Madrid Tech Hub");
         promoter.setPromoterName1("John");
         promoter.setPromoterName2("Smith");
-        promoter.setPromoterNo("12345");
+        promoter.setPromoterNo(123);
         promoter.setStreet("Innovation Street");
         promoter.setZipCode("28001");
         
@@ -84,7 +84,7 @@ class PromoterTest {
             () -> assertEquals("Madrid Tech Hub", promoter.getProjectPromoter()),
             () -> assertEquals("John", promoter.getPromoterName1()),
             () -> assertEquals("Smith", promoter.getPromoterName2()),
-            () -> assertEquals("12345", promoter.getPromoterNo()),
+            () -> assertEquals(123, promoter.getPromoterNo()),
             () -> assertEquals("Innovation Street", promoter.getStreet()),
             () -> assertEquals("28001", promoter.getZipCode())
         );

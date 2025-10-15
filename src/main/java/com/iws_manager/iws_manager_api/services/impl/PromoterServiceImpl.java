@@ -150,7 +150,7 @@ public class PromoterServiceImpl implements PromoterService {
     }
 
     @Override
-    public List<Promoter> getByPromoterNo(String promoterNo) {
+    public List<Promoter> getByPromoterNo(Integer promoterNo) {
         return promoterRepository.findByPromoterNo(promoterNo);
     }
 

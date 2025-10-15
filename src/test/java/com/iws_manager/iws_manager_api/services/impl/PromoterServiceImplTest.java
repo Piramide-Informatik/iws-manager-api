@@ -43,7 +43,7 @@ class PromoterServiceImplTest {
         promoter.setProjectPromoter(PROJ_TEST);
         promoter.setPromoterName1(NAME1_TEST);
         promoter.setPromoterName2(NAME2_TEST);
-        promoter.setPromoterNo("123");
+        promoter.setPromoterNo(123);
         promoter.setStreet(STREET_TEST);
         promoter.setZipCode("0001");
     }
@@ -176,9 +176,9 @@ class PromoterServiceImplTest {
 
     @Test
     void getByPromoterNoShouldReturnList() {
-        when(promoterRepository.findByPromoterNo("123")).thenReturn(List.of(promoter));
+        when(promoterRepository.findByPromoterNo(123)).thenReturn(List.of(promoter));
 
-        List<Promoter> result = promoterService.getByPromoterNo("123");
+        List<Promoter> result = promoterService.getByPromoterNo(123);
 
         assertEquals(1, result.size());
     }

@@ -46,7 +46,7 @@ public class Promoter extends BaseEntity{
     private String promoterName2;
     
     @Column(name = "promoterno", length = 255)
-    private String promoterNo;
+    private Integer promoterNo;
 
     @Column(name = "street", length = 255)
     private String street;

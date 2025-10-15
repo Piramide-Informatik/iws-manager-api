@@ -107,7 +107,7 @@ public class PromoterController {
     }
 
     @GetMapping("/by-promoterno/{promoterNo}")
-    public ResponseEntity<List<Promoter>> getByPromoterNo(@PathVariable String promoterNo) {
+    public ResponseEntity<List<Promoter>> getByPromoterNo(@PathVariable Integer promoterNo) {
         List<Promoter> promoters = promoterService.getByPromoterNo(promoterNo);
         return new ResponseEntity<>(promoters, HttpStatus.OK);
     }

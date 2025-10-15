@@ -17,7 +17,7 @@ public interface PromoterRepository extends JpaRepository<Promoter, Long> {
     List<Promoter> findByProjectPromoter(String projectPromoter);
     List<Promoter> findByPromoterName1(String promoterName1);
     List<Promoter> findByPromoterName2(String promoterName2);
-    List<Promoter> findByPromoterNo(String promoterNo);
+    List<Promoter> findByPromoterNo(Integer promoterNo);
     List<Promoter> findByStreet(String street);
     List<Promoter> findByZipCode(String zipCode);
 
