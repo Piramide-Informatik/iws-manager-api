@@ -103,4 +103,16 @@ public class ContactPersonController {
         contactPersonService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/ordered-by-lastname")
+    public ResponseEntity<List<ContactPerson>> getAllByOrderByLastNameAsc() {
+        List<ContactPerson> contactPersons = contactPersonService.getAllByOrderByLastNameAsc();
+        return new ResponseEntity<>(contactPersons, HttpStatus.OK);
+    }
+
+    @GetMapping("/customer/{customerId}/ordered-by-lastname")
+    public ResponseEntity<List<ContactPerson>> getByCustomerIdOrderByLastNameAsc(@PathVariable Long customerId) {
+        List<ContactPerson> contactPersons = contactPersonService.getByCustomerIdOrderByLastNameAsc(customerId);
+        return new ResponseEntity<>(contactPersons, HttpStatus.OK);
+    }
 }

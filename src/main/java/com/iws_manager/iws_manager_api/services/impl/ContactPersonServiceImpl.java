@@ -125,4 +125,14 @@ public class ContactPersonServiceImpl implements ContactPersonService {
         
         contactPersonRepository.deleteById(id);
     }
+
+    @Override
+    public List<ContactPerson> getAllByOrderByLastNameAsc() {
+        return contactPersonRepository.findAllByOrderByLastNameAsc();
+    }
+
+    @Override
+    public List<ContactPerson> getByCustomerIdOrderByLastNameAsc(Long customerId) {
+        return contactPersonRepository.findByCustomerIdOrderByLastNameAsc(customerId);
+    }
 }

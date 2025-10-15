@@ -3,6 +3,7 @@ package com.iws_manager.iws_manager_api.services.impl;
 import com.iws_manager.iws_manager_api.models.ProjectStatus;
 import com.iws_manager.iws_manager_api.repositories.ProjectStatusRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.ProjectStatusService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,6 +109,9 @@ public class ProjectStatusServiceImpl implements ProjectStatusService {
     public void delete(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
+        }
+        if (!projectStatusRepository.existsById(id)) {
+            throw new EntityNotFoundException("projectStatus not found with id: " + id);
         }
         projectStatusRepository.deleteById(id);
     }

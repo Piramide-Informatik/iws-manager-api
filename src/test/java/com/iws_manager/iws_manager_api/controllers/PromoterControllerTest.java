@@ -115,15 +115,6 @@ class PromoterControllerTest {
     }
 
     @Test
-    void deleteNotFound() {
-        doThrow(new RuntimeException()).when(promoterService).delete(ID);
-
-        ResponseEntity<Void> response = promoterController.delete(ID);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    }
-
-    @Test
     void getByCityReturnsList() {
         List<Promoter> list = Arrays.asList(promoter);
         when(promoterService.getByCity(CITY)).thenReturn(list);

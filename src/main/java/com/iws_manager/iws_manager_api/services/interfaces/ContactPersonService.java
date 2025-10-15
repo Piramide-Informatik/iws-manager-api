@@ -11,4 +11,7 @@ public interface ContactPersonService {
     List<ContactPerson> findAll();
     ContactPerson update(Long id, ContactPerson contactPersonDetails);
     void delete(Long id);
+
+    List<ContactPerson> getAllByOrderByLastNameAsc();
+    List<ContactPerson> getByCustomerIdOrderByLastNameAsc(Long customerId);
 }

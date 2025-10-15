@@ -172,11 +172,11 @@ class SalutationServiceImplTest {
             () -> salutationService.update(99L, new Salutation()));
         verify(salutationRepository, never()).save(any());
     }
-
     @Test
     @DisplayName("Should delete salutation successfully")
     void deleteShouldExecuteDelete() {
         // Arrange
+        when(salutationRepository.existsById(1L)).thenReturn(true);
         doNothing().when(salutationRepository).deleteById(1L);
 
         // Act
@@ -185,7 +185,6 @@ class SalutationServiceImplTest {
         // Assert
         verify(salutationRepository, times(1)).deleteById(1L);
     }
-
     @Test
     @DisplayName("Should throw exception when deleting with null ID")
     void deleteShouldThrowExceptionWhenIdIsNull() {
