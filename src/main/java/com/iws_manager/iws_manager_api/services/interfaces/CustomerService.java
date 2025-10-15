@@ -13,4 +13,6 @@ public interface CustomerService {
     Customer update(Long id, Customer customerDetails);
     void delete(Long id);
     List<ContactPerson> findContactsByCustomerId(Long customerId);
+
+    Long getNextCustomerNo();
 }

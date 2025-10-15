@@ -152,4 +152,11 @@ public class CustomerServiceImpl implements CustomerService {
         
         return customerRepository.findByCustomerId(customerId);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long getNextCustomerNo() {
+        Long maxCustomerNo = customerRepository.findMaxCustomerNo();
+        return (maxCustomerNo != null ? maxCustomerNo + 1 : 1);
+    }
 }
