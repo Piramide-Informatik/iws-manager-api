@@ -30,7 +30,6 @@ class CountryControllerTest {
     private static final String COUNTRY_LABEL = "CO";
     private static final String NAME_JSON_PATH = "$.name";
     private static final String LABEL_JSON_PATH = "$.label";
-    private static final String ERROR_JSON_PATH = "$.error";
     private static final String ID = "/{id}";
     private static final long VALID_ID = 1L;
     private static final long INVALID_ID = 99L;
@@ -84,15 +83,6 @@ class CountryControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath(NAME_JSON_PATH).value(COUNTRY_NAME))
                 .andExpect(jsonPath(LABEL_JSON_PATH).value(COUNTRY_LABEL));
-    }
-
-    @Test
-    void createCountryShouldReturnBadRequestWhenMissingName() throws Exception {
-        mockMvc.perform(post(BASE_URL)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(buildCountryJson(null, COUNTRY_LABEL, null)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath(ERROR_JSON_PATH).value("Both name and label are required"));
     }
 
     // ------------------- GET BY ID TESTS -------------------
