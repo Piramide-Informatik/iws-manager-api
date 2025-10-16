@@ -33,11 +33,6 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createUser(@RequestBody User user){
-        if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
-            Map<String, String> error = new HashMap<>();
-            error.put("error", "User is required");
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-        }
         User createdUser = userService.create(user);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
