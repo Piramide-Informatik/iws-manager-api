@@ -92,4 +92,10 @@ public class PublicHolidayController {
         List<PublicHoliday> publicHolidays = publicHolidayService.findAllByOrderBySequenceNoDesc();
         return new ResponseEntity<>(publicHolidays,HttpStatus.OK);
     }
+
+    @GetMapping("/next-sequence-no")
+    public ResponseEntity<Long> getNextEmployeeNo() {
+        Long next = publicHolidayService.getNextSequenceNo();
+        return ResponseEntity.ok(next);
+    }
 }

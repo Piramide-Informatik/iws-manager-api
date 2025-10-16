@@ -14,5 +14,5 @@ public interface PublicHolidayRepository extends JpaRepository<PublicHoliday, Lo
     List<PublicHoliday> findAllByOrderBySequenceNoDesc();
 
     @Query("SELECT COALESCE(MAX(p.sequenceNo), 0) FROM PublicHoliday p")
-    Integer findMaxSequenceNo();
+    Long findMaxSequenceNo();
 }

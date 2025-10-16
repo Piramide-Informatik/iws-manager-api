@@ -18,5 +18,5 @@ public interface PublicHolidayService {
 
     List<PublicHoliday> findAllByOrderBySequenceNo();
     List<PublicHoliday> findAllByOrderBySequenceNoDesc();
-
+    Long getNextSequenceNo();
 }

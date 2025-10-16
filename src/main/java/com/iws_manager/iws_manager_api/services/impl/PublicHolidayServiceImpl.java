@@ -127,4 +127,11 @@ public class PublicHolidayServiceImpl implements PublicHolidayService {
         return publicHolidayRepository.findAllByOrderBySequenceNoDesc();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Long getNextSequenceNo() {
+        Long maxSequenceNo = publicHolidayRepository.findMaxSequenceNo();
+        return (maxSequenceNo != null ? maxSequenceNo + 1 : 1);
+    }
+
 }
