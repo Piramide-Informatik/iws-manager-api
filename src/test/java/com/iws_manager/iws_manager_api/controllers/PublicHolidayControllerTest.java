@@ -138,16 +138,6 @@ public class PublicHolidayControllerTest {
     }
 
     @Test
-    void createPublicHolidayShouldValidateInput() throws Exception {
-        PublicHoliday invalidPublicHoliday = new PublicHoliday();
-
-        mockMvc.perform(post(uri)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(invalidPublicHoliday)))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
     void createPublicHolidayShouldReturnCreatedContractor() throws Exception {
         PublicHoliday validPublicHoliday = new PublicHoliday();
         validPublicHoliday.setName(FIRST_NAME);

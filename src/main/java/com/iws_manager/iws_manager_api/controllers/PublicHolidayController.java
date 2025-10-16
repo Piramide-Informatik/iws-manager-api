@@ -33,12 +33,6 @@ public class PublicHolidayController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createPublicHoliday(@RequestBody PublicHoliday publicHoliday) {
-        if (publicHoliday.getName() == null || publicHoliday.getName().trim().isEmpty()) {
-            Map<String, String> error = new HashMap<>();
-            error.put("error","PublicHoliday is required");
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-        }
-
         PublicHoliday createdPublicHoliday = publicHolidayService.create(publicHoliday);
         return new ResponseEntity<>(createdPublicHoliday, HttpStatus.CREATED);
     }
@@ -97,5 +91,11 @@ public class PublicHolidayController {
     public ResponseEntity<List<PublicHoliday>> getAllByOrderBySequenceNoDesc() {
         List<PublicHoliday> publicHolidays = publicHolidayService.findAllByOrderBySequenceNoDesc();
         return new ResponseEntity<>(publicHolidays,HttpStatus.OK);
+    }
+
+    @GetMapping("/next-sequence-no")
+    public ResponseEntity<Long> getNextEmployeeNo() {
+        Long next = publicHolidayService.getNextSequenceNo();
+        return ResponseEntity.ok(next);
     }
 }

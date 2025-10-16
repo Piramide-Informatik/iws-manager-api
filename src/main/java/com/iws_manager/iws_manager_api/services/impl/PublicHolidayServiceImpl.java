@@ -33,11 +33,6 @@ public class PublicHolidayServiceImpl implements PublicHolidayService {
         if (publicHoliday == null) {
             throw new IllegalArgumentException("PublicHoliday cannot be null");
         }
-        if (publicHoliday.getSequenceNo() == null) {
-            Integer maxSeq = publicHolidayRepository.findMaxSequenceNo();
-            publicHoliday.setSequenceNo(maxSeq + 1);
-        }
-
         return publicHolidayRepository.save(publicHoliday);
     }
 
@@ -130,6 +125,13 @@ public class PublicHolidayServiceImpl implements PublicHolidayService {
     @Transactional(readOnly = true)
     public List<PublicHoliday> findAllByOrderBySequenceNoDesc() {
         return publicHolidayRepository.findAllByOrderBySequenceNoDesc();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long getNextSequenceNo() {
+        Long maxSequenceNo = publicHolidayRepository.findMaxSequenceNo();
+        return (maxSequenceNo != null ? maxSequenceNo + 1 : 1);
     }
 
 }
