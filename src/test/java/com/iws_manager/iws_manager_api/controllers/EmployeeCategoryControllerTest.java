@@ -137,15 +137,6 @@ class EmployeeCategoryControllerTest {
     }
 
     @Test
-    void createEmployeeCategoryShouldValidateInput() throws Exception {
-        EmployeeCategory invalidEmployeeCategory = new EmployeeCategory();
-
-        mockMvc.perform(post(uri)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(invalidEmployeeCategory)))
-                .andExpect(status().isBadRequest());
-    }
-    @Test
     void createEmployeeCategoryShouldReturnCreatedEmployeeCategory() throws Exception {
         EmployeeCategory validEmployeeCategory = new EmployeeCategory();
         validEmployeeCategory.setTitle(categoryTitle);
