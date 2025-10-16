@@ -33,11 +33,6 @@ public class PublicHolidayServiceImpl implements PublicHolidayService {
         if (publicHoliday == null) {
             throw new IllegalArgumentException("PublicHoliday cannot be null");
         }
-        if (publicHoliday.getSequenceNo() == null) {
-            Integer maxSeq = publicHolidayRepository.findMaxSequenceNo();
-            publicHoliday.setSequenceNo(maxSeq + 1);
-        }
-
         return publicHolidayRepository.save(publicHoliday);
     }
 
