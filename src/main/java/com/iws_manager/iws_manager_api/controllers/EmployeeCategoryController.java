@@ -33,12 +33,6 @@ public class EmployeeCategoryController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> createEmployeeCategory(@RequestBody EmployeeCategory category) {
 
-        if (category.getTitle() == null || category.getTitle().trim().isEmpty()) {
-            Map<String, String> error = new HashMap<>();
-            error.put("error", "Title is required");
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-        }
-
         EmployeeCategory createdEmployeeCategory = employeeCategoryService.create(category);
         return new ResponseEntity<>(createdEmployeeCategory, HttpStatus.CREATED);
     }
