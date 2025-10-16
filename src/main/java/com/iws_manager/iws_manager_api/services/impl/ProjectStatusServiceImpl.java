@@ -73,7 +73,7 @@ public class ProjectStatusServiceImpl implements ProjectStatusService {
     @Override
     @Transactional(readOnly = true)
     public List<ProjectStatus> findAll() {
-        return projectStatusRepository.findAll();
+        return projectStatusRepository.findAllByOrderByNameAsc();
     }
 
     /**
