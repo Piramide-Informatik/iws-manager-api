@@ -106,14 +106,14 @@ class ProjectStatusServiceImplTest {
         projectStatus2.setId(2L);
         projectStatus2.setName("Stufe");
         
-        when(projectStatusRepository.findAll()).thenReturn(Arrays.asList(sampleProjectStatus, projectStatus2));
+        when(projectStatusRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(sampleProjectStatus, projectStatus2));
 
         // Act
         List<ProjectStatus> result = projectStatusService.findAll();
 
         // Assert
         assertEquals(2, result.size());
-        verify(projectStatusRepository, times(1)).findAll();
+        verify(projectStatusRepository, times(1)).findAllByOrderByNameAsc();
     }
 
     @Test
