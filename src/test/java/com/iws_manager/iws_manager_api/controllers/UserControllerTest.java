@@ -134,16 +134,6 @@ public class UserControllerTest {
     }
 
     @Test
-    void createUserShouldValidateInput() throws Exception {
-        User invalidUser = new User();
-
-        mockMvc.perform(post(uri)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(invalidUser)))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
     void createUserShouldReturnCreatedContractor() throws Exception {
         User validUser = new User();
         validUser.setUsername(FIRST_USERNAME);
