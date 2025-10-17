@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.iws_manager.iws_manager_api.models.SubcontractYear;
 import com.iws_manager.iws_manager_api.repositories.SubcontractYearRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.SubcontractYearService;
+import jakarta.persistence.EntityNotFoundException;
 
 /**
  * Implementation of the {@link SubcontractYearService} interface for managing Branch entities.
@@ -114,6 +115,10 @@ public class SubcontractYearServiceImpl implements SubcontractYearService {
     public void delete(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
+        }
+
+        if (!subcontractYearRepository.existsById(id)) {
+            throw new EntityNotFoundException("SubcontractYear not found with id: " + id);
         }
         subcontractYearRepository.deleteById(id);
     }

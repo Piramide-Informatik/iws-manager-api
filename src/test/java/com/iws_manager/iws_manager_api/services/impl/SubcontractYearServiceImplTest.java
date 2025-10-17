@@ -140,7 +140,7 @@ public class SubcontractYearServiceImplTest {
 
     @Test
     public void deleteShouldCallRepository() {
-        doNothing().when(subcontractYearRepository).deleteById(TEST_ID);
+        when(subcontractYearRepository.existsById(TEST_ID)).thenReturn(true);
 
         subcontractYearService.delete(TEST_ID);
 
