@@ -112,7 +112,7 @@ class SubcontractProjectServiceImplTest {
 
     @Test
     void deleteShouldCallRepositoryDelete() {
-        doNothing().when(subcontractProjectRepository).deleteById(1L);
+        when(subcontractProjectRepository.existsById(1L)).thenReturn(true);
 
         subcontractProjectService.delete(1L);
 

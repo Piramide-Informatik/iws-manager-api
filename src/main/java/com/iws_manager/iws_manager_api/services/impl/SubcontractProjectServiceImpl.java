@@ -13,6 +13,8 @@ import com.iws_manager.iws_manager_api.models.SubcontractProject;
 import com.iws_manager.iws_manager_api.repositories.SubcontractProjectRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.SubcontractProjectService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 /**
  * Implementation of the {@link SubcontractProjectService} interface for managing Branch entities.
  * Provides CRUD operations and business logic for SubcontractProject management.
@@ -117,6 +119,10 @@ public class SubcontractProjectServiceImpl implements SubcontractProjectService 
     public void delete(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
+        }
+
+        if (!subcontractProjectRepository.existsById(id)) {
+            throw new EntityNotFoundException("SubcontractProject not found with id: " + id);
         }
         subcontractProjectRepository.deleteById(id);
     }
