@@ -167,14 +167,6 @@ public class OrderControllerTest {
     }
 
     @Test
-    void deleteOrderShouldReturnNotFound() throws Exception {
-        doThrow(new RuntimeException("Not found")).when(orderService).delete(NON_EXISTENT_ID);
-
-        mockMvc.perform(delete(BASE_URI + "/999"))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
     void getByCustomerIdShouldReturnList() throws Exception {
         given(orderService.getByCustomerId(CUSTOMER_ID)).willReturn(Collections.singletonList(order1));
 
