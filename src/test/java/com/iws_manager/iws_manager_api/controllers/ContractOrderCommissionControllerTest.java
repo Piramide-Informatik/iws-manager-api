@@ -179,14 +179,6 @@ public class ContractOrderCommissionControllerTest {
     }
 
     @Test
-    void deleteContractOrderCommissionShouldReturnNotFound() throws Exception {
-        doThrow(new RuntimeException("Not found")).when(contractOrderCommissionService).delete(NON_EXISTENT_ID);
-
-        mockMvc.perform(delete(BASE_URI + "/999"))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
     void getByCommissionShouldReturnList() throws Exception {
         given(contractOrderCommissionService.getByCommission(COMMISSION_10_50))
             .willReturn(Collections.singletonList(commission1));

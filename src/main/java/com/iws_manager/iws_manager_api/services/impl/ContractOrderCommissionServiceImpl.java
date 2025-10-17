@@ -12,6 +12,8 @@ import com.iws_manager.iws_manager_api.models.ContractOrderCommission;
 import com.iws_manager.iws_manager_api.repositories.ContractOrderCommissionRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.ContractOrderCommissionService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 /**
  * Implementation of the {@link ContractOrderCommissionService} interface for managing ContractOrderCommission entities.
  * Provides CRUD operations and business logic for ContractOrderCommission management.
@@ -115,6 +117,11 @@ public class ContractOrderCommissionServiceImpl implements ContractOrderCommissi
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
         }
+
+        if (!contractOrderCommissionRepository.existsById(id)) {
+            throw new EntityNotFoundException("ContractOrderCommission not found with id: " + id);
+        }
+
         contractOrderCommissionRepository.deleteById(id);
     }
 

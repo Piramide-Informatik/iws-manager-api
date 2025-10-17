@@ -158,7 +158,7 @@ class ContractOrderCommissionServiceImplTest {
 
     @Test
     void testDelete() {
-        doNothing().when(contractOrderCommissionRepository).deleteById(CONTRACT_ID_1);
+        when(contractOrderCommissionRepository.existsById(CONTRACT_ID_1)).thenReturn(true);
 
         contractOrderCommissionService.delete(CONTRACT_ID_1);
 
