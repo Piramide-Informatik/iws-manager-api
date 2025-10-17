@@ -124,8 +124,8 @@ public class BasicContractServiceImpl implements BasicContractService {
             throw new IllegalArgumentException("ID cannot be null");
         }
 
-        if (!basicContractRepository.existsById(id)) {  
-            throw new EntityNotFoundException("ContactPerson not found with id: " + id);
+        if (!basicContractRepository.existsById(id)) {
+            throw new EntityNotFoundException("BasicContract not found with id: " + id);
         }
         basicContractRepository.deleteById(id);
     }

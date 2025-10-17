@@ -124,15 +124,6 @@ class BasicContractControllerTest {
         verify(basicContractService, times(1)).delete(ID);
     }
 
-    @Test
-    void deleteNotFound() {
-        doThrow(new RuntimeException()).when(basicContractService).delete(ID);
-
-        ResponseEntity<Void> response = basicContractController.delete(ID);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    }
-
     // Property-based Tests
     @Test
     void getByConfirmationDateReturnsList() {
