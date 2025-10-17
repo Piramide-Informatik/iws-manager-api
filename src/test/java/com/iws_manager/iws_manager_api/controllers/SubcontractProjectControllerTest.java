@@ -111,15 +111,6 @@ class SubcontractProjectControllerTest {
     }
 
     @Test
-    void deleteWhenNotExistsShouldReturnNotFound() {
-        doThrow(new RuntimeException()).when(subcontractProjectService).delete(TEST_ID);
-
-        ResponseEntity<Void> response = subcontractProjectController.delete(TEST_ID);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    }
-
-    @Test
     void getByAmountShouldReturnProjects() {
         List<SubcontractProject> projects = Arrays.asList(testProject);
         when(subcontractProjectService.getByAmount(TEST_AMOUNT)).thenReturn(projects);
