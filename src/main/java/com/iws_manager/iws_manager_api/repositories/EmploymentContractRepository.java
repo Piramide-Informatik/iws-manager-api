@@ -18,6 +18,8 @@ public interface EmploymentContractRepository extends JpaRepository<EmploymentCo
      * @return List of the employee's contracts
      */
     List<EmploymentContract> findByEmployeeId(Long employeeId);
+    List<EmploymentContract> findByEmployeeIdOrderByStartDateAsc(Long employeeId);
+
 
     /**
      * Finds contracts by customer ID

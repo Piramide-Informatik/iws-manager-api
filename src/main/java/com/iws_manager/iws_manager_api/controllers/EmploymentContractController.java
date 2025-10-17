@@ -112,6 +112,12 @@ public class EmploymentContractController {
         return ResponseEntity.ok(contracts);
     }
 
+    @GetMapping("/employee/{employeeId}/sort-by-start-date")
+    public ResponseEntity<List<EmploymentContract>> getByEmployeeIdOrderByStartDateAsc(@PathVariable Long employeeId) {
+        List<EmploymentContract> contracts = employmentContractService.getByEmployeeIdOrderByStartDateAsc(employeeId);
+        return ResponseEntity.ok(contracts);
+    }
+
     @GetMapping("/customer/{customerId}")
     public ResponseEntity<List<EmploymentContract>> getByCustomerId(@PathVariable Long customerId) {
         List<EmploymentContract> contracts = employmentContractService.findByCustomerId(customerId);
