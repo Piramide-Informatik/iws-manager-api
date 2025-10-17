@@ -143,7 +143,7 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalArgumentException("ID cannot be null");
         }
         if (!orderRepository.existsById(id)) {  
-            throw new EntityNotFoundException("EmploymentContract not found with id: " + id);
+            throw new EntityNotFoundException("Order not found with id: " + id);
         }
         orderRepository.deleteById(id);
     }
