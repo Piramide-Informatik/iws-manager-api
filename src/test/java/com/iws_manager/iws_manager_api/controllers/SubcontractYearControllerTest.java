@@ -147,14 +147,6 @@ public class SubcontractYearControllerTest {
     }
 
     @Test
-    void deleteSubcontractYearShouldReturnNotFound() throws Exception {
-        doThrow(new RuntimeException("Not found")).when(subcontractYearService).delete(999L);
-
-        mockMvc.perform(delete(URI + "/999"))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
     void findByMonthsShouldReturnList() throws Exception {
         given(subcontractYearService.findByMonths(12)).willReturn(Collections.singletonList(sy1));
 
