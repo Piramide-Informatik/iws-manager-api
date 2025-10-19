@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.iws_manager.iws_manager_api.models.OrderCommission;
 import com.iws_manager.iws_manager_api.repositories.OrderCommissionRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.OrderCommissionService;
+import jakarta.persistence.EntityNotFoundException;
+
 
 /**
  * Implementation of the {@link OrderCommissionService} interface for managing Branch entities.
@@ -116,6 +118,11 @@ public class OrderCommissionServiceImpl implements OrderCommissionService {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
         }
+
+        if (!orderCommissionRepository.existsById(id)) {
+            throw new EntityNotFoundException("OrderCommission not found with id: " + id);
+        }
+
         orderCommissionRepository.deleteById(id);
     }
 
