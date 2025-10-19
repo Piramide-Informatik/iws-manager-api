@@ -197,11 +197,12 @@ class OrderCommissionServiceImplTest {
 
     @Test
     void deleteWithValidIdShouldCallRepository() {
+        when(orderCommissionRepository.existsById(1L)).thenReturn(true);
         // Act
         orderCommissionService.delete(1L);
 
         // Assert
-        verify(orderCommissionRepository).deleteById(1L);
+        verify(orderCommissionRepository, times(1)).deleteById(1L);
     }
 
     @Test

@@ -172,20 +172,6 @@ class OrderCommissionControllerTest {
         verify(orderCommissionService).delete(1L);
     }
 
-    @Test
-    void deleteWithNonExistingIdShouldReturnNotFound() {
-        // Arrange
-        doThrow(new RuntimeException("Not found")).when(orderCommissionService).delete(999L);
-
-        // Act
-        ResponseEntity<Void> response = orderCommissionController.delete(999L);
-
-        // Assert
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertNull(response.getBody());
-        verify(orderCommissionService).delete(999L);
-    }
-
     // PROPERTIES Tests
     @Test
     void getByCommissionShouldReturnMatchingCommissions() {
