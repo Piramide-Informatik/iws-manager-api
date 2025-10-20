@@ -36,9 +36,11 @@ public interface EmploymentContractRepository extends JpaRepository<EmploymentCo
      */
     @Query("""
         SELECT ec FROM EmploymentContract ec
-        JOIN ec.employee e
+        LEFT JOIN ec.employee e
         WHERE ec.customer.id = :customerId
-        ORDER BY e.employeeno ASC
+        ORDER BY 
+        CASE WHEN e.employeeno IS NULL THEN 0 ELSE 1 END,
+        e.employeeno ASC
     """)
     List<EmploymentContract> findByCustomerIdOrderByEmployeenoAsc(@Param("customerId") Long customerId);
 }
