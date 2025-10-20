@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import jakarta.persistence.EntityNotFoundException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,12 +57,14 @@ public class RoleServiceImpl implements RoleService {
         if (id == null || roleDetails == null) {
             throw new IllegalArgumentException("ID and role details cannot be null");
         }
+
         return roleRepository.findById(id)
                 .map(existingRole -> {
                     existingRole.setName(roleDetails.getName());
+                    existingRole.setUpdatedAt(LocalDateTime.now());
                     return roleRepository.save(existingRole);
                 })
-                .orElseThrow(()-> new RuntimeException("Role not found with id: "+id));
+                .orElseThrow(() -> new RuntimeException("Role not found with id: " + id));
     }
 
     @Override
