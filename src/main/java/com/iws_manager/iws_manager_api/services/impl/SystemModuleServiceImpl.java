@@ -39,7 +39,7 @@ public class SystemModuleServiceImpl implements SystemModuleService {
     @Override
     @Transactional(readOnly = true)
     public List<SystemModule> findAll() {
-        return systemModuleRepository.findAll();
+        return systemModuleRepository.findAllByOrderByNameAsc();
     }
 
     @Override

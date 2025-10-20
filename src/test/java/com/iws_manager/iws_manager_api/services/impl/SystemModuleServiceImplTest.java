@@ -80,12 +80,12 @@ class SystemModuleServiceImplTest {
         systemModule2.setId(2L);
         systemModule2.setName(MODULE_B);
 
-        when(systemModuleRepository.findAll()).thenReturn(Arrays.asList(sampleSystemModule,systemModule2));
+        when(systemModuleRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(sampleSystemModule,systemModule2));
 
         List<SystemModule> result = systemModuleService.findAll();
 
         assertEquals(2, result.size());
-        verify(systemModuleRepository, times(1)).findAll();
+        verify(systemModuleRepository, times(1)).findAllByOrderByNameAsc();
     }
 
     @Test
