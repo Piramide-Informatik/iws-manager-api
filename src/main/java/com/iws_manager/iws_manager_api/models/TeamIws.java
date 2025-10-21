@@ -22,7 +22,7 @@ public class TeamIws extends BaseEntity {
     @Column(name = "teamiws", nullable = true, length = 255)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teamleaderid", nullable = true)
     @JsonIgnoreProperties(value = {"teamIws", "team", "hibernateLazyInitializer", "handler"}, allowSetters = true)
     private EmployeeIws teamLeader;
