@@ -54,7 +54,7 @@ public class User extends BaseEntity{
     @Column(name = "username", length = 255)
     private String username;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "userrole",
             joinColumns = @JoinColumn(name = "userid"),
