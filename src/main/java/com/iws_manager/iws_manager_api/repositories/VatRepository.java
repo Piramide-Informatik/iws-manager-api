@@ -4,7 +4,6 @@ import com.iws_manager.iws_manager_api.models.Vat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
-import org.springframework.data.jpa.repository.EntityGraph;
 
 @Repository
 public interface VatRepository extends JpaRepository<Vat, Long> {
