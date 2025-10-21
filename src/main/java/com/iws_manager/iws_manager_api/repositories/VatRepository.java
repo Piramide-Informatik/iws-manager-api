@@ -7,5 +7,6 @@ import java.util.List;
 
 @Repository
 public interface VatRepository extends JpaRepository<Vat, Long> {
+
     List<Vat> findAllByOrderByLabelAsc();
 }

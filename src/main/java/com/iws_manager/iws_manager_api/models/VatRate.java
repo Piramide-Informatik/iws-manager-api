@@ -26,7 +26,7 @@ public class VatRate extends BaseEntity {
     @Column(name = "rate", nullable = true, columnDefinition = "DECIMAL(5,2)")
     private BigDecimal rate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vatid", referencedColumnName = "vatid", nullable = true )
     private Vat vat;
 }
