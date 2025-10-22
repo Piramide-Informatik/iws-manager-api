@@ -21,7 +21,7 @@ public class SubcontractYear extends BaseEntity{
     @Column(name = "months", columnDefinition = "TINYINT")
     private Integer months;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subcontractid", referencedColumnName = "subcontractid")
     private Subcontract subcontract;
 
