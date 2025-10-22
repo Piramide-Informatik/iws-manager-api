@@ -27,14 +27,14 @@ public class Subcontract extends BaseEntity{
     @Column(name = "afamonths", nullable = true, columnDefinition = "SMALLINT")
     private Integer afamonths;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contractorid", referencedColumnName = "contractorid")
     private Contractor contractor;
 
     @Column(name = "contracttitle", length = 255)
     private String contractTitle;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerid", referencedColumnName = "customerid")
     private Customer customer;
 
@@ -68,7 +68,7 @@ public class Subcontract extends BaseEntity{
     @Column(name = "note", length = 255)
     private String note;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projectcostcenterid", referencedColumnName = "projectcostcenterid")
     private ProjectCostCenter projectCostCenter;
 }
