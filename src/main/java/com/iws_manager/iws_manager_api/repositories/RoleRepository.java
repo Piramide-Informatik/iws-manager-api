@@ -4,11 +4,13 @@ import com.iws_manager.iws_manager_api.models.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.EntityGraph;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface RoleRepository extends JpaRepository<Role,Long> {
+    @EntityGraph(attributePaths = {"roleRights", "roleRights.systemFunction"})
     @Query(value = """
     SELECT r.* 
     FROM role r
@@ -17,6 +19,7 @@ public interface RoleRepository extends JpaRepository<Role,Long> {
 """, nativeQuery = true)
     List<Role> findByUserId(@Param("userId") Long userId);
 
+    @EntityGraph(attributePaths = {"roleRights", "roleRights.systemFunction"})
     List<Role> findAllByOrderByNameAsc();
 
 }
