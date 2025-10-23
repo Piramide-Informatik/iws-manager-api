@@ -41,11 +41,11 @@ public class Contractor extends BaseEntity{
     @Column(name = "contractorno", length = 255)
     private String number;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "countryid", referencedColumnName = "countryid")
     private Country country;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerid", referencedColumnName = "customerid")
     private Customer customer;
 
