@@ -32,7 +32,7 @@ public class Promoter extends BaseEntity{
     @Column(name = "city", length = 255)
     private String city;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "countryid", referencedColumnName = "countryid")
     private Country country;
 

@@ -21,18 +21,18 @@ import lombok.*;
 @AttributeOverride(name = "id", column = @Column(name = "subcontractprojectid"))
 public class SubcontractProject extends BaseEntity{
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subcontractyearid", referencedColumnName = "subcontractyearid")
     private SubcontractYear subcontractYear;
 
     @Column(name = "amount", nullable = true, columnDefinition = "DECIMAL(10,2)")
     private BigDecimal amount;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projectid", referencedColumnName = "projectid")
     private Project project;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subcontractid", referencedColumnName = "subcontractid")
     private Subcontract subcontract;
 

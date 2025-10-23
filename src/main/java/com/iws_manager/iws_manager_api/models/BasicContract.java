@@ -28,25 +28,25 @@ public class BasicContract extends BaseEntity{
     @Column(name = "contractno", nullable =  true)
     private Integer contractNo;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contractstatusid", referencedColumnName = "contractstatusid")
     private ContractStatus contractStatus;
 
     @Column(name = "contracttitle", nullable =  true, length = 255)
     private String contractTitle;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerid", referencedColumnName = "customerid")
     private Customer customer;
 
     @Column(name = "`date`", nullable =  true, columnDefinition = "DATE")
     private LocalDate date;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fundingprogramid", referencedColumnName = "fundingprogramid")
     private FundingProgram fundingProgram;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employeeiwsid", referencedColumnName = "employeeiwsid")
     private EmployeeIws employeeIws;
 }
