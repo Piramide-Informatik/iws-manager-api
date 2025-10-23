@@ -29,7 +29,7 @@ public class OrderCommission extends BaseEntity{
     @Column(name = "mincommission", nullable = true, columnDefinition = "DECIMAL(10,2)")
     private BigDecimal minCommission;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orderid", referencedColumnName = "orderid")
     private Order order;
 }

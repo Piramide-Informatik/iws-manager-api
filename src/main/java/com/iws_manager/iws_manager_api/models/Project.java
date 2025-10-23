@@ -34,7 +34,7 @@ public class Project extends BaseEntity{
     @Column(name = "`comment`", nullable = true, length = 255)
     private String comment;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerid", referencedColumnName = "customerid")
     private Customer customer;
 
@@ -62,15 +62,15 @@ public class Project extends BaseEntity{
     @Column(name = "donation", nullable = true, columnDefinition = "DECIMAL(10,2)")
     private BigDecimal donation;
 
-    // @ManyToOne(fetch = FetchType.EAGER)
+    // @ManyToOne(fetch = FetchType.LAZY)
     // @JoinColumn(name = "empiws20id", referencedColumnName = "empiws20id")
     // private Empiws20 empiws20;
 
-    // @ManyToOne(fetch = FetchType.EAGER)
+    // @ManyToOne(fetch = FetchType.LAZY)
     // @JoinColumn(name = "empiws30id", referencedColumnName = "empiws30id")
     // private Empiws30 empiws30;
 
-    // @ManyToOne(fetch = FetchType.EAGER)
+    // @ManyToOne(fetch = FetchType.LAZY)
     // @JoinColumn(name = "empiws50id", referencedColumnName = "empiws50id")
     // private Empiws50 empiws50;
  
@@ -86,7 +86,7 @@ public class Project extends BaseEntity{
     @Column(name = "fundinglabel", length = 255)
     private String fundingLabel;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fundingprogramid", referencedColumnName = "fundingprogramid")
     private FundingProgram fundingProgram;
 
@@ -117,7 +117,7 @@ public class Project extends BaseEntity{
     @Column(name = "maxhoursperyear", nullable = true, columnDefinition = "DECIMAL(5,2)")
     private BigDecimal maxHoursPerYear;
 
-    // @ManyToOne(fetch = FetchType.EAGER)
+    // @ManyToOne(fetch = FetchType.LAZY)
     // @JoinColumn(name = "networkid", referencedColumnName = "networkid")
     // private Network network;
 
@@ -139,7 +139,7 @@ public class Project extends BaseEntity{
     @Column(name = "projectname", length = 255)
     private String projectName;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "promoterid", referencedColumnName = "promoterid")
     private Promoter promoter;
 
@@ -155,7 +155,7 @@ public class Project extends BaseEntity{
     @Column(name = "startdate", nullable = true, columnDefinition = "DATE")
     private LocalDate startDate;
     
-    // @ManyToOne(fetch = FetchType.EAGER)
+    // @ManyToOne(fetch = FetchType.LAZY)
     // @JoinColumn(name = "statusid", referencedColumnName = "statusid")
     // private Status status;
 
