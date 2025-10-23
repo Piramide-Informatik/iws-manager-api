@@ -36,18 +36,18 @@ public class Invoice extends BaseEntity {
     @Column(name = "amounttax", nullable = true, columnDefinition = "DECIMAL(10,2)")
     private BigDecimal amountTax;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "billerid", referencedColumnName = "billerid", nullable = true)
     private Biller biller;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cancelledinvoiceid", referencedColumnName = "invoiceid", nullable = true)
     private Invoice cancelledInvoice;
 
     @Column(name = "comment", nullable = true, length = 255)
     private String comment;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerid", referencedColumnName = "customerid", nullable = true)
     private Customer customer;
 
@@ -64,25 +64,25 @@ public class Invoice extends BaseEntity {
     @Column(name = "invoicetitle", nullable = true, length = 255)
     private String invoiceTitle;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "invoicetypeid", referencedColumnName = "invoicetypeid", nullable = true)
     private InvoiceType invoiceType;
 
     @Column(name = "iscancellation", nullable = true, columnDefinition = "SMALLINT")
     private Short isCancellation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "networkid", referencedColumnName = "networkid", nullable = true)
     private Network network;
 
     @Column(name = "note", columnDefinition = "TEXT", nullable = true)
     private String note;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orderid", referencedColumnName = "orderid", nullable = true)
     private Order order;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payconditionid", referencedColumnName = "payconditionid", nullable = true)
     private PayCondition payCondition;
 
@@ -95,7 +95,7 @@ public class Invoice extends BaseEntity {
     @Column(name = "taxrate", nullable = true, columnDefinition = "DECIMAL(5,2)")
     private BigDecimal taxRate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vatid", referencedColumnName = "vatid", nullable = true)
     private Vat vat;
 }
