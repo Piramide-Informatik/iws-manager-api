@@ -23,7 +23,7 @@ public class ContractOrderCommission extends BaseEntity {
     @Column(name = "commission", nullable = true, columnDefinition = "DECIMAL(5,2)")
     private BigDecimal commission;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "basiccontractid", referencedColumnName = "basiccontractid")
     private BasicContract basicContract;
     
