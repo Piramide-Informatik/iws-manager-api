@@ -31,11 +31,11 @@ public class Order extends BaseEntity{
     @Column(name = "approvalpdf", nullable = true, columnDefinition = "BLOB")
     private byte[] approvalPdf;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "approvalstatusid", referencedColumnName = "approvalstatusid")
     private ApprovalStatus approvalStatus;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "basiccontractid", referencedColumnName = "basiccontractid")
     private BasicContract basiccontract;
     
@@ -45,7 +45,7 @@ public class Order extends BaseEntity{
     @Column(name = "contractdata2", nullable = true, length = 255)
     private String contractData2;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contractorid", referencedColumnName = "contractorid")
     private Contractor contractor;
     
@@ -53,22 +53,22 @@ public class Order extends BaseEntity{
     @Column(name = "contractpdf", nullable = true, columnDefinition = "BLOB")
     private byte[] contractPdf;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contractstatusid", referencedColumnName = "contractstatusid")
     private ContractStatus contractStatus;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerid", referencedColumnName = "customerid")
     private Customer customer;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employeeiwsid", referencedColumnName = "employeeiwsid")
     private EmployeeIws employeeIws;
     
     @Column(name = "fixcommission", nullable = true, columnDefinition = "DECIMAL(5,2)")
     private BigDecimal fixCommission;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fundingprogramid", referencedColumnName = "fundingprogramid")
     private FundingProgram fundingProgram;
     
@@ -93,7 +93,7 @@ public class Order extends BaseEntity{
     @Column(name = "orderno", nullable = true)
     private Integer orderNo;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "ordertypeid", 
         referencedColumnName = "costtypeid",
@@ -107,11 +107,11 @@ public class Order extends BaseEntity{
     @Column(name = "ordervalue", nullable = true, columnDefinition = "DECIMAL(10,2)")
     private BigDecimal orderValue;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projectid", referencedColumnName = "projectid")
     private Project project;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "promoterid", referencedColumnName = "promoterid")
     private Promoter promoter;
     
