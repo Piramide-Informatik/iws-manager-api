@@ -23,7 +23,7 @@ public class ContactPerson extends BaseEntity{
     /**
      * Customer to whom the contact person is linked.
      */
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerid", referencedColumnName = "customerid")
     private Customer customer;
 
@@ -60,14 +60,14 @@ public class ContactPerson extends BaseEntity{
     /**
      * Salutation of the contact person (e.g., Dr., Eng.).
      */
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "salutationid",  referencedColumnName = "salutationid")
     private Salutation salutation;
 
     /**
      * Title of the contact person (e.g., Mr., Mrs.).
      */
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "titleid",  referencedColumnName = "titleid")
     private Title title;
 }
