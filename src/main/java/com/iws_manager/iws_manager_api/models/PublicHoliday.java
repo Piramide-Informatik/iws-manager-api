@@ -45,11 +45,11 @@ public class PublicHoliday extends BaseEntity {
     @Column(name = "sequenceno",columnDefinition = "INT")
     private Integer sequenceNo;
 
-    @OneToMany(mappedBy = "publicHoliday", cascade = CascadeType.REMOVE)
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "publicHoliday", cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties("publicHoliday")
     private List<StateHoliday> stateHolidays;
 
-    @OneToMany(mappedBy = "publicHoliday", cascade = CascadeType.REMOVE)
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "publicHoliday", cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties("publicHoliday")
     private List<HolidayYear> holidayYears;
 
