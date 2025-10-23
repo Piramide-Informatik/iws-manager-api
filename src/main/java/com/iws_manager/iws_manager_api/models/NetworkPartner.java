@@ -21,7 +21,7 @@ public class NetworkPartner extends BaseEntity {
     @Column(name = "`comment`", length = 255, nullable = true)
     private String comment;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "contactid",
         referencedColumnName = "contactpersonid",
@@ -30,7 +30,7 @@ public class NetworkPartner extends BaseEntity {
     )
     private ContactPerson contact;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "partnerid",
         referencedColumnName = "customerid",
@@ -39,7 +39,7 @@ public class NetworkPartner extends BaseEntity {
     )
     private Customer partner;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "networkid",
         referencedColumnName = "networkid",
