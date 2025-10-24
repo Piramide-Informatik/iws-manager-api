@@ -39,7 +39,7 @@ public class Debt extends BaseEntity{
     @Column(name = "confdatelevel2", nullable = true, columnDefinition = "DATE")
     private LocalDate confDateLevel2;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerid", referencedColumnName = "customerid")
     private Customer customer;
 
@@ -97,7 +97,7 @@ public class Debt extends BaseEntity{
     @Column(name = "openamount", nullable = true, columnDefinition = "DECIMAL(10,2)")
     private BigDecimal openAmount;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orderid", referencedColumnName = "orderid")
     private Order order;
 
@@ -110,14 +110,14 @@ public class Debt extends BaseEntity{
     @Column(name = "projectend", nullable = true, columnDefinition = "DATE")
     private LocalDate projectEnd;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "projectid", referencedColumnName = "projectid")
     private Project project;
 
     @Column(name = "projectstart", nullable = true, columnDefinition = "DATE")
     private LocalDate projectStart;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "promoterid", referencedColumnName = "promoterid")
     private Promoter promoter;
 
