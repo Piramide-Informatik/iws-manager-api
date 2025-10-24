@@ -67,14 +67,14 @@ public class Employee extends BaseEntity {
     @Column(name = "phone", length = 255)
     private String phone;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "qualificationfzid", referencedColumnName = "qualificationfzid")
     private QualificationFZ qualificationFZ;
 
     @Column(name = "qualificationkmui", length = 255)
     private String qualificationkmui;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "salutationid", referencedColumnName = "salutationid")
     private Salutation salutation;
 
@@ -84,7 +84,7 @@ public class Employee extends BaseEntity {
     @Column(name = "soleproprietorsince")
     private LocalDate soleproprietorsince;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "titleid", referencedColumnName = "titleid")
     private Title title;
 }
