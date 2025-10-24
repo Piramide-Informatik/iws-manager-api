@@ -24,14 +24,14 @@ public class EmploymentContract extends BaseEntity{
     /**
      * Customer to whom the contract is linked.
      */
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerid", referencedColumnName = "customerid")
     private Customer customer;
 
     /**
      * Customer to whom the contract is linked.
      */
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employeeid", referencedColumnName = "employeeid")
     private Employee employee;
 
