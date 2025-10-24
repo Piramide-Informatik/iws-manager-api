@@ -7,6 +7,7 @@ import com.iws_manager.iws_manager_api.models.EmploymentContract;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +18,9 @@ public interface EmploymentContractRepository extends JpaRepository<EmploymentCo
      * @param employeeId ID of the employee
      * @return List of the employee's contracts
      */
+    @EntityGraph(attributePaths = { "customer", "employee"})
     List<EmploymentContract> findByEmployeeId(Long employeeId);
+    @EntityGraph(attributePaths = { "customer", "employee"})
     List<EmploymentContract> findByEmployeeIdOrderByStartDateAsc(Long employeeId);
 
 
@@ -26,6 +29,7 @@ public interface EmploymentContractRepository extends JpaRepository<EmploymentCo
      * @param customerId ID of the customer
      * @return List of the customer's contracts
      */
+    @EntityGraph(attributePaths = { "customer", "employee"})
     List<EmploymentContract> findByCustomerId(Long customerId);
 
      /**
@@ -34,6 +38,7 @@ public interface EmploymentContractRepository extends JpaRepository<EmploymentCo
      * @param customerId ID of the customer
      * @return List of EmploymentContracts sorted by employee number
      */
+    @EntityGraph(attributePaths = { "customer", "employee"})
     @Query("""
         SELECT ec FROM EmploymentContract ec
         LEFT JOIN ec.employee e
