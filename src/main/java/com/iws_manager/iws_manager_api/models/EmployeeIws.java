@@ -46,13 +46,13 @@ public class EmployeeIws extends BaseEntity{
     @Column(name = "startdate", nullable = true, columnDefinition = "DATE")
     private LocalDate startDate;
     
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "teamiwsid"
     )
     private TeamIws teamIws;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid", referencedColumnName = "userid")
     private User user;
 }

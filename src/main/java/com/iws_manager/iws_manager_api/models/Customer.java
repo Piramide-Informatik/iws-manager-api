@@ -17,21 +17,18 @@ import lombok.*;
 @AttributeOverride(name = "id", column = @Column(name = "customerid"))
 public class Customer extends BaseEntity{
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "branchid", referencedColumnName = "branchid", nullable = true)
     private Branch branch;
 
     @Column(name = "city", nullable = true, length = 255)
     private String city;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "companytypeid", referencedColumnName = "companytypeid", nullable = true)
     private CompanyType companytype;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "countryid", referencedColumnName = "countryid")
     private Country country;
 
@@ -74,8 +71,7 @@ public class Customer extends BaseEntity{
     @Column(name = "phone", nullable = true, length = 255)
     private String phone;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stateid", referencedColumnName = "stateid", nullable = true)
     private State state;
 
