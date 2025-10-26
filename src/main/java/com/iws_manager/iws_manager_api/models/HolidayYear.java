@@ -36,7 +36,7 @@ public class HolidayYear extends BaseEntity {
     @Column(name = "year", columnDefinition = "DATE")
     private LocalDate year;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publicholidayid")
     private PublicHoliday publicHoliday;
 }

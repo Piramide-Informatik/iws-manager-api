@@ -3,8 +3,10 @@ package com.iws_manager.iws_manager_api.repositories;
 import java.time.LocalDate;
 import java.util.List;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import com.iws_manager.iws_manager_api.models.Debt;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +14,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DebtRepository extends JpaRepository<Debt, Long> {
+    @EntityGraph(attributePaths = {"customer", "order", "project", "promoter"})
+    Optional<Debt> findById(Long id);
     //findAll
+    @EntityGraph(attributePaths = {"customer", "order", "project", "promoter"})
     List<Debt> findAllByOrderByDebtNoAsc();
 
     //properties Methods
@@ -22,6 +27,7 @@ public interface DebtRepository extends JpaRepository<Debt, Long> {
     List<Debt> findByComment(String comment);
     List<Debt> findByConfDateLevel1(LocalDate confDateLevel1);
     List<Debt> findByConfDateLevel2(LocalDate confDateLevel2);
+    @EntityGraph(attributePaths = {"customer", "order", "project", "promoter"})
     List<Debt> findByCustomerId(Long customerId);
     List<Debt> findByDate(LocalDate date);
     List<Debt> findByDebtNo(Integer debtNo);
@@ -41,12 +47,15 @@ public interface DebtRepository extends JpaRepository<Debt, Long> {
     List<Debt> findByLastPaymentDate(LocalDate lastPaymentDate);
     List<Debt> findByNetAmount(BigDecimal netAmount);
     List<Debt> findByOpenAmount(BigDecimal openAmount);
+    @EntityGraph(attributePaths = {"customer", "order", "project", "promoter"})
     List<Debt> findByOrderId(Long orderId);
     List<Debt> findByPayedAmount(BigDecimal payedAmount);
     List<Debt> findByProjectCosts(BigDecimal projectCosts);
     List<Debt> findByProjectEnd(LocalDate projectEnd);
+    @EntityGraph(attributePaths = {"customer", "order", "project", "promoter"})
     List<Debt> findByProjectId(Long projectId);
     List<Debt> findByProjectStart(LocalDate projectStart);
+    @EntityGraph(attributePaths = {"customer", "order", "project", "promoter"})
     List<Debt> findByPromoterId(Long promoterId);
     List<Debt> findByRequestNo(Integer requestNo);
     List<Debt> findByTaxAmount(BigDecimal taxAmount);
