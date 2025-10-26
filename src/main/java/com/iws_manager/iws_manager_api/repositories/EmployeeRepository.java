@@ -9,20 +9,20 @@ import java.util.List;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-    @EntityGraph(attributePaths = {"qualificationFZ", "salutation", "title"})
+    @EntityGraph(attributePaths = {"customer","qualificationFZ", "salutation", "title"})
     List<Employee> findAllByOrderByEmployeenoAsc();
 
-    @EntityGraph(attributePaths = {"qualificationFZ", "salutation", "title"})
+    @EntityGraph(attributePaths = {"customer","qualificationFZ", "salutation", "title"})
     List<Employee> findByLastname(String lastname);
-    @EntityGraph(attributePaths = {"qualificationFZ", "salutation", "title"})
+    @EntityGraph(attributePaths = {"customer","qualificationFZ", "salutation", "title"})
     Employee findByEmail(String email);
-    @EntityGraph(attributePaths = {"qualificationFZ", "salutation", "title"})
+    @EntityGraph(attributePaths = {"customer","qualificationFZ", "salutation", "title"})
     List<Employee> findByTitleId(Long titleId);
-    @EntityGraph(attributePaths = {"qualificationFZ", "salutation", "title"})
+    @EntityGraph(attributePaths = {"customer","qualificationFZ", "salutation", "title"})
     List<Employee> findBySalutationId(Long salutationId);
-    @EntityGraph(attributePaths = {"qualificationFZ", "salutation", "title"})
+    @EntityGraph(attributePaths = {"customer","qualificationFZ", "salutation", "title"})
     List<Employee> findByQualificationFZId(Long qualificationFZId);
     //find by customer Id
-    @EntityGraph(attributePaths = {"qualificationFZ", "salutation", "title"})
+    @EntityGraph(attributePaths = {"customer","qualificationFZ", "salutation", "title"})
     List<Employee> findByCustomerIdOrderByEmployeenoAsc(Long customerId);
 }
