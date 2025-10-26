@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,5 +74,17 @@ public class IwsCommissionController {
     public ResponseEntity<Void> deleteIwsCommission(@PathVariable Long id) {
         iwsCommissionService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/fromOrderValue/min/{value}")
+    public ResponseEntity<List<IwsCommission>> getByFromOrderValueLessThanEqual(@PathVariable BigDecimal value) {
+        List<IwsCommission> results = iwsCommissionService.findByFromOrderValueLessThanEqual(value);
+        return new ResponseEntity<>(results, HttpStatus.OK);
+    }
+
+    @GetMapping("/fromOrderValue/max/{value}")
+    public ResponseEntity<List<IwsCommission>> getByFromOrderValueGreaterThanEqual(@PathVariable BigDecimal value) {
+        List<IwsCommission> results = iwsCommissionService.findByFromOrderValueGreaterThanEqual(value);
+        return new ResponseEntity<>(results, HttpStatus.OK);
     }
 }

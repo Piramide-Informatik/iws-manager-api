@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityNotFoundException;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,5 +72,23 @@ public class IwsCommissionServiceImpl implements IwsCommissionService {
             throw new EntityNotFoundException("IwsCommission not found with id: " + id);
         }
         iwsCommissionRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<IwsCommission> findByFromOrderValueGreaterThanEqual(BigDecimal value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Value cannot be null");
+        }
+        return iwsCommissionRepository.findByFromOrderValueGreaterThanEqualOrderByFromOrderValueAsc(value);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<IwsCommission> findByFromOrderValueLessThanEqual(BigDecimal value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Value cannot be null");
+        }
+        return iwsCommissionRepository.findByFromOrderValueLessThanEqualOrderByFromOrderValueAsc(value);
     }
 }

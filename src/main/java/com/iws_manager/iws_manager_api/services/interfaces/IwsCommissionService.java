@@ -2,6 +2,7 @@ package com.iws_manager.iws_manager_api.services.interfaces;
 
 import com.iws_manager.iws_manager_api.models.IwsCommission;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,4 +12,8 @@ public interface IwsCommissionService {
     List<IwsCommission> findAll();
     IwsCommission update(Long id, IwsCommission iwsCommissionDetails);
     void delete(Long id);
+
+    // Nuevos métodos
+    List<IwsCommission> findByFromOrderValueGreaterThanEqual(BigDecimal value);
+    List<IwsCommission> findByFromOrderValueLessThanEqual(BigDecimal value);
 }
