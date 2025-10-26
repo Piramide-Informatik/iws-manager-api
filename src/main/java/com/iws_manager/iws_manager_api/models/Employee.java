@@ -42,7 +42,7 @@ public class Employee extends BaseEntity {
     @Column(name = "coentrepreneursince")
     private LocalDate coentrepreneursince;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerid", referencedColumnName = "customerid")
     private Customer customer;
 
