@@ -13,14 +13,21 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EmploymentContractRepository extends JpaRepository<EmploymentContract, Long> {
+
+     @EntityGraph(attributePaths = {
+        "customer", "customer.branch", "customer.companytype", "customer.country", "customer.state",
+        "employee", "employee.title", "employee.salutation", "employee.qualificationfz"
+    })
+    List<EmploymentContract> findAll();
+
     /**
      * Finds contracts by employee ID
      * @param employeeId ID of the employee
      * @return List of the employee's contracts
      */
-    @EntityGraph(attributePaths = { "customer", "employee"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "employee", "employee.title", "employee.salutation", "employee.qualificationfz"})
     List<EmploymentContract> findByEmployeeId(Long employeeId);
-    @EntityGraph(attributePaths = { "customer", "employee"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "employee", "employee.title", "employee.salutation", "employee.qualificationfz"})
     List<EmploymentContract> findByEmployeeIdOrderByStartDateAsc(Long employeeId);
 
 
@@ -29,7 +36,7 @@ public interface EmploymentContractRepository extends JpaRepository<EmploymentCo
      * @param customerId ID of the customer
      * @return List of the customer's contracts
      */
-    @EntityGraph(attributePaths = { "customer", "employee"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "employee", "employee.title", "employee.salutation", "employee.qualificationfz"})
     List<EmploymentContract> findByCustomerId(Long customerId);
 
      /**
@@ -38,7 +45,7 @@ public interface EmploymentContractRepository extends JpaRepository<EmploymentCo
      * @param customerId ID of the customer
      * @return List of EmploymentContracts sorted by employee number
      */
-    @EntityGraph(attributePaths = { "customer", "employee"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "employee", "employee.title", "employee.salutation", "employee.qualificationfz"})
     @Query("""
         SELECT ec FROM EmploymentContract ec
         LEFT JOIN ec.employee e
