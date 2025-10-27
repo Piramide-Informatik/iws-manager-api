@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 public interface EmployeeIwsRepository extends JpaRepository<EmployeeIws, Long> {
     
     // FIND ALL
+    @EntityGraph(attributePaths = {"teamIws", "user"})
+    List<EmployeeIws> findAll();
     @EntityGraph(attributePaths = { "teamIws", "user"})
     List<EmployeeIws> findAllByOrderByLastnameAsc();
     @EntityGraph(attributePaths = { "teamIws", "user"})
