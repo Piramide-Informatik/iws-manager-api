@@ -9,20 +9,20 @@ import java.util.List;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-    @EntityGraph(attributePaths = {"customer","qualificationFZ", "salutation", "title"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "qualificationFZ", "salutation", "title"})
     List<Employee> findAllByOrderByEmployeenoAsc();
 
-    @EntityGraph(attributePaths = {"customer","qualificationFZ", "salutation", "title"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "qualificationFZ", "salutation", "title"})
     List<Employee> findByLastname(String lastname);
-    @EntityGraph(attributePaths = {"customer","qualificationFZ", "salutation", "title"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "qualificationFZ", "salutation", "title"})
     Employee findByEmail(String email);
-    @EntityGraph(attributePaths = {"customer","qualificationFZ", "salutation", "title"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "qualificationFZ", "salutation", "title"})
     List<Employee> findByTitleId(Long titleId);
-    @EntityGraph(attributePaths = {"customer","qualificationFZ", "salutation", "title"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "qualificationFZ", "salutation", "title"})
     List<Employee> findBySalutationId(Long salutationId);
-    @EntityGraph(attributePaths = {"customer","qualificationFZ", "salutation", "title"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "qualificationFZ", "salutation", "title"})
     List<Employee> findByQualificationFZId(Long qualificationFZId);
     //find by customer Id
-    @EntityGraph(attributePaths = {"customer","qualificationFZ", "salutation", "title"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "qualificationFZ", "salutation", "title"})
     List<Employee> findByCustomerIdOrderByEmployeenoAsc(Long customerId);
 }
