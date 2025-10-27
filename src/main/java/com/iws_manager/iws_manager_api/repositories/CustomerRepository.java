@@ -15,6 +15,9 @@ import java.util.Optional;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
+    @EntityGraph(attributePaths = {"branch", "companytype", "country", "state"})
+    List<Customer> findAll();
+
     @Query("SELECT cp FROM ContactPerson cp " +
            "LEFT JOIN FETCH cp.salutation " +
            "LEFT JOIN FETCH cp.title " +
