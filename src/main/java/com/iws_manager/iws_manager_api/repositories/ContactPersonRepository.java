@@ -9,15 +9,15 @@ import java.util.Optional;
 
 @Repository
 public interface ContactPersonRepository extends JpaRepository<ContactPerson, Long> {
-    @EntityGraph(attributePaths = {"customer", "salutation", "title"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "salutation", "title"})
     List<ContactPerson> findAll();
 
-    @EntityGraph(attributePaths = {"customer", "salutation", "title"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "salutation", "title"})
     Optional<ContactPerson> findById(Long id);
 
-    @EntityGraph(attributePaths = {"customer", "salutation", "title"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "salutation", "title"})
     List<ContactPerson> findAllByOrderByLastNameAsc();
 
-    @EntityGraph(attributePaths = {"customer", "salutation", "title"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "salutation", "title"})
     List<ContactPerson> findByCustomerIdOrderByLastNameAsc(Long customerId);
 }
