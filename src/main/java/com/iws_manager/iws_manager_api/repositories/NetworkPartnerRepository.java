@@ -9,16 +9,16 @@ import java.util.List;
 
 @Repository
 public interface NetworkPartnerRepository extends JpaRepository<NetworkPartner, Long> {
-    @EntityGraph(attributePaths = { "contact", "partner", "network" })
+    @EntityGraph(attributePaths = {"contact", "partner", "partner.branch", "partner.companytype", "partner.country", "partner.state", "network"})
     List<NetworkPartner> findAllByOrderByPartnernoAsc();
 
-    @EntityGraph(attributePaths = { "contact", "partner", "network" })
+    @EntityGraph(attributePaths = {"contact", "partner", "partner.branch", "partner.companytype", "partner.country", "partner.state", "network"})
     List<NetworkPartner> findByNetworkIdOrderByPartnernoAsc(Long networkId);
 
-    @EntityGraph(attributePaths = { "contact", "partner", "network" })
+    @EntityGraph(attributePaths = {"contact", "partner", "partner.branch", "partner.companytype", "partner.country", "partner.state", "network"})
     List<NetworkPartner> findByPartnerIdOrderByPartnernoAsc(Long partnerId);
 
-    @EntityGraph(attributePaths = { "contact", "partner", "network" })
+    @EntityGraph(attributePaths = {"contact", "partner", "partner.branch", "partner.companytype", "partner.country", "partner.state", "network"})
     List<NetworkPartner> findByContactIdOrderByPartnernoAsc(Long contactPersonId);
 
 }

@@ -11,40 +11,49 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderCommissionRepository extends JpaRepository<OrderCommission, Long> {
 
+    @EntityGraph(attributePaths = {
+        "order",
+        "order.customer", "order.customer.branch", "order.customer.companytype", "order.customer.country", "order.customer.state",
+        "order.employeeIws", "order.employeeIws.teamIws",
+        "order.fundingProgram",
+        "order.costType"
+    })
+    List<OrderCommission> findAll();
+
     //PROPERTIES
-    @EntityGraph(attributePaths = {"order"})
+    @EntityGraph(attributePaths = {"order", "order.customer", "order.customer.branch", "order.customer.companytype", "order.customer.country", "order.customer.state", "order.employeeIws", "order.employeeIws.teamIws", "order.fundingProgram", "order.costType"})
     List<OrderCommission> findByCommission(BigDecimal commission);
-    @EntityGraph(attributePaths = {"order"})
+    @EntityGraph(attributePaths = {"order", "order.customer", "order.customer.branch", "order.customer.companytype", "order.customer.country", "order.customer.state", "order.employeeIws", "order.employeeIws.teamIws", "order.fundingProgram", "order.costType"})
     List<OrderCommission> findByFromOrderValue(BigDecimal fromOrderValue);
-    @EntityGraph(attributePaths = {"order"})
+    @EntityGraph(attributePaths = {"order", "order.customer", "order.customer.branch", "order.customer.companytype", "order.customer.country", "order.customer.state", "order.employeeIws", "order.employeeIws.teamIws", "order.fundingProgram", "order.costType"})
     List<OrderCommission> findByMinCommission(BigDecimal minCommission);
-    @EntityGraph(attributePaths = {"order"})
+    @EntityGraph(attributePaths = {"order", "order.customer", "order.customer.branch", "order.customer.companytype", "order.customer.country", "order.customer.state", "order.employeeIws", "order.employeeIws.teamIws", "order.fundingProgram", "order.costType"})
     List<OrderCommission> findByOrderId(Long orderId);
     
     //HELPERS
-    @EntityGraph(attributePaths = {"order"})
+    @EntityGraph(attributePaths = {"order", "order.customer", "order.customer.branch", "order.customer.companytype", "order.customer.country", "order.customer.state", "order.employeeIws", "order.employeeIws.teamIws", "order.fundingProgram", "order.costType"})
     List<OrderCommission> findByCommissionLessThanEqual(BigDecimal value);
-    @EntityGraph(attributePaths = {"order"})
+    @EntityGraph(attributePaths = {"order", "order.customer", "order.customer.branch", "order.customer.companytype", "order.customer.country", "order.customer.state", "order.employeeIws", "order.employeeIws.teamIws", "order.fundingProgram", "order.costType"})
     List<OrderCommission> findByCommissionGreaterThanEqual(BigDecimal value);
-    @EntityGraph(attributePaths = {"order"})
+    @EntityGraph(attributePaths = {"order", "order.customer", "order.customer.branch", "order.customer.companytype", "order.customer.country", "order.customer.state", "order.employeeIws", "order.employeeIws.teamIws", "order.fundingProgram", "order.costType"})
     List<OrderCommission> findByCommissionBetween(BigDecimal startValue, BigDecimal endValue);
 
-    @EntityGraph(attributePaths = {"order"})
+    @EntityGraph(attributePaths = {"order", "order.customer", "order.customer.branch", "order.customer.companytype", "order.customer.country", "order.customer.state", "order.employeeIws", "order.employeeIws.teamIws", "order.fundingProgram", "order.costType"})
     List<OrderCommission> findByFromOrderValueLessThanEqual(BigDecimal value);
-    @EntityGraph(attributePaths = {"order"})
+    @EntityGraph(attributePaths = {"order", "order.customer", "order.customer.branch", "order.customer.companytype", "order.customer.country", "order.customer.state", "order.employeeIws", "order.employeeIws.teamIws", "order.fundingProgram", "order.costType"})
     List<OrderCommission> findByFromOrderValueGreaterThanEqual(BigDecimal value);
-    @EntityGraph(attributePaths = {"order"})
+    @EntityGraph(attributePaths = {"order", "order.customer", "order.customer.branch", "order.customer.companytype", "order.customer.country", "order.customer.state", "order.employeeIws", "order.employeeIws.teamIws", "order.fundingProgram", "order.costType"})
     List<OrderCommission> findByFromOrderValueBetween(BigDecimal startValue, BigDecimal endValue);
 
-    @EntityGraph(attributePaths = {"order"})
+    @EntityGraph(attributePaths = {"order", "order.customer", "order.customer.branch", "order.customer.companytype", "order.customer.country", "order.customer.state", "order.employeeIws", "order.employeeIws.teamIws", "order.fundingProgram", "order.costType"})
     List<OrderCommission> findByMinCommissionLessThanEqual(BigDecimal value);
-    @EntityGraph(attributePaths = {"order"})
+    @EntityGraph(attributePaths = {"order", "order.customer", "order.customer.branch", "order.customer.companytype", "order.customer.country", "order.customer.state", "order.employeeIws", "order.employeeIws.teamIws", "order.fundingProgram", "order.costType"})
     List<OrderCommission> findByMinCommissionGreaterThanEqual(BigDecimal value);
-    @EntityGraph(attributePaths = {"order"})
+    @EntityGraph(attributePaths = {"order", "order.customer", "order.customer.branch", "order.customer.companytype", "order.customer.country", "order.customer.state", "order.employeeIws", "order.employeeIws.teamIws", "order.fundingProgram", "order.costType"})
     List<OrderCommission> findByMinCommissionBetween(BigDecimal startValue, BigDecimal endValue);
 
     //SORTS
-    @EntityGraph(attributePaths = {"order"})
+    @EntityGraph(attributePaths = {"order", "order.customer", "order.customer.branch", "order.customer.companytype", "order.customer.country", "order.customer.state", "order.employeeIws", "order.employeeIws.teamIws", "order.fundingProgram", "order.costType"})
     List<OrderCommission> findByOrderIdOrderByFromOrderValueAsc(Long orderId);
 
 }
