@@ -149,7 +149,7 @@ public class SubcontractProjectServiceImpl implements SubcontractProjectService 
 
     @Override
     public List<SubcontractProject> getBySubcontractId(Long subcontractId) {
-        return subcontractProjectRepository.findBySubcontractId(subcontractId);
+        return subcontractProjectRepository.findBySubcontractIdOrdered(subcontractId);
     }
 
     @Override

@@ -167,7 +167,7 @@ class SubcontractServiceImplTest {
         List<SubcontractProject> projects = Arrays.asList(project1, project2);
 
         when(subcontractRepository.findById(1L)).thenReturn(Optional.of(sampleSubcontract));
-        when(subcontractProjectRepository.findBySubcontractId(1L)).thenReturn(projects);
+        when(subcontractProjectRepository.findBySubcontractIdOrdered(1L)).thenReturn(projects);
 
         subcontractService.recalculateSubcontractProjects(1L);
 
@@ -198,7 +198,7 @@ class SubcontractServiceImplTest {
         List<SubcontractProject> projects = Arrays.asList(project1, project2);
 
         when(subcontractRepository.findById(1L)).thenReturn(Optional.of(sampleSubcontract));
-        when(subcontractProjectRepository.findBySubcontractId(1L)).thenReturn(projects);
+        when(subcontractProjectRepository.findBySubcontractIdOrdered(1L)).thenReturn(projects);
 
         subcontractService.recalculateSubcontractProjects(1L);
 
@@ -214,7 +214,7 @@ class SubcontractServiceImplTest {
     void testRecalculateSubcontractNotFoundThrowsException() {
         when(subcontractRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(RuntimeException.class, () -> subcontractService.recalculateSubcontractProjects(1L));
-        verify(subcontractProjectRepository, never()).findBySubcontractId(anyLong());
+        verify(subcontractProjectRepository, never()).findBySubcontractIdOrdered(anyLong());
     }
 
     @Test
