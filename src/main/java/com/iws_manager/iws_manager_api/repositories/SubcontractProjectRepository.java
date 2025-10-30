@@ -34,9 +34,7 @@ public interface SubcontractProjectRepository extends JpaRepository<SubcontractP
     // Find by subcontract ID
     @Query("SELECT sp FROM SubcontractProject sp WHERE sp.subcontract.id = :subcontractId ORDER BY sp.project.projectLabel ASC, sp.amount ASC")    
     List<SubcontractProject> findBySubcontractIdOrdered(@Param("subcontractId") Long subcontractId);
-    // @EntityGraph(attributePaths = {"subcontractYear", "project", "subcontract"})
-    // List<SubcontractProject> findBySubcontractId(Long subcontractId);
-    
+
     // Find by share percentage range (inclusive)
     @EntityGraph(attributePaths = {"subcontractYear", "project", "subcontract"})
     List<SubcontractProject> findByShareBetween(BigDecimal start, BigDecimal end);
