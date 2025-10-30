@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RoleRepository extends JpaRepository<Role,Long> {
-    @EntityGraph(attributePaths = {"roleRights", "roleRights.systemFunction"})
+    @EntityGraph(attributePaths = {"roleRights", "roleRights.systemFunction", "roleRights.systemFunction.module"})
     @Query(value = """
     SELECT r.* 
     FROM role r
@@ -19,7 +19,7 @@ public interface RoleRepository extends JpaRepository<Role,Long> {
 """, nativeQuery = true)
     List<Role> findByUserId(@Param("userId") Long userId);
 
-    @EntityGraph(attributePaths = {"roleRights", "roleRights.systemFunction"})
+    @EntityGraph(attributePaths = {"roleRights", "roleRights.systemFunction", "roleRights.systemFunction.module"})
     List<Role> findAllByOrderByNameAsc();
 
 }
