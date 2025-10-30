@@ -161,7 +161,7 @@ class SubcontractProjectServiceImplTest {
 
     @Test
     void getBySubcontractIdShouldReturnMatchingProjects() {
-        when(subcontractProjectRepository.findBySubcontractId(1L)).thenReturn(Arrays.asList(project1));
+        when(subcontractProjectRepository.findBySubcontractIdOrdered(1L)).thenReturn(Arrays.asList(project1));
 
         List<SubcontractProject> result = subcontractProjectService.getBySubcontractId(1L);
 
