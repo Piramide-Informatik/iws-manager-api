@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RoleRepository extends JpaRepository<Role,Long> {
-    @EntityGraph(attributePaths = {"roleRights", "roleRights.systemFunction", "roleRights.systemFunction.module"})
     @Query(value = """
     SELECT r.* 
     FROM role r
