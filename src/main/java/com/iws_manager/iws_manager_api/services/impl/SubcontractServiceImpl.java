@@ -181,7 +181,7 @@ public class SubcontractServiceImpl implements SubcontractService {
         Subcontract subcontract = subcontractRepository.findById(subcontractId)
                 .orElseThrow(() -> new RuntimeException("Subcontract not found with id: " + subcontractId));
 
-        List<SubcontractProject> projects = subcontractProjectRepository.findBySubcontractId(subcontractId);
+        List<SubcontractProject> projects = subcontractProjectRepository.findBySubcontractIdOrdered(subcontractId);
 
         if (Boolean.TRUE.equals(subcontract.getNetOrGross())) {
             // Case: netOrGross = true → invoiceNet se mantiene, invoiceGross = 0 y projects.amount = 0
