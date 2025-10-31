@@ -16,7 +16,7 @@ public interface EmploymentContractRepository extends JpaRepository<EmploymentCo
 
      @EntityGraph(attributePaths = {
         "customer", "customer.branch", "customer.companytype", "customer.country", "customer.state",
-        "employee", "employee.title", "employee.salutation", "employee.qualificationfz"
+        "employee", "employee.title", "employee.salutation", "employee.qualificationFZ"
     })
     List<EmploymentContract> findAll();
 
@@ -25,9 +25,9 @@ public interface EmploymentContractRepository extends JpaRepository<EmploymentCo
      * @param employeeId ID of the employee
      * @return List of the employee's contracts
      */
-    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "employee", "employee.title", "employee.salutation", "employee.qualificationfz"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "employee", "employee.title", "employee.salutation", "employee.qualificationFZ"})
     List<EmploymentContract> findByEmployeeId(Long employeeId);
-    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "employee", "employee.title", "employee.salutation", "employee.qualificationfz"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "employee", "employee.title", "employee.salutation", "employee.qualificationFZ"})
     List<EmploymentContract> findByEmployeeIdOrderByStartDateAsc(Long employeeId);
 
 
@@ -36,7 +36,7 @@ public interface EmploymentContractRepository extends JpaRepository<EmploymentCo
      * @param customerId ID of the customer
      * @return List of the customer's contracts
      */
-    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "employee", "employee.title", "employee.salutation", "employee.qualificationfz"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "employee", "employee.title", "employee.salutation", "employee.qualificationFZ"})
     List<EmploymentContract> findByCustomerId(Long customerId);
 
      /**
@@ -45,7 +45,7 @@ public interface EmploymentContractRepository extends JpaRepository<EmploymentCo
      * @param customerId ID of the customer
      * @return List of EmploymentContracts sorted by employee number
      */
-    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "employee", "employee.title", "employee.salutation", "employee.qualificationfz"})
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "employee", "employee.title", "employee.salutation", "employee.qualificationFZ"})
     @Query("""
         SELECT ec FROM EmploymentContract ec
         LEFT JOIN ec.employee e
