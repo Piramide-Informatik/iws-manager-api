@@ -287,7 +287,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<Project> getProjectsByCustomerId(Long customerId) {
-        return projectRepository.findByCustomerId(customerId);
+        return projectRepository.findByCustomerIdOrderByProjectLabelAsc(customerId);
     }
 
     @Override

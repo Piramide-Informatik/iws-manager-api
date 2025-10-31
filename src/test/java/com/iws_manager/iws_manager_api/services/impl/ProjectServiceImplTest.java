@@ -389,12 +389,12 @@ class ProjectServiceImplTest {
     @Test
     void findByCustomerIdShouldReturnProjects() {
         Long customerId = 1L;
-        when(projectRepository.findByCustomerId(customerId)).thenReturn(Arrays.asList(testProject));
+        when(projectRepository.findByCustomerIdOrderByProjectLabelAsc(customerId)).thenReturn(Arrays.asList(testProject));
 
         List<Project> result = projectService.getProjectsByCustomerId(customerId);
 
         assertEquals(1, result.size());
-        verify(projectRepository).findByCustomerId(customerId);
+        verify(projectRepository).findByCustomerIdOrderByProjectLabelAsc(customerId);
     }
 
     @Test
