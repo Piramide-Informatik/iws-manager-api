@@ -97,6 +97,9 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     // --- Entities (Relationships) ---
     @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "fundingProgram", "promoter", "promoter.country"})
     List<Project> findByCustomerId(Long customerId);
+
+    @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "fundingProgram", "promoter", "promoter.country"})
+    List<Project> findByCustomerIdOrderByProjectLabelAsc(Long customerId);
     // List<Project> findByEmpiws20Id(Long empiws20Id);  // Cuando se descomente
 
     @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "fundingProgram", "promoter", "promoter.country"})
