@@ -198,7 +198,8 @@ public class SubcontractServiceImpl implements SubcontractService {
 
             for (SubcontractProject project : projects) {
                 BigDecimal share = project.getShare() != null ? project.getShare() : BigDecimal.ZERO;
-                project.setAmount(invoiceGross.multiply(share));
+                BigDecimal shareDecimal = share.divide(BigDecimal.valueOf(100));
+                project.setAmount(invoiceGross.multiply(shareDecimal));
             }
         }
 
