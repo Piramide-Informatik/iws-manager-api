@@ -189,11 +189,11 @@ class SubcontractServiceImplTest {
 
         SubcontractProject project1 = new SubcontractProject();
         project1.setId(101L);
-        project1.setShare(new BigDecimal("0.25"));
+        project1.setShare(new BigDecimal("25"));
 
         SubcontractProject project2 = new SubcontractProject();
         project2.setId(102L);
-        project2.setShare(new BigDecimal("0.75"));
+        project2.setShare(new BigDecimal("75"));
 
         List<SubcontractProject> projects = Arrays.asList(project1, project2);
 
