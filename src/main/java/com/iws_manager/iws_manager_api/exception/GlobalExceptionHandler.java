@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+import com.iws_manager.iws_manager_api.exception.exceptions.DuplicateResourceException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -71,6 +73,24 @@ public class GlobalExceptionHandler {
         );
         
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
+    // Handle for unique field validations
+    @ExceptionHandler(DuplicateResourceException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<ErrorResponse> handleDuplicateResourceException(
+            DuplicateResourceException ex,
+            WebRequest request) {
+        
+        ErrorResponse errorDetails = new ErrorResponse(
+            LocalDateTime.now(),
+            HttpStatus.CONFLICT.value(),
+            "Conflict",
+            ex.getMessage(),
+            request.getDescription(false).replace("uri=", "")
+        );
+        
+        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
 
     // Handle all other exceptions
