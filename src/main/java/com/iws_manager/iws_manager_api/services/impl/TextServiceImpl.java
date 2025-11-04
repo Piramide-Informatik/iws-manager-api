@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.iws_manager.iws_manager_api.exception.exceptions.DuplicateResourceException;
 import com.iws_manager.iws_manager_api.models.Text;
 import com.iws_manager.iws_manager_api.repositories.TextRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.TextService;
@@ -48,6 +49,9 @@ public class TextServiceImpl implements TextService {
         if (text == null) {
             throw new IllegalArgumentException("Text cannot be null");
         }
+
+        validateUniqueLabelForCreation(text.getLabel());
+
         return textRepository.save(text);
     }
 
@@ -95,11 +99,13 @@ public class TextServiceImpl implements TextService {
         
         return textRepository.findById(id)
                 .map(existingText -> {
+                    validateUniqueLabelForUpdate(existingText, textDetails, id);
+                    
                     existingText.setLabel(textDetails.getLabel());
                     existingText.setContent(textDetails.getContent());
                     return textRepository.save(existingText);
                 })
-                .orElseThrow(() -> new RuntimeException("Text not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Text not found with id: " + id));
     }
 
     /**
@@ -119,5 +125,42 @@ public class TextServiceImpl implements TextService {
             throw new EntityNotFoundException("Text not found with id: " + id);
         }
         textRepository.deleteById(id);
+    }
+
+    /**
+     * Validates that the label is unique for creation.
+     * 
+     * @param label the label to validate
+     * @throws DuplicateResourceException if a Text with the same label already exists
+     */
+    private void validateUniqueLabelForCreation(String label) {
+        if (label != null && textRepository.existsByLabel(label)) {
+            throw new DuplicateResourceException(
+                "Text duplication with label '" + label + "'"
+            );
+        }
+    }
+
+    /**
+     * Validates that the label is unique for update, considering only other records.
+     * 
+     * @param existingText the existing Text being updated
+     * @param newText the Text with new values
+     * @param id the ID of the Text being updated
+     * @throws DuplicateResourceException if another Text with the same label already exists
+     */
+    private void validateUniqueLabelForUpdate(Text existingText, Text newText, Long id) {
+        // Solo validar si el label ha cambiado
+        boolean labelChanged = !existingText.getLabel().equals(newText.getLabel());
+        
+        if (labelChanged) {
+            boolean labelExists = textRepository.existsByLabelAndIdNot(newText.getLabel(), id);
+            
+            if (labelExists) {
+                throw new DuplicateResourceException(
+                    "Text duplication with label '" + newText.getLabel() + "'"
+                );
+            }
+        }
     }
 }
