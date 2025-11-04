@@ -35,7 +35,7 @@ import java.util.List;
 //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Role extends BaseEntity {
 
-    @Column(name = "role", length = 255)
+    @Column(name = "role", unique = true, length = 255)
     private String name;
 
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)

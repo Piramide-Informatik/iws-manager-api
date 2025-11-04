@@ -21,4 +21,5 @@ public interface RoleRepository extends JpaRepository<Role,Long> {
     @EntityGraph(attributePaths = {"roleRights", "roleRights.systemFunction", "roleRights.systemFunction.module"})
     List<Role> findAllByOrderByNameAsc();
 
+    boolean existsByName(String name);
 }

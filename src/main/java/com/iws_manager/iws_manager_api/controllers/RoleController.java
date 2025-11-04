@@ -57,13 +57,8 @@ public class RoleController {
     public ResponseEntity<Role> updateRole(
             @PathVariable Long id,
             @RequestBody Role roleDetails) {
-        try {
-            Role updatedRole = roleService.update(id, roleDetails);
-            return new ResponseEntity<>(updatedRole, HttpStatus.OK);
-        } catch (RuntimeException e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
+        Role updatedRole = roleService.update(id, roleDetails);
+        return new ResponseEntity<>(updatedRole, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
