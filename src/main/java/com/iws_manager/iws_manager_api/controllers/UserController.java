@@ -54,12 +54,8 @@ public class UserController {
     public ResponseEntity<User> updateUser(
             @PathVariable Long id,
             @RequestBody User userDetails) {
-        try {
-            User updatedUser = userService.update(id, userDetails);
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        User updatedUser = userService.update(id, userDetails);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
