@@ -34,6 +34,12 @@ public class RoleServiceImpl implements RoleService {
         if (role == null) {
             throw  new IllegalArgumentException("Role cannot be null");
         }
+        if (roleRepository.existsByName(role.getName())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Name already exists"
+            );
+        }
         return roleRepository.save(role);
     }
 
@@ -60,7 +66,16 @@ public class RoleServiceImpl implements RoleService {
 
         return roleRepository.findById(id)
                 .map(existingRole -> {
-                    existingRole.setName(roleDetails.getName());
+                    if (!existingRole.getName().equals(roleDetails.getName())
+                            && roleRepository.existsByName(roleDetails.getName())) {
+                        throw new ResponseStatusException(
+                                HttpStatus.CONFLICT,
+                                "Name already exists"
+                        );
+                    }
+                    if(roleDetails.getName()!=null){
+                        existingRole.setName(roleDetails.getName());
+                    }
                     existingRole.setUpdatedAt(LocalDateTime.now());
                     return roleRepository.save(existingRole);
                 })

@@ -9,9 +9,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -118,7 +120,7 @@ public class RoleControllerTest {
     @Test
     void updateRoleShouldReturnNotFound() throws Exception {
         given(roleService.update(anyLong(), any(Role.class)))
-                .willThrow(new RuntimeException("Role not found"));
+                .willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found"));
 
         mockMvc.perform(put(uri+"/99")
                 .contentType(MediaType.APPLICATION_JSON)
