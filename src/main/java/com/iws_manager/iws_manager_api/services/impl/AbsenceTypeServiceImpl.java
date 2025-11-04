@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityNotFoundException;
+import com.iws_manager.iws_manager_api.exception.exceptions.DuplicateResourceException;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,9 @@ public class AbsenceTypeServiceImpl implements AbsenceTypeService {
         if(absenceType == null){
             throw new IllegalArgumentException("AbsenceType cannot be null");
         }
+
+        validateUniqueConstraintsForCreation(absenceType);
+
         return absenceTypeRepository.save(absenceType);
     }
 
@@ -51,6 +55,8 @@ public class AbsenceTypeServiceImpl implements AbsenceTypeService {
         }
         return absenceTypeRepository.findById(id)
                 .map(existingAbsenseType -> {
+                    validateUniqueConstraintsForUpdate(existingAbsenseType, absenceTypeDetails, id);
+
                     existingAbsenseType.setName(absenceTypeDetails.getName());
                     existingAbsenseType.setHours(absenceTypeDetails.getHours());
                     existingAbsenseType.setLabel(absenceTypeDetails.getLabel());
@@ -58,7 +64,7 @@ public class AbsenceTypeServiceImpl implements AbsenceTypeService {
                     existingAbsenseType.setShareOfDay(absenceTypeDetails.getShareOfDay());
 
                     return absenceTypeRepository.save(existingAbsenseType);
-                }).orElseThrow(()-> new RuntimeException("AbsenseType not found with id: "+ id));
+                }).orElseThrow(()-> new EntityNotFoundException("AbsenseType not found with id: "+ id));
     }
 
     @Override
@@ -71,5 +77,44 @@ public class AbsenceTypeServiceImpl implements AbsenceTypeService {
             throw new EntityNotFoundException("AbsenseType not found with id: "+ id);
         }
         absenceTypeRepository.deleteById(id);
+    }
+
+    private void validateUniqueConstraintsForCreation(AbsenceType absenceType) {
+        boolean existsDuplicate = absenceTypeRepository.existsByNameOrLabel(
+            absenceType.getName(), 
+            absenceType.getLabel()
+        );
+        
+        if (existsDuplicate) {
+            throw new DuplicateResourceException(
+                "Absence type duplication with name '" + absenceType.getName() + 
+                "' or label '" + absenceType.getLabel() + "'"
+            );
+        }
+    }
+
+    private void validateUniqueConstraintsForUpdate(
+        AbsenceType existingAbsenceType, 
+        AbsenceType newAbsenceType, 
+        Long id
+    ) {
+        // Solo validar si los campos únicos han cambiado
+        boolean nameChanged = !existingAbsenceType.getName().equals(newAbsenceType.getName());
+        boolean labelChanged = !existingAbsenceType.getLabel().equals(newAbsenceType.getLabel());
+        
+        if (nameChanged || labelChanged) {
+            boolean existsDuplicate = absenceTypeRepository.existsByNameOrLabelAndIdNot(
+                newAbsenceType.getName(), 
+                newAbsenceType.getLabel(), 
+                id
+            );
+            
+            if (existsDuplicate) {
+                throw new DuplicateResourceException(
+                    "Absence type duplication with name '" + newAbsenceType.getName() + 
+                    "' or label '" + newAbsenceType.getLabel() + "'"
+                );
+            }
+        }
     }
 }
