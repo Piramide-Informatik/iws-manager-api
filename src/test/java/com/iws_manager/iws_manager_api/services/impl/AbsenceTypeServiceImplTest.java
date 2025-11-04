@@ -2,6 +2,7 @@ package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.models.AbsenceType;
 import com.iws_manager.iws_manager_api.repositories.AbsenceTypeRepository;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+
+import com.iws_manager.iws_manager_api.exception.exceptions.DuplicateResourceException;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -124,36 +127,62 @@ public class AbsenceTypeServiceImplTest {
     }
 
     @Test
-    public void updateShouldThrowExceptioWhenOptimisticLockingFails() {
-        //Setup
+    public void updateShouldThrowExceptionWhenOptimisticLockingFails() {
+        // Setup
         Long absenceTypeId = 1L;
+        
         AbsenceType currentAbsenceType = new AbsenceType();
         currentAbsenceType.setId(absenceTypeId);
         currentAbsenceType.setName(VACATION_NAME);
+        currentAbsenceType.setLabel("VAC");
         currentAbsenceType.setVersion(2L);
 
+        // Outdated version trying to update (version 1)
         AbsenceType outdatedAbsenceType = new AbsenceType();
         outdatedAbsenceType.setId(absenceTypeId);
         outdatedAbsenceType.setName(PERSONAL_PERMISSION);
+        outdatedAbsenceType.setLabel("PERM");
         outdatedAbsenceType.setVersion(1L);
 
         when(absenceTypeRepository.findById(absenceTypeId)).thenReturn(Optional.of(currentAbsenceType));
+        
+        when(absenceTypeRepository.existsByNameOrLabelAndIdNot(anyString(), anyString(), anyLong()))
+            .thenReturn(false);
+        
         when(absenceTypeRepository.save(any(AbsenceType.class)))
-                .thenThrow(new ObjectOptimisticLockingFailureException("Concurrent modification detected",
-                        new ObjectOptimisticLockingFailureException(AbsenceType.class, absenceTypeId)));
+                .thenThrow(new ObjectOptimisticLockingFailureException(AbsenceType.class, absenceTypeId));
 
-        Exception exception = assertThrows(RuntimeException.class,
+        assertThrows(ObjectOptimisticLockingFailureException.class,
                 () -> absenceTypeService.update(absenceTypeId, outdatedAbsenceType));
 
-        assertNotNull(exception, "An exception should have been thrown");
+        verify(absenceTypeRepository).findById(absenceTypeId);
+        verify(absenceTypeRepository).existsByNameOrLabelAndIdNot(PERSONAL_PERMISSION, "PERM", absenceTypeId);
+        verify(absenceTypeRepository).save(any(AbsenceType.class));
+    }
 
-        if(!(exception instanceof ObjectOptimisticLockingFailureException)){
-            assertNotNull(exception.getCause(), "The exception should have a cause");
-            assertTrue(exception.getCause() instanceof  ObjectOptimisticLockingFailureException,
-                    "the cause should be ObjectOptimisticLockingFailureException");
+    @Test
+    public void updateShouldThrowExceptionWhenNameOrLabelAlreadyExists() {
+        // Setup
+        Long absenceTypeId = 1L;
+        
+        AbsenceType existingAbsenceType = new AbsenceType();
+        existingAbsenceType.setId(absenceTypeId);
+        existingAbsenceType.setName(VACATION_NAME);
+        existingAbsenceType.setLabel("VAC");
 
-            verify(absenceTypeRepository).findById(absenceTypeId);
-            verify(absenceTypeRepository.save(any(AbsenceType.class)));
-        }
+        AbsenceType updatedAbsenceType = new AbsenceType();
+        updatedAbsenceType.setName(PERSONAL_PERMISSION); 
+        updatedAbsenceType.setLabel("PERM"); 
+
+        when(absenceTypeRepository.findById(absenceTypeId)).thenReturn(Optional.of(existingAbsenceType));
+        when(absenceTypeRepository.existsByNameOrLabelAndIdNot(PERSONAL_PERMISSION, "PERM", absenceTypeId))
+            .thenReturn(true);
+
+        assertThrows(DuplicateResourceException.class,
+                () -> absenceTypeService.update(absenceTypeId, updatedAbsenceType));
+
+        verify(absenceTypeRepository).findById(absenceTypeId);
+        verify(absenceTypeRepository).existsByNameOrLabelAndIdNot(PERSONAL_PERMISSION, "PERM", absenceTypeId);
+        verify(absenceTypeRepository, never()).save(any(AbsenceType.class));
     }
 }
