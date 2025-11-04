@@ -31,7 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
 
     private static final String FIRST_USERNAME = "rigo123";
-    private static final String UPDATE_USERNAME = "rigo123 updated";
     private static final String SECOND_USERNAME = "4ndr3s";
     private MockMvc mockMvc;
     private String uri = "/api/v1/users";
@@ -115,7 +114,6 @@ public class UserControllerTest {
 
     @Test
     void updateUserShouldReturnNotFound() throws Exception {
-        // Simulamos que el servicio lanza ResponseStatusException(404)
         given(userService.update(anyLong(), any(User.class)))
                 .willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
