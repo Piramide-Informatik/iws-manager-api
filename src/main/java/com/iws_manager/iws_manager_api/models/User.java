@@ -51,7 +51,7 @@ public class User extends BaseEntity{
     @Column(name = "password", length = 255,nullable = true)
     private String password;
 
-    @Column(name = "username", length = 255)
+    @Column(name = "username",unique = true, length = 255)
     private String username;
 
     @ManyToMany(fetch = FetchType.LAZY)

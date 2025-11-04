@@ -19,4 +19,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @EntityGraph(attributePaths = {"roles"})
     List<User> findAllByOrderByUsernameAsc();
+
+    boolean existsByUsername(String username);
 }

@@ -33,6 +33,12 @@ public class UserServiceImpl implements UserService {
         if(user == null) {
             throw new IllegalArgumentException("User cannot be null");
         }
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Username already exists"
+            );
+        }
         return userRepository.save(user);
     }
 
@@ -58,12 +64,21 @@ public class UserServiceImpl implements UserService {
         }
         return userRepository.findById(id)
                 .map(existingUser -> {
+                    if (!existingUser.getUsername().equals(userDetails.getUsername())
+                            && userRepository.existsByUsername(userDetails.getUsername())) {
+                        throw new ResponseStatusException(
+                                HttpStatus.CONFLICT,
+                                "Username already exists"
+                        );
+                    }
                     existingUser.setFirstName(userDetails.getFirstName());
                     existingUser.setLastName(userDetails.getLastName());
                     existingUser.setActive(userDetails.isActive());
                     existingUser.setEmail(userDetails.getEmail());
                     existingUser.setPassword(userDetails.getPassword());
-                    existingUser.setUsername(userDetails.getUsername());
+                    if (userDetails.getUsername() != null) {
+                        existingUser.setUsername(userDetails.getUsername());
+                    }
                     return userRepository.save(existingUser);
                 }).orElseThrow(() -> new RuntimeException("User not found with id: "+id));
     }

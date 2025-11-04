@@ -9,9 +9,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
 
     private static final String FIRST_USERNAME = "rigo123";
-    private static final String UPDATE_USERNAME = "rigo123 updated";
     private static final String SECOND_USERNAME = "4ndr3s";
     private MockMvc mockMvc;
     private String uri = "/api/v1/users";
@@ -101,27 +102,24 @@ public class UserControllerTest {
     }
 
     @Test
-    void updateUserShouldReturnUpdatedUser() throws Exception {
-        User updatedUser = new User();
-        updatedUser.setUsername(UPDATE_USERNAME);
+    void updateUserShouldReturnConflictWhenUsernameExists() throws Exception {
+        given(userService.update(anyLong(), any(User.class)))
+                .willThrow(new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists"));
 
-        given(userService.update(1L, updatedUser)).willReturn(updatedUser);
-
-        mockMvc.perform(put(uri+"/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(updatedUser)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath(user).value(UPDATE_USERNAME));
+        mockMvc.perform(put(uri + "/5")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(user1)))
+                .andExpect(status().isConflict());
     }
 
     @Test
     void updateUserShouldReturnNotFound() throws Exception {
         given(userService.update(anyLong(), any(User.class)))
-                .willThrow(new RuntimeException("User not found"));
+                .willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-        mockMvc.perform(put(uri+"/99")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(user1)))
+        mockMvc.perform(put(uri + "/99")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(user1)))
                 .andExpect(status().isNotFound());
     }
 
