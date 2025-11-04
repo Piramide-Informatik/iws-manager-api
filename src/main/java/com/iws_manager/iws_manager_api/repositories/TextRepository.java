@@ -8,4 +8,10 @@ import java.util.List;
 @Repository
 public interface TextRepository extends JpaRepository<Text, Long> {
     List<Text> findAllByOrderByLabelAsc();
+
+    // CREATION - verify if label is duplicated
+    boolean existsByLabel(String label);
+    
+    // UPDATING - verify if label is duplicated
+    boolean existsByLabelAndIdNot(String label, Long id);
 }

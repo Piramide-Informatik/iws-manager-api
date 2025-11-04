@@ -83,14 +83,11 @@ public class TextController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Text> updateText(
-            @PathVariable Long id,
-            @RequestBody Text textDetails) {
-        try {
-            Text updatedText = textService.update(id, textDetails);
-            return new ResponseEntity<>(updatedText, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        @PathVariable Long id,
+        @RequestBody Text textDetails) {
+       
+        Text updatedText = textService.update(id, textDetails);
+        return new ResponseEntity<>(updatedText, HttpStatus.OK);
     }
 
     /**
