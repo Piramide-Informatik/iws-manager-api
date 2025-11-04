@@ -55,7 +55,6 @@ class TextControllerTest {
 
     @BeforeEach
     void setUp() {
-        // mockMvc = MockMvcBuilders.standaloneSetup(textController).build();
         mockMvc = MockMvcBuilders.standaloneSetup(textController)
             .setControllerAdvice(new GlobalExceptionHandler())
             .build();
