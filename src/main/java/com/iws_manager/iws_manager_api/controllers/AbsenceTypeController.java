@@ -51,12 +51,10 @@ public class AbsenceTypeController {
 
     @PutMapping("/{id}")
     public ResponseEntity<AbsenceType> updateAbsenseType(@PathVariable Long id, @RequestBody AbsenceType absenceTypeDetails){
-        try {
-            AbsenceType updateAbsenceType = absenceTypeService.update(id, absenceTypeDetails);
-            return new ResponseEntity<>(updateAbsenceType, HttpStatus.OK);
-        }catch (RuntimeException e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        
+        AbsenceType updateAbsenceType = absenceTypeService.update(id, absenceTypeDetails);
+        return new ResponseEntity<>(updateAbsenceType, HttpStatus.OK);
+        
     }
 
     @DeleteMapping("/{id}")

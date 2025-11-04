@@ -3,6 +3,7 @@ package com.iws_manager.iws_manager_api.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iws_manager.iws_manager_api.models.AbsenceType;
 import com.iws_manager.iws_manager_api.services.interfaces.AbsenceTypeService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +26,10 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.iws_manager.iws_manager_api.exception.GlobalExceptionHandler;
+
+import jakarta.persistence.EntityNotFoundException;
+
 @ExtendWith(MockitoExtension.class)
 public class AbsenceTypeControllerTest {
     private static final String VACATION_NAME = "Vacation";
@@ -45,7 +50,9 @@ public class AbsenceTypeControllerTest {
 
     @BeforeEach
     void setUp(){
-        mockMvc = MockMvcBuilders.standaloneSetup(absenceTypeController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(absenceTypeController)
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .build();
 
         absenceType1 = new AbsenceType();
         absenceType1.setId(1L);
@@ -113,10 +120,10 @@ public class AbsenceTypeControllerTest {
                 .andExpect(jsonPath(name).value(UPDATED_VACATION));
     }
 
-    @Test
+   @Test
     void updateAbsenceTypeShouldReturnNotFound() throws Exception {
         given(absenceTypeService.update(anyLong(), any(AbsenceType.class)))
-                .willThrow(new RuntimeException("AbsenceType not found"));
+                .willThrow(new EntityNotFoundException("AbsenseType not found with id: 99")); // Cambiado a "AbsenseType"
 
         mockMvc.perform(put(uri+"/99")
                 .contentType(MediaType.APPLICATION_JSON)
