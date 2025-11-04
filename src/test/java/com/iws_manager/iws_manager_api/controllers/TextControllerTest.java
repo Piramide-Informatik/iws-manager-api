@@ -2,6 +2,7 @@ package com.iws_manager.iws_manager_api.controllers;
 
 import com.iws_manager.iws_manager_api.models.Text;
 import com.iws_manager.iws_manager_api.services.interfaces.TextService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +21,10 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import com.iws_manager.iws_manager_api.exception.GlobalExceptionHandler;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
 class TextControllerTest {
@@ -50,7 +55,9 @@ class TextControllerTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(textController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(textController)
+            .setControllerAdvice(new GlobalExceptionHandler())
+            .build();
         validText = createTestText(VALID_ID, TEXT_LABEL, TEXT_CONTENT);
     }
 
@@ -145,7 +152,7 @@ class TextControllerTest {
     @Test
     void updateTextShouldReturnNotFoundWhenInvalidId() throws Exception {
         when(textService.update(eq(INVALID_ID), any(Text.class)))
-            .thenThrow(new RuntimeException("Text not found"));
+            .thenThrow(new EntityNotFoundException("Text not found with id: " + INVALID_ID));
 
         mockMvc.perform(put(BASE_URL + ID, INVALID_ID)
                 .contentType(MediaType.APPLICATION_JSON)
