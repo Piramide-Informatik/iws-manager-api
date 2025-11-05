@@ -141,12 +141,12 @@ public class AbsenceTypeServiceImplTest {
         AbsenceType outdatedAbsenceType = new AbsenceType();
         outdatedAbsenceType.setId(absenceTypeId);
         outdatedAbsenceType.setName(PERSONAL_PERMISSION);
-        outdatedAbsenceType.setLabel("PERM");
+        outdatedAbsenceType.setLabel("PERMX");
         outdatedAbsenceType.setVersion(1L);
 
         when(absenceTypeRepository.findById(absenceTypeId)).thenReturn(Optional.of(currentAbsenceType));
         
-        when(absenceTypeRepository.existsByNameOrLabelAndIdNot(anyString(), anyString(), anyLong()))
+        when(absenceTypeRepository.existsByNameAndIdNot(anyString(), anyLong()))
             .thenReturn(false);
         
         when(absenceTypeRepository.save(any(AbsenceType.class)))
@@ -156,12 +156,74 @@ public class AbsenceTypeServiceImplTest {
                 () -> absenceTypeService.update(absenceTypeId, outdatedAbsenceType));
 
         verify(absenceTypeRepository).findById(absenceTypeId);
-        verify(absenceTypeRepository).existsByNameOrLabelAndIdNot(PERSONAL_PERMISSION, "PERM", absenceTypeId);
+        verify(absenceTypeRepository).existsByNameAndIdNot(PERSONAL_PERMISSION, absenceTypeId);
         verify(absenceTypeRepository).save(any(AbsenceType.class));
     }
 
     @Test
-    public void updateShouldThrowExceptionWhenNameOrLabelAlreadyExists() {
+    public void updateShouldThrowExceptionWhenNameAlreadyExists() {
+        // Setup
+        Long absenceTypeId = 1L;
+        
+        AbsenceType existingAbsenceType = new AbsenceType();
+        existingAbsenceType.setId(absenceTypeId);
+        existingAbsenceType.setName(VACATION_NAME);
+        existingAbsenceType.setLabel("VAC");
+
+        AbsenceType updatedAbsenceType = new AbsenceType();
+        updatedAbsenceType.setName(PERSONAL_PERMISSION); 
+        updatedAbsenceType.setLabel("NEW_LABEL"); 
+
+        when(absenceTypeRepository.findById(absenceTypeId)).thenReturn(Optional.of(existingAbsenceType));
+        when(absenceTypeRepository.existsByNameAndIdNot(PERSONAL_PERMISSION, absenceTypeId))
+            .thenReturn(true);
+
+        // Execute & Verify
+        DuplicateResourceException exception = assertThrows(DuplicateResourceException.class,
+                () -> absenceTypeService.update(absenceTypeId, updatedAbsenceType));
+
+        assertEquals("Absence type duplication with attribute 'name' = '" + PERSONAL_PERMISSION + "'", 
+                    exception.getMessage());
+
+        verify(absenceTypeRepository).findById(absenceTypeId);
+        verify(absenceTypeRepository).existsByNameAndIdNot(PERSONAL_PERMISSION, absenceTypeId);
+        verify(absenceTypeRepository, never()).existsByLabelAndIdNot(anyString(), anyLong());
+        verify(absenceTypeRepository, never()).save(any(AbsenceType.class));
+    }
+
+    @Test
+    public void updateShouldThrowExceptionWhenLabelAlreadyExists() {
+        // Setup
+        Long absenceTypeId = 1L;
+        
+        AbsenceType existingAbsenceType = new AbsenceType();
+        existingAbsenceType.setId(absenceTypeId);
+        existingAbsenceType.setName(VACATION_NAME);
+        existingAbsenceType.setLabel("VAC");
+
+        AbsenceType updatedAbsenceType = new AbsenceType();
+        updatedAbsenceType.setName("NEW_NAME"); 
+        updatedAbsenceType.setLabel("PERM"); 
+
+        when(absenceTypeRepository.findById(absenceTypeId)).thenReturn(Optional.of(existingAbsenceType));
+        when(absenceTypeRepository.existsByLabelAndIdNot("PERM", absenceTypeId))
+            .thenReturn(true);
+
+        // Execute & Verify
+        DuplicateResourceException exception = assertThrows(DuplicateResourceException.class,
+                () -> absenceTypeService.update(absenceTypeId, updatedAbsenceType));
+
+        assertEquals("Absence type duplication with attribute 'label' = 'PERM'", 
+                    exception.getMessage());
+
+        verify(absenceTypeRepository).findById(absenceTypeId);
+        verify(absenceTypeRepository, never()).existsByNameAndIdNot(anyString(), anyLong());
+        verify(absenceTypeRepository).existsByLabelAndIdNot("PERM", absenceTypeId);
+        verify(absenceTypeRepository, never()).save(any(AbsenceType.class));
+    }
+
+    @Test
+    public void updateShouldThrowExceptionWhenBothNameAndLabelAlreadyExist() {
         // Setup
         Long absenceTypeId = 1L;
         
@@ -175,14 +237,88 @@ public class AbsenceTypeServiceImplTest {
         updatedAbsenceType.setLabel("PERM"); 
 
         when(absenceTypeRepository.findById(absenceTypeId)).thenReturn(Optional.of(existingAbsenceType));
-        when(absenceTypeRepository.existsByNameOrLabelAndIdNot(PERSONAL_PERMISSION, "PERM", absenceTypeId))
+        when(absenceTypeRepository.existsByNameAndIdNot(PERSONAL_PERMISSION, absenceTypeId))
+            .thenReturn(true);
+        when(absenceTypeRepository.existsByLabelAndIdNot("PERM", absenceTypeId))
             .thenReturn(true);
 
-        assertThrows(DuplicateResourceException.class,
+        // Execute & Verify
+        DuplicateResourceException exception = assertThrows(DuplicateResourceException.class,
                 () -> absenceTypeService.update(absenceTypeId, updatedAbsenceType));
 
+        assertEquals("Absence type duplication with attributes 'name' = '" + PERSONAL_PERMISSION + "' and 'label' = 'PERM'", 
+                    exception.getMessage());
+
         verify(absenceTypeRepository).findById(absenceTypeId);
-        verify(absenceTypeRepository).existsByNameOrLabelAndIdNot(PERSONAL_PERMISSION, "PERM", absenceTypeId);
+        verify(absenceTypeRepository).existsByNameAndIdNot(PERSONAL_PERMISSION, absenceTypeId);
+        verify(absenceTypeRepository).existsByLabelAndIdNot("PERM", absenceTypeId);
         verify(absenceTypeRepository, never()).save(any(AbsenceType.class));
     }
+
+    @Test
+    public void createShouldThrowExceptionWhenNameAlreadyExists() {
+        // Setup
+        AbsenceType newAbsenceType = new AbsenceType();
+        newAbsenceType.setName(PERSONAL_PERMISSION); 
+        newAbsenceType.setLabel("NEW_LABEL"); 
+
+        when(absenceTypeRepository.existsByName(PERSONAL_PERMISSION)).thenReturn(true);
+        when(absenceTypeRepository.existsByLabel("NEW_LABEL")).thenReturn(false);
+
+        // Execute & Verify
+        DuplicateResourceException exception = assertThrows(DuplicateResourceException.class,
+                () -> absenceTypeService.create(newAbsenceType));
+
+        assertEquals("Absence type duplication with attribute 'name' = '" + PERSONAL_PERMISSION + "'", 
+                    exception.getMessage());
+
+        verify(absenceTypeRepository).existsByName(PERSONAL_PERMISSION);
+        verify(absenceTypeRepository).existsByLabel("NEW_LABEL");
+        verify(absenceTypeRepository, never()).save(any(AbsenceType.class));
+    }
+
+    @Test
+    public void createShouldThrowExceptionWhenLabelAlreadyExists() {
+        // Setup
+        AbsenceType newAbsenceType = new AbsenceType();
+        newAbsenceType.setName("NEW_NAME"); 
+        newAbsenceType.setLabel("VAC"); 
+
+        when(absenceTypeRepository.existsByName("NEW_NAME")).thenReturn(false);
+        when(absenceTypeRepository.existsByLabel("VAC")).thenReturn(true);
+
+        // Execute & Verify
+        DuplicateResourceException exception = assertThrows(DuplicateResourceException.class,
+                () -> absenceTypeService.create(newAbsenceType));
+
+        assertEquals("Absence type duplication with attribute 'label' = 'VAC'", 
+                    exception.getMessage());
+
+        verify(absenceTypeRepository).existsByName("NEW_NAME");
+        verify(absenceTypeRepository).existsByLabel("VAC");
+        verify(absenceTypeRepository, never()).save(any(AbsenceType.class));
+    }
+
+    @Test
+    public void createShouldThrowExceptionWhenBothNameAndLabelAlreadyExist() {
+        // Setup
+        AbsenceType newAbsenceType = new AbsenceType();
+        newAbsenceType.setName(PERSONAL_PERMISSION); 
+        newAbsenceType.setLabel("VAC"); 
+
+        when(absenceTypeRepository.existsByName(PERSONAL_PERMISSION)).thenReturn(true);
+        when(absenceTypeRepository.existsByLabel("VAC")).thenReturn(true);
+
+        // Execute & Verify
+        DuplicateResourceException exception = assertThrows(DuplicateResourceException.class,
+                () -> absenceTypeService.create(newAbsenceType));
+
+        assertEquals("Absence type duplication with attributes 'name' = '" + PERSONAL_PERMISSION + "' and 'label' = 'VAC'", 
+                    exception.getMessage());
+
+        verify(absenceTypeRepository).existsByName(PERSONAL_PERMISSION);
+        verify(absenceTypeRepository).existsByLabel("VAC");
+        verify(absenceTypeRepository, never()).save(any(AbsenceType.class));
+    }
+    
 }

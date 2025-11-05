@@ -80,16 +80,11 @@ public class AbsenceTypeServiceImpl implements AbsenceTypeService {
     }
 
     private void validateUniqueConstraintsForCreation(AbsenceType absenceType) {
-        boolean existsDuplicate = absenceTypeRepository.existsByNameOrLabel(
-            absenceType.getName(), 
-            absenceType.getLabel()
-        );
+        boolean nameExists = absenceTypeRepository.existsByName(absenceType.getName());
+        boolean labelExists = absenceTypeRepository.existsByLabel(absenceType.getLabel());
         
-        if (existsDuplicate) {
-            throw new DuplicateResourceException(
-                "Absence type duplication with name '" + absenceType.getName() + 
-                "' or label '" + absenceType.getLabel() + "'"
-            );
+        if (nameExists || labelExists) {
+            buildAndThrowDuplicateException(nameExists, labelExists, absenceType.getName(), absenceType.getLabel());
         }
     }
 
@@ -98,23 +93,32 @@ public class AbsenceTypeServiceImpl implements AbsenceTypeService {
         AbsenceType newAbsenceType, 
         Long id
     ) {
-        // Solo validar si los campos únicos han cambiado
         boolean nameChanged = !existingAbsenceType.getName().equals(newAbsenceType.getName());
         boolean labelChanged = !existingAbsenceType.getLabel().equals(newAbsenceType.getLabel());
         
         if (nameChanged || labelChanged) {
-            boolean existsDuplicate = absenceTypeRepository.existsByNameOrLabelAndIdNot(
-                newAbsenceType.getName(), 
-                newAbsenceType.getLabel(), 
-                id
-            );
+            boolean nameExists = nameChanged && absenceTypeRepository.existsByNameAndIdNot(newAbsenceType.getName(), id);
+            boolean labelExists = labelChanged && absenceTypeRepository.existsByLabelAndIdNot(newAbsenceType.getLabel(), id);
             
-            if (existsDuplicate) {
-                throw new DuplicateResourceException(
-                    "Absence type duplication with name '" + newAbsenceType.getName() + 
-                    "' or label '" + newAbsenceType.getLabel() + "'"
-                );
+            if (nameExists || labelExists) {
+                buildAndThrowDuplicateException(nameExists, labelExists, newAbsenceType.getName(), newAbsenceType.getLabel());
             }
+        }
+    }
+
+    private void buildAndThrowDuplicateException(boolean nameExists, boolean labelExists, String name, String label) {
+        if (nameExists && labelExists) {
+            throw new DuplicateResourceException(
+                "Absence type duplication with attributes 'name' = '" + name + "' and 'label' = '" + label + "'"
+            );
+        } else if (nameExists) {
+            throw new DuplicateResourceException(
+                "Absence type duplication with attribute 'name' = '" + name + "'"
+            );
+        } else if (labelExists) {
+            throw new DuplicateResourceException(
+                "Absence type duplication with attribute 'label' = '" + label + "'"
+            );
         }
     }
 }
