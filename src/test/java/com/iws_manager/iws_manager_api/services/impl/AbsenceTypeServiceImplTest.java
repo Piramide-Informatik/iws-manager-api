@@ -161,7 +161,7 @@ public class AbsenceTypeServiceImplTest {
     }
 
     @Test
-    public void updateShouldThrowExceptionWhenNameAlreadyExists() {
+    public void updateShouldThrowExceptionWhenOnlyNameChangedAndAlreadyExists() {
         // Setup
         Long absenceTypeId = 1L;
         
@@ -171,8 +171,8 @@ public class AbsenceTypeServiceImplTest {
         existingAbsenceType.setLabel("VAC");
 
         AbsenceType updatedAbsenceType = new AbsenceType();
-        updatedAbsenceType.setName(PERSONAL_PERMISSION); 
-        updatedAbsenceType.setLabel("NEW_LABEL"); 
+        updatedAbsenceType.setName(PERSONAL_PERMISSION); // Nombre que ya existe
+        updatedAbsenceType.setLabel("VAC"); // Mismo label
 
         when(absenceTypeRepository.findById(absenceTypeId)).thenReturn(Optional.of(existingAbsenceType));
         when(absenceTypeRepository.existsByNameAndIdNot(PERSONAL_PERMISSION, absenceTypeId))
@@ -190,9 +190,9 @@ public class AbsenceTypeServiceImplTest {
         verify(absenceTypeRepository, never()).existsByLabelAndIdNot(anyString(), anyLong());
         verify(absenceTypeRepository, never()).save(any(AbsenceType.class));
     }
-
+    
     @Test
-    public void updateShouldThrowExceptionWhenLabelAlreadyExists() {
+    public void updateShouldThrowExceptionWhenOnlyLabelChangedAndAlreadyExists() {
         // Setup
         Long absenceTypeId = 1L;
         
@@ -202,8 +202,8 @@ public class AbsenceTypeServiceImplTest {
         existingAbsenceType.setLabel("VAC");
 
         AbsenceType updatedAbsenceType = new AbsenceType();
-        updatedAbsenceType.setName("NEW_NAME"); 
-        updatedAbsenceType.setLabel("PERM"); 
+        updatedAbsenceType.setName(VACATION_NAME); // Mismo nombre
+        updatedAbsenceType.setLabel("PERM"); // Label que ya existe
 
         when(absenceTypeRepository.findById(absenceTypeId)).thenReturn(Optional.of(existingAbsenceType));
         when(absenceTypeRepository.existsByLabelAndIdNot("PERM", absenceTypeId))
