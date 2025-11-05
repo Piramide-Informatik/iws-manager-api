@@ -114,10 +114,7 @@ class SystemParameterControllerTest {
         when(systemParameterService.update(eq(ID), any(SystemParameter.class)))
             .thenThrow(new EntityNotFoundException("SystemParameter not found with id: " + ID));
 
-        // En test unitario, la excepción se propaga - usamos assertThrows
-        assertThrows(EntityNotFoundException.class, () -> {
-            systemParameterController.update(ID, systemParameter);
-        });
+        assertThrows(EntityNotFoundException.class, () -> systemParameterController.update(ID, systemParameter));
 
         verify(systemParameterService, times(1)).update(eq(ID), any(SystemParameter.class));
     }
