@@ -8,4 +8,10 @@ import java.util.List;
 @Repository
 public interface SystemParameterRepository extends JpaRepository<SystemParameter, Long> {
     List<SystemParameter> findAllByOrderByNameAsc();
+
+     // CREATION - verify if name is duplicated
+    boolean existsByName(String name);
+    
+    // UPDATING - verify if name is duplicated excluding current item
+    boolean existsByNameAndIdNot(String name, Long id);
 }

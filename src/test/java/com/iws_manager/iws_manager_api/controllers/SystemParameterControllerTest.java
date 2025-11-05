@@ -2,6 +2,7 @@ package com.iws_manager.iws_manager_api.controllers;
 
 import com.iws_manager.iws_manager_api.models.SystemParameter;
 import com.iws_manager.iws_manager_api.services.interfaces.SystemParameterService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,7 +17,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
+
+import jakarta.persistence.EntityNotFoundException;
 
 class SystemParameterControllerTest {
 
@@ -107,11 +111,12 @@ class SystemParameterControllerTest {
 
     @Test
     void updateNotFound() {
-        when(systemParameterService.update(ID, systemParameter)).thenThrow(new RuntimeException("Not found"));
+        when(systemParameterService.update(eq(ID), any(SystemParameter.class)))
+            .thenThrow(new EntityNotFoundException("SystemParameter not found with id: " + ID));
 
-        ResponseEntity<SystemParameter> response = systemParameterController.update(ID, systemParameter);
+        assertThrows(EntityNotFoundException.class, () -> systemParameterController.update(ID, systemParameter));
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        verify(systemParameterService, times(1)).update(eq(ID), any(SystemParameter.class));
     }
 
     @Test

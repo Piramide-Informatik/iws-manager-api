@@ -143,18 +143,18 @@ class SystemParameterServiceImplTest {
     }
 
     @Test
-    void deleteShouldThrowWhenNotFound() {
-        when(systemParameterRepository.existsById(99L)).thenReturn(false);
+void deleteShouldThrowWhenNotFound() {
+    when(systemParameterRepository.existsById(99L)).thenReturn(false);
 
-        EntityNotFoundException exception = assertThrows(
-            EntityNotFoundException.class, 
-            () -> systemParameterService.delete(99L)
-        );
+    EntityNotFoundException exception = assertThrows(
+        EntityNotFoundException.class, 
+        () -> systemParameterService.delete(99L)
+    );
 
-        assertEquals("Customer not found with id: 99", exception.getMessage());
-        verify(systemParameterRepository).existsById(99L);
-        verify(systemParameterRepository, never()).deleteById(any());
-    }
+    assertEquals("SystemParameter not found with id: 99", exception.getMessage());
+    verify(systemParameterRepository).existsById(99L);
+    verify(systemParameterRepository, never()).deleteById(any());
+}
 
     @Test
     void updateShouldOnlyModifyAllowedFields() {

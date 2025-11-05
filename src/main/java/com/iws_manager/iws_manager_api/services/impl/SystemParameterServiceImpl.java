@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.iws_manager.iws_manager_api.exception.exceptions.DuplicateResourceException;
 import com.iws_manager.iws_manager_api.models.SystemParameter;
 import com.iws_manager.iws_manager_api.repositories.SystemParameterRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.SystemParameterService;
+
 import jakarta.persistence.EntityNotFoundException;
 
 /**
@@ -47,6 +49,9 @@ public class SystemParameterServiceImpl implements SystemParameterService {
         if (systemParameter == null) {
             throw new IllegalArgumentException("SystemParameter cannot be null");
         }
+
+        validateUniqueNameForCreation(systemParameter.getName());
+
         return systemParameterRepository.save(systemParameter);
     }
 
@@ -94,13 +99,16 @@ public class SystemParameterServiceImpl implements SystemParameterService {
         
         return systemParameterRepository.findById(id)
                 .map(existingSystemParameter -> {
+
+                    validateUniqueNameForUpdate(existingSystemParameter, systemParameterDetails, id);
+
                     existingSystemParameter.setName(systemParameterDetails.getName());
                     existingSystemParameter.setValueChar(systemParameterDetails.getValueChar());
                     existingSystemParameter.setValueNum(systemParameterDetails.getValueNum());
                     
                     return systemParameterRepository.save(existingSystemParameter);
                 })
-                .orElseThrow(() -> new RuntimeException("SystemParameter not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("SystemParameter not found with id: " + id));
     }
 
     /**
@@ -116,8 +124,46 @@ public class SystemParameterServiceImpl implements SystemParameterService {
         }
 
          if (!systemParameterRepository.existsById(id)) {  
-            throw new EntityNotFoundException("Customer not found with id: " + id);
+            throw new EntityNotFoundException("SystemParameter not found with id: " + id);
         }
         systemParameterRepository.deleteById(id);
+    }
+
+    /**
+     * Validates that the name is unique for creation.
+     * 
+     * @param name the name to validate
+     * @throws DuplicateResourceException if a SystemParameter with the same name already exists
+     */
+    private void validateUniqueNameForCreation(String name) {
+        if (name != null && systemParameterRepository.existsByName(name)) {
+            throw new DuplicateResourceException(
+                "System Parameter duplication with name '" + name + "'"
+            );
+        }
+    }
+
+    /**
+     * Validates that the name is unique for update, considering only other records.
+     * 
+     * @param existingParameter the existing SystemParameter being updated
+     * @param newParameter the SystemParameter with new values
+     * @param id the ID of the SystemParameter being updated
+     * @throws DuplicateResourceException if another SystemParameter with the same name already exists
+     */
+    private void validateUniqueNameForUpdate(SystemParameter existingParameter, 
+                                           SystemParameter newParameter, 
+                                           Long id) {
+        boolean nameChanged = !existingParameter.getName().equals(newParameter.getName());
+        
+        if (nameChanged) {
+            boolean nameExists = systemParameterRepository.existsByNameAndIdNot(newParameter.getName(), id);
+            
+            if (nameExists) {
+                throw new DuplicateResourceException(
+                    "System Parameter duplication with name '" + newParameter.getName() + "'"
+                );
+            }
+        }
     }
 }
