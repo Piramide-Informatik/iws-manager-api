@@ -41,12 +41,8 @@ public class SystemParameterController {
 
     @PutMapping("/{id}")
     public ResponseEntity<SystemParameter> update(@PathVariable Long id, @RequestBody SystemParameter systemParameterDetails) {
-        try {
-            SystemParameter updatedSystemParameter = systemParameterService.update(id, systemParameterDetails);
-            return new ResponseEntity<>(updatedSystemParameter, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        SystemParameter updatedSystemParameter = systemParameterService.update(id, systemParameterDetails);
+        return new ResponseEntity<>(updatedSystemParameter, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
