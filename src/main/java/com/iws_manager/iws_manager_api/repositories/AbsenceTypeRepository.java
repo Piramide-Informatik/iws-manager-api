@@ -15,15 +15,11 @@ public interface AbsenceTypeRepository extends JpaRepository<AbsenceType,Long> {
     List<AbsenceType> findAllByOrderByNameAsc();
 
     // CREATION - verify if name and label exist
-    @Query("SELECT COUNT(a) > 0 FROM AbsenceType a WHERE a.name = :name OR a.label = :label")
-    boolean existsByNameOrLabel(@Param("name") String name, @Param("label") String label);
+    boolean existsByName(String name);
+    boolean existsByLabel(String label);
     
     // UPDATING - verify if name and label exists with exception of the same item
-    @Query("SELECT COUNT(a) > 0 FROM AbsenceType a WHERE (a.name = :name OR a.label = :label) AND a.id != :excludeId")
-    boolean existsByNameOrLabelAndIdNot(
-        @Param("name") String name, 
-        @Param("label") String label, 
-        @Param("excludeId") Long excludeId
-    );
+    boolean existsByNameAndIdNot(String name, Long excludeId);
+    boolean existsByLabelAndIdNot(String label, Long excludeId);
 
 }
