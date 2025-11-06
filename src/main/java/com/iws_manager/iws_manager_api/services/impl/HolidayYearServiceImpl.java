@@ -31,7 +31,7 @@ public class HolidayYearServiceImpl implements HolidayYearService {
 
     @Override
     public List<HolidayYear> getByPublicHolidayId(Long publicHolidayId) {
-        return holidayYearRepository.findByPublicHoliday_Id(publicHolidayId);
+        return holidayYearRepository.findByPublicHolidayId(publicHolidayId);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class HolidayYearServiceImpl implements HolidayYearService {
                 .orElseThrow(() -> new EntityNotFoundException("PublicHoliday not found"));
 
         // Find the last HolidayYear by that date (or any logic you want)
-        List<HolidayYear> existingYears = holidayYearRepository.findByPublicHoliday_Id(publicHolidayId);
+        List<HolidayYear> existingYears = holidayYearRepository.findByPublicHolidayId(publicHolidayId);
 
         LocalDate lastDate = existingYears.stream()
                 .map(HolidayYear::getDate)
