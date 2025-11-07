@@ -100,4 +100,16 @@ public class HolidayYearController {
         boolean exists = holidayYearService.existsByYearAndPublicHoliday(year, publicHolidayId);
         return ResponseEntity.ok(exists);
     }
+
+     @GetMapping("/ordered-by-year")
+    public ResponseEntity<List<HolidayYear>> getAllOrderedByYear() {
+        List<HolidayYear> holidayYears = holidayYearService.getAllOrderByYearAsc();
+        return new ResponseEntity<>(holidayYears, HttpStatus.OK);
+    }
+
+    @GetMapping("/public-holiday/{publicHolidayId}/ordered-by-year")
+    public ResponseEntity<List<HolidayYear>> getByPublicHolidayOrderedByYear(@PathVariable Long publicHolidayId) {
+        List<HolidayYear> holidayYears = holidayYearService.getByPublicHolidayIdOrderByYearAsc(publicHolidayId);
+        return new ResponseEntity<>(holidayYears, HttpStatus.OK);
+    }
 }
