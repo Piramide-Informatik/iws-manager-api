@@ -18,4 +18,6 @@ public interface HolidayYearService {
     HolidayYear createNextYear(Long publicHolidayId);
     boolean existsByYearAndPublicHoliday(LocalDate year, Long publicHolidayId);
     List<HolidayYear> getByYear(LocalDate year);    
+    List<HolidayYear> getAllOrderByYearAsc();
+    List<HolidayYear> getByPublicHolidayIdOrderByYearAsc(Long publicHolidayId);
 }

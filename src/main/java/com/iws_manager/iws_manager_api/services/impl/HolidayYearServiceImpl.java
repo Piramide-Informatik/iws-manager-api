@@ -121,4 +121,16 @@ public class HolidayYearServiceImpl implements HolidayYearService {
     public List<HolidayYear> getByYear(LocalDate year) {
         return holidayYearRepository.findByYear(year);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<HolidayYear> getAllOrderByYearAsc() {
+        return holidayYearRepository.findAllByOrderByYearAsc();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<HolidayYear> getByPublicHolidayIdOrderByYearAsc(Long publicHolidayId) {
+        return holidayYearRepository.findByPublicHolidayIdOrderByYearAsc(publicHolidayId);
+    }
 }
