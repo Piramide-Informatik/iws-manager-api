@@ -16,10 +16,16 @@ public interface HolidayYearRepository extends JpaRepository<HolidayYear, Long> 
     List<HolidayYear> findAll();
 
     @EntityGraph(attributePaths = {"publicHoliday"})
+    List<HolidayYear> findAllByOrderByYearAsc();
+
+    @EntityGraph(attributePaths = {"publicHoliday"})
     Optional<HolidayYear> findById(Long id);
     
     @EntityGraph(attributePaths = {"publicHoliday"})
     List<HolidayYear> findByPublicHolidayId(Long publicHolidayId);
+
+    @EntityGraph(attributePaths = {"publicHoliday"})
+    List<HolidayYear> findByPublicHolidayIdOrderByYearAsc(Long publicHolidayId);
 
     @EntityGraph(attributePaths = {"publicHoliday"})
     boolean existsByYearAndPublicHolidayId(LocalDate year, Long publicHolidayId);
