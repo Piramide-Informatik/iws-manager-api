@@ -194,4 +194,12 @@ public class EmployeeIwsController {
         Integer next = employeeIwsService.getNextEmployeeNo();
         return ResponseEntity.ok(next);
     }
+
+    @PostMapping("/with-auto-employeeno")
+    public ResponseEntity<EmployeeIws> createWithAutoEmployeeNo(@RequestBody EmployeeIws employeeIws) {
+
+        EmployeeIws created = employeeIwsService.createWithAutoEmployeeNo(employeeIws);
+        return ResponseEntity.ok(created);
+       
+    }
 }

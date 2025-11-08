@@ -270,4 +270,20 @@ public class EmployeeIwsServiceImpl implements EmployeeIwsService {
         Integer maxSeq = employeeIwsRepository.findMaxEmployeeNo();
         return (maxSeq == null ? 1 : maxSeq + 1);
     }
+
+    @Override
+    public EmployeeIws createWithAutoEmployeeNo(EmployeeIws employeeIws) {
+        if (employeeIws == null) {
+            throw new IllegalArgumentException("EmployeeIws cannot be null");
+        }
+
+        Integer maxEmployeeNo = employeeIwsRepository.findMaxEmployeeNo();
+
+        int baseNumber = (maxEmployeeNo == null || maxEmployeeNo == 0) ? 1 : maxEmployeeNo;
+        
+        Integer newEmployeeNo = baseNumber + 1;
+        employeeIws.setEmployeeNo(newEmployeeNo);
+
+        return employeeIwsRepository.save(employeeIws);
+    }
 }

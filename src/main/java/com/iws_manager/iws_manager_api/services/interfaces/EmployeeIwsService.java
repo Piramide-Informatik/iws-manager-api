@@ -45,4 +45,7 @@ public interface EmployeeIwsService {
     List<EmployeeIws> getByActiveOrderByLastnameAsc(Integer active);
 
     Integer getNextEmployeeNo();
+
+    //CREATE
+    EmployeeIws createWithAutoEmployeeNo(EmployeeIws employeeIws);
 }
