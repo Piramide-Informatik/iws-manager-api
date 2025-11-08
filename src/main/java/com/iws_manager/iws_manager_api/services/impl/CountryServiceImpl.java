@@ -118,4 +118,46 @@ public class CountryServiceImpl implements CountryService {
         }
         countryRepository.deleteById(id);
     }
+
+    /**
+     * Updates an existing Country entity with exclusive default handling.
+     * If the country is being set as default (isDefault = true), all other countries
+     * will be automatically set to isDefault = false to maintain only one default country.
+     * 
+     * @param id the ID of the Country to update
+     * @param countryDetails the Country object containing updated fields
+     * @return the updated Country entity
+     * @throws RuntimeException if no Country exists with the given ID
+     * @throws IllegalArgumentException if either parameter is null
+     */
+    @Override
+    public Country updateWithDefaultHandling(Long id, Country countryDetails) {
+        if (id == null || countryDetails == null) {
+            throw new IllegalArgumentException("ID and country details cannot be null");
+        }
+        
+        return countryRepository.findById(id)
+                .map(existingCountry -> {
+                    if (Boolean.TRUE.equals(countryDetails.getIsDefault())) {
+                        resetOtherDefaults(id);
+                    }
+                    
+                    existingCountry.setName(countryDetails.getName());
+                    existingCountry.setLabel(countryDetails.getLabel());
+                    existingCountry.setIsDefault(countryDetails.getIsDefault());
+                    return countryRepository.save(existingCountry);
+                })
+                .orElseThrow(() -> new EntityNotFoundException("Country not found with id: " + id));
+    }
+
+    private void resetOtherDefaults(Long currentCountryId) {
+        List<Country> defaultCountries = countryRepository.findByIsDefaultTrue();
+        
+        for (Country country : defaultCountries) {
+            if (!country.getId().equals(currentCountryId)) {
+                country.setIsDefault(false);
+                countryRepository.save(country);
+            }
+        }
+    }
 }
