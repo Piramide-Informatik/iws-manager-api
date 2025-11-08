@@ -1,6 +1,7 @@
 package com.iws_manager.iws_manager_api.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iws_manager.iws_manager_api.models.base.BaseEntity;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
@@ -45,10 +46,12 @@ public class PublicHoliday extends BaseEntity {
     @Column(name = "sequenceno",columnDefinition = "INT")
     private Integer sequenceNo;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "publicHoliday", cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties("publicHoliday")
     private List<StateHoliday> stateHolidays;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "publicHoliday", cascade = CascadeType.REMOVE)
     @JsonIgnoreProperties("publicHoliday")
     private List<HolidayYear> holidayYears;
