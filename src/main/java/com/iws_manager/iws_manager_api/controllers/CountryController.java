@@ -105,4 +105,14 @@ public class CountryController {
         countryService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PutMapping("/{id}/with-default-handling")
+    public ResponseEntity<Country> updateWithDefaultHandling(@PathVariable Long id, @RequestBody Country countryDetails) {
+        try {
+            Country updatedCountry = countryService.updateWithDefaultHandling(id, countryDetails);
+            return ResponseEntity.ok(updatedCountry);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
