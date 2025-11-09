@@ -14,5 +14,8 @@ public interface CustomerService {
     void delete(Long id);
     List<ContactPerson> findContactsByCustomerId(Long customerId);
 
-    Long getNextCustomerNo();
+    Integer getNextCustomerNo();
+
+    //CREATE
+    Customer createWithAutoCustomerNo(Customer customer);
 }

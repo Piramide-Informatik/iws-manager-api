@@ -129,8 +129,16 @@ public class CustomerController {
     }
 
     @GetMapping("/next-customer-no")
-    public ResponseEntity<Long> getNextCustomerNo() {
-        Long nextCustomerNo = customerService.getNextCustomerNo();
+    public ResponseEntity<Integer> getNextCustomerNo() {
+        Integer nextCustomerNo = customerService.getNextCustomerNo();
         return new ResponseEntity<>(nextCustomerNo, HttpStatus.OK);
+    }
+
+    @PostMapping("/with-auto-customer-no")
+    public ResponseEntity<Customer> createWithAutoEmployeeNo(@RequestBody Customer customer) {
+
+        Customer created = customerService.createWithAutoCustomerNo(customer);
+        return ResponseEntity.ok(created);
+
     }
 }
