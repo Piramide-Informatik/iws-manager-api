@@ -29,5 +29,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Optional<Customer> findById(Long id);
 
     @Query("SELECT MAX(c.customerno) FROM Customer c")
-    Long findMaxCustomerNo();
+    Integer findMaxCustomerNo();
 }
