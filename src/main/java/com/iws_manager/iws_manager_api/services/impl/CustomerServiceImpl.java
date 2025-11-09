@@ -155,8 +155,23 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional(readOnly = true)
-    public Long getNextCustomerNo() {
-        Long maxCustomerNo = customerRepository.findMaxCustomerNo();
+    public Integer getNextCustomerNo() {
+        Integer maxCustomerNo = customerRepository.findMaxCustomerNo();
         return (maxCustomerNo != null ? maxCustomerNo + 1 : 1);
+    }
+
+    @Override
+    public Customer createWithAutoCustomerNo(Customer customer) {
+        if (customer == null) {
+            throw new IllegalArgumentException("Customer cannot be null");
+        }
+        Integer maxCustomerNo = customerRepository.findMaxCustomerNo();
+
+        Integer baseNumber = (maxCustomerNo == null || maxCustomerNo == 0) ? 1 : maxCustomerNo;
+
+        Integer newCustomerNo = baseNumber + 1;
+        customer.setCustomerno(newCustomerNo);
+
+        return customerRepository.save(customer);
     }
 }
