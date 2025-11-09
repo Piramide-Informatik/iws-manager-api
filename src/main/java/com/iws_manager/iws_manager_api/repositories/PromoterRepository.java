@@ -6,6 +6,7 @@ import com.iws_manager.iws_manager_api.models.Promoter;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -39,4 +40,7 @@ public interface PromoterRepository extends JpaRepository<Promoter, Long> {
 
     @EntityGraph(attributePaths = {"country"})
     List<Promoter> findByPromoterName1OrPromoterName2(String name1, String name2);
+
+    @Query("SELECT COALESCE(MAX(CAST(p.promoterNo AS INTEGER)), 0) FROM Promoter p WHERE p.promoterNo IS NOT NULL")
+    Integer findMaxPromoterNo();
 }
