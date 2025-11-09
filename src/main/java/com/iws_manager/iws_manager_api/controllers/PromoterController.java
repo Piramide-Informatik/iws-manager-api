@@ -130,4 +130,20 @@ public class PromoterController {
         return new ResponseEntity<>(promoters, HttpStatus.OK);
     }
 
+
+    @GetMapping("/next-promoter-no")
+    public ResponseEntity<Integer> getNextPromoterNo() {
+        try {
+            Integer nextPromoterNo = promoterService.getNextPromoterNo();
+            return ResponseEntity.ok(nextPromoterNo);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @PostMapping("/with-auto-promoterno")
+    public ResponseEntity<Promoter> createWithAutoPromoterNo(@RequestBody Promoter promoter) {
+        Promoter created = promoterService.createWithAutoPromoterNo(promoter);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    }
 }
