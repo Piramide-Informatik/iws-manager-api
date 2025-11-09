@@ -115,4 +115,10 @@ public class CountryController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping("/with-default-handling")
+    public ResponseEntity<Country> createWithDefaultHandling(@RequestBody Country country) {
+        Country created = countryService.createWithDefaultHandling(country);
+        return ResponseEntity.ok(created);
+    }
 }
