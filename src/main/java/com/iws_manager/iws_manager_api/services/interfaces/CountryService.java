@@ -13,4 +13,5 @@ public interface CountryService {
     void delete(Long id);
 
     Country updateWithDefaultHandling(Long id, Country countryDetails);
+    Country createWithDefaultHandling(Country country);
 }

@@ -120,6 +120,28 @@ public class CountryServiceImpl implements CountryService {
     }
 
     /**
+     * Creates a new Country entity with exclusive default handling.
+     * If the country is being created as default (isDefault = true), all other countries
+     * will be automatically set to isDefault = false to maintain only one default country.
+     * 
+     * @param country the Country entity to be created
+     * @return the persisted Country entity with generated ID
+     * @throws IllegalArgumentException if the Country parameter is null
+     */
+    @Override
+    public Country createWithDefaultHandling(Country country) {
+        if (country == null) {
+            throw new IllegalArgumentException("Country cannot be null");
+        }
+
+        if (Boolean.TRUE.equals(country.getIsDefault())) {
+            resetOtherDefaults(null); 
+        }
+
+        return countryRepository.save(country);
+    }
+
+    /**
      * Updates an existing Country entity with exclusive default handling.
      * If the country is being set as default (isDefault = true), all other countries
      * will be automatically set to isDefault = false to maintain only one default country.
