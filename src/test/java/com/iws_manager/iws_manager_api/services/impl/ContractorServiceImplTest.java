@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-
 import com.iws_manager.iws_manager_api.models.Contractor;
 import com.iws_manager.iws_manager_api.repositories.ContractorRepository;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import com.iws_manager.iws_manager_api.models.Customer;
+
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Contractor Service Implementation Tests")
 public class ContractorServiceImplTest {
@@ -30,26 +32,38 @@ public class ContractorServiceImplTest {
     private ContractorServiceImpl contractorService;
 
     private Contractor sampleContractor;
+    private Customer sampleCustomer;
 
     @BeforeEach
     void setUp(){
         sampleContractor = new Contractor();
         sampleContractor.setId(1L);
         sampleContractor.setName("SRL");
+        sampleContractor.setLabel("CONTRACTOR_LABEL");
+        sampleContractor.setCustomer(sampleCustomer);
     }
+    
     @Test
     @DisplayName("Should save contractor successfully")
-    void creatShouldReturnSavedTitle(){
-        //Arrange
+    void createShouldReturnSavedContractor(){
+        // Arrange 
+        Customer customer = new Customer();
+        customer.setId(1L);
+        sampleContractor.setCustomer(customer);
+        sampleContractor.setLabel("CONTRACTOR_LABEL");
+
+        when(contractorRepository.existsByLabelIgnoreCaseAndCustomerId(eq("CONTRACTOR_LABEL"), eq(1L)))
+            .thenReturn(false);
         when(contractorRepository.save(any(Contractor.class))).thenReturn(sampleContractor);
 
-        //Act
+        // Act
         Contractor result = contractorService.create(sampleContractor);
 
-        //Assert
+        // Assert
         assertNotNull(result);
         assertEquals("SRL", result.getName());
-        verify(contractorRepository,times(1)).save(any(Contractor.class));
+        verify(contractorRepository, times(1)).existsByLabelIgnoreCaseAndCustomerId(eq("CONTRACTOR_LABEL"), eq(1L));
+        verify(contractorRepository, times(1)).save(any(Contractor.class));
     }
 
     @Test
@@ -137,40 +151,36 @@ public class ContractorServiceImplTest {
     }
 
     @Test
-    public void updateShouldThrowExceptioWhenOptimisticLockingFails(){
-        //Setup
+    public void updateShouldThrowExceptionWhenOptimisticLockingFails() {
+        // Setup
         Long contractorId = 1L;
+        
+        Customer customer = new Customer();
+        customer.setId(1L);
+        
         Contractor currentContractor = new Contractor();
         currentContractor.setId(contractorId);
         currentContractor.setName("SRL");
-        currentContractor.setVersion(2L); //Current version in DB
+        currentContractor.setLabel("LABEL");
+        currentContractor.setCustomer(customer);
+        currentContractor.setVersion(2L);
 
         Contractor outdatedContractor = new Contractor();
         outdatedContractor.setId(contractorId);
-        outdatedContractor.setName("LRS");
+        outdatedContractor.setName("LRS"); 
+        outdatedContractor.setLabel("LABEL"); 
+        outdatedContractor.setCustomer(customer);
         outdatedContractor.setVersion(1L);
 
         when(contractorRepository.findById(contractorId)).thenReturn(Optional.of(currentContractor));
         when(contractorRepository.save(any(Contractor.class)))
-                .thenThrow(new ObjectOptimisticLockingFailureException("Concurrent modification detected",
-                        new ObjectOptimisticLockingFailureException(Contractor.class, contractorId)));
+                .thenThrow(new ObjectOptimisticLockingFailureException(Contractor.class, contractorId));
 
-        //Execution and verification
-        Exception exception = assertThrows(RuntimeException.class,
-                () -> contractorService.update(contractorId, outdatedContractor)
-        );
+        assertThrows(ObjectOptimisticLockingFailureException.class,
+                () -> contractorService.update(contractorId, outdatedContractor));
 
-        assertNotNull(exception, "An exception should have been thrown");
-
-        //Verify if it's the direct exception or wrapped
-        if(!(exception instanceof ObjectOptimisticLockingFailureException)){
-            assertNotNull(exception.getCause(), "The exception should have a cause");
-            assertTrue(exception.getCause() instanceof ObjectOptimisticLockingFailureException,
-                    "The cause should be ObjectOptimisticLockingFailureException");
-
-            //Verify repository interactions
-            verify(contractorRepository).findById(contractorId);
-            verify(contractorRepository.save(any(Contractor.class)));
-        }
+        verify(contractorRepository).findById(contractorId);
+        verify(contractorRepository, never()).existsByLabelIgnoreCaseAndCustomerIdAndIdNot(anyString(), anyLong(), anyLong());
+        verify(contractorRepository).save(any(Contractor.class));
     }
 }
