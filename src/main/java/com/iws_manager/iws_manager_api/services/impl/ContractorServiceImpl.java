@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import com.iws_manager.iws_manager_api.exception.exceptions.DuplicateResourceException;
+
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
@@ -28,6 +30,9 @@ public class ContractorServiceImpl implements ContractorService {
         if(contractor == null){
             throw new IllegalArgumentException("Contractor cannot be null");
         }
+
+        validateUniqueLabelForCreation(contractor.getLabel(), contractor.getCustomer().getId());
+
         return contractorRepository.save(contractor);
     }
 
@@ -52,6 +57,9 @@ public class ContractorServiceImpl implements ContractorService {
         }
         return contractorRepository.findById(id)
                 .map(existingContractor -> {
+                    Long customerId = existingContractor.getCustomer().getId();
+                    validateUniqueLabelForUpdate(existingContractor, contractorDetails, id, customerId);
+                    
                     existingContractor.setName(contractorDetails.getName());
                     existingContractor.setCity(contractorDetails.getCity());
                     existingContractor.setLabel(contractorDetails.getLabel());
@@ -65,7 +73,7 @@ public class ContractorServiceImpl implements ContractorService {
 
                     return contractorRepository.save(existingContractor);
                 })
-                .orElseThrow(()-> new RuntimeException("Contractor not found with id: "+ id));
+                .orElseThrow(()-> new EntityNotFoundException("Contractor not found with id: "+ id));
     }
 
     @Override
@@ -98,5 +106,39 @@ public class ContractorServiceImpl implements ContractorService {
     @Override
     public List<Contractor> getByCustomerIdOrderByNameAsc(Long customerId) {
         return contractorRepository.findByCustomerIdOrderByNameAsc(customerId);
+    }
+
+    /**
+     * Validates that the label is unique for creation (case-insensitive) within the same customer.
+     */
+    private void validateUniqueLabelForCreation(String label, Long customerId) {
+        if (label != null && customerId != null && 
+            contractorRepository.existsByLabelIgnoreCaseAndCustomerId(label, customerId)) {
+            throw new DuplicateResourceException(
+                "Contractor duplication with attribute 'label' = '" + label + "' for this customer"
+            );
+        }
+    }
+
+    /**
+     * Validates that the label is unique for update, considering only other records (case-insensitive) within the same customer.
+     */
+    private void validateUniqueLabelForUpdate(Contractor existingContractor, 
+                                            Contractor newContractor, 
+                                            Long id, 
+                                            Long customerId) {
+       
+        boolean labelChanged = !existingContractor.getLabel().equals(newContractor.getLabel());
+        
+        if (labelChanged) {
+            boolean labelExists = contractorRepository.existsByLabelIgnoreCaseAndCustomerIdAndIdNot(
+                newContractor.getLabel(), customerId, id);
+            
+            if (labelExists) {
+                throw new DuplicateResourceException(
+                    "Contractor duplication with attribute 'label' = '" + newContractor.getLabel() + "' for this customer"
+                );
+            }
+        }
     }
 }

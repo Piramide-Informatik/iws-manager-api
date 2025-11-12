@@ -24,6 +24,8 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import jakarta.persistence.EntityNotFoundException;
+import com.iws_manager.iws_manager_api.exception.GlobalExceptionHandler;
 
 @ExtendWith(MockitoExtension.class)
 public class ContractorControllerTest {
@@ -45,7 +47,7 @@ public class ContractorControllerTest {
 
     @BeforeEach
     void setUp(){
-        mockMvc = MockMvcBuilders.standaloneSetup(contractorController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(contractorController).setControllerAdvice(new GlobalExceptionHandler()).build();
 
         contractor1 = new Contractor();
         contractor1.setId(1L);
@@ -116,12 +118,14 @@ public class ContractorControllerTest {
     @Test
     void updateContractorShouldReturnNotFound() throws Exception {
         given(contractorService.update(anyLong(), any(Contractor.class)))
-                .willThrow(new RuntimeException("Contractor not found"));
+                .willThrow(new EntityNotFoundException("Contractor not found with id: 99"));
 
         mockMvc.perform(put(uri+"/99")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(contractor1)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error").value("Not Found"))
+                .andExpect(jsonPath("$.message").value("Contractor not found with id: 99"));
     }
 
     @Test
