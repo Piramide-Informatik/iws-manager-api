@@ -53,12 +53,8 @@ public class ContractorController {
     public ResponseEntity<Contractor> updateContractor(
             @PathVariable Long id,
             @RequestBody Contractor contractorDetails){
-        try {
-            Contractor updateContractor = contractorService.update(id, contractorDetails);
-            return new ResponseEntity<>(updateContractor, HttpStatus.OK);
-        } catch (RuntimeException e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Contractor updateContractor = contractorService.update(id, contractorDetails);
+        return new ResponseEntity<>(updateContractor, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
