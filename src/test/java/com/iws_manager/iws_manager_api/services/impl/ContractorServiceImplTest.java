@@ -33,13 +33,14 @@ public class ContractorServiceImplTest {
 
     private Contractor sampleContractor;
     private Customer sampleCustomer;
+    private static final String CONTRACTOR_LABEL = "Label"; 
 
     @BeforeEach
     void setUp(){
         sampleContractor = new Contractor();
         sampleContractor.setId(1L);
         sampleContractor.setName("SRL");
-        sampleContractor.setLabel("CONTRACTOR_LABEL");
+        sampleContractor.setLabel(CONTRACTOR_LABEL);
         sampleContractor.setCustomer(sampleCustomer);
     }
     
@@ -50,9 +51,9 @@ public class ContractorServiceImplTest {
         Customer customer = new Customer();
         customer.setId(1L);
         sampleContractor.setCustomer(customer);
-        sampleContractor.setLabel("CONTRACTOR_LABEL");
+        sampleContractor.setLabel(CONTRACTOR_LABEL);
 
-        when(contractorRepository.existsByLabelIgnoreCaseAndCustomerId(eq("CONTRACTOR_LABEL"), eq(1L)))
+        when(contractorRepository.existsByLabelIgnoreCaseAndCustomerId(eq(CONTRACTOR_LABEL), eq(1L)))
             .thenReturn(false);
         when(contractorRepository.save(any(Contractor.class))).thenReturn(sampleContractor);
 
@@ -62,7 +63,7 @@ public class ContractorServiceImplTest {
         // Assert
         assertNotNull(result);
         assertEquals("SRL", result.getName());
-        verify(contractorRepository, times(1)).existsByLabelIgnoreCaseAndCustomerId(eq("CONTRACTOR_LABEL"), eq(1L));
+        verify(contractorRepository, times(1)).existsByLabelIgnoreCaseAndCustomerId(eq(CONTRACTOR_LABEL), eq(1L));
         verify(contractorRepository, times(1)).save(any(Contractor.class));
     }
 
