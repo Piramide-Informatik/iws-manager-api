@@ -73,7 +73,7 @@ public class ContractorServiceImpl implements ContractorService {
 
                     return contractorRepository.save(existingContractor);
                 })
-                .orElseThrow(()-> new RuntimeException("Contractor not found with id: "+ id));
+                .orElseThrow(()-> new EntityNotFoundException("Contractor not found with id: "+ id));
     }
 
     @Override
