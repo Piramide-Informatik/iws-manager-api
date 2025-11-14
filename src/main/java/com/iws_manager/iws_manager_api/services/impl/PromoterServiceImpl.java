@@ -201,6 +201,7 @@ public class PromoterServiceImpl implements PromoterService {
         if (promoter == null) {
             throw new IllegalArgumentException("Promoter cannot be null");
         }
+        validateUniqueConstraintsForCreation(promoter.getProjectPromoter(), promoter.getPromoterName1());
 
         // Obtener el siguiente promoterNo automáticamente como Integer
         Integer nextPromoterNo = getNextPromoterNo();
