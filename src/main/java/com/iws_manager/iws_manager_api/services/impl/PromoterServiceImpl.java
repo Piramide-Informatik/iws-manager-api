@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Optional;
 
 import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.iws_manager.iws_manager_api.exception.exceptions.DuplicateResourceException;
 import com.iws_manager.iws_manager_api.models.Promoter;
 import com.iws_manager.iws_manager_api.repositories.PromoterRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.PromoterService;
@@ -50,6 +52,9 @@ public class PromoterServiceImpl implements PromoterService {
         if (promoter == null) {
             throw new IllegalArgumentException("Promoter cannot be null");
         }
+
+        validateUniqueConstraintsForCreation(promoter.getProjectPromoter(), promoter.getPromoterName1());
+
         return promoterRepository.save(promoter);
     }
 
@@ -97,6 +102,8 @@ public class PromoterServiceImpl implements PromoterService {
         
         return  promoterRepository.findById(id)
                 .map(existingPromoter -> {
+                    validateUniqueConstraintsForUpdate(existingPromoter, promoterDetails, id);
+
                     existingPromoter.setCity(promoterDetails.getCity());
                     existingPromoter.setCountry(promoterDetails.getCountry());
                     existingPromoter.setProjectPromoter(promoterDetails.getProjectPromoter());
@@ -202,5 +209,89 @@ public class PromoterServiceImpl implements PromoterService {
         promoter.setPromoterNo(String.valueOf(nextPromoterNo));
 
         return promoterRepository.save(promoter);
+    }
+
+    /**
+     * Validates that projectPromoter and promoterName1 are unique for creation (case-insensitive).
+     */
+    private void validateUniqueConstraintsForCreation(String projectPromoter, String promoterName1) {
+        if ((projectPromoter != null && promoterRepository.existsByProjectPromoterOrPromoterName1IgnoreCase(projectPromoter, promoterName1))) {
+            checkWhichFieldsAreDuplicateForCreation(projectPromoter, promoterName1);
+        }
+    }
+
+    /**
+     * Validates that projectPromoter and promoterName1 are unique for update, considering only other records (case-insensitive).
+     */
+    private void validateUniqueConstraintsForUpdate(Promoter existingPromoter, 
+                                                  Promoter newPromoter, 
+                                                  Long id) {
+        boolean projectPromoterChanged = !existingPromoter.getProjectPromoter().equals(newPromoter.getProjectPromoter());
+        boolean promoterName1Changed = !existingPromoter.getPromoterName1().equals(newPromoter.getPromoterName1());
+        
+        if (projectPromoterChanged || promoterName1Changed) {
+            if (promoterRepository.existsByProjectPromoterOrPromoterName1IgnoreCaseAndIdNot(
+                newPromoter.getProjectPromoter(), newPromoter.getPromoterName1(), id)) {
+                checkWhichFieldsAreDuplicateForUpdate(newPromoter.getProjectPromoter(), newPromoter.getPromoterName1(), id);
+            }
+        }
+    }
+
+    /**
+     * Determines which specific fields are duplicated during creation.
+     */
+    private void checkWhichFieldsAreDuplicateForCreation(String projectPromoter, String promoterName1) {
+        // Buscar todos los promoters para verificar duplicados case-insensitive
+        List<Promoter> allPromoters = promoterRepository.findAll();
+        
+        boolean projectPromoterExists = allPromoters.stream()
+            .anyMatch(p -> p.getProjectPromoter() != null && 
+                          p.getProjectPromoter().equalsIgnoreCase(projectPromoter));
+        
+        boolean promoterName1Exists = allPromoters.stream()
+            .anyMatch(p -> p.getPromoterName1() != null && 
+                          p.getPromoterName1().equalsIgnoreCase(promoterName1));
+        
+        buildAndThrowDuplicateException(projectPromoterExists, promoterName1Exists, projectPromoter, promoterName1);
+    }
+
+    /**
+     * Determines which specific fields are duplicated during update.
+     */
+    private void checkWhichFieldsAreDuplicateForUpdate(String projectPromoter, String promoterName1, Long excludeId) {
+        // Buscar promoters existentes excluyendo el actual
+        List<Promoter> allPromoters = promoterRepository.findAll();
+        
+        boolean projectPromoterExists = allPromoters.stream()
+            .anyMatch(p -> !p.getId().equals(excludeId) && 
+                          p.getProjectPromoter() != null && 
+                          p.getProjectPromoter().equalsIgnoreCase(projectPromoter));
+        
+        boolean promoterName1Exists = allPromoters.stream()
+            .anyMatch(p -> !p.getId().equals(excludeId) && 
+                          p.getPromoterName1() != null && 
+                          p.getPromoterName1().equalsIgnoreCase(promoterName1));
+        
+        buildAndThrowDuplicateException(projectPromoterExists, promoterName1Exists, projectPromoter, promoterName1);
+    }
+
+    /**
+     * Builds and throws the appropriate duplicate exception based on which fields are duplicated.
+     */
+    private void buildAndThrowDuplicateException(boolean projectPromoterExists, boolean promoterName1Exists, 
+                                               String projectPromoter, String promoterName1) {
+        if (projectPromoterExists && promoterName1Exists) {
+            throw new DuplicateResourceException(
+                "Promoter duplication with attributes 'projectPromoter' = '" + projectPromoter + "' and 'promoterName1' = '" + promoterName1 + "'"
+            );
+        } else if (projectPromoterExists) {
+            throw new DuplicateResourceException(
+                "Promoter duplication with attribute 'projectPromoter' = '" + projectPromoter + "'"
+            );
+        } else if (promoterName1Exists) {
+            throw new DuplicateResourceException(
+                "Promoter duplication with attribute 'promoterName1' = '" + promoterName1 + "'"
+            );
+        }
     }
 }
