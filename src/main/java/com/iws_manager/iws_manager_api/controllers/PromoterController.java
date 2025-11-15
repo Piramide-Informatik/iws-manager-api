@@ -58,12 +58,8 @@ public class PromoterController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Promoter> update(@PathVariable Long id, @RequestBody Promoter promoterDetails){
-        try {
-            Promoter updatePromoter = promoterService.update(id, promoterDetails);
-            return new ResponseEntity<>(updatePromoter, HttpStatus.OK);
-        } catch (RuntimeException e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Promoter updatePromoter = promoterService.update(id, promoterDetails);
+        return new ResponseEntity<>(updatePromoter, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

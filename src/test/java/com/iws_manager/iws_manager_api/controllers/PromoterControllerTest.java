@@ -2,6 +2,7 @@ package com.iws_manager.iws_manager_api.controllers;
 
 import com.iws_manager.iws_manager_api.models.Promoter;
 import com.iws_manager.iws_manager_api.services.interfaces.PromoterService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,7 +17,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
+
+import jakarta.persistence.EntityNotFoundException;
 
 class PromoterControllerTest {
 
@@ -97,13 +101,13 @@ class PromoterControllerTest {
         assertEquals(promoter, response.getBody());
     }
 
-    @Test
+   @Test
     void updateNotFound() {
-        when(promoterService.update(ID, promoter)).thenThrow(new RuntimeException());
+        when(promoterService.update(ID, promoter)).thenThrow(new EntityNotFoundException("Promoter not found with id: " + ID));
 
-        ResponseEntity<Promoter> response = promoterController.update(ID, promoter);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertThrows(EntityNotFoundException.class, () -> promoterController.update(ID, promoter));
+        
+        verify(promoterService, times(1)).update(ID, promoter);
     }
 
     @Test
