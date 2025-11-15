@@ -115,7 +115,7 @@ public class PromoterServiceImpl implements PromoterService {
 
                     return promoterRepository.save(existingPromoter);
                 })
-                .orElseThrow(() -> new RuntimeException("Promoter not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Promoter not found with id: " + id));
     }
 
     /**
