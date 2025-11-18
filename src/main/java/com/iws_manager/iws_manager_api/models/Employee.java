@@ -87,4 +87,8 @@ public class Employee extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "titleid", referencedColumnName = "titleid")
     private Title title;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employeecategoryid", referencedColumnName = "employeecategoryid")
+    private EmployeeCategory employeeCategory;
 }

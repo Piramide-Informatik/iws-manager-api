@@ -81,4 +81,9 @@ public class EmployeeController {
     public ResponseEntity<List<Employee>> findByCustomerId(@PathVariable Long customerId) {
         return ResponseEntity.ok(employeeService.findByCustomerId(customerId));
     }
+
+    @GetMapping("/employeecategory/{employeeCategoryId}")
+    public ResponseEntity<List<Employee>> findByEemployeeCategoryId(@PathVariable Long employeeCategoryId) {
+        return ResponseEntity.ok(employeeService.findByEmployeeCategoryId(employeeCategoryId));
+    }
 }
