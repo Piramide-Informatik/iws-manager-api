@@ -4,11 +4,15 @@ import com.iws_manager.iws_manager_api.dtos.user.CreateUserDTO;
 import com.iws_manager.iws_manager_api.dtos.user.UpdateUserDTO;
 import com.iws_manager.iws_manager_api.dtos.user.UserDTO;
 import com.iws_manager.iws_manager_api.dtos.user.UserWithRolesDTO;
+import com.iws_manager.iws_manager_api.models.Role;
 import com.iws_manager.iws_manager_api.models.User;
 
 import java.util.stream.Collectors;
 
 public class UserMapper {
+    private UserMapper() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
     public static UserDTO toDTO(User user) {
         return new UserDTO(
                 user.getId(),
@@ -28,7 +32,7 @@ public class UserMapper {
                 user.getLastName(),
                 user.isActive(),
                 user.getEmail(),
-                user.getRoles().stream().map(r -> r.getName()).collect(Collectors.toList())
+                user.getRoles().stream().map(Role::getName).collect(Collectors.toList())
         );
     }
 
@@ -39,7 +43,7 @@ public class UserMapper {
         user.setLastName(dto.lastName());
         user.setEmail(dto.email());
         user.setPassword(dto.password());
-        user.setActive(dto.active() != null ? dto.active() : true);
+        user.setActive(dto.active() == null || dto.active());
         return user;
     }
 
