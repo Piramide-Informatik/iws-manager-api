@@ -19,4 +19,5 @@ public interface EmployeeService {
     List<Employee> findBySalutationId(Long salutationId);
     List<Employee> findByQualificationFZId(Long qualificationFZId);
     List<Employee> findByCustomerId(Long customerId);
+    List<Employee> findByEmployeeCategoryId(Long employeeCategoryId);
 }

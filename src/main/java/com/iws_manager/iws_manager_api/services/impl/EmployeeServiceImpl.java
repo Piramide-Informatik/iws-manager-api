@@ -111,6 +111,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                     existingEmployee.setShareholdersince(employeeDetails.getShareholdersince());
                     existingEmployee.setSoleproprietorsince(employeeDetails.getSoleproprietorsince());
                     existingEmployee.setQualificationkmui(employeeDetails.getQualificationkmui());
+                    existingEmployee.setEmployeeCategory(employeeDetails.getEmployeeCategory());
 
                     return employeeRepository.save(existingEmployee);
                 })
@@ -162,5 +163,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employee> findByCustomerId(Long customerId) {
         return employeeRepository.findByCustomerIdOrderByEmployeenoAsc(customerId);
+    }
+
+    @Override
+    public List<Employee> findByEmployeeCategoryId(Long employeeCategoryId) {
+        return  employeeRepository.findByEmployeeCategoryId(employeeCategoryId);
     }
 }
