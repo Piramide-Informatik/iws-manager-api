@@ -20,7 +20,8 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UserServiceImplV2 implements UserServiceV2 {
-    private static final String USERNOTFOUND = "User not found";
+    private static final String USER_NOT_FOUND = "User not found";
+    private static final String ID_CANNOT_BE_NULL = "ID cannot be null";
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
@@ -59,25 +60,19 @@ public class UserServiceImplV2 implements UserServiceV2 {
                     UserMapper.updateEntity(existing, dto);
                     return userRepository.save(existing);
                 })
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
     }
 
     @Override
     public void delete(Long id) {
-        int roleCount = roleRepository.findByUserId(id).size();
+        validateIdNotNull(id);
 
-        if (id == null) {
-            throw new IllegalArgumentException("ID cannot be null");
-        }
+        List<Role> userRoles = roleRepository.findByUserId(id);
 
-        if (!userRepository.existsById(id)) {
-            throw new EntityNotFoundException("User not found with id: " + id);
-        }
-
-        if (roleCount > 0) {
+        if (!userRoles.isEmpty()) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    "User is assigned to " + roleCount + " role(s) and cannot be deleted"
+                    "User is assigned to " + userRoles.size() + " role(s) and cannot be deleted"
             );
         }
         userRepository.deleteById(id);
@@ -85,7 +80,7 @@ public class UserServiceImplV2 implements UserServiceV2 {
 
     @Override
     public User assignRole(Long userId, List<Long> roleIds) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException(USERNOTFOUND));
+        User user = findUserById(userId);
         List<Role> roles = roleRepository.findAllById(roleIds);
         user.setRoles(roles);
         return userRepository.save(user);
@@ -93,9 +88,7 @@ public class UserServiceImplV2 implements UserServiceV2 {
 
     @Override
     public List<Role> getRolesByUser(Long userId) {
-        if (userId == null) {
-            throw new IllegalArgumentException("User ID cannot be null");
-        }
+        validateIdNotNull(userId);
         return roleRepository.findByUserId(userId);
     }
 
@@ -104,10 +97,23 @@ public class UserServiceImplV2 implements UserServiceV2 {
         if (userId == null) {
             throw new IllegalArgumentException("User ID cannot be null");
         }
-        // Asumimos que roleRepository.findByUserId(userId) devuelve List<Role>
+        // We assume that roleRepository.findByUserId(userId) returns List<Role>
         List<Role> roles = roleRepository.findByUserId(userId);
         return roles.stream()
                 .map(Role::getName)
                 .toList();
+    }
+
+    // helper methods
+    private void validateIdNotNull(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException(ID_CANNOT_BE_NULL);
+        }
+    }
+
+    private User findUserById(Long id) {
+        validateIdNotNull(id);
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND + " with id: " + id));
     }
 }
