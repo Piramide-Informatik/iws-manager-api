@@ -6,5 +6,5 @@ public record ContractOrderCommissionInputDTO(
     BigDecimal commission,
     BigDecimal fromOrderValue, 
     BigDecimal minCommission,
-    Long basicContractId
+    BasicContractReferenceDTO basicContract
 ) {}

@@ -3,7 +3,6 @@ package com.iws_manager.iws_manager_api.mappers;
 import com.iws_manager.iws_manager_api.dtos.contractordercommission.*;
 import com.iws_manager.iws_manager_api.models.ContractOrderCommission;
 import com.iws_manager.iws_manager_api.models.BasicContract;
-import com.iws_manager.iws_manager_api.dtos.contractordercommission.BasicContractInfoDTO;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -67,10 +66,11 @@ public class ContractOrderCommissionMapper {
         entity.setFromOrderValue(dto.fromOrderValue());
         entity.setMinCommission(dto.minCommission());
         
-        // Just stablish the relation through the ID, not loading all the entity
-        if (dto.basicContractId() != null) {
+        // ✅ CORREGIDO: Usar basicContract() consistentemente
+        if (dto.basicContract() != null) {
             BasicContract basicContract = new BasicContract();
-            basicContract.setId(dto.basicContractId());
+            basicContract.setId(dto.basicContract().id());
+            basicContract.setVersion(dto.basicContract().version());  // ← Importante!
             entity.setBasicContract(basicContract);
         }
         
@@ -84,7 +84,7 @@ public class ContractOrderCommissionMapper {
                 .collect(Collectors.toList());
     }
 
-    // Update with dto data
+    // Update with dto data - CORREGIDO
     public void updateEntityFromDTO(ContractOrderCommissionInputDTO dto, ContractOrderCommission entity) {
         if (dto == null || entity == null) {
             return;
@@ -94,9 +94,11 @@ public class ContractOrderCommissionMapper {
         entity.setFromOrderValue(dto.fromOrderValue());
         entity.setMinCommission(dto.minCommission());
         
-        if (dto.basicContractId() != null) {
+        // ✅ CORREGIDO: Usar basicContract() en lugar de basicContractId()
+        if (dto.basicContract() != null) {
             BasicContract basicContract = new BasicContract();
-            basicContract.setId(dto.basicContractId());
+            basicContract.setId(dto.basicContract().id());
+            basicContract.setVersion(dto.basicContract().version());  // ← Agregar version aquí también
             entity.setBasicContract(basicContract);
         }
     }
