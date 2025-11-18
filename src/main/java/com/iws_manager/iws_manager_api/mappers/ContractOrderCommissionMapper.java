@@ -3,6 +3,7 @@ package com.iws_manager.iws_manager_api.mappers;
 import com.iws_manager.iws_manager_api.dtos.contractordercommission.*;
 import com.iws_manager.iws_manager_api.models.ContractOrderCommission;
 import com.iws_manager.iws_manager_api.models.BasicContract;
+import com.iws_manager.iws_manager_api.dtos.contractordercommission.BasicContractInfoDTO;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
