@@ -1,5 +1,6 @@
 package com.iws_manager.iws_manager_api.controllers;
 
+import com.iws_manager.iws_manager_api.dtos.role.RoleDTO;
 import com.iws_manager.iws_manager_api.dtos.user.CreateUserDTO;
 import com.iws_manager.iws_manager_api.dtos.user.UpdateUserDTO;
 import com.iws_manager.iws_manager_api.dtos.user.UserDTO;
@@ -76,8 +77,8 @@ public class UserControllerV2 {
     }
 
     @GetMapping("/{id}/roles")
-    public ResponseEntity<List<String>> getRoleNamesByUser(@PathVariable Long id) {
-        List<String> roles = userService.getRoleNamesByUser(id);
+    public ResponseEntity<List<RoleDTO>> getRoleNamesByUser(@PathVariable Long id) {
+        List<RoleDTO> roles = userService.getRoleNamesByUser(id);
         return ResponseEntity.ok(roles);
     }
 }

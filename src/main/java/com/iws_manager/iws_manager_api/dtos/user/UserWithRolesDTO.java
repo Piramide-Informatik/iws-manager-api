@@ -1,5 +1,7 @@
 package com.iws_manager.iws_manager_api.dtos.user;
 
+import com.iws_manager.iws_manager_api.dtos.role.RoleDTO;
+
 import java.util.List;
 
 public record UserWithRolesDTO(
@@ -9,6 +11,6 @@ public record UserWithRolesDTO(
         String lastName,
         boolean active,
         String email,
-        List<String> roles
+        List<RoleDTO> roles
 ) {
 }
