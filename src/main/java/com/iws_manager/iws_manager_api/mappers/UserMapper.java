@@ -4,6 +4,7 @@ import com.iws_manager.iws_manager_api.dtos.user.CreateUserDTO;
 import com.iws_manager.iws_manager_api.dtos.user.UpdateUserDTO;
 import com.iws_manager.iws_manager_api.dtos.user.UserDTO;
 import com.iws_manager.iws_manager_api.dtos.user.UserWithRolesDTO;
+import com.iws_manager.iws_manager_api.dtos.role.RoleDTO;
 import com.iws_manager.iws_manager_api.models.Role;
 import com.iws_manager.iws_manager_api.models.User;
 
@@ -32,7 +33,9 @@ public class UserMapper {
                 user.getLastName(),
                 user.isActive(),
                 user.getEmail(),
-                user.getRoles().stream().map(Role::getName).collect(Collectors.toList())
+                user.getRoles().stream()
+                        .map(role -> new RoleDTO(role.getId(), role.getName()))
+                        .collect(Collectors.toList())
         );
     }
 
