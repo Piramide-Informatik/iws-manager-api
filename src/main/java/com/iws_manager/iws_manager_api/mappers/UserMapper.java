@@ -5,7 +5,6 @@ import com.iws_manager.iws_manager_api.dtos.user.UpdateUserDTO;
 import com.iws_manager.iws_manager_api.dtos.user.UserDTO;
 import com.iws_manager.iws_manager_api.dtos.user.UserWithRolesDTO;
 import com.iws_manager.iws_manager_api.dtos.role.RoleDTO;
-import com.iws_manager.iws_manager_api.models.Role;
 import com.iws_manager.iws_manager_api.models.User;
 
 import java.util.stream.Collectors;
