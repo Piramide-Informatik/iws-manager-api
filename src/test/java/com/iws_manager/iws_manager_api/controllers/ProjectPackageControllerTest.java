@@ -11,8 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -35,8 +33,7 @@ class ProjectPackageControllerTest {
 
     private ProjectPackage testProject;
     private static final Long TEST_ID = 1L;
-    private static final String TEST_TITLE = "test";
-    private static final LocalDate TEST_DATE = LocalDate.now();
+
 
     @BeforeEach
     void setUp() {
