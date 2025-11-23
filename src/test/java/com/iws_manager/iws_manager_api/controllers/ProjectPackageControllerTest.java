@@ -35,8 +35,7 @@ class ProjectPackageControllerTest {
 
     private ProjectPackage testProject;
     private static final Long TEST_ID = 1L;
-    private static final String TEST_TITLE = "test";
-    private static final LocalDate TEST_DATE = LocalDate.now();
+
 
     @BeforeEach
     void setUp() {
