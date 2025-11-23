@@ -69,16 +69,19 @@ public class ProjectPackageServiceImpl implements ProjectPackageService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProjectPackage> findAllTitleAsc() {
         return projectPackageRepository.findAllByOrderByPackageTitleAsc();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProjectPackage> findAllSerialAsc() {
         return projectPackageRepository.findAllByOrderByPackageSerialAsc();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProjectPackage> findAllPackageNoAsc() {
         return projectPackageRepository.findAllByOrderByPackageNoAsc();
     }
@@ -89,6 +92,7 @@ public class ProjectPackageServiceImpl implements ProjectPackageService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProjectPackage> findAllEndDateAsc() {
         return projectPackageRepository.findAllByOrderByEndDate();
     }
