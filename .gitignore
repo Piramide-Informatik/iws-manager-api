@@ -40,3 +40,6 @@ out/
 ### environment variables
 env.bat
 env.sh
+
+### resources ###
+resources/
