@@ -66,13 +66,13 @@ public class Project extends BaseEntity {
     @JoinColumn(name = "empiws20id", referencedColumnName = "employeeiwsid")
     private EmployeeIws empiws20;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "empiws30id", referencedColumnName = "empiws30id")
-    // private Empiws30 empiws30;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empiws30id", referencedColumnName = "employeeiwsid")
+    private EmployeeIws empiws30;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "empiws50id", referencedColumnName = "empiws50id")
-    // private Empiws50 empiws50;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empiws50id", referencedColumnName = "employeeiwsid")
+    private EmployeeIws empiws50;
 
     @Column(name = "endapproval", nullable = true, columnDefinition = "DATE")
     private LocalDate endApproval;
