@@ -62,9 +62,9 @@ public class Project extends BaseEntity {
     @Column(name = "donation", nullable = true, columnDefinition = "DECIMAL(10,2)")
     private BigDecimal donation;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "empiws20id", referencedColumnName = "empiws20id")
-    // private Empiws20 empiws20;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empiws20id", referencedColumnName = "employeeiwsid")
+    private EmployeeIws empiws20;
 
     // @ManyToOne(fetch = FetchType.LAZY)
     // @JoinColumn(name = "empiws30id", referencedColumnName = "empiws30id")
