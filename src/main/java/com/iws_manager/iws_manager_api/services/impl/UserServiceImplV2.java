@@ -1,5 +1,6 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
+import com.iws_manager.iws_manager_api.dtos.role.RoleDTO;
 import com.iws_manager.iws_manager_api.dtos.user.CreateUserDTO;
 import com.iws_manager.iws_manager_api.dtos.user.UpdateUserDTO;
 import com.iws_manager.iws_manager_api.mappers.UserMapper;
@@ -93,14 +94,14 @@ public class UserServiceImplV2 implements UserServiceV2 {
     }
 
     @Override
-    public List<String> getRoleNamesByUser(Long userId) {
+    public List<RoleDTO> getRoleNamesByUser(Long userId) {
         if (userId == null) {
             throw new IllegalArgumentException("User ID cannot be null");
         }
         // We assume that roleRepository.findByUserId(userId) returns List<Role>
         List<Role> roles = roleRepository.findByUserId(userId);
         return roles.stream()
-                .map(Role::getName)
+                .map(role -> new RoleDTO(role.getId(), role.getName()))
                 .toList();
     }
 
