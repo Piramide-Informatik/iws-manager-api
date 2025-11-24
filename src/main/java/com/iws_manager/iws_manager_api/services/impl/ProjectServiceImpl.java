@@ -141,7 +141,7 @@ public class ProjectServiceImpl implements ProjectService {
                     existingProject.setShareResearch(projectDetails.getShareResearch());
                     existingProject.setStartApproval(projectDetails.getStartApproval());
                     existingProject.setStartDate(projectDetails.getStartDate());
-                    // existingProject.setStatus(projectDetails.getStatus());
+                    existingProject.setStatus(projectDetails.getStatus());
                     existingProject.setTitle(projectDetails.getTitle());
 
                     return projectRepository.save(existingProject);

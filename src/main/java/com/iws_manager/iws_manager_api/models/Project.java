@@ -155,9 +155,9 @@ public class Project extends BaseEntity {
     @Column(name = "startdate", nullable = true, columnDefinition = "DATE")
     private LocalDate startDate;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "statusid", referencedColumnName = "statusid")
-    // private Status status;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "statusid", referencedColumnName = "statusid")
+    private ProjectStatus status;
 
     @Column(name = "title", length = 255)
     private String title;
