@@ -20,7 +20,7 @@ import lombok.*;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "project")
 @AttributeOverride(name = "id", column = @Column(name = "projectid"))
-public class Project extends BaseEntity{
+public class Project extends BaseEntity {
 
     @Column(name = "approvaldate", nullable = true, columnDefinition = "DATE")
     private LocalDate approvalDate;
@@ -33,7 +33,7 @@ public class Project extends BaseEntity{
 
     @Column(name = "`comment`", nullable = true, length = 255)
     private String comment;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerid", referencedColumnName = "customerid")
     private Customer customer;
@@ -46,7 +46,7 @@ public class Project extends BaseEntity{
 
     @Column(name = "date3", nullable = true, columnDefinition = "DATE")
     private LocalDate date3;
-    
+
     @Column(name = "date4", nullable = true, columnDefinition = "DATE")
     private LocalDate date4;
 
@@ -62,18 +62,18 @@ public class Project extends BaseEntity{
     @Column(name = "donation", nullable = true, columnDefinition = "DECIMAL(10,2)")
     private BigDecimal donation;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "empiws20id", referencedColumnName = "empiws20id")
-    // private Empiws20 empiws20;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empiws20id", referencedColumnName = "employeeiwsid")
+    private EmployeeIws empiws20;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "empiws30id", referencedColumnName = "empiws30id")
-    // private Empiws30 empiws30;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empiws30id", referencedColumnName = "employeeiwsid")
+    private EmployeeIws empiws30;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "empiws50id", referencedColumnName = "empiws50id")
-    // private Empiws50 empiws50;
- 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empiws50id", referencedColumnName = "employeeiwsid")
+    private EmployeeIws empiws50;
+
     @Column(name = "endapproval", nullable = true, columnDefinition = "DATE")
     private LocalDate endApproval;
 
@@ -117,9 +117,9 @@ public class Project extends BaseEntity{
     @Column(name = "maxhoursperyear", nullable = true, columnDefinition = "DECIMAL(5,2)")
     private BigDecimal maxHoursPerYear;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "networkid", referencedColumnName = "networkid")
-    // private Network network;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "networkid", referencedColumnName = "networkid")
+    private Network network;
 
     @Column(name = "orderidfue", nullable = true)
     private Integer orderIdFue;
@@ -138,7 +138,7 @@ public class Project extends BaseEntity{
 
     @Column(name = "projectname", length = 255)
     private String projectName;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "promoterid", referencedColumnName = "promoterid")
     private Promoter promoter;
@@ -154,10 +154,10 @@ public class Project extends BaseEntity{
 
     @Column(name = "startdate", nullable = true, columnDefinition = "DATE")
     private LocalDate startDate;
-    
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "statusid", referencedColumnName = "statusid")
-    // private Status status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "statusid", referencedColumnName = "statusid")
+    private ProjectStatus status;
 
     @Column(name = "title", length = 255)
     private String title;

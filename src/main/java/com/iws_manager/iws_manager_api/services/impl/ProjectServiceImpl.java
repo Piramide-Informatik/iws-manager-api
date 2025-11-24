@@ -14,18 +14,22 @@ import com.iws_manager.iws_manager_api.repositories.ProjectRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.ProjectService;
 
 /**
- * Implementation of the {@link ProjectService} interface for managing Branch entities.
+ * Implementation of the {@link ProjectService} interface for managing Branch
+ * entities.
  * Provides CRUD operations and business logic for Project management.
  * 
- * <p>This service implementation is transactional by default, with read-only operations
- * optimized for database performance.</p>
+ * <p>
+ * This service implementation is transactional by default, with read-only
+ * operations
+ * optimized for database performance.
+ * </p>
  */
 @Service
 @Transactional
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
-    
+
     /**
      * Constructs a new ProjectService with the required repository dependency.
      * 
@@ -35,7 +39,6 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectServiceImpl(ProjectRepository projectRepository) {
         this.projectRepository = projectRepository;
     }
-
 
     /**
      * Creates and persists a new Project entity.
@@ -82,10 +85,10 @@ public class ProjectServiceImpl implements ProjectService {
     /**
      * Updates an existing Project entity.
      * 
-     * @param id the ID of the Project to update
+     * @param id            the ID of the Project to update
      * @param branchDetails the Project object containing updated fields
      * @return the updated Project entity
-     * @throws RuntimeException if no Project exists with the given ID
+     * @throws RuntimeException         if no Project exists with the given ID
      * @throws IllegalArgumentException if either parameter is null
      */
     @Override
@@ -93,8 +96,8 @@ public class ProjectServiceImpl implements ProjectService {
         if (id == null || projectDetails == null) {
             throw new IllegalArgumentException("ID and project details cannot be null");
         }
-        
-        return  projectRepository.findById(id)
+
+        return projectRepository.findById(id)
                 .map(existingProject -> {
                     existingProject.setApprovalDate(projectDetails.getApprovalDate());
                     existingProject.setAuthorizationDate(projectDetails.getAuthorizationDate());
@@ -109,9 +112,9 @@ public class ProjectServiceImpl implements ProjectService {
                     existingProject.setDateLevel1(projectDetails.getDateLevel1());
                     existingProject.setDateLevel2(projectDetails.getDateLevel2());
                     existingProject.setDonation(projectDetails.getDonation());
-                    // existingProject.setEmpiws20(projectDetails.getEmpiws20());
-                    // existingProject.setEmpiws30(projectDetails.getEmpiws30());
-                    // existingProject.setEmpiws50(projectDetails.getEmpiws50());
+                    existingProject.setEmpiws20(projectDetails.getEmpiws20());
+                    existingProject.setEmpiws30(projectDetails.getEmpiws30());
+                    existingProject.setEmpiws50(projectDetails.getEmpiws50());
                     existingProject.setEndApproval(projectDetails.getEndApproval());
                     existingProject.setEndDate(projectDetails.getEndDate());
                     existingProject.setFinanceAuthority(projectDetails.getFinanceAuthority());
@@ -126,7 +129,7 @@ public class ProjectServiceImpl implements ProjectService {
                     existingProject.setIncome5(projectDetails.getIncome5());
                     existingProject.setMaxHoursPerMonth(projectDetails.getMaxHoursPerMonth());
                     existingProject.setMaxHoursPerYear(projectDetails.getMaxHoursPerYear());
-                    // existingProject.setNetwork(projectDetails.getNetwork());
+                    existingProject.setNetwork(projectDetails.getNetwork());
                     existingProject.setOrderIdFue(projectDetails.getOrderIdFue());
                     existingProject.setOrderIdAdmin(projectDetails.getOrderIdAdmin());
                     existingProject.setStuffFlat(projectDetails.getStuffFlat());
@@ -138,7 +141,7 @@ public class ProjectServiceImpl implements ProjectService {
                     existingProject.setShareResearch(projectDetails.getShareResearch());
                     existingProject.setStartApproval(projectDetails.getStartApproval());
                     existingProject.setStartDate(projectDetails.getStartDate());
-                    // existingProject.setStatus(projectDetails.getStatus());
+                    existingProject.setStatus(projectDetails.getStatus());
                     existingProject.setTitle(projectDetails.getTitle());
 
                     return projectRepository.save(existingProject);
