@@ -1,5 +1,6 @@
 package com.iws_manager.iws_manager_api.services.interfaces;
 
+import com.iws_manager.iws_manager_api.dtos.role.RoleDTO;
 import com.iws_manager.iws_manager_api.dtos.user.CreateUserDTO;
 import com.iws_manager.iws_manager_api.dtos.user.UpdateUserDTO;
 import com.iws_manager.iws_manager_api.models.Role;
@@ -16,5 +17,5 @@ public interface UserServiceV2 {
     void delete(Long id);
     User assignRole(Long userId, List<Long> roleIds);
     List<Role> getRolesByUser(Long userId);
-    List<String> getRoleNamesByUser(Long userId);
+    List<RoleDTO> getRoleNamesByUser(Long userId);
 }
