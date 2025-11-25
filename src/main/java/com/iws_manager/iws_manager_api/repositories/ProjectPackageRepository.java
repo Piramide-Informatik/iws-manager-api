@@ -11,18 +11,18 @@ import org.springframework.data.jpa.repository.EntityGraph;
 
 @Repository
 public interface ProjectPackageRepository extends JpaRepository<ProjectPackage, Long> {
-    @EntityGraph(attributePaths = {"project"})
+    @EntityGraph(attributePaths = {"project", "project.customer", "project.customer.branch", "project.customer.companytype", "project.customer.country", "project.customer.state"})
     List<ProjectPackage> findAllByOrderByPackageTitleAsc();
 
-    @EntityGraph(attributePaths = {"project"})
+    @EntityGraph(attributePaths = {"project", "project.customer", "project.customer.branch", "project.customer.companytype", "project.customer.country", "project.customer.state"})
     List<ProjectPackage> findAllByOrderByPackageSerialAsc();
 
-    @EntityGraph(attributePaths = {"project"})
+    @EntityGraph(attributePaths = {"project", "project.customer", "project.customer.branch", "project.customer.companytype", "project.customer.country", "project.customer.state"})
     List<ProjectPackage> findAllByOrderByPackageNoAsc();
 
-    @EntityGraph(attributePaths = {"project"})
+    @EntityGraph(attributePaths = {"project", "project.customer", "project.customer.branch", "project.customer.companytype", "project.customer.country", "project.customer.state"})
     List<ProjectPackage> findAllByOrderByStartDate();
 
-    @EntityGraph(attributePaths = {"project"})
+    @EntityGraph(attributePaths = {"project", "project.customer", "project.customer.branch", "project.customer.companytype", "project.customer.country", "project.customer.state"})
     List<ProjectPackage> findAllByOrderByEndDate();
 }
