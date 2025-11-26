@@ -9,6 +9,7 @@ import com.iws_manager.iws_manager_api.models.ProjectPackage;
 import com.iws_manager.iws_manager_api.repositories.ProjectPackageRepository;
 import com.iws_manager.iws_manager_api.repositories.ProjectRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.ProjectPackageServiceV2;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import java.util.Optional;
 @Transactional
 public class ProjectPackageServiceImplV2 implements ProjectPackageServiceV2 {
     private static final String PROJECTPACKAGE_NOT_FOUND = "ProjectPackage not found";
+    private static final String ID_CANNOT_BE_NULL = "ID cannot be null";
     private final ProjectPackageRepository projectPackageRepository;
     private final ProjectRepository projectRepository;
 
@@ -65,12 +67,9 @@ public class ProjectPackageServiceImplV2 implements ProjectPackageServiceV2 {
 
     @Override
     public void delete(Long id) {
-        if (id == null) {
-            throw new RuntimeException("ID cannot be null");
-        }
-
+        validateIdNotNull(id);
         if (projectPackageRepository.existsById(id)) {
-            throw new RuntimeException("Project Package not found with id: " + id);
+            throw new EntityNotFoundException("Project Package not found with id: " + id);
         }
         projectPackageRepository.deleteById(id);
     }
@@ -103,5 +102,11 @@ public class ProjectPackageServiceImplV2 implements ProjectPackageServiceV2 {
     @Transactional(readOnly = true)
     public List<ProjectPackage> findAllEndDateAsc() {
         return projectPackageRepository.findAllFetchProjectByOrderByEndDateAsc();
+    }
+
+    private void validateIdNotNull(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException(ID_CANNOT_BE_NULL);
+        }
     }
 }
