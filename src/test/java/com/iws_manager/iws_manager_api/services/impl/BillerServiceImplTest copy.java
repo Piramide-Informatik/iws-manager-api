@@ -106,7 +106,7 @@ class NetworkServiceImplTest {
         Network network2 = new Network();
         network2.setId(2L);
         network2.setName("New Network");
-        
+
         when(networkRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(sampleNetwork, network2));
 
         // Act
@@ -143,8 +143,8 @@ class NetworkServiceImplTest {
         when(networkRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(RuntimeException.class, 
-            () -> networkService.update(99L, new Network()));
+        assertThrows(RuntimeException.class,
+                () -> networkService.update(99L, new Network()));
         verify(networkRepository, never()).save(any());
     }
 
@@ -155,30 +155,31 @@ class NetworkServiceImplTest {
         Network currentNetwork = new Network();
         currentNetwork.setId(networkId);
         currentNetwork.setName(networkName);
-        currentNetwork.setVersion(2L); // Current version in DB
-        
+        currentNetwork.setVersion(2); // Current version in DB
+
         Network outdatedNetwork = new Network();
         outdatedNetwork.setId(networkId);
         outdatedNetwork.setName("Doctor");
-        outdatedNetwork.setVersion(1L); // Outdated version
+        outdatedNetwork.setVersion(1); // Outdated version
 
         when(networkRepository.findById(networkId)).thenReturn(Optional.of(currentNetwork));
         when(networkRepository.save(any(Network.class)))
-            .thenThrow(new ObjectOptimisticLockingFailureException("Concurrent modification detected", 
-                    new ObjectOptimisticLockingFailureException(Network.class, networkId)));
+                .thenThrow(new ObjectOptimisticLockingFailureException("Concurrent modification detected",
+                        new ObjectOptimisticLockingFailureException(Network.class, networkId)));
 
         // Execution and verification
-        Exception exception = assertThrows(RuntimeException.class, () -> networkService.update(networkId, outdatedNetwork));
+        Exception exception = assertThrows(RuntimeException.class,
+                () -> networkService.update(networkId, outdatedNetwork));
 
         assertNotNull(exception, "An exception should have been thrown");
-        
+
         // Verify if it's the direct exception or wrapped
         if (!(exception instanceof ObjectOptimisticLockingFailureException)) {
             assertNotNull(exception.getCause(), "The exception should have a cause");
-            assertTrue(exception.getCause() instanceof ObjectOptimisticLockingFailureException, 
+            assertTrue(exception.getCause() instanceof ObjectOptimisticLockingFailureException,
                     "The cause should be ObjectOptimisticLockingFailureException");
         }
-        
+
         // Verify repository interactions
         verify(networkRepository).findById(networkId);
         verify(networkRepository).save(any(Network.class));

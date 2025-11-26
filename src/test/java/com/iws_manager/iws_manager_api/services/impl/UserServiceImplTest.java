@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +41,7 @@ public class UserServiceImplTest {
         userRepository = mock(UserRepository.class);
         userService = new UserServiceImpl(userRepository, roleRepository);
 
-        sampleUser=new User();
+        sampleUser = new User();
         sampleUser.setId(1L);
         sampleUser.setFirstName(FIRSTNAME_ROGER);
         sampleUser.setLastName("Lopez");
@@ -53,19 +52,20 @@ public class UserServiceImplTest {
 
     @Test
     @DisplayName("Should save user successfully")
-    void creatShouldReturnSavedUser(){
+    void creatShouldReturnSavedUser() {
         // Simulates saving what is passed (do not overwrite the password here)
-     when(userRepository.save(any(User.class))).thenReturn(sampleUser).thenAnswer(invocation -> invocation.getArgument(0));
+        when(userRepository.save(any(User.class))).thenReturn(sampleUser)
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
-     User result = userService.create(sampleUser);
+        User result = userService.create(sampleUser);
 
-     assertNotNull(result);
-     assertEquals(FIRSTNAME_ROGER, result.getFirstName());
-     assertEquals("Lopez", result.getLastName());
-     assertEquals(USERNAME_ROGER, result.getUsername());
-     assertEquals("roger@mail.com", result.getEmail());
+        assertNotNull(result);
+        assertEquals(FIRSTNAME_ROGER, result.getFirstName());
+        assertEquals("Lopez", result.getLastName());
+        assertEquals(USERNAME_ROGER, result.getUsername());
+        assertEquals("roger@mail.com", result.getEmail());
 
-     verify(userRepository, times(1)).save(any(User.class));
+        verify(userRepository, times(1)).save(any(User.class));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class UserServiceImplTest {
 
     @Test
     @DisplayName("Should find user by ID")
-    void findByIdShouldReturnUserWhen(){
+    void findByIdShouldReturnUserWhen() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(sampleUser));
 
         Optional<User> result = userService.findById(1L);
@@ -94,7 +94,7 @@ public class UserServiceImplTest {
         user2.setId(2L);
         user2.setUsername(USERNAME_ANDRES);
 
-        when(userRepository.findAllByOrderByUsernameAsc()).thenReturn(Arrays.asList(sampleUser,user2));
+        when(userRepository.findAllByOrderByUsernameAsc()).thenReturn(Arrays.asList(sampleUser, user2));
 
         List<User> result = userService.findAll();
 
@@ -107,7 +107,7 @@ public class UserServiceImplTest {
     @DisplayName("Should update user successfully including encrypted password")
     void updateShouldReturnUpdatedUser() {
         User updatedDetails = new User();
-        updatedDetails.setUsername(USERNAME_ROGER+" Updated");
+        updatedDetails.setUsername(USERNAME_ROGER + " Updated");
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(sampleUser));
         when(userRepository.save(any(User.class))).thenAnswer(inv -> inv.getArgument(0));
@@ -135,13 +135,13 @@ public class UserServiceImplTest {
         User currentUser = new User();
         currentUser.setId(userId);
         currentUser.setUsername(USERNAME_ROGER);
-        currentUser.setVersion(2L);
+        currentUser.setVersion(2);
         currentUser.setPassword("testRoger123");
 
         User outUser = new User();
         outUser.setId(userId);
         outUser.setUsername(USERNAME_ANDRES);
-        outUser.setVersion(1L);
+        outUser.setVersion(1);
         outUser.setPassword("someNewPassword123");
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(currentUser));
@@ -152,9 +152,9 @@ public class UserServiceImplTest {
 
         assertNotNull(exception, "An exception should have been thrown");
 
-        if (!(exception instanceof  ObjectOptimisticLockingFailureException)) {
+        if (!(exception instanceof ObjectOptimisticLockingFailureException)) {
             assertNotNull(exception.getCause(), "The exception should have a cause");
-            assertTrue(exception.getCause() instanceof  ObjectOptimisticLockingFailureException,
+            assertTrue(exception.getCause() instanceof ObjectOptimisticLockingFailureException,
                     "The cause should be ObjectOptimisticLockingFailureException");
         }
 

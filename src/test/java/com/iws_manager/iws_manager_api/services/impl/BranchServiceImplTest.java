@@ -106,7 +106,7 @@ class BranchServiceImplTest {
         Branch branch2 = new Branch();
         branch2.setId(2L);
         branch2.setName("Economics department");
-        
+
         when(branchRepository.findAll()).thenReturn(Arrays.asList(sampleBranch, branch2));
 
         // Act
@@ -143,8 +143,8 @@ class BranchServiceImplTest {
         when(branchRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(RuntimeException.class, 
-            () -> branchService.update(99L, new Branch()));
+        assertThrows(RuntimeException.class,
+                () -> branchService.update(99L, new Branch()));
         verify(branchRepository, never()).save(any());
     }
 
@@ -155,30 +155,31 @@ class BranchServiceImplTest {
         Branch currentBranch = new Branch();
         currentBranch.setId(branchId);
         currentBranch.setName(branchName);
-        currentBranch.setVersion(2L); // Current version in DB
-        
+        currentBranch.setVersion(2); // Current version in DB
+
         Branch outdatedBranch = new Branch();
         outdatedBranch.setId(branchId);
         outdatedBranch.setName("Doctor");
-        outdatedBranch.setVersion(1L); // Outdated version
+        outdatedBranch.setVersion(1); // Outdated version
 
         when(branchRepository.findById(branchId)).thenReturn(Optional.of(currentBranch));
         when(branchRepository.save(any(Branch.class)))
-            .thenThrow(new ObjectOptimisticLockingFailureException("Concurrent modification detected", 
-                    new ObjectOptimisticLockingFailureException(Branch.class, branchId)));
+                .thenThrow(new ObjectOptimisticLockingFailureException("Concurrent modification detected",
+                        new ObjectOptimisticLockingFailureException(Branch.class, branchId)));
 
         // Execution and verification
-        Exception exception = assertThrows(RuntimeException.class, () -> branchService.update(branchId, outdatedBranch));
+        Exception exception = assertThrows(RuntimeException.class,
+                () -> branchService.update(branchId, outdatedBranch));
 
         assertNotNull(exception, "An exception should have been thrown");
-        
+
         // Verify if it's the direct exception or wrapped
         if (!(exception instanceof ObjectOptimisticLockingFailureException)) {
             assertNotNull(exception.getCause(), "The exception should have a cause");
-            assertTrue(exception.getCause() instanceof ObjectOptimisticLockingFailureException, 
+            assertTrue(exception.getCause() instanceof ObjectOptimisticLockingFailureException,
                     "The cause should be ObjectOptimisticLockingFailureException");
         }
-        
+
         // Verify repository interactions
         verify(branchRepository).findById(branchId);
         verify(branchRepository).save(any(Branch.class));

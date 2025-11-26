@@ -29,13 +29,13 @@ public class AbsenceTypeServiceImplTest {
     private static final String EXISTING_LABEL = "VAC";
     private static final String NEW_LABEL = "NEW_LABEL";
     private static final String DUPLICATE_LABEL = "PERM";
-    
+
     @Mock
     private AbsenceTypeRepository absenceTypeRepository;
-    
+
     @InjectMocks
     private AbsenceTypeServiceImpl absenceTypeService;
-    
+
     private AbsenceType sampleAbsenceType;
     private AbsenceType existingAbsenceType;
 
@@ -107,7 +107,8 @@ public class AbsenceTypeServiceImplTest {
     @DisplayName("Should return all absencetype")
     void findAllShouldReturnAllAbsenceType() {
         AbsenceType absenceType2 = createAbsenceType(2L, PERSONAL_PERMISSION, "PERM");
-        when(absenceTypeRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(sampleAbsenceType, absenceType2));
+        when(absenceTypeRepository.findAllByOrderByNameAsc())
+                .thenReturn(Arrays.asList(sampleAbsenceType, absenceType2));
 
         List<AbsenceType> result = absenceTypeService.findAll();
 
@@ -142,9 +143,9 @@ public class AbsenceTypeServiceImplTest {
     @Test
     @DisplayName("Should throw exception when optimistic locking fails")
     public void updateShouldThrowExceptionWhenOptimisticLockingFails() {
-        existingAbsenceType.setVersion(2L);
+        existingAbsenceType.setVersion(2);
         AbsenceType outdatedAbsenceType = createAbsenceType(ABSENCE_TYPE_ID, PERSONAL_PERMISSION, "PERMX");
-        outdatedAbsenceType.setVersion(1L);
+        outdatedAbsenceType.setVersion(1);
 
         setupFindByIdMock();
         when(absenceTypeRepository.existsByNameAndIdNot(PERSONAL_PERMISSION, ABSENCE_TYPE_ID)).thenReturn(false);
@@ -170,15 +171,15 @@ public class AbsenceTypeServiceImplTest {
         DuplicateResourceException exception = assertThrows(DuplicateResourceException.class,
                 () -> absenceTypeService.update(ABSENCE_TYPE_ID, updatedAbsenceType));
 
-        assertEquals("Absence type duplication with attribute 'name' = '" + PERSONAL_PERMISSION + "'", 
-                    exception.getMessage());
+        assertEquals("Absence type duplication with attribute 'name' = '" + PERSONAL_PERMISSION + "'",
+                exception.getMessage());
 
         verify(absenceTypeRepository).findById(ABSENCE_TYPE_ID);
         verify(absenceTypeRepository).existsByNameAndIdNot(PERSONAL_PERMISSION, ABSENCE_TYPE_ID);
         verify(absenceTypeRepository, never()).existsByLabelAndIdNot(anyString(), anyLong());
         verify(absenceTypeRepository, never()).save(any(AbsenceType.class));
     }
-    
+
     @Test
     @DisplayName("Should throw exception when only label changed and already exists")
     public void updateShouldThrowExceptionWhenOnlyLabelChangedAndAlreadyExists() {
@@ -190,8 +191,8 @@ public class AbsenceTypeServiceImplTest {
         DuplicateResourceException exception = assertThrows(DuplicateResourceException.class,
                 () -> absenceTypeService.update(ABSENCE_TYPE_ID, updatedAbsenceType));
 
-        assertEquals("Absence type duplication with attribute 'label' = '" + DUPLICATE_LABEL + "'", 
-                    exception.getMessage());
+        assertEquals("Absence type duplication with attribute 'label' = '" + DUPLICATE_LABEL + "'",
+                exception.getMessage());
 
         verify(absenceTypeRepository).findById(ABSENCE_TYPE_ID);
         verify(absenceTypeRepository, never()).existsByNameAndIdNot(anyString(), anyLong());
@@ -211,8 +212,10 @@ public class AbsenceTypeServiceImplTest {
         DuplicateResourceException exception = assertThrows(DuplicateResourceException.class,
                 () -> absenceTypeService.update(ABSENCE_TYPE_ID, updatedAbsenceType));
 
-        assertEquals("Absence type duplication with attributes 'name' = '" + PERSONAL_PERMISSION + "' and 'label' = '" + DUPLICATE_LABEL + "'", 
-                    exception.getMessage());
+        assertEquals(
+                "Absence type duplication with attributes 'name' = '" + PERSONAL_PERMISSION + "' and 'label' = '"
+                        + DUPLICATE_LABEL + "'",
+                exception.getMessage());
 
         verify(absenceTypeRepository).findById(ABSENCE_TYPE_ID);
         verify(absenceTypeRepository).existsByNameAndIdNot(PERSONAL_PERMISSION, ABSENCE_TYPE_ID);
@@ -231,8 +234,8 @@ public class AbsenceTypeServiceImplTest {
         DuplicateResourceException exception = assertThrows(DuplicateResourceException.class,
                 () -> absenceTypeService.create(newAbsenceType));
 
-        assertEquals("Absence type duplication with attribute 'name' = '" + PERSONAL_PERMISSION + "'", 
-                    exception.getMessage());
+        assertEquals("Absence type duplication with attribute 'name' = '" + PERSONAL_PERMISSION + "'",
+                exception.getMessage());
 
         verify(absenceTypeRepository).existsByName(PERSONAL_PERMISSION);
         verify(absenceTypeRepository).existsByLabel(NEW_LABEL);
@@ -251,8 +254,8 @@ public class AbsenceTypeServiceImplTest {
         DuplicateResourceException exception = assertThrows(DuplicateResourceException.class,
                 () -> absenceTypeService.create(newAbsenceType));
 
-        assertEquals("Absence type duplication with attribute 'label' = '" + EXISTING_LABEL + "'", 
-                    exception.getMessage());
+        assertEquals("Absence type duplication with attribute 'label' = '" + EXISTING_LABEL + "'",
+                exception.getMessage());
 
         verify(absenceTypeRepository).existsByName(name);
         verify(absenceTypeRepository).existsByLabel(EXISTING_LABEL);
@@ -270,8 +273,10 @@ public class AbsenceTypeServiceImplTest {
         DuplicateResourceException exception = assertThrows(DuplicateResourceException.class,
                 () -> absenceTypeService.create(newAbsenceType));
 
-        assertEquals("Absence type duplication with attributes 'name' = '" + PERSONAL_PERMISSION + "' and 'label' = '" + EXISTING_LABEL + "'", 
-                    exception.getMessage());
+        assertEquals(
+                "Absence type duplication with attributes 'name' = '" + PERSONAL_PERMISSION + "' and 'label' = '"
+                        + EXISTING_LABEL + "'",
+                exception.getMessage());
 
         verify(absenceTypeRepository).existsByName(PERSONAL_PERMISSION);
         verify(absenceTypeRepository).existsByLabel(EXISTING_LABEL);

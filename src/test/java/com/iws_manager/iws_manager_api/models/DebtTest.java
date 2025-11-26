@@ -24,7 +24,7 @@ class DebtTest {
     private static final Integer BILLING_MONTHS = 6;
     private static final Long ENTITY_ID = 1L;
     private static final Long ALTERNATIVE_ID = 2L;
-    private static final Long VERSION = 1L;
+    private static final Integer VERSION = 1;
 
     @Test
     void testBasicDebtProperties() {
@@ -35,7 +35,7 @@ class DebtTest {
         debt.setComment(COMMENT);
         debt.setDebtNo(DEBT_NO);
         debt.setDebtTitle(DEBT_TITLE);
-        
+
         // Assert
         assertEquals(BILLING_END, debt.getBillingEnd());
         assertEquals(BILLING_MONTHS, debt.getBillingMonths());
@@ -51,7 +51,7 @@ class DebtTest {
         debt.setBillingStart(BILLING_START);
         debt.setConfDateLevel1(CONF_DATE_LEVEL1);
         debt.setProjectStart(PROJECT_START);
-        
+
         // Assert
         assertEquals(BILLING_START, debt.getBillingStart());
         assertEquals(CONF_DATE_LEVEL1, debt.getConfDateLevel1());
@@ -65,7 +65,7 @@ class DebtTest {
         debt.setDonation(DONATION);
         debt.setGrossAmount(GROSS_AMOUNT);
         debt.setIwsPercent(IWS_PERCENT);
-        
+
         // Assert
         assertEquals(0, DONATION.compareTo(debt.getDonation()));
         assertEquals(0, GROSS_AMOUNT.compareTo(debt.getGrossAmount()));
@@ -77,13 +77,13 @@ class DebtTest {
     void testAuditFields() {
         // Arrange
         LocalDateTime now = LocalDateTime.now();
-        
+
         // Act
         Debt debt = new Debt();
         debt.setCreatedAt(now);
         debt.setUpdatedAt(now);
         debt.setVersion(VERSION);
-        
+
         // Assert
         assertEquals(now, debt.getCreatedAt());
         assertEquals(now, debt.getUpdatedAt());
@@ -96,7 +96,7 @@ class DebtTest {
         Debt debt1 = createBasicDebt(ENTITY_ID, DEBT_NO);
         Debt debt2 = createBasicDebt(ENTITY_ID, ALTERNATIVE_DEBT_NO);
         Debt debt3 = createBasicDebt(ALTERNATIVE_ID, DEBT_NO);
-        
+
         // Assert
         assertEquals(debt1, debt2);
         assertNotEquals(debt1, debt3);
@@ -110,7 +110,7 @@ class DebtTest {
         Debt debt = new Debt();
         debt.setKmui0838(KMUI_0838);
         debt.setKmui0850(KMUI_0850);
-        
+
         // Assert
         assertEquals(0, KMUI_0838.compareTo(debt.getKmui0838()));
         assertEquals(0, KMUI_0850.compareTo(debt.getKmui0850()));
