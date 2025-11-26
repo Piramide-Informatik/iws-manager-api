@@ -5,6 +5,6 @@ package com.iws_manager.iws_manager_api.dtos.shared;
  * Usado en DTOs de entrada (POST/PUT) para establecer relaciones.
  */
 public record BasicReferenceDTO(
-    Long id,
-    Long version
-) {}
+        Long id,
+        Integer version) {
+}
