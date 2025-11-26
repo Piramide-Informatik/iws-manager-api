@@ -19,6 +19,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Role Service Implementation Tests")
 public class RoleServiceImplTest {
@@ -34,7 +35,7 @@ public class RoleServiceImplTest {
     private Role sampleRole;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         sampleRole = new Role();
         sampleRole.setId(1L);
         sampleRole.setName(FIRST_ROLE);
@@ -67,7 +68,7 @@ public class RoleServiceImplTest {
         Optional<Role> result = roleService.findById(1L);
 
         assertTrue(result.isPresent());
-        assertEquals(FIRST_ROLE,result.get().getName());
+        assertEquals(FIRST_ROLE, result.get().getName());
         verify(roleRepository, times(1)).findById(1L);
     }
 
@@ -136,21 +137,19 @@ public class RoleServiceImplTest {
         Role currentRole = new Role();
         currentRole.setId(roleId);
         currentRole.setName(FIRST_ROLE);
-        currentRole.setVersion(2L);
+        currentRole.setVersion(2);
 
         Role outdatedRole = new Role();
         outdatedRole.setId(roleId);
         outdatedRole.setName(SECOND_ROLE);
-        outdatedRole.setVersion(1L);
+        outdatedRole.setVersion(1);
 
         when(roleRepository.findById(roleId)).thenReturn(Optional.of(currentRole));
         when(roleRepository.save(any(Role.class)))
                 .thenThrow(new ObjectOptimisticLockingFailureException("Concurrent modification detected",
-                         new ObjectOptimisticLockingFailureException(Role.class, roleId)));
+                        new ObjectOptimisticLockingFailureException(Role.class, roleId)));
 
-        Exception exception = assertThrows(RuntimeException.class, () ->
-           roleService.update(roleId, outdatedRole)
-        );
+        Exception exception = assertThrows(RuntimeException.class, () -> roleService.update(roleId, outdatedRole));
 
         assertNotNull(exception, "An exception should have been thrown");
 

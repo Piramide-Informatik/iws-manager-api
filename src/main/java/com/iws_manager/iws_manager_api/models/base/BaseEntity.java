@@ -19,27 +19,33 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Base entity class that provides common fields and behavior for all JPA entities in the application.
+ * Base entity class that provides common fields and behavior for all JPA
+ * entities in the application.
  * <p>
- * This abstract class serves as the foundation for all domain entities, including:
+ * This abstract class serves as the foundation for all domain entities,
+ * including:
  * <ul>
- *   <li>Auto-generated primary key (ID)</li>
- *   <li>Automatic audit tracking (creation and modification timestamps)</li>
- *   <li>Common JPA configuration</li>
+ * <li>Auto-generated primary key (ID)</li>
+ * <li>Automatic audit tracking (creation and modification timestamps)</li>
+ * <li>Common JPA configuration</li>
  * </ul>
  * 
- * <p>Subclasses should extend this class and add their specific domain fields and relationships.
+ * <p>
+ * Subclasses should extend this class and add their specific domain fields and
+ * relationships.
  *
- * @MappedSuperclass Indicates that this class provides mapping information for its subclasses,
+ * @MappedSuperclass Indicates that this class provides mapping information for
+ *                   its subclasses,
  *                   but is not an entity itself.
- * @EntityListeners Enables automatic auditing through Spring Data JPA's auditing features.
+ * @EntityListeners Enables automatic auditing through Spring Data JPA's
+ *                  auditing features.
  */
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public abstract class BaseEntity {
 
     /**
@@ -71,18 +77,20 @@ public abstract class BaseEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-     /**
+    /**
      * Version number for optimistic locking control.
      * <p>
      * This field is automatically managed by JPA to implement optimistic locking.
      * It gets incremented automatically on each update to the entity, preventing
      * concurrent modifications (lost updates).
      * 
-     * <p>When an entity is updated, the version in memory is compared with the version
-     * in the database. If they differ, an OptimisticLockException is thrown, indicating
+     * <p>
+     * When an entity is updated, the version in memory is compared with the version
+     * in the database. If they differ, an OptimisticLockException is thrown,
+     * indicating
      * the entity was modified by another transaction.
      */
     @Version
-    @Column(name = "version", nullable = false, columnDefinition = "bigint default 0")
-    private Long version;
+    @Column(name = "version", nullable = false, columnDefinition = "int default 1")
+    private Integer version;
 }
