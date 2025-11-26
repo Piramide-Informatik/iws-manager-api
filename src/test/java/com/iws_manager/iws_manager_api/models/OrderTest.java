@@ -21,7 +21,7 @@ class OrderTest {
         // Arrange
         String acronym = "PRJ-X";
         LocalDate approvalDate = LocalDate.of(2023, 7, 1);
-        
+
         // Act
         Order order = new Order();
         order.setAcronym(acronym);
@@ -30,7 +30,7 @@ class OrderTest {
         order.setOrderDate(ORDER_DATE);
         order.setApprovalDate(approvalDate);
         order.setOrderValue(ORDER_VALUE);
-        
+
         // Assert
         assertEquals(acronym, order.getAcronym());
         assertEquals(ORDER_TITLE, order.getOrderTitle());
@@ -46,16 +46,16 @@ class OrderTest {
         Order order = new Order();
         order.setOrderTitle(ORDER_TITLE);
         LocalDateTime now = LocalDateTime.now();
-        
+
         // Act
         order.setCreatedAt(now);
         order.setUpdatedAt(now);
-        order.setVersion(1L);
-        
+        order.setVersion(1);
+
         // Assert
         assertEquals(now, order.getCreatedAt());
         assertEquals(now, order.getUpdatedAt());
-        assertEquals(1L, order.getVersion());
+        assertEquals(1, order.getVersion());
     }
 
     @Test
@@ -64,9 +64,9 @@ class OrderTest {
         Order order1 = createBasicOrder(ENTITY_ID, ORDER_NO, ORDER_TITLE);
         Order order2 = createBasicOrder(ENTITY_ID, 1002, "Different Title");
         Order order3 = createBasicOrder(ALTERNATIVE_ID, ORDER_NO, ORDER_TITLE);
-        
+
         // Assert
-        assertEquals(order1, order2);  // Iguales por ID
+        assertEquals(order1, order2); // Iguales por ID
         assertNotEquals(order1, order3); // Diferentes por ID
         assertEquals(order1.hashCode(), order2.hashCode());
         assertNotEquals(order1.hashCode(), order3.hashCode());
@@ -77,12 +77,12 @@ class OrderTest {
         // Arrange
         BigDecimal fixCommission = new BigDecimal("12.34");
         BigDecimal iwsProvision = new BigDecimal("1234.56");
-        
+
         // Act
         Order order = new Order();
         order.setFixCommission(fixCommission);
         order.setIwsProvision(iwsProvision);
-        
+
         // Assert
         assertEquals(2, order.getFixCommission().scale());
         assertEquals(2, order.getIwsProvision().scale());
@@ -95,12 +95,12 @@ class OrderTest {
         // Arrange
         LocalDate signatureDate = LocalDate.of(2023, 5, 10);
         LocalDate nextDeptDate = LocalDate.of(2023, 8, 20);
-        
+
         // Act
         Order order = new Order();
         order.setSignatureDate(signatureDate);
         order.setNextDeptDate(nextDeptDate);
-        
+
         // Assert
         assertEquals(signatureDate, order.getSignatureDate());
         assertEquals(nextDeptDate, order.getNextDeptDate());
@@ -119,15 +119,14 @@ class OrderTest {
         CostType type = new CostType();
         type.setId(1L);
         type.setType("Standard");
-        
+
         Order order = new Order();
         order.setOrderNo(1001);
         order.setOrderType(type);
-        
+
         assertAll(
-            () -> assertEquals(1001, order.getOrderNo()),
-            () -> assertEquals(1L, order.getOrderType().getId()),
-            () -> assertEquals("Standard", order.getOrderType().getType())
-        );
+                () -> assertEquals(1001, order.getOrderNo()),
+                () -> assertEquals(1L, order.getOrderType().getId()),
+                () -> assertEquals("Standard", order.getOrderType().getType()));
     }
 }

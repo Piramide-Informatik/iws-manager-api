@@ -52,7 +52,7 @@ class SystemFunctionServiceImplTest {
 
     @Test
     @DisplayName("Should save SystemFunction successfully")
-    void creatShouldReturnSavedSystemFunction(){
+    void creatShouldReturnSavedSystemFunction() {
         when(systemModuleRepository.findById(1L)).thenReturn(Optional.of(sampleSystemFunction.getModule()));
         when(systemFunctionRepository.save(any(SystemFunction.class))).thenReturn(sampleSystemFunction);
 
@@ -90,7 +90,7 @@ class SystemFunctionServiceImplTest {
         systemFunction2.setId(2L);
         systemFunction2.setFunctionName(FUNCTION_A);
 
-        when(systemFunctionRepository.findAll()).thenReturn(Arrays.asList(sampleSystemFunction,systemFunction2));
+        when(systemFunctionRepository.findAll()).thenReturn(Arrays.asList(sampleSystemFunction, systemFunction2));
 
         List<SystemFunction> result = systemFunctionService.findAll();
 
@@ -102,7 +102,7 @@ class SystemFunctionServiceImplTest {
     @DisplayName("Should update SystemFunction successfully")
     void updateShouldReturnUpdatedSystemFunction() {
         SystemFunction updatedDetails = new SystemFunction();
-        updatedDetails.setFunctionName(FUNCTION_A+" Updated");
+        updatedDetails.setFunctionName(FUNCTION_A + " Updated");
 
         when(systemFunctionRepository.findById(1L)).thenReturn(Optional.of(sampleSystemFunction));
         when(systemFunctionRepository.save(any(SystemFunction.class))).thenAnswer(inv -> inv.getArgument(0));
@@ -130,25 +130,26 @@ class SystemFunctionServiceImplTest {
         SystemFunction currentSystemFunction = new SystemFunction();
         currentSystemFunction.setId(systemFunctionId);
         currentSystemFunction.setFunctionName(FUNCTION_A);
-        currentSystemFunction.setVersion(2L);
+        currentSystemFunction.setVersion(2);
 
         SystemFunction outSystemFunction = new SystemFunction();
         outSystemFunction.setId(systemFunctionId);
         outSystemFunction.setFunctionName(FUNCTION_B);
-        outSystemFunction.setVersion(1L);
+        outSystemFunction.setVersion(1);
 
         when(systemFunctionRepository.findById(systemFunctionId)).thenReturn(Optional.of(currentSystemFunction));
         when(systemFunctionRepository.save(any(SystemFunction.class)))
                 .thenThrow(new ObjectOptimisticLockingFailureException("Concurrent modification detected",
                         new ObjectOptimisticLockingFailureException(SystemFunction.class, systemFunctionId)));
 
-        Exception exception = assertThrows(RuntimeException.class, () -> systemFunctionService.update(systemFunctionId,outSystemFunction));
+        Exception exception = assertThrows(RuntimeException.class,
+                () -> systemFunctionService.update(systemFunctionId, outSystemFunction));
 
         assertNotNull(exception, "An exception should have been thrown");
 
-        if (!(exception instanceof  ObjectOptimisticLockingFailureException)) {
+        if (!(exception instanceof ObjectOptimisticLockingFailureException)) {
             assertNotNull(exception.getCause(), "The exception should have a cause");
-            assertTrue(exception.getCause() instanceof  ObjectOptimisticLockingFailureException,
+            assertTrue(exception.getCause() instanceof ObjectOptimisticLockingFailureException,
                     "The cause should be ObjectOptimisticLockingFailureException");
         }
 

@@ -33,28 +33,28 @@ public class ContractorServiceImplTest {
 
     private Contractor sampleContractor;
     private Customer sampleCustomer;
-    private static final String CONTRACTOR_LABEL = "Label"; 
+    private static final String CONTRACTOR_LABEL = "Label";
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         sampleContractor = new Contractor();
         sampleContractor.setId(1L);
         sampleContractor.setName("SRL");
         sampleContractor.setLabel(CONTRACTOR_LABEL);
         sampleContractor.setCustomer(sampleCustomer);
     }
-    
+
     @Test
     @DisplayName("Should save contractor successfully")
-    void createShouldReturnSavedContractor(){
-        // Arrange 
+    void createShouldReturnSavedContractor() {
+        // Arrange
         Customer customer = new Customer();
         customer.setId(1L);
         sampleContractor.setCustomer(customer);
         sampleContractor.setLabel(CONTRACTOR_LABEL);
 
         when(contractorRepository.existsByLabelIgnoreCaseAndCustomerId(eq(CONTRACTOR_LABEL), eq(1L)))
-            .thenReturn(false);
+                .thenReturn(false);
         when(contractorRepository.save(any(Contractor.class))).thenReturn(sampleContractor);
 
         // Act
@@ -69,55 +69,55 @@ public class ContractorServiceImplTest {
 
     @Test
     @DisplayName("Should throw exception when creating null contractor")
-    void createShouldThrowExceptionWhenTitleIsNull(){
-        assertThrows(IllegalArgumentException.class,()-> contractorService.create(null));
+    void createShouldThrowExceptionWhenTitleIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> contractorService.create(null));
         verify(contractorRepository, never()).save(any());
     }
 
     @Test
     @DisplayName("Should find contractor by ID")
-    void findByIdShouldReturnContractorWhenExists(){
-        //Arrage
+    void findByIdShouldReturnContractorWhenExists() {
+        // Arrage
         when(contractorRepository.findById(1L)).thenReturn(Optional.of(sampleContractor));
 
-        //Act
+        // Act
         Optional<Contractor> result = contractorService.findById(1L);
 
-        //Assert
+        // Assert
         assertTrue(result.isPresent());
         assertEquals("SRL", result.get().getName());
-        verify(contractorRepository,times(1)).findById(1L);
+        verify(contractorRepository, times(1)).findById(1L);
     }
 
     @Test
     @DisplayName("Should throw exception when finding with null ID")
-    void findByIdShouldThrowExceptionWhenIdIsNull(){
+    void findByIdShouldThrowExceptionWhenIdIsNull() {
         assertThrows(IllegalArgumentException.class, () -> contractorService.findById(null));
         verify(contractorRepository, never()).findById(any());
     }
 
     @Test
     @DisplayName("Should return all contractors")
-    void findAllShouldReturnAllContractors(){
-        //Arrange
+    void findAllShouldReturnAllContractors() {
+        // Arrange
         Contractor contractor2 = new Contractor();
         contractor2.setId(2L);
         contractor2.setName("LRS");
 
-        when(contractorRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(sampleContractor,contractor2));
+        when(contractorRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(sampleContractor, contractor2));
 
-        //Act
+        // Act
         List<Contractor> result = contractorService.findAll();
 
-        //Assert
+        // Assert
         assertEquals(2, result.size());
         verify(contractorRepository, times(1)).findAllByOrderByNameAsc();
     }
 
     @Test
     @DisplayName("Should return all contractor ordered by name")
-    void findAllShouldReturnAllContractorOrderedByName(){
-        //Arrange
+    void findAllShouldReturnAllContractorOrderedByName() {
+        // Arrange
         Contractor contractor1 = new Contractor();
         contractor1.setId(1L);
         contractor1.setName("A");
@@ -126,26 +126,27 @@ public class ContractorServiceImplTest {
         contractor2.setId(2L);
         contractor2.setName("D");
 
-        //Mockea el metodo que realmente usa el servicio
+        // Mockea el metodo que realmente usa el servicio
         when(contractorRepository.findAllByOrderByNameAsc())
-                .thenReturn(List.of(contractor1,contractor2));
+                .thenReturn(List.of(contractor1, contractor2));
 
-        //Act
+        // Act
         List<Contractor> result = contractorService.findAll();
 
-        //Assert
+        // Assert
         assertEquals(2, result.size());
-        assertEquals("A", result.get(0).getName());//verfica el orden
+        assertEquals("A", result.get(0).getName());// verfica el orden
         assertEquals("D", result.get(1).getName());
-        verify(contractorRepository, times(1)).findAllByOrderByNameAsc();//Verfica el metodo correcto
+        verify(contractorRepository, times(1)).findAllByOrderByNameAsc();// Verfica el metodo correcto
     }
+
     @Test
     @DisplayName("Should throw exception when updating non-existent title")
-    void updateShouldThrowExceptionWhenContractorNotFound(){
-        //Arrange
+    void updateShouldThrowExceptionWhenContractorNotFound() {
+        // Arrange
         when(contractorRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        //Act & Assert
+        // Act & Assert
         assertThrows(RuntimeException.class,
                 () -> contractorService.update(99L, new Contractor()));
         verify(contractorRepository, never()).save(any());
@@ -155,23 +156,23 @@ public class ContractorServiceImplTest {
     public void updateShouldThrowExceptionWhenOptimisticLockingFails() {
         // Setup
         Long contractorId = 1L;
-        
+
         Customer customer = new Customer();
         customer.setId(1L);
-        
+
         Contractor currentContractor = new Contractor();
         currentContractor.setId(contractorId);
         currentContractor.setName("SRL");
         currentContractor.setLabel("LABEL");
         currentContractor.setCustomer(customer);
-        currentContractor.setVersion(2L);
+        currentContractor.setVersion(2);
 
         Contractor outdatedContractor = new Contractor();
         outdatedContractor.setId(contractorId);
-        outdatedContractor.setName("LRS"); 
-        outdatedContractor.setLabel("LABEL"); 
+        outdatedContractor.setName("LRS");
+        outdatedContractor.setLabel("LABEL");
         outdatedContractor.setCustomer(customer);
-        outdatedContractor.setVersion(1L);
+        outdatedContractor.setVersion(1);
 
         when(contractorRepository.findById(contractorId)).thenReturn(Optional.of(currentContractor));
         when(contractorRepository.save(any(Contractor.class)))
@@ -181,7 +182,8 @@ public class ContractorServiceImplTest {
                 () -> contractorService.update(contractorId, outdatedContractor));
 
         verify(contractorRepository).findById(contractorId);
-        verify(contractorRepository, never()).existsByLabelIgnoreCaseAndCustomerIdAndIdNot(anyString(), anyLong(), anyLong());
+        verify(contractorRepository, never()).existsByLabelIgnoreCaseAndCustomerIdAndIdNot(anyString(), anyLong(),
+                anyLong());
         verify(contractorRepository).save(any(Contractor.class));
     }
 }

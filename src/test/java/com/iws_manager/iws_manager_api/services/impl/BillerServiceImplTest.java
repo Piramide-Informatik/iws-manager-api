@@ -106,7 +106,7 @@ class BillerServiceImplTest {
         Biller biller2 = new Biller();
         biller2.setId(2L);
         biller2.setName("New Biller");
-        
+
         when(billerRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(sampleBiller, biller2));
 
         // Act
@@ -143,8 +143,8 @@ class BillerServiceImplTest {
         when(billerRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(RuntimeException.class, 
-            () -> billerService.update(99L, new Biller()));
+        assertThrows(RuntimeException.class,
+                () -> billerService.update(99L, new Biller()));
         verify(billerRepository, never()).save(any());
     }
 
@@ -155,30 +155,31 @@ class BillerServiceImplTest {
         Biller currentBiller = new Biller();
         currentBiller.setId(billerId);
         currentBiller.setName(billerName);
-        currentBiller.setVersion(2L); // Current version in DB
-        
+        currentBiller.setVersion(2); // Current version in DB
+
         Biller outdatedBiller = new Biller();
         outdatedBiller.setId(billerId);
         outdatedBiller.setName("Doctor");
-        outdatedBiller.setVersion(1L); // Outdated version
+        outdatedBiller.setVersion(1); // Outdated version
 
         when(billerRepository.findById(billerId)).thenReturn(Optional.of(currentBiller));
         when(billerRepository.save(any(Biller.class)))
-            .thenThrow(new ObjectOptimisticLockingFailureException("Concurrent modification detected", 
-                    new ObjectOptimisticLockingFailureException(Biller.class, billerId)));
+                .thenThrow(new ObjectOptimisticLockingFailureException("Concurrent modification detected",
+                        new ObjectOptimisticLockingFailureException(Biller.class, billerId)));
 
         // Execution and verification
-        Exception exception = assertThrows(RuntimeException.class, () -> billerService.update(billerId, outdatedBiller));
+        Exception exception = assertThrows(RuntimeException.class,
+                () -> billerService.update(billerId, outdatedBiller));
 
         assertNotNull(exception, "An exception should have been thrown");
-        
+
         // Verify if it's the direct exception or wrapped
         if (!(exception instanceof ObjectOptimisticLockingFailureException)) {
             assertNotNull(exception.getCause(), "The exception should have a cause");
-            assertTrue(exception.getCause() instanceof ObjectOptimisticLockingFailureException, 
+            assertTrue(exception.getCause() instanceof ObjectOptimisticLockingFailureException,
                     "The cause should be ObjectOptimisticLockingFailureException");
         }
-        
+
         // Verify repository interactions
         verify(billerRepository).findById(billerId);
         verify(billerRepository).save(any(Biller.class));

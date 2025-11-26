@@ -22,8 +22,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("SystemModule Implementation Tests")
-public
-class SystemModuleServiceImplTest {
+public class SystemModuleServiceImplTest {
     private static final String MODULE_A = "module A";
     private static final String MODULE_B = "module B";
 
@@ -43,7 +42,7 @@ class SystemModuleServiceImplTest {
 
     @Test
     @DisplayName("Should save SystemModule successfully")
-    void creatShouldReturnSavedSystemModule(){
+    void creatShouldReturnSavedSystemModule() {
         when(systemModuleRepository.save(any(SystemModule.class))).thenReturn(sampleSystemModule);
 
         SystemModule result = systemModuleService.create(sampleSystemModule);
@@ -80,7 +79,8 @@ class SystemModuleServiceImplTest {
         systemModule2.setId(2L);
         systemModule2.setName(MODULE_B);
 
-        when(systemModuleRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(sampleSystemModule,systemModule2));
+        when(systemModuleRepository.findAllByOrderByNameAsc())
+                .thenReturn(Arrays.asList(sampleSystemModule, systemModule2));
 
         List<SystemModule> result = systemModuleService.findAll();
 
@@ -92,7 +92,7 @@ class SystemModuleServiceImplTest {
     @DisplayName("Should update SystemModule successfully")
     void updateShouldReturnUpdatedSystemModule() {
         SystemModule updatedDetails = new SystemModule();
-        updatedDetails.setName(MODULE_A+" Updated");
+        updatedDetails.setName(MODULE_A + " Updated");
 
         when(systemModuleRepository.findById(1L)).thenReturn(Optional.of(sampleSystemModule));
         when(systemModuleRepository.save(any(SystemModule.class))).thenAnswer(inv -> inv.getArgument(0));
@@ -120,25 +120,26 @@ class SystemModuleServiceImplTest {
         SystemModule currentSystemModule = new SystemModule();
         currentSystemModule.setId(systemModuleId);
         currentSystemModule.setName(MODULE_A);
-        currentSystemModule.setVersion(2L);
+        currentSystemModule.setVersion(2);
 
         SystemModule outSystemModule = new SystemModule();
         outSystemModule.setId(systemModuleId);
         outSystemModule.setName(MODULE_B);
-        outSystemModule.setVersion(1L);
+        outSystemModule.setVersion(1);
 
         when(systemModuleRepository.findById(systemModuleId)).thenReturn(Optional.of(currentSystemModule));
         when(systemModuleRepository.save(any(SystemModule.class)))
                 .thenThrow(new ObjectOptimisticLockingFailureException("Concurrent modification detected",
                         new ObjectOptimisticLockingFailureException(ApprovalStatus.class, systemModuleId)));
 
-        Exception exception = assertThrows(RuntimeException.class, () -> systemModuleService.update(systemModuleId,outSystemModule));
+        Exception exception = assertThrows(RuntimeException.class,
+                () -> systemModuleService.update(systemModuleId, outSystemModule));
 
         assertNotNull(exception, "An exception should have been thrown");
 
-        if (!(exception instanceof  ObjectOptimisticLockingFailureException)) {
+        if (!(exception instanceof ObjectOptimisticLockingFailureException)) {
             assertNotNull(exception.getCause(), "The exception should have a cause");
-            assertTrue(exception.getCause() instanceof  ObjectOptimisticLockingFailureException,
+            assertTrue(exception.getCause() instanceof ObjectOptimisticLockingFailureException,
                     "The cause should be ObjectOptimisticLockingFailureException");
         }
 

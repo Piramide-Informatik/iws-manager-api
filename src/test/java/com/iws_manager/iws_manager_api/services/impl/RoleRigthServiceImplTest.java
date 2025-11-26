@@ -46,13 +46,11 @@ public class RoleRigthServiceImplTest {
     private Role sampleRole;
     private SystemFunction sampleFunciton;
 
-
     @BeforeEach
     void setUp() {
         sampleRole = new Role();
         sampleRole.setId(1L);
         sampleRole.setName("Admin");
-
 
         sampleFunciton = new SystemFunction();
         sampleFunciton.setId(1L);
@@ -67,7 +65,7 @@ public class RoleRigthServiceImplTest {
 
     @Test
     @DisplayName("Should save approvalstatus successfully")
-    void creatShouldReturnSavedApprovalStatus(){
+    void creatShouldReturnSavedApprovalStatus() {
 
         when(roleRepository.findById(1L)).thenReturn(Optional.of(sampleRole));
         when(systemFunctionRepository.findById(1L)).thenReturn(Optional.of(sampleFunciton));
@@ -89,7 +87,6 @@ public class RoleRigthServiceImplTest {
 
     }
 
-
     @Test
     @DisplayName("Should find roleRight by ID")
     void findByIdShouldReturnRoleRightWhen() {
@@ -109,7 +106,7 @@ public class RoleRigthServiceImplTest {
         roleRight2.setId(2L);
         roleRight2.setAccessRight(NUM_ACCESSB);
 
-        when(roleRightRepository.findAll()).thenReturn(Arrays.asList(sampleRoleRight,roleRight2));
+        when(roleRightRepository.findAll()).thenReturn(Arrays.asList(sampleRoleRight, roleRight2));
 
         List<RoleRight> result = roleRightService.findAll();
 
@@ -149,25 +146,26 @@ public class RoleRigthServiceImplTest {
         RoleRight currentRoleRight = new RoleRight();
         currentRoleRight.setId(roleRightId);
         currentRoleRight.setAccessRight(NUM_ACCESSA);
-        currentRoleRight.setVersion(2L);
+        currentRoleRight.setVersion(2);
 
         RoleRight outRoleRight = new RoleRight();
         outRoleRight.setId(roleRightId);
         outRoleRight.setAccessRight(NUM_ACCESSB);
-        outRoleRight.setVersion(1L);
+        outRoleRight.setVersion(1);
 
         when(roleRightRepository.findById(roleRightId)).thenReturn(Optional.of(currentRoleRight));
         when(roleRightRepository.save(any(RoleRight.class)))
                 .thenThrow(new ObjectOptimisticLockingFailureException("Concurrent modification detected",
                         new ObjectOptimisticLockingFailureException(ApprovalStatus.class, roleRightId)));
 
-        Exception exception = assertThrows(RuntimeException.class, () -> roleRightService.update(roleRightId,outRoleRight));
+        Exception exception = assertThrows(RuntimeException.class,
+                () -> roleRightService.update(roleRightId, outRoleRight));
 
         assertNotNull(exception, "An exception should have been thrown");
 
-        if (!(exception instanceof  ObjectOptimisticLockingFailureException)) {
+        if (!(exception instanceof ObjectOptimisticLockingFailureException)) {
             assertNotNull(exception.getCause(), "The exception should have a cause");
-            assertTrue(exception.getCause() instanceof  ObjectOptimisticLockingFailureException,
+            assertTrue(exception.getCause() instanceof ObjectOptimisticLockingFailureException,
                     "The cause should be ObjectOptimisticLockingFailureException");
         }
 

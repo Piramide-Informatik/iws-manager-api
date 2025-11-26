@@ -1,6 +1,5 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
-
 import com.iws_manager.iws_manager_api.models.ApprovalStatus;
 import com.iws_manager.iws_manager_api.repositories.ApprovalStatusRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +42,7 @@ public class ApprovalStatusImplTest {
 
     @Test
     @DisplayName("Should save approvalstatus successfully")
-    void creatShouldReturnSavedApprovalStatus(){
+    void creatShouldReturnSavedApprovalStatus() {
         when(approvalStatusRepository.save(any(ApprovalStatus.class))).thenReturn(sampleApprovalStatus);
 
         ApprovalStatus result = approvalStatusService.create(sampleApprovalStatus);
@@ -60,6 +59,7 @@ public class ApprovalStatusImplTest {
         verify(approvalStatusRepository, never()).save(any());
 
     }
+
     @Test
     @DisplayName("Should find approvalStatus by ID")
     void findByIdShouldReturnApprovalStatusWhen() {
@@ -79,7 +79,7 @@ public class ApprovalStatusImplTest {
         approvalStatus2.setId(2L);
         approvalStatus2.setStatus(NAME_REJECTED);
 
-        when(approvalStatusRepository.findAll()).thenReturn(Arrays.asList(sampleApprovalStatus,approvalStatus2));
+        when(approvalStatusRepository.findAll()).thenReturn(Arrays.asList(sampleApprovalStatus, approvalStatus2));
 
         List<ApprovalStatus> result = approvalStatusService.findAll();
 
@@ -91,7 +91,7 @@ public class ApprovalStatusImplTest {
     @DisplayName("Should update approvalstatus successfully")
     void updateShouldReturnUpdatedApprovalStatus() {
         ApprovalStatus updatedDetails = new ApprovalStatus();
-        updatedDetails.setStatus(NAME_APPROVED+" Updated");
+        updatedDetails.setStatus(NAME_APPROVED + " Updated");
 
         when(approvalStatusRepository.findById(1L)).thenReturn(Optional.of(sampleApprovalStatus));
         when(approvalStatusRepository.save(any(ApprovalStatus.class))).thenAnswer(inv -> inv.getArgument(0));
@@ -119,25 +119,26 @@ public class ApprovalStatusImplTest {
         ApprovalStatus currentApprovalStatus = new ApprovalStatus();
         currentApprovalStatus.setId(approvalStatusId);
         currentApprovalStatus.setStatus(NAME_APPROVED);
-        currentApprovalStatus.setVersion(2L);
+        currentApprovalStatus.setVersion(2);
 
         ApprovalStatus outApprovalStatus = new ApprovalStatus();
         outApprovalStatus.setId(approvalStatusId);
         outApprovalStatus.setStatus(NAME_REJECTED);
-        outApprovalStatus.setVersion(1L);
+        outApprovalStatus.setVersion(1);
 
         when(approvalStatusRepository.findById(approvalStatusId)).thenReturn(Optional.of(currentApprovalStatus));
         when(approvalStatusRepository.save(any(ApprovalStatus.class)))
                 .thenThrow(new ObjectOptimisticLockingFailureException("Concurrent modification detected",
                         new ObjectOptimisticLockingFailureException(ApprovalStatus.class, approvalStatusId)));
 
-        Exception exception = assertThrows(RuntimeException.class, () -> approvalStatusService.update(approvalStatusId,outApprovalStatus));
+        Exception exception = assertThrows(RuntimeException.class,
+                () -> approvalStatusService.update(approvalStatusId, outApprovalStatus));
 
         assertNotNull(exception, "An exception should have been thrown");
 
-        if (!(exception instanceof  ObjectOptimisticLockingFailureException)) {
+        if (!(exception instanceof ObjectOptimisticLockingFailureException)) {
             assertNotNull(exception.getCause(), "The exception should have a cause");
-            assertTrue(exception.getCause() instanceof  ObjectOptimisticLockingFailureException,
+            assertTrue(exception.getCause() instanceof ObjectOptimisticLockingFailureException,
                     "The cause should be ObjectOptimisticLockingFailureException");
         }
 

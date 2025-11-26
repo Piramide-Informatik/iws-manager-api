@@ -1,6 +1,5 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
-
 import com.iws_manager.iws_manager_api.models.PublicHoliday;
 import com.iws_manager.iws_manager_api.repositories.PublicHolidayRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,10 +18,11 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 @DisplayName("PublicHoliday Service Implementation Tests")
 public class PublicHolidayServiceImplTest {
-    private static final String NAME_INDAY= "Independence Day";
+    private static final String NAME_INDAY = "Independence Day";
     private static final String NAME_COCHR = "Corpus Christi";
 
     @Mock
@@ -41,7 +41,7 @@ public class PublicHolidayServiceImplTest {
 
     @Test
     @DisplayName("Should save publicholiday successfully")
-    void creatShouldReturnSavedPublicHoliday(){
+    void creatShouldReturnSavedPublicHoliday() {
         when(publicHolidayRepository.save(any(PublicHoliday.class))).thenReturn(samplePublicHoliday);
 
         PublicHoliday result = publicHolidayService.create(samplePublicHoliday);
@@ -78,7 +78,8 @@ public class PublicHolidayServiceImplTest {
         publicHoliday2.setId(2L);
         publicHoliday2.setName(NAME_INDAY);
 
-        when(publicHolidayRepository.findAllByOrderByNameAsc()).thenReturn(Arrays.asList(samplePublicHoliday,publicHoliday2));
+        when(publicHolidayRepository.findAllByOrderByNameAsc())
+                .thenReturn(Arrays.asList(samplePublicHoliday, publicHoliday2));
 
         List<PublicHoliday> result = publicHolidayService.findAll();
 
@@ -90,7 +91,7 @@ public class PublicHolidayServiceImplTest {
     @DisplayName("Should update PublicHoliday successfully")
     void updateShouldReturnUpdatedPublicHoliday() {
         PublicHoliday updatedDetails = new PublicHoliday();
-        updatedDetails.setName(NAME_INDAY+" Updated");
+        updatedDetails.setName(NAME_INDAY + " Updated");
 
         when(publicHolidayRepository.findById(1L)).thenReturn(Optional.of(samplePublicHoliday));
         when(publicHolidayRepository.save(any(PublicHoliday.class))).thenAnswer(inv -> inv.getArgument(0));
@@ -118,25 +119,26 @@ public class PublicHolidayServiceImplTest {
         PublicHoliday currentPublicHoliday = new PublicHoliday();
         currentPublicHoliday.setId(publicHolidayId);
         currentPublicHoliday.setName(NAME_INDAY);
-        currentPublicHoliday.setVersion(2L);
+        currentPublicHoliday.setVersion(2);
 
         PublicHoliday outPublicHoliday = new PublicHoliday();
         outPublicHoliday.setId(publicHolidayId);
         outPublicHoliday.setName(NAME_COCHR);
-        outPublicHoliday.setVersion(1L);
+        outPublicHoliday.setVersion(1);
 
         when(publicHolidayRepository.findById(publicHolidayId)).thenReturn(Optional.of(currentPublicHoliday));
         when(publicHolidayRepository.save(any(PublicHoliday.class)))
                 .thenThrow(new ObjectOptimisticLockingFailureException("Concurrent modification detected",
                         new ObjectOptimisticLockingFailureException(PublicHoliday.class, publicHolidayId)));
 
-        Exception exception = assertThrows(RuntimeException.class, () -> publicHolidayService.update(publicHolidayId,outPublicHoliday));
+        Exception exception = assertThrows(RuntimeException.class,
+                () -> publicHolidayService.update(publicHolidayId, outPublicHoliday));
 
         assertNotNull(exception, "An exception should have been thrown");
 
-        if (!(exception instanceof  ObjectOptimisticLockingFailureException)) {
+        if (!(exception instanceof ObjectOptimisticLockingFailureException)) {
             assertNotNull(exception.getCause(), "The exception should have a cause");
-            assertTrue(exception.getCause() instanceof  ObjectOptimisticLockingFailureException,
+            assertTrue(exception.getCause() instanceof ObjectOptimisticLockingFailureException,
                     "The cause should be ObjectOptimisticLockingFailureException");
         }
 
