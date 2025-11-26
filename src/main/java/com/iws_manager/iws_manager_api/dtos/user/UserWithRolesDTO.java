@@ -9,6 +9,7 @@ public record UserWithRolesDTO(
         String username,
         String firstName,
         String lastName,
+        String password,
         boolean active,
         String email,
         List<RoleDTO> roles

@@ -19,6 +19,7 @@ public class UserMapper {
                 user.getUsername(),
                 user.getFirstName(),
                 user.getLastName(),
+                user.getEmail(),
                 user.isActive(),
                 user.getEmail()
         );
@@ -30,6 +31,7 @@ public class UserMapper {
                 user.getUsername(),
                 user.getFirstName(),
                 user.getLastName(),
+                user.getPassword(),
                 user.isActive(),
                 user.getEmail(),
                 user.getRoles().stream()
@@ -54,6 +56,7 @@ public class UserMapper {
         if (dto.firstName() != null) user.setFirstName(dto.firstName());
         if (dto.lastName() != null) user.setLastName(dto.lastName());
         if (dto.email() != null) user.setEmail(dto.email());
+        if (dto.password() != null) user.setPassword(dto.password());
         if (dto.active() != null) user.setActive(dto.active());
     }
 }
