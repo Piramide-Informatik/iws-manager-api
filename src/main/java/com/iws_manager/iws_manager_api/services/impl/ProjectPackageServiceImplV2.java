@@ -8,7 +8,6 @@ import com.iws_manager.iws_manager_api.models.Project;
 import com.iws_manager.iws_manager_api.models.ProjectPackage;
 import com.iws_manager.iws_manager_api.repositories.ProjectPackageRepository;
 import com.iws_manager.iws_manager_api.repositories.ProjectRepository;
-import com.iws_manager.iws_manager_api.services.interfaces.ProjectPackageService;
 import com.iws_manager.iws_manager_api.services.interfaces.ProjectPackageServiceV2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

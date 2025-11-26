@@ -78,7 +78,7 @@ public class ProjectPackageMapper {
         projectPackage.setPackageNo(dto.packageNo());
         projectPackage.setStartDate(dto.startDate());
         projectPackage.setEndDate(dto.endDate());
-        projectPackage.setProject(project);  // Asignar el proyecto
+        projectPackage.setProject(project);
         return projectPackage;
     }
 }

@@ -3,16 +3,9 @@ package com.iws_manager.iws_manager_api.controllers;
 import com.iws_manager.iws_manager_api.dtos.projectpackage.CreateProjectPackageDTO;
 import com.iws_manager.iws_manager_api.dtos.projectpackage.ProjectPackageDTO;
 import com.iws_manager.iws_manager_api.dtos.projectpackage.ProjectPackageWithProjectDTO;
-import com.iws_manager.iws_manager_api.dtos.user.UpdateUserDTO;
-import com.iws_manager.iws_manager_api.dtos.user.UserDTO;
-import com.iws_manager.iws_manager_api.dtos.user.UserWithRolesDTO;
 import com.iws_manager.iws_manager_api.mappers.ProjectPackageMapper;
-import com.iws_manager.iws_manager_api.mappers.UserMapper;
 import com.iws_manager.iws_manager_api.models.ProjectPackage;
-import com.iws_manager.iws_manager_api.models.User;
-import com.iws_manager.iws_manager_api.services.interfaces.ProjectPackageService;
 import com.iws_manager.iws_manager_api.services.interfaces.ProjectPackageServiceV2;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,7 +24,7 @@ import java.util.List;
 public class ProjectPackageControllerV2 {
     private final ProjectPackageServiceV2 projectPackageServiceV2;
 
-    public ProjectPackageControllerV2(ProjectPackageService projectPackageService, ProjectPackageServiceV2 projectPackageServiceV2) {
+    public ProjectPackageControllerV2(ProjectPackageServiceV2 projectPackageServiceV2) {
         this.projectPackageServiceV2 = projectPackageServiceV2;
     }
 
