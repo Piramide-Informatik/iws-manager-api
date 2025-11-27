@@ -239,14 +239,11 @@ public class ProjectController {
      * Estos endpoints quedan preparados para cuando se activen las relaciones
      */
 
-    // @GetMapping("/by-empiws20/{empiws20Id}")
-    // public ResponseEntity<List<Project>> getByEmpiws20Id(@PathVariable Long
-    // empiws20Id) {
-    // // List<Project> projects =
-    // projectService.getProjectsByEmpiws20Id(empiws20Id);
-    // // return new ResponseEntity<>(projects, HttpStatus.OK);
-    // return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    // }
+    @GetMapping("/by-empiws20/{empiws20Id}")
+    public ResponseEntity<List<Project>> getByEmpiws20Id(@PathVariable Long empiws20Id) {
+        List<Project> projects = projectService.getProjectsByEmpiws20Id(empiws20Id);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
 
     @GetMapping("/by-funding-program/{fundingProgramId}")
     public ResponseEntity<List<Project>> getByFundingProgramId(@PathVariable Long fundingProgramId) {
@@ -260,13 +257,11 @@ public class ProjectController {
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
-    // @GetMapping("/by-status/{statusId}")
-    // public ResponseEntity<List<Project>> getByStatusId(@PathVariable Long
-    // statusId) {
-    // // List<Project> projects = projectService.getProjectsByStatusId(statusId);
-    // // return new ResponseEntity<>(projects, HttpStatus.OK);
-    // return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    // }
+    @GetMapping("/by-status/{statusId}")
+    public ResponseEntity<List<Project>> getProjectsByStatusId(@PathVariable Long statusId) {
+        List<Project> projects = projectService.getProjectsByStatusId(statusId);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
 
     /// by-approval-date-range?start=2023-01-01&end=2023-12-31
     @GetMapping("/by-approval-date-range")

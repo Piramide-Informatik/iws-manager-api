@@ -127,7 +127,10 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @EntityGraph(attributePaths = { "customer", "customer.branch", "customer.companytype", "customer.country",
             "customer.state", "fundingProgram", "promoter", "promoter.country" })
     List<Project> findByCustomerIdOrderByProjectLabelAsc(Long customerId);
-    // List<Project> findByEmpiws20Id(Long empiws20Id); // Cuando se descomente
+
+    @EntityGraph(attributePaths = { "customer", "customer.branch", "customer.companytype", "customer.country",
+            "customer.state", "fundingProgram", "promoter", "promoter.country" })
+    List<Project> findByEmpiws20Id(Long empiws20Id);
 
     @EntityGraph(attributePaths = { "customer", "customer.branch", "customer.companytype", "customer.country",
             "customer.state", "fundingProgram", "promoter", "promoter.country" })
@@ -136,7 +139,10 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @EntityGraph(attributePaths = { "customer", "customer.branch", "customer.companytype", "customer.country",
             "customer.state", "fundingProgram", "promoter", "promoter.country" })
     List<Project> findByPromoterId(Long promoterId);
-    // List<Project> findByStatusId(Long statusId); // Cuando se descomente
+
+    @EntityGraph(attributePaths = { "customer", "customer.branch", "customer.companytype", "customer.country",
+            "customer.state", "fundingProgram", "promoter", "promoter.country" })
+    List<Project> findByStatusId(Long statusId);
 
     /* =================== */
     /* HELPERS - UTILITIES */

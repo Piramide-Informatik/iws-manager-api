@@ -209,6 +209,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public List<Project> getProjectsByEmpiws20Id(Long empiws20Id) {
+        return projectRepository.findByEmpiws20Id(empiws20Id);
+    }
+
+    @Override
     public List<Project> getProjectsByPromoterId(Long fundingProgramId) {
         return projectRepository.findByPromoterId(fundingProgramId);
     }
@@ -286,6 +291,11 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<Project> getProjectsByTitle(String title) {
         return projectRepository.findByTitle(title);
+    }
+
+    @Override
+    public List<Project> getProjectsByStatusId(Long statusId) {
+        return projectRepository.findByStatusId(statusId);
     }
 
     @Override
