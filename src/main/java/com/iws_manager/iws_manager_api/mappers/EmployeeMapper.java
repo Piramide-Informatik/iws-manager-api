@@ -1,6 +1,7 @@
 package com.iws_manager.iws_manager_api.mappers;
 
 import com.iws_manager.iws_manager_api.dtos.employee.*;
+import com.iws_manager.iws_manager_api.dtos.shared.CustomerInfoDTO;
 import com.iws_manager.iws_manager_api.dtos.shared.BasicReferenceDTO;
 import com.iws_manager.iws_manager_api.models.Employee;
 import com.iws_manager.iws_manager_api.models.Customer;
@@ -126,8 +127,7 @@ public class EmployeeMapper {
                 employeeCategoryDTO,
                 // Needed fields
                 entity.getCustomer() != null ? entity.getCustomer().getId() : null,
-                entity.getCustomer() != null ? entity.getCustomer().getCustomername1() : null
-        );
+                entity.getCustomer() != null ? entity.getCustomer().getCustomername1() : null);
     }
 
     public EmployeeDetailDTO toDetailDTO(Employee entity) {
@@ -158,8 +158,7 @@ public class EmployeeMapper {
                 qualificationFZDTO,
                 salutationDTO,
                 titleDTO,
-                employeeCategoryDTO
-        );
+                employeeCategoryDTO);
     }
 
     // Métodos helper para construir DTOs de relaciones
@@ -171,8 +170,7 @@ public class EmployeeMapper {
                 customer.getId(),
                 customer.getCustomername1(),
                 customer.getCustomername2(),
-                customer.getCity()
-        );
+                customer.getCity());
     }
 
     private QualificationFZInfoDTO buildQualificationFZInfoDTO(QualificationFZ qualificationFZ) {
@@ -181,8 +179,7 @@ public class EmployeeMapper {
         }
         return new QualificationFZInfoDTO(
                 qualificationFZ.getId(),
-                qualificationFZ.getQualification()
-        );
+                qualificationFZ.getQualification());
     }
 
     private SalutationInfoDTO buildSalutationInfoDTO(Salutation salutation) {
@@ -191,8 +188,7 @@ public class EmployeeMapper {
         }
         return new SalutationInfoDTO(
                 salutation.getId(),
-                salutation.getName()
-        );
+                salutation.getName());
     }
 
     private TitleInfoDTO buildTitleInfoDTO(Title title) {
@@ -201,8 +197,7 @@ public class EmployeeMapper {
         }
         return new TitleInfoDTO(
                 title.getId(),
-                title.getName()
-        );
+                title.getName());
     }
 
     private EmployeeCategoryInfoDTO buildEmployeeCategoryInfoDTO(EmployeeCategory employeeCategory) {
@@ -212,8 +207,7 @@ public class EmployeeMapper {
         return new EmployeeCategoryInfoDTO(
                 employeeCategory.getId(),
                 employeeCategory.getLabel(),
-                employeeCategory.getTitle()
-        );
+                employeeCategory.getTitle());
     }
 
     public List<EmployeeDTO> toDTOList(List<Employee> entities) {
