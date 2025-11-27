@@ -130,8 +130,8 @@ public class ProjectServiceImpl implements ProjectService {
                     existingProject.setMaxHoursPerMonth(projectDetails.getMaxHoursPerMonth());
                     existingProject.setMaxHoursPerYear(projectDetails.getMaxHoursPerYear());
                     existingProject.setNetwork(projectDetails.getNetwork());
-                    existingProject.setOrderIdFue(projectDetails.getOrderIdFue());
-                    existingProject.setOrderIdAdmin(projectDetails.getOrderIdAdmin());
+                    existingProject.setOrderFue(projectDetails.getOrderFue());
+                    existingProject.setOrderAdmin(projectDetails.getOrderAdmin());
                     existingProject.setStuffFlat(projectDetails.getStuffFlat());
                     existingProject.setProductiveHoursPerYear(projectDetails.getProductiveHoursPerYear());
                     existingProject.setProjectLabel(projectDetails.getProjectLabel());
@@ -209,6 +209,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public List<Project> getProjectsByEmpiws20Id(Long empiws20Id) {
+        return projectRepository.findByEmpiws20Id(empiws20Id);
+    }
+
+    @Override
     public List<Project> getProjectsByPromoterId(Long fundingProgramId) {
         return projectRepository.findByPromoterId(fundingProgramId);
     }
@@ -244,13 +249,13 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Project> getProjectsByOrderIdFue(Integer orderIdFue) {
-        return projectRepository.findByOrderIdFue(orderIdFue);
+    public List<Project> getProjectsByOrderIdFue(Long orderIdFue) {
+        return projectRepository.findByOrderFueId(orderIdFue);
     }
 
     @Override
-    public List<Project> getProjectsByOrderIdAdmin(Integer orderIdAdmin) {
-        return projectRepository.findByOrderIdAdmin(orderIdAdmin);
+    public List<Project> getProjectsByOrderIdAdmin(Long orderIdAdmin) {
+        return projectRepository.findByOrderAdminId(orderIdAdmin);
     }
 
     @Override
@@ -286,6 +291,11 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<Project> getProjectsByTitle(String title) {
         return projectRepository.findByTitle(title);
+    }
+
+    @Override
+    public List<Project> getProjectsByStatusId(Long statusId) {
+        return projectRepository.findByStatusId(statusId);
     }
 
     @Override

@@ -123,7 +123,7 @@ class ProjectServiceImplTest {
     @Test
     void deleteShouldDeleteProject() {
         projectService.delete(1L);
-        
+
         verify(projectRepository).deleteById(1L);
     }
 
@@ -289,24 +289,24 @@ class ProjectServiceImplTest {
 
     @Test
     void findByOrderIdFueShouldReturnProjects() {
-        Integer orderId = 123;
-        when(projectRepository.findByOrderIdFue(orderId)).thenReturn(Arrays.asList(testProject));
+        Long orderId = 123L;
+        when(projectRepository.findByOrderFueId(orderId)).thenReturn(Arrays.asList(testProject));
 
         List<Project> result = projectService.getProjectsByOrderIdFue(orderId);
 
         assertEquals(1, result.size());
-        verify(projectRepository).findByOrderIdFue(orderId);
+        verify(projectRepository).findByOrderFueId(orderId);
     }
 
     @Test
     void findByOrderIdAdminShouldReturnProjects() {
-        Integer orderId = 456;
-        when(projectRepository.findByOrderIdAdmin(orderId)).thenReturn(Arrays.asList(testProject));
+        Long orderId = 456L;
+        when(projectRepository.findByOrderAdminId(orderId)).thenReturn(Arrays.asList(testProject));
 
         List<Project> result = projectService.getProjectsByOrderIdAdmin(orderId);
 
         assertEquals(1, result.size());
-        verify(projectRepository).findByOrderIdAdmin(orderId);
+        verify(projectRepository).findByOrderAdminId(orderId);
     }
 
     @Test
@@ -389,7 +389,8 @@ class ProjectServiceImplTest {
     @Test
     void findByCustomerIdShouldReturnProjects() {
         Long customerId = 1L;
-        when(projectRepository.findByCustomerIdOrderByProjectLabelAsc(customerId)).thenReturn(Arrays.asList(testProject));
+        when(projectRepository.findByCustomerIdOrderByProjectLabelAsc(customerId))
+                .thenReturn(Arrays.asList(testProject));
 
         List<Project> result = projectService.getProjectsByCustomerId(customerId);
 
