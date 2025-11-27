@@ -553,9 +553,10 @@ public class ProjectServiceImplV2 implements ProjectServiceV2 {
     }
 
     private void setEmployeeRelationships(Project project, ProjectRequestDTO dto) {
-        setEmployeeRelationship(project::setEmpiws20, dto.empiws20(), "EmployeeIws", employeeIwsRepository);
-        setEmployeeRelationship(project::setEmpiws30, dto.empiws30(), "EmployeeIws", employeeIwsRepository);
-        setEmployeeRelationship(project::setEmpiws50, dto.empiws50(), "EmployeeIws", employeeIwsRepository);
+        String employeeIws = "EmployeeIws";
+        setEmployeeRelationship(project::setEmpiws20, dto.empiws20(), employeeIws, employeeIwsRepository);
+        setEmployeeRelationship(project::setEmpiws30, dto.empiws30(), employeeIws, employeeIwsRepository);
+        setEmployeeRelationship(project::setEmpiws50, dto.empiws50(), employeeIws, employeeIwsRepository);
     }
 
     private void setOrderRelationships(Project project, ProjectRequestDTO dto) {
