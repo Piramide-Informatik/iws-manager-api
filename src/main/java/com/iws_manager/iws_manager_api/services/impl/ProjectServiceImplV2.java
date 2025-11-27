@@ -2,6 +2,7 @@ package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.services.interfaces.v2.ProjectServiceV2;
 import com.iws_manager.iws_manager_api.dtos.project.ProjectResponseDTO;
+import com.iws_manager.iws_manager_api.dtos.shared.BasicReferenceDTO;
 import com.iws_manager.iws_manager_api.dtos.project.ProjectRequestDTO;
 import com.iws_manager.iws_manager_api.mappers.ProjectMapper;
 import com.iws_manager.iws_manager_api.models.EmployeeIws;
@@ -15,6 +16,7 @@ import com.iws_manager.iws_manager_api.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.iws_manager.iws_manager_api.models.Customer;
 import com.iws_manager.iws_manager_api.repositories.CustomerRepository;
@@ -29,6 +31,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -491,7 +494,11 @@ public class ProjectServiceImplV2 implements ProjectServiceV2 {
     }
 
     private void updateEntityFromDTO(Project project, ProjectRequestDTO dto) {
-        // Campos básicos
+        setBasicFields(project, dto);
+        setRelationshipFields(project, dto);
+    }
+
+    private void setBasicFields(Project project, ProjectRequestDTO dto) {
         project.setApprovalDate(dto.approvalDate());
         project.setAuthorizationDate(dto.authorizationDate());
         project.setChance(dto.chance());
@@ -526,8 +533,16 @@ public class ProjectServiceImplV2 implements ProjectServiceV2 {
         project.setStartApproval(dto.startApproval());
         project.setStartDate(dto.startDate());
         project.setTitle(dto.title());
+    }
 
-        // Relaciones - cargar entidades desde los IDs
+    private void setRelationshipFields(Project project, ProjectRequestDTO dto) {
+        setCustomerRelationship(project, dto);
+        setEmployeeRelationships(project, dto);
+        setOrderRelationships(project, dto);
+        setOtherRelationships(project, dto);
+    }
+
+    private void setCustomerRelationship(Project project, ProjectRequestDTO dto) {
         if (dto.customer() != null) {
             Customer customer = customerRepository.findById(dto.customer().id())
                     .orElseThrow(() -> new RuntimeException("Customer not found with id: " + dto.customer().id()));
@@ -535,78 +550,40 @@ public class ProjectServiceImplV2 implements ProjectServiceV2 {
         } else {
             project.setCustomer(null);
         }
+    }
 
-        if (dto.empiws20() != null) {
-            EmployeeIws empiws20 = employeeIwsRepository.findById(dto.empiws20().id())
-                    .orElseThrow(() -> new RuntimeException("EmployeeIws not found with id: " + dto.empiws20().id()));
-            project.setEmpiws20(empiws20);
-        } else {
-            project.setEmpiws20(null);
-        }
+    private void setEmployeeRelationships(Project project, ProjectRequestDTO dto) {
+        setEmployeeRelationship(project::setEmpiws20, dto.empiws20(), "EmployeeIws", employeeIwsRepository);
+        setEmployeeRelationship(project::setEmpiws30, dto.empiws30(), "EmployeeIws", employeeIwsRepository);
+        setEmployeeRelationship(project::setEmpiws50, dto.empiws50(), "EmployeeIws", employeeIwsRepository);
+    }
 
-        if (dto.empiws30() != null) {
-            EmployeeIws empiws30 = employeeIwsRepository.findById(dto.empiws30().id())
-                    .orElseThrow(() -> new RuntimeException("EmployeeIws not found with id: " + dto.empiws30().id()));
-            project.setEmpiws30(empiws30);
-        } else {
-            project.setEmpiws30(null);
-        }
+    private void setOrderRelationships(Project project, ProjectRequestDTO dto) {
+        setRelationship(project::setOrderFue, dto.orderFue(), "Order", orderRepository);
+        setRelationship(project::setOrderAdmin, dto.orderAdmin(), "Order", orderRepository);
+    }
 
-        if (dto.empiws50() != null) {
-            EmployeeIws empiws50 = employeeIwsRepository.findById(dto.empiws50().id())
-                    .orElseThrow(() -> new RuntimeException("EmployeeIws not found with id: " + dto.empiws50().id()));
-            project.setEmpiws50(empiws50);
-        } else {
-            project.setEmpiws50(null);
-        }
+    private void setOtherRelationships(Project project, ProjectRequestDTO dto) {
+        setRelationship(project::setNetwork, dto.network(), "Network", networkRepository);
+        setRelationship(project::setFundingProgram, dto.fundingProgram(), "FundingProgram", fundingProgramRepository);
+        setRelationship(project::setPromoter, dto.promoter(), "Promoter", promoterRepository);
+        setRelationship(project::setStatus, dto.status(), "ProjectStatus", projectStatusRepository);
+    }
 
-        if (dto.orderFue() != null) {
-            Order orderFue = orderRepository.findById(dto.orderFue().id())
-                    .orElseThrow(() -> new RuntimeException("Order not found with id: " + dto.orderFue().id()));
-            project.setOrderFue(orderFue);
+    private <T> void setRelationship(Consumer<T> setter, BasicReferenceDTO reference,
+            String entityName, JpaRepository<T, Long> repository) {
+        if (reference != null) {
+            T entity = repository.findById(reference.id())
+                    .orElseThrow(() -> new RuntimeException(entityName + " not found with id: " + reference.id()));
+            setter.accept(entity);
         } else {
-            project.setOrderFue(null);
-        }
-
-        if (dto.orderAdmin() != null) {
-            Order orderAdmin = orderRepository.findById(dto.orderAdmin().id())
-                    .orElseThrow(() -> new RuntimeException("Order not found with id: " + dto.orderAdmin().id()));
-            project.setOrderAdmin(orderAdmin);
-        } else {
-            project.setOrderAdmin(null);
-        }
-
-        if (dto.network() != null) {
-            Network network = networkRepository.findById(dto.network().id())
-                    .orElseThrow(() -> new RuntimeException("Network not found with id: " + dto.network().id()));
-            project.setNetwork(network);
-        } else {
-            project.setNetwork(null);
-        }
-
-        if (dto.fundingProgram() != null) {
-            FundingProgram fundingProgram = fundingProgramRepository.findById(dto.fundingProgram().id())
-                    .orElseThrow(() -> new RuntimeException(
-                            "FundingProgram not found with id: " + dto.fundingProgram().id()));
-            project.setFundingProgram(fundingProgram);
-        } else {
-            project.setFundingProgram(null);
-        }
-
-        if (dto.promoter() != null) {
-            Promoter promoter = promoterRepository.findById(dto.promoter().id())
-                    .orElseThrow(() -> new RuntimeException("Promoter not found with id: " + dto.promoter().id()));
-            project.setPromoter(promoter);
-        } else {
-            project.setPromoter(null);
-        }
-
-        if (dto.status() != null) {
-            ProjectStatus status = projectStatusRepository.findById(dto.status().id())
-                    .orElseThrow(() -> new RuntimeException("ProjectStatus not found with id: " + dto.status().id()));
-            project.setStatus(status);
-        } else {
-            project.setStatus(null);
+            setter.accept(null);
         }
     }
+
+    private void setEmployeeRelationship(Consumer<EmployeeIws> setter, BasicReferenceDTO reference,
+            String entityName, EmployeeIwsRepository repository) {
+        setRelationship(setter, reference, entityName, repository);
+    }
+
 }
