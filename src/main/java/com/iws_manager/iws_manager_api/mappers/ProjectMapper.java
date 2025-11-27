@@ -12,6 +12,10 @@ import com.iws_manager.iws_manager_api.dtos.project.ProjectResponseDTO;
 
 public class ProjectMapper {
 
+    private ProjectMapper() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
+
     public static ProjectResponseDTO toResponseDTO(Project project) {
         if (project == null)
             return null;
