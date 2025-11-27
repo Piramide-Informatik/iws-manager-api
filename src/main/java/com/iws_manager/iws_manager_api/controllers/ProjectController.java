@@ -76,14 +76,6 @@ public class ProjectController {
         }
     }
 
-    // @GetMapping("/approvaldate/{approvalDate}")
-    // public ResponseEntity<List<Project>> getProjectsByApprovalDate(@PathVariable
-    // LocalDate approvalDate) {
-    // List<Project> projects =
-    // projectService.getProjectsByApprovalDate(approvalDate);
-    // return new ResponseEntity<>(projects, HttpStatus.OK);
-    // }
-
     @GetMapping("/by-approval-date/{approvalDate}")
     public ResponseEntity<List<Project>> getByApprovalDate(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate approvalDate) {
