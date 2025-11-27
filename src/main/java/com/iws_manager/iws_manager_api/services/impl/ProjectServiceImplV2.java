@@ -1,6 +1,6 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
-import com.iws_manager.iws_manager_api.services.interfaces.v2.ProjectServiceV2;
+import com.iws_manager.iws_manager_api.services.interfaces.ProjectServiceV2;
 import com.iws_manager.iws_manager_api.dtos.project.ProjectResponseDTO;
 import com.iws_manager.iws_manager_api.dtos.shared.BasicReferenceDTO;
 import com.iws_manager.iws_manager_api.dtos.project.ProjectRequestDTO;

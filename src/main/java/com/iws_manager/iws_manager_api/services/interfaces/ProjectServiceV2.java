@@ -1,4 +1,4 @@
-package com.iws_manager.iws_manager_api.services.interfaces.v2;
+package com.iws_manager.iws_manager_api.services.interfaces;
 
 import com.iws_manager.iws_manager_api.dtos.project.ProjectResponseDTO;
 import com.iws_manager.iws_manager_api.dtos.project.ProjectRequestDTO;
