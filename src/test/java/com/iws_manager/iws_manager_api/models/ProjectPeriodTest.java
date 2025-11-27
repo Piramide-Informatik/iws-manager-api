@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProjectPeriodTest {
-    Integer periodNo = 1;
+    Short periodNo = 1;
     ProjectPeriod projectPeriod = new ProjectPeriod();
     @Test
     void testPublicHolidayCreation() {
