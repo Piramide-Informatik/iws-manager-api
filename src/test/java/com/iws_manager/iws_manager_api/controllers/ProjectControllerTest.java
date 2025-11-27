@@ -55,7 +55,7 @@ class ProjectControllerTest {
     @Test
     void updateShouldReturnNotFoundWhenProjectNotExists() {
         when(projectService.update(eq(TEST_ID), any(Project.class)))
-            .thenThrow(new RuntimeException("Not found"));
+                .thenThrow(new RuntimeException("Not found"));
 
         ResponseEntity<Project> response = projectController.update(TEST_ID, testProject);
 
@@ -138,9 +138,10 @@ class ProjectControllerTest {
     void getByApprovalDateRangeShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.getProjectsByApprovalDateBetween(TEST_DATE, TEST_DATE.plusDays(1)))
-            .thenReturn(projects);
+                .thenReturn(projects);
 
-        ResponseEntity<List<Project>> response = projectController.getByApprovalDateRange(TEST_DATE, TEST_DATE.plusDays(1));
+        ResponseEntity<List<Project>> response = projectController.getByApprovalDateRange(TEST_DATE,
+                TEST_DATE.plusDays(1));
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(projects, response.getBody());
@@ -173,9 +174,10 @@ class ProjectControllerTest {
     void getByHourlyRateRangeShouldReturnProjects() {
         List<Project> projects = Arrays.asList(testProject);
         when(projectService.getProjectsByHourlyRateMueuBetween(TEST_DECIMAL, TEST_DECIMAL.add(BigDecimal.TEN)))
-            .thenReturn(projects);
+                .thenReturn(projects);
 
-        ResponseEntity<List<Project>> response = projectController.getByHourlyRateRange(TEST_DECIMAL, TEST_DECIMAL.add(BigDecimal.TEN));
+        ResponseEntity<List<Project>> response = projectController.getByHourlyRateRange(TEST_DECIMAL,
+                TEST_DECIMAL.add(BigDecimal.TEN));
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(projects, response.getBody());
@@ -276,8 +278,7 @@ class ProjectControllerTest {
         List<Project> expectedProjects = Arrays.asList(testProject);
         when(projectService.getProjectsByFinanceAuthority(TEST_STRING)).thenReturn(expectedProjects);
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getByFinanceAuthority(TEST_STRING);
+        ResponseEntity<List<Project>> response = projectController.getByFinanceAuthority(TEST_STRING);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedProjects, response.getBody());
@@ -288,8 +289,7 @@ class ProjectControllerTest {
     void getByFinanceAuthorityShouldReturnEmptyListWhenNoMatches() {
         when(projectService.getProjectsByFinanceAuthority(TEST_STRING)).thenReturn(List.of());
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getByFinanceAuthority(TEST_STRING);
+        ResponseEntity<List<Project>> response = projectController.getByFinanceAuthority(TEST_STRING);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.getBody().isEmpty());
@@ -300,8 +300,7 @@ class ProjectControllerTest {
         List<Project> expectedProjects = Arrays.asList(testProject);
         when(projectService.getProjectsByFundingLabel(TEST_STRING)).thenReturn(expectedProjects);
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getByFundingLabel(TEST_STRING);
+        ResponseEntity<List<Project>> response = projectController.getByFundingLabel(TEST_STRING);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedProjects, response.getBody());
@@ -312,8 +311,7 @@ class ProjectControllerTest {
         String differentCase = "TEST";
         when(projectService.getProjectsByFundingLabel(differentCase)).thenReturn(List.of());
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getByFundingLabel(differentCase);
+        ResponseEntity<List<Project>> response = projectController.getByFundingLabel(differentCase);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotEquals(TEST_STRING, differentCase);
@@ -325,8 +323,7 @@ class ProjectControllerTest {
         List<Project> expectedProjects = Arrays.asList(testProject);
         when(projectService.getProjectsByNoteContaining(TEST_STRING)).thenReturn(expectedProjects);
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getByNoteContaining(TEST_STRING);
+        ResponseEntity<List<Project>> response = projectController.getByNoteContaining(TEST_STRING);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedProjects, response.getBody());
@@ -337,8 +334,7 @@ class ProjectControllerTest {
         String partialText = "est"; // Part of the string "test"
         when(projectService.getProjectsByNoteContaining(partialText)).thenReturn(List.of(testProject));
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getByNoteContaining(partialText);
+        ResponseEntity<List<Project>> response = projectController.getByNoteContaining(partialText);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().size());
@@ -349,8 +345,7 @@ class ProjectControllerTest {
         List<Project> expectedProjects = Arrays.asList(testProject);
         when(projectService.getProjectsByProjectLabel(TEST_STRING)).thenReturn(expectedProjects);
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getByProjectLabel(TEST_STRING);
+        ResponseEntity<List<Project>> response = projectController.getByProjectLabel(TEST_STRING);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedProjects, response.getBody());
@@ -361,8 +356,7 @@ class ProjectControllerTest {
         List<Project> expectedProjects = Arrays.asList(testProject);
         when(projectService.getProjectsByTitle(TEST_STRING)).thenReturn(expectedProjects);
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getByTitle(TEST_STRING);
+        ResponseEntity<List<Project>> response = projectController.getByTitle(TEST_STRING);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedProjects, response.getBody());
@@ -373,8 +367,7 @@ class ProjectControllerTest {
         List<Project> expectedProjects = Arrays.asList(testProject);
         when(projectService.getProjectsByTitleEndingWith(TEST_STRING)).thenReturn(expectedProjects);
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getWithTitleEnding(TEST_STRING);
+        ResponseEntity<List<Project>> response = projectController.getWithTitleEnding(TEST_STRING);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedProjects, response.getBody());
@@ -385,11 +378,10 @@ class ProjectControllerTest {
         String suffix = "tion";
         Project matchingProject = new Project();
         matchingProject.setTitle("Important Project Documentation");
-        
+
         when(projectService.getProjectsByTitleEndingWith(suffix)).thenReturn(List.of(matchingProject));
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getWithTitleEnding(suffix);
+        ResponseEntity<List<Project>> response = projectController.getWithTitleEnding(suffix);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().size());
@@ -445,7 +437,7 @@ class ProjectControllerTest {
 
     @Test
     void getByOrderIdFueShouldReturnProjectsWithSpecificOrderId() {
-        Integer orderId = 12345;
+        Long orderId = 12345L;
         List<Project> expectedProjects = List.of(testProject);
         when(projectService.getProjectsByOrderIdFue(orderId)).thenReturn(expectedProjects);
 
@@ -467,7 +459,7 @@ class ProjectControllerTest {
 
     @Test
     void getByOrderIdAdminShouldReturnProjects() {
-        Integer orderId = 54321;
+        Long orderId = 54321L;
         List<Project> expectedProjects = List.of(testProject);
         when(projectService.getProjectsByOrderIdAdmin(orderId)).thenReturn(expectedProjects);
 
@@ -479,7 +471,7 @@ class ProjectControllerTest {
 
     @Test
     void getByOrderIdAdminShouldReturnNotFoundForInvalidId() {
-        Integer invalidId = -1;
+        Long invalidId = -1L;
         when(projectService.getProjectsByOrderIdAdmin(invalidId)).thenReturn(List.of());
 
         ResponseEntity<List<Project>> response = projectController.getByOrderIdAdmin(invalidId);
@@ -527,12 +519,11 @@ class ProjectControllerTest {
     void getWithAuthorizationBeforeShouldReturnProjectsBeforeDate() {
         LocalDate date1 = LocalDate.of(2023, 12, 31);
         List<Project> expectedProjects = List.of(testProject);
-        
-        when(projectService.getProjectsByAuthorizationDateBefore(date1))
-            .thenReturn(expectedProjects);
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getWithAuthorizationBefore(date1);
+        when(projectService.getProjectsByAuthorizationDateBefore(date1))
+                .thenReturn(expectedProjects);
+
+        ResponseEntity<List<Project>> response = projectController.getWithAuthorizationBefore(date1);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedProjects, response.getBody());
@@ -541,8 +532,7 @@ class ProjectControllerTest {
 
     @Test
     void getWithAuthorizationBeforeShouldHandleNullDate() {
-        ResponseEntity<List<Project>> response = 
-            projectController.getWithAuthorizationBefore(null);
+        ResponseEntity<List<Project>> response = projectController.getWithAuthorizationBefore(null);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
@@ -551,12 +541,11 @@ class ProjectControllerTest {
     void getWithEndDateAfterShouldReturnProjectsAfterDate() {
         LocalDate date2 = LocalDate.of(2023, 1, 1);
         List<Project> expectedProjects = List.of(testProject);
-        
-        when(projectService.getProjectsByEndDateAfter(date2))
-            .thenReturn(expectedProjects);
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getWithEndDateAfter(date2);
+        when(projectService.getProjectsByEndDateAfter(date2))
+                .thenReturn(expectedProjects);
+
+        ResponseEntity<List<Project>> response = projectController.getWithEndDateAfter(date2);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedProjects, response.getBody());
@@ -566,10 +555,9 @@ class ProjectControllerTest {
     void getWithEndDateAfterShouldReturnEmptyListForFutureDate() {
         LocalDate futureDate = LocalDate.now().plusYears(10);
         when(projectService.getProjectsByEndDateAfter(futureDate))
-            .thenReturn(List.of());
+                .thenReturn(List.of());
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getWithEndDateAfter(futureDate);
+        ResponseEntity<List<Project>> response = projectController.getWithEndDateAfter(futureDate);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.getBody().isEmpty());
@@ -579,12 +567,11 @@ class ProjectControllerTest {
     void getWithFundingRateLessThanShouldReturnProjectsBelowRate() {
         BigDecimal rateLimit = BigDecimal.valueOf(50.0);
         List<Project> expectedProjects = List.of(testProject);
-        
-        when(projectService.getProjectsByFundingRateLessThan(rateLimit))
-            .thenReturn(expectedProjects);
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getWithFundingRateLessThan(rateLimit);
+        when(projectService.getProjectsByFundingRateLessThan(rateLimit))
+                .thenReturn(expectedProjects);
+
+        ResponseEntity<List<Project>> response = projectController.getWithFundingRateLessThan(rateLimit);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedProjects, response.getBody());
@@ -594,10 +581,9 @@ class ProjectControllerTest {
     void getWithFundingRateLessThanShouldHandleEdgeCases() {
         BigDecimal zeroRate = BigDecimal.ZERO;
         when(projectService.getProjectsByFundingRateLessThan(zeroRate))
-            .thenReturn(List.of());
+                .thenReturn(List.of());
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getWithFundingRateLessThan(zeroRate);
+        ResponseEntity<List<Project>> response = projectController.getWithFundingRateLessThan(zeroRate);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.getBody().isEmpty());
@@ -607,12 +593,11 @@ class ProjectControllerTest {
     void getByMaxHoursPerMonthShouldReturnProjectsWithExactHours() {
         BigDecimal hours = BigDecimal.valueOf(160.0);
         List<Project> expectedProjects = List.of(testProject);
-        
-        when(projectService.getProjectsByMaxHoursPerMonth(hours))
-            .thenReturn(expectedProjects);
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getByMaxHoursPerMonth(hours);
+        when(projectService.getProjectsByMaxHoursPerMonth(hours))
+                .thenReturn(expectedProjects);
+
+        ResponseEntity<List<Project>> response = projectController.getByMaxHoursPerMonth(hours);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedProjects, response.getBody());
@@ -622,10 +607,9 @@ class ProjectControllerTest {
     void getByMaxHoursPerMonthShouldHandleDecimalValues() {
         BigDecimal decimalHours = BigDecimal.valueOf(120.5);
         when(projectService.getProjectsByMaxHoursPerMonth(decimalHours))
-            .thenReturn(List.of(testProject));
+                .thenReturn(List.of(testProject));
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getByMaxHoursPerMonth(decimalHours);
+        ResponseEntity<List<Project>> response = projectController.getByMaxHoursPerMonth(decimalHours);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().size());
@@ -635,12 +619,11 @@ class ProjectControllerTest {
     void getByMaxHoursPerYearShouldReturnProjects() {
         BigDecimal hours = BigDecimal.valueOf(1920.0);
         List<Project> expectedProjects = List.of(testProject);
-        
-        when(projectService.getProjectsByMaxHoursPerYear(hours))
-            .thenReturn(expectedProjects);
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getByMaxHoursPerYear(hours);
+        when(projectService.getProjectsByMaxHoursPerYear(hours))
+                .thenReturn(expectedProjects);
+
+        ResponseEntity<List<Project>> response = projectController.getByMaxHoursPerYear(hours);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedProjects, response.getBody());
@@ -650,10 +633,9 @@ class ProjectControllerTest {
     void getByMaxHoursPerYearShouldHandleLargeValues() {
         BigDecimal largeValue = BigDecimal.valueOf(10000.0);
         when(projectService.getProjectsByMaxHoursPerYear(largeValue))
-            .thenReturn(List.of());
+                .thenReturn(List.of());
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getByMaxHoursPerYear(largeValue);
+        ResponseEntity<List<Project>> response = projectController.getByMaxHoursPerYear(largeValue);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.getBody().isEmpty());
@@ -663,12 +645,11 @@ class ProjectControllerTest {
     void getByProductiveHoursPerYearShouldReturnProjects() {
         BigDecimal hours = BigDecimal.valueOf(1800.0);
         List<Project> expectedProjects = List.of(testProject);
-        
-        when(projectService.getProjectsByProductiveHoursPerYear(hours))
-            .thenReturn(expectedProjects);
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getByProductiveHoursPerYear(hours);
+        when(projectService.getProjectsByProductiveHoursPerYear(hours))
+                .thenReturn(expectedProjects);
+
+        ResponseEntity<List<Project>> response = projectController.getByProductiveHoursPerYear(hours);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedProjects, response.getBody());
@@ -678,10 +659,9 @@ class ProjectControllerTest {
     void getByProductiveHoursPerYearShouldHandlePrecision() {
         BigDecimal preciseHours = new BigDecimal("1768.75");
         when(projectService.getProjectsByProductiveHoursPerYear(preciseHours))
-            .thenReturn(List.of(testProject));
+                .thenReturn(List.of(testProject));
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getByProductiveHoursPerYear(preciseHours);
+        ResponseEntity<List<Project>> response = projectController.getByProductiveHoursPerYear(preciseHours);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().size());
@@ -749,12 +729,11 @@ class ProjectControllerTest {
         List<Project> projects = Arrays.asList(testProject);
         LocalDate startDate = TEST_DATE;
         LocalDate endDate = TEST_DATE.plusDays(7);
-        
-        when(projectService.getProjectsByStartDateBetween(startDate, endDate))
-            .thenReturn(projects);
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getByStartDateRange(startDate, endDate);
+        when(projectService.getProjectsByStartDateBetween(startDate, endDate))
+                .thenReturn(projects);
+
+        ResponseEntity<List<Project>> response = projectController.getByStartDateRange(startDate, endDate);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(projects, response.getBody());
@@ -765,12 +744,11 @@ class ProjectControllerTest {
     void getByStartDateRangeShouldReturnEmptyListForInvalidRange() {
         LocalDate startDate = TEST_DATE;
         LocalDate endDate = TEST_DATE.minusDays(1); // invalid range
-        
-        when(projectService.getProjectsByStartDateBetween(startDate, endDate))
-            .thenReturn(List.of());
 
-        ResponseEntity<List<Project>> response = 
-            projectController.getByStartDateRange(startDate, endDate);
+        when(projectService.getProjectsByStartDateBetween(startDate, endDate))
+                .thenReturn(List.of());
+
+        ResponseEntity<List<Project>> response = projectController.getByStartDateRange(startDate, endDate);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.getBody().isEmpty());

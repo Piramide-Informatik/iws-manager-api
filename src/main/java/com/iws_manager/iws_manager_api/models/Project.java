@@ -121,11 +121,13 @@ public class Project extends BaseEntity {
     @JoinColumn(name = "networkid", referencedColumnName = "networkid")
     private Network network;
 
-    @Column(name = "orderidfue", nullable = true)
-    private Integer orderIdFue;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orderidfue", referencedColumnName = "orderid")
+    private Order orderFue;
 
-    @Column(name = "orderidadmin", nullable = true)
-    private Integer orderIdAdmin;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orderidadmin", referencedColumnName = "orderid")
+    private Order orderAdmin;
 
     @Column(name = "stuffflat", nullable = true, columnDefinition = "DECIMAL(5,2)")
     private BigDecimal stuffFlat;

@@ -38,36 +38,36 @@ public class ProjectController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> create(@RequestBody Project project){
+    public ResponseEntity<?> create(@RequestBody Project project) {
         Project createProject = projectService.create(project);
         return new ResponseEntity<>(createProject, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Project> getById(@PathVariable Long id){
-        return  projectService.findById(id)
-                .map( project -> new ResponseEntity<>(project, HttpStatus.OK))
+    public ResponseEntity<Project> getById(@PathVariable Long id) {
+        return projectService.findById(id)
+                .map(project -> new ResponseEntity<>(project, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping
-    public ResponseEntity<List<Project>> getAll(){
+    public ResponseEntity<List<Project>> getAll() {
         List<Project> projects = projectService.findAll();
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Project> update(@PathVariable Long id, @RequestBody Project projectDetails){
+    public ResponseEntity<Project> update(@PathVariable Long id, @RequestBody Project projectDetails) {
         try {
             Project updateProject = projectService.update(id, projectDetails);
             return new ResponseEntity<>(updateProject, HttpStatus.OK);
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         try {
             projectService.delete(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -76,44 +76,44 @@ public class ProjectController {
         }
     }
 
-    // @GetMapping("/approvaldate/{approvalDate}")
-    // public ResponseEntity<List<Project>> getProjectsByApprovalDate(@PathVariable LocalDate approvalDate) {
-    //     List<Project> projects = projectService.getProjectsByApprovalDate(approvalDate);
-    //     return new ResponseEntity<>(projects, HttpStatus.OK);
-    // }
-
     @GetMapping("/by-approval-date/{approvalDate}")
-    public ResponseEntity<List<Project>> getByApprovalDate(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate approvalDate) {
+    public ResponseEntity<List<Project>> getByApprovalDate(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate approvalDate) {
         List<Project> projects = projectService.getProjectsByApprovalDate(approvalDate);
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
     @GetMapping("/by-authorization-date/{authorizationDate}")
-    public ResponseEntity<List<Project>> getByAuthorizationDate(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate authorizationDate) {
+    public ResponseEntity<List<Project>> getByAuthorizationDate(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate authorizationDate) {
         List<Project> projects = projectService.getProjectsByAuthorizationDate(authorizationDate);
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
     @GetMapping("/by-end-approval/{endApproval}")
-    public ResponseEntity<List<Project>> getByEndApproval(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endApproval) {
+    public ResponseEntity<List<Project>> getByEndApproval(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endApproval) {
         List<Project> projects = projectService.getProjectsByEndApproval(endApproval);
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
     @GetMapping("/by-end-date/{endDate}")
-    public ResponseEntity<List<Project>> getByEndDate(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+    public ResponseEntity<List<Project>> getByEndDate(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         List<Project> projects = projectService.getProjectsByEndDate(endDate);
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
     @GetMapping("/by-start-approval/{startApproval}")
-    public ResponseEntity<List<Project>> getByStartApproval(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startApproval) {
+    public ResponseEntity<List<Project>> getByStartApproval(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startApproval) {
         List<Project> projects = projectService.getProjectsByStartApproval(startApproval);
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
     @GetMapping("/by-start-date/{startDate}")
-    public ResponseEntity<List<Project>> getByStartDate(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate) {
+    public ResponseEntity<List<Project>> getByStartDate(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate) {
         List<Project> projects = projectService.getProjectsByStartDate(startDate);
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
@@ -136,7 +136,7 @@ public class ProjectController {
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
-     @GetMapping("/by-max-hours-month/{maxHoursPerMonth}")
+    @GetMapping("/by-max-hours-month/{maxHoursPerMonth}")
     public ResponseEntity<List<Project>> getByMaxHoursPerMonth(@PathVariable BigDecimal maxHoursPerMonth) {
         List<Project> projects = projectService.getProjectsByMaxHoursPerMonth(maxHoursPerMonth);
         return new ResponseEntity<>(projects, HttpStatus.OK);
@@ -167,13 +167,13 @@ public class ProjectController {
     }
 
     @GetMapping("/by-order-fue/{orderIdFue}")
-    public ResponseEntity<List<Project>> getByOrderIdFue(@PathVariable Integer orderIdFue) {
+    public ResponseEntity<List<Project>> getByOrderIdFue(@PathVariable Long orderIdFue) {
         List<Project> projects = projectService.getProjectsByOrderIdFue(orderIdFue);
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
     @GetMapping("/by-order-admin/{orderIdAdmin}")
-    public ResponseEntity<List<Project>> getByOrderIdAdmin(@PathVariable Integer orderIdAdmin) {
+    public ResponseEntity<List<Project>> getByOrderIdAdmin(@PathVariable Long orderIdAdmin) {
         List<Project> projects = projectService.getProjectsByOrderIdAdmin(orderIdAdmin);
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
@@ -231,12 +231,11 @@ public class ProjectController {
      * Estos endpoints quedan preparados para cuando se activen las relaciones
      */
 
-    // @GetMapping("/by-empiws20/{empiws20Id}")
-    // public ResponseEntity<List<Project>> getByEmpiws20Id(@PathVariable Long empiws20Id) {
-    //     // List<Project> projects = projectService.getProjectsByEmpiws20Id(empiws20Id);
-    //     // return new ResponseEntity<>(projects, HttpStatus.OK);
-    //     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    // }
+    @GetMapping("/by-empiws20/{empiws20Id}")
+    public ResponseEntity<List<Project>> getByEmpiws20Id(@PathVariable Long empiws20Id) {
+        List<Project> projects = projectService.getProjectsByEmpiws20Id(empiws20Id);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
 
     @GetMapping("/by-funding-program/{fundingProgramId}")
     public ResponseEntity<List<Project>> getByFundingProgramId(@PathVariable Long fundingProgramId) {
@@ -250,14 +249,13 @@ public class ProjectController {
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
-    // @GetMapping("/by-status/{statusId}")
-    // public ResponseEntity<List<Project>> getByStatusId(@PathVariable Long statusId) {
-    //     // List<Project> projects = projectService.getProjectsByStatusId(statusId);
-    //     // return new ResponseEntity<>(projects, HttpStatus.OK);
-    //     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    // }
+    @GetMapping("/by-status/{statusId}")
+    public ResponseEntity<List<Project>> getProjectsByStatusId(@PathVariable Long statusId) {
+        List<Project> projects = projectService.getProjectsByStatusId(statusId);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
 
-    ///by-approval-date-range?start=2023-01-01&end=2023-12-31
+    /// by-approval-date-range?start=2023-01-01&end=2023-12-31
     @GetMapping("/by-approval-date-range")
     public ResponseEntity<List<Project>> getByApprovalDateRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
@@ -290,7 +288,7 @@ public class ProjectController {
     }
 
     // Búsquedas con operadores numéricos
-    ///with-chance-greater-than?chance=50.00
+    /// with-chance-greater-than?chance=50.00
     @GetMapping("/with-chance-greater-than")
     public ResponseEntity<List<Project>> getWithChanceGreaterThan(
             @RequestParam BigDecimal chance) {
@@ -314,7 +312,7 @@ public class ProjectController {
     }
 
     // Búsquedas por patrones de texto
-    ///with-name-containing?name=proyecto
+    /// with-name-containing?name=proyecto
     @GetMapping("/with-name-containing")
     public ResponseEntity<List<Project>> getWithNameContaining(
             @RequestParam String name) {
