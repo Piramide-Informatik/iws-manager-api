@@ -29,7 +29,7 @@ import java.time.LocalDate;
 @AttributeOverride(name ="id", column = @Column(name = "projectperiodid"))
 public class ProjectPeriod extends BaseEntity {
     @Column(name="packageno", length = 255)
-    private Integer periodNo;
+    private Short periodNo;
 
     @Column(name = "start", columnDefinition = "DATE")
     private LocalDate startDate;
