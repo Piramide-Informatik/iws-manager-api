@@ -1,0 +1,153 @@
+package com.iws_manager.iws_manager_api.services.impl;
+
+import com.iws_manager.iws_manager_api.models.ProjectPackage;
+import com.iws_manager.iws_manager_api.models.ProjectPeriod;
+import com.iws_manager.iws_manager_api.repositories.ProjectPackageRepository;
+import com.iws_manager.iws_manager_api.repositories.ProjectPeriodRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class ProjectPeriodServiceImplTest {
+
+    @Mock
+    private ProjectPeriodRepository periodRepository;
+    @InjectMocks
+    private ProjectPeriodServiceImpl projectPeriodService;
+    private ProjectPeriod testProjectPeriod;
+
+    @BeforeEach
+    void setUp() {
+        testProjectPeriod = new ProjectPeriod();
+        testProjectPeriod.setId(1L);
+        testProjectPeriod.setPeriodNo((short) 1);
+        testProjectPeriod.setStartDate(LocalDate.now());
+    }
+    @Test
+    void createShouldSaveAndReturnProjectPeriod() {
+        when(periodRepository.save(any(ProjectPeriod.class))).thenReturn(testProjectPeriod);
+
+        ProjectPeriod result = projectPeriodService.create(testProjectPeriod);
+
+        assertNotNull(result);
+        assertEquals(testProjectPeriod.getId(), result.getId());
+        verify(periodRepository).save(testProjectPeriod);
+    }
+
+    @Test
+    void createShouldThrowExceptionWhenProjectPeriodIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> projectPeriodService.create(null));
+    }
+
+    @Test
+    void findByIdShouldReturnProjectPeriodWhenExists() {
+        when(periodRepository.findById(1L)).thenReturn(Optional.of(testProjectPeriod));
+
+        Optional<ProjectPeriod> result = projectPeriodService.findById(1L);
+
+        assertTrue(result.isPresent());
+        assertEquals(testProjectPeriod.getId(), result.get().getId());
+    }
+
+    @Test
+    void findByIdShouldReturnEmptyWhenNotExists() {
+        when(periodRepository.findById(1L)).thenReturn(Optional.empty());
+
+        Optional<ProjectPeriod> result = projectPeriodService.findById(1L);
+
+        assertFalse(result.isPresent());
+    }
+
+    @Test
+    void findByIdShouldThrowExceptionWhenIdIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> projectPeriodService.findById(null));
+    }
+
+    @Test
+    void findAllShouldReturnAllProjectsPeriodOrderedByNoAsc() {
+        List<ProjectPeriod> projects = Arrays.asList(testProjectPeriod);
+        when(periodRepository.findAllByOrderByPeriodNoAsc()).thenReturn(projects);
+
+        List<ProjectPeriod> result = projectPeriodService.getAllProjectPeriodsByPeriodNoAsc();
+
+        assertEquals(1, result.size());
+        verify(periodRepository).findAllByOrderByPeriodNoAsc();
+    }
+
+    @Test
+    void findAllShouldReturnAllProjectsPeriodOrderedByStartDateAsc() {
+        List<ProjectPeriod> projects = Arrays.asList(testProjectPeriod);
+        when(periodRepository.findAllByOrderByStartDateAsc()).thenReturn(projects);
+
+        List<ProjectPeriod> result = projectPeriodService.getAllProjectPeriodsByStartDateAsc();
+
+        assertEquals(1, result.size());
+        verify(periodRepository).findAllByOrderByStartDateAsc();
+    }
+
+    @Test
+    void findAllShouldReturnAllProjectsPeriodOrderedByEndDateAsc() {
+        List<ProjectPeriod> projects = Arrays.asList(testProjectPeriod);
+        when(periodRepository.findAllByOrderByEndDateAsc()).thenReturn(projects);
+
+        List<ProjectPeriod> result = projectPeriodService.getAllProjectPeriodsByEndDateAsc();
+
+        assertEquals(1, result.size());
+        verify(periodRepository).findAllByOrderByEndDateAsc();
+    }
+
+    @Test
+    void updateShouldUpdateExistingProjectPeriod() {
+        ProjectPeriod updatedDetails = new ProjectPeriod();
+        updatedDetails.setPeriodNo((short) 1);
+        updatedDetails.setStartDate(LocalDate.now());
+
+        when(periodRepository.findById(1L)).thenReturn(Optional.of(testProjectPeriod));
+        when(periodRepository.save(any(ProjectPeriod.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        ProjectPeriod result = projectPeriodService.update(1L, updatedDetails);
+
+        assertEquals((short) 1, result.getPeriodNo());
+        assertEquals(LocalDate.now(), result.getStartDate());
+        verify(periodRepository).save(testProjectPeriod);
+    }
+
+    @Test
+    void updateShouldThrowExceptionWhenProjectPeriodNotFound() {
+        when(projectPeriodService.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> projectPeriodService.update(1L, new ProjectPeriod()));
+    }
+
+    @Test
+    void updateShouldThrowExceptionWhenIdOrDetailsIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> projectPeriodService.update(null, new ProjectPeriod()));
+        assertThrows(IllegalArgumentException.class, () -> projectPeriodService.update(1L, null));
+    }
+
+    @Test
+    void deleteShouldDeleteProjectPackage() {
+        projectPeriodService.delete(1L);
+
+        verify(periodRepository).deleteById(1L);
+    }
+
+    @Test
+    void deleteShouldThrowExceptionWhenIdIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> projectPeriodService.delete(null));
+    }
+}
