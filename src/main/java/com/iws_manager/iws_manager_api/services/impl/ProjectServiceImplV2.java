@@ -1,9 +1,9 @@
-package com.iws_manager.iws_manager_api.services.impl.v2;
+package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.services.interfaces.v2.ProjectServiceV2;
 import com.iws_manager.iws_manager_api.dtos.project.ProjectResponseDTO;
 import com.iws_manager.iws_manager_api.dtos.project.ProjectRequestDTO;
-import com.iws_manager.iws_manager_api.dtos.project.ProjectMapper;
+import com.iws_manager.iws_manager_api.mappers.ProjectMapper;
 import com.iws_manager.iws_manager_api.models.EmployeeIws;
 import com.iws_manager.iws_manager_api.models.FundingProgram;
 import com.iws_manager.iws_manager_api.models.Network;

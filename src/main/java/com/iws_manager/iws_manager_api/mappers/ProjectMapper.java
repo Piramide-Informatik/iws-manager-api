@@ -1,4 +1,4 @@
-package com.iws_manager.iws_manager_api.dtos.project;
+package com.iws_manager.iws_manager_api.mappers;
 
 import com.iws_manager.iws_manager_api.models.Project;
 import com.iws_manager.iws_manager_api.dtos.shared.CustomerInfoDTO;
@@ -8,6 +8,7 @@ import com.iws_manager.iws_manager_api.dtos.shared.NetworkBasicDTO;
 import com.iws_manager.iws_manager_api.dtos.shared.FundingProgramBasicDTO;
 import com.iws_manager.iws_manager_api.dtos.shared.PromoterBasicDTO;
 import com.iws_manager.iws_manager_api.dtos.shared.ProjectStatusBasicDTO;
+import com.iws_manager.iws_manager_api.dtos.project.ProjectResponseDTO;
 
 public class ProjectMapper {
 

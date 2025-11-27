@@ -1,4 +1,4 @@
-package com.iws_manager.iws_manager_api.controllers.v2;
+package com.iws_manager.iws_manager_api.controllers;
 
 import com.iws_manager.iws_manager_api.dtos.project.ProjectResponseDTO;
 import com.iws_manager.iws_manager_api.dtos.project.ProjectRequestDTO;
