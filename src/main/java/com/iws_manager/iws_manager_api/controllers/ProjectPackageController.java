@@ -2,6 +2,7 @@ package com.iws_manager.iws_manager_api.controllers;
 
 import com.iws_manager.iws_manager_api.models.ProjectPackage;
 import com.iws_manager.iws_manager_api.services.interfaces.ProjectPackageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +22,7 @@ import java.util.List;
 public class ProjectPackageController {
     private final ProjectPackageService projectPackageService;
 
+    @Autowired
     public ProjectPackageController(ProjectPackageService projectPackageService) {
         this.projectPackageService = projectPackageService;
     }
