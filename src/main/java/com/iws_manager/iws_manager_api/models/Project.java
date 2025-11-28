@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.iws_manager.iws_manager_api.models.base.BaseEntity;
 
 import jakarta.persistence.*;
@@ -121,10 +122,12 @@ public class Project extends BaseEntity {
     @JoinColumn(name = "networkid", referencedColumnName = "networkid")
     private Network network;
 
+    @JsonIgnoreProperties("project")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orderidfue", referencedColumnName = "orderid")
     private Order orderFue;
 
+    @JsonIgnoreProperties("project")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orderidadmin", referencedColumnName = "orderid")
     private Order orderAdmin;
