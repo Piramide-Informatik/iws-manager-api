@@ -22,6 +22,7 @@ public interface PromoterService {
     List<Promoter> getByZipCode(String zipCode);
 
     List<Promoter> getByPromoterName1OrPromoterName2(String name1, String name2);
+    List<Promoter> getAllByOrderByPromoterName1Asc();
 
     Integer getNextPromoterNo();
     Promoter createWithAutoPromoterNo(Promoter promoter);

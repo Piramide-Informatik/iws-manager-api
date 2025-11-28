@@ -14,6 +14,9 @@ import org.springframework.stereotype.Repository;
 public interface PromoterRepository extends JpaRepository<Promoter, Long> {
     @EntityGraph(attributePaths = {"country"})
     List<Promoter> findAllByOrderByPromoterNoAsc();
+
+    @EntityGraph(attributePaths = {"country"})
+    List<Promoter> findAllByOrderByPromoterName1Asc();
     
     @EntityGraph(attributePaths = {"country"})
     List<Promoter> findByCity(String city);

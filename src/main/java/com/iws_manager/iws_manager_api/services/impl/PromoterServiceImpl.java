@@ -182,6 +182,12 @@ public class PromoterServiceImpl implements PromoterService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<Promoter> getAllByOrderByPromoterName1Asc() {
+        return promoterRepository.findAllByOrderByPromoterName1Asc();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Integer getNextPromoterNo() {
         Integer maxPromoterNo = promoterRepository.findMaxPromoterNo();
         return (maxPromoterNo == null || maxPromoterNo == 0) ? 1 : maxPromoterNo + 1;
