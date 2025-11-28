@@ -135,6 +135,7 @@ public class ProjectMapper {
                         project.getPromoter().getId(),
                         project.getPromoter().getPromoterName1(),
                         project.getPromoter().getPromoterName2(),
+                        project.getPromoter().getProjectPromoter(),
                         project.getPromoter().getPromoterNo(),
                         project.getPromoter().getCity(),
                         project.getPromoter().getStreet(),
