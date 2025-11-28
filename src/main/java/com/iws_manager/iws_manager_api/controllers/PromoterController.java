@@ -116,6 +116,12 @@ public class PromoterController {
         return new ResponseEntity<>(promoters, HttpStatus.OK);
     }
 
+    @GetMapping("/sort-by-promotername1")
+    public ResponseEntity<List<Promoter>> getAllByOrderByPromoterName1(){
+        List<Promoter> promoters = promoterService.getAllByOrderByPromoterName1Asc();
+        return new ResponseEntity<>(promoters, HttpStatus.OK);
+    }
+
     //GET /api/v1/promoters/by-promoter-name1-or-name2?name1=Juan&name2=Pedro
 
     @GetMapping("/by-promoter-name1-or-name2")
