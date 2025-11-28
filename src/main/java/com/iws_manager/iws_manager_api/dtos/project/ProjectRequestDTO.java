@@ -1,0 +1,52 @@
+package com.iws_manager.iws_manager_api.dtos.project;
+
+import com.iws_manager.iws_manager_api.dtos.shared.BasicReferenceDTO;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+public record ProjectRequestDTO(
+        LocalDate approvalDate,
+        LocalDate authorizationDate,
+        BigDecimal chance,
+        String comment,
+        LocalDate date1,
+        LocalDate date2,
+        LocalDate date3,
+        LocalDate date4,
+        LocalDate date5,
+        LocalDate dateLevel1,
+        LocalDate dateLevel2,
+        BigDecimal donation,
+        LocalDate endApproval,
+        LocalDate endDate,
+        String financeAuthority,
+        String fundingLabel,
+        BigDecimal fundingRate,
+        BigDecimal hourlyRateMueu,
+        BigDecimal income1,
+        BigDecimal income2,
+        BigDecimal income3,
+        BigDecimal income4,
+        BigDecimal income5,
+        BigDecimal maxHoursPerMonth,
+        BigDecimal maxHoursPerYear,
+        BigDecimal stuffFlat,
+        BigDecimal productiveHoursPerYear,
+        String projectLabel,
+        String projectName,
+        String note,
+        BigDecimal shareResearch,
+        LocalDate startApproval,
+        LocalDate startDate,
+        String title,
+        BasicReferenceDTO customer,
+        BasicReferenceDTO empiws20,
+        BasicReferenceDTO empiws30,
+        BasicReferenceDTO empiws50,
+        BasicReferenceDTO orderFue,
+        BasicReferenceDTO orderAdmin,
+        BasicReferenceDTO network,
+        BasicReferenceDTO fundingProgram,
+        BasicReferenceDTO promoter,
+        BasicReferenceDTO status) {
+}
