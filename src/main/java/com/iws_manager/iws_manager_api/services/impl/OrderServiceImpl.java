@@ -149,6 +149,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     // PROPERTIES
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Order> getAllByOrderByOrderLabelAsc() {
+        return orderRepository.findAllByOrderByOrderLabelAsc();
+    }
+
     @Override
     public List<Order> getByAcronym(String acronym) {
         return orderRepository.findByAcronym(acronym);
