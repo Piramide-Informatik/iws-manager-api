@@ -71,6 +71,12 @@ public class OrderController {
 
     //PROPERTIES
 
+    @GetMapping("/sort-by-orderlabel")
+    public ResponseEntity<List<Order>> getAllByOrderByOrderLabelAsc(){
+        List<Order> orders = orderService.getAllByOrderByOrderLabelAsc();
+        return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
     /**
      * Gets all the orders by customer ordered by title.
      * @param customerId customer ID.

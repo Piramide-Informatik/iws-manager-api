@@ -14,6 +14,8 @@ public interface OrderService {
     Order update(Long id, Order orderDetails);
     void delete(Long id);
 
+    List<Order> getAllByOrderByOrderLabelAsc();
+
     List<Order> getByCustomerIdOrderByOrderTitleAsc(Long customerId);
     List<Order> getByCustomerIdOrderByOrderLabelAsc(Long customerId);
     List<Order> getByCustomerIdOrderByOrderNoAsc(Long customerId);
