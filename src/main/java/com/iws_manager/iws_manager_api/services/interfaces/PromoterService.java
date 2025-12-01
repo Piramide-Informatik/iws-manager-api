@@ -23,6 +23,7 @@ public interface PromoterService {
 
     List<Promoter> getByPromoterName1OrPromoterName2(String name1, String name2);
     List<Promoter> getAllByOrderByPromoterName1Asc();
+    List<Promoter> getAllByOrderByPromoterNoAsc();
 
     Integer getNextPromoterNo();
     Promoter createWithAutoPromoterNo(Promoter promoter);
