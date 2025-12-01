@@ -9,7 +9,7 @@ public record EmployeeDTO(
         String email,
         Integer employeeno,
         String label,
-
+        Integer version,
         // Additional fields (frontend overview table)
         LocalDate generalmanagersince,
         LocalDate shareholdersince,
@@ -23,5 +23,7 @@ public record EmployeeDTO(
 
         // Additional fields
         Long customerId,
-        String customerName) {
+        String customerName
+
+) {
 }

@@ -16,6 +16,7 @@ public record EmployeeDetailDTO(
         LocalDate shareholdersince,
         LocalDate soleproprietorsince,
         String qualificationkmui,
+        Integer version,
 
         // Relaciones optimizadas
         CustomerInfoDTO customer,
