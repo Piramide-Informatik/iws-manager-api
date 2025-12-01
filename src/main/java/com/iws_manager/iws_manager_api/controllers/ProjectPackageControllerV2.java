@@ -110,4 +110,13 @@ public class ProjectPackageControllerV2 {
                 .toList();
         return ResponseEntity.ok(list);
     }
+
+    @GetMapping("/project/{id}")
+    public ResponseEntity<List<ProjectPackageDTO>> getAllByProjectId(@PathVariable Long id){
+        List<ProjectPackageDTO> list = projectPackageServiceV2.findAllByProjectId(id)
+                .stream()
+                .map(ProjectPackageMapper::toDTO)
+                .toList();
+        return ResponseEntity.ok(list);
+    }
 }
