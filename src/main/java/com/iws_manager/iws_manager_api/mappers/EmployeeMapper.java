@@ -116,6 +116,7 @@ public class EmployeeMapper {
                 entity.getEmail(),
                 entity.getEmployeeno(),
                 entity.getLabel(),
+                entity.getVersion(),
                 // New fields
                 entity.getGeneralmanagersince(),
                 entity.getShareholdersince(),
@@ -128,6 +129,7 @@ public class EmployeeMapper {
                 // Needed fields
                 entity.getCustomer() != null ? entity.getCustomer().getId() : null,
                 entity.getCustomer() != null ? entity.getCustomer().getCustomername1() : null);
+
     }
 
     public EmployeeDetailDTO toDetailDTO(Employee entity) {
@@ -154,6 +156,7 @@ public class EmployeeMapper {
                 entity.getShareholdersince(),
                 entity.getSoleproprietorsince(),
                 entity.getQualificationkmui(),
+                entity.getVersion(),
                 customerDTO,
                 qualificationFZDTO,
                 salutationDTO,

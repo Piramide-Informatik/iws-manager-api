@@ -59,6 +59,9 @@ public class ProjectPackageServiceImplV2 implements ProjectPackageServiceV2 {
                         Project project = projectRepository.findById(dto.projectId())
                                 .orElseThrow(() -> new RuntimeException("Project not found"));
                         existing.setProject(project);
+                    } else {
+                        // If null comes -> delete relationship
+                        existing.setProject(null);
                     }
                     ProjectPackageMapper.updateEntity(existing, dto);
                     return projectPackageRepository.save(existing);
@@ -102,6 +105,12 @@ public class ProjectPackageServiceImplV2 implements ProjectPackageServiceV2 {
     @Transactional(readOnly = true)
     public List<ProjectPackage> findAllEndDateAsc() {
         return projectPackageRepository.findAllFetchProjectByOrderByEndDateAsc();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProjectPackage> findAllByProjectId(Long id) {
+        return projectPackageRepository.findAllByProjectIdFetchProject(id);
     }
 
     private void validateIdNotNull(Long id) {
