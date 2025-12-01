@@ -20,4 +20,6 @@ public interface ProjectPackageServiceV2 {
     List<ProjectPackage> findAllPackageNoAsc();
     List<ProjectPackage> findAllStartDateAsc();
     List<ProjectPackage> findAllEndDateAsc();
+
+    List<ProjectPackage> findAllByProjectId(Long id);
 }

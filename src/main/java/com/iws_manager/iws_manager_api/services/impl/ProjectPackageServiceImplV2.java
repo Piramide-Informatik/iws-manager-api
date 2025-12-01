@@ -104,6 +104,12 @@ public class ProjectPackageServiceImplV2 implements ProjectPackageServiceV2 {
         return projectPackageRepository.findAllFetchProjectByOrderByEndDateAsc();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProjectPackage> findAllByProjectId(Long id) {
+        return projectPackageRepository.findAllByProjectIdFetchProject(id);
+    }
+
     private void validateIdNotNull(Long id) {
         if (id == null) {
             throw new IllegalArgumentException(ID_CANNOT_BE_NULL);
