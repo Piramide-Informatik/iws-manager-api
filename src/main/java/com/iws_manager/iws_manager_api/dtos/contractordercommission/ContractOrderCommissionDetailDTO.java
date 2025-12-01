@@ -7,5 +7,6 @@ public record ContractOrderCommissionDetailDTO(
     BigDecimal commission,
     BigDecimal fromOrderValue, 
     BigDecimal minCommission,
-    BasicContractInfoDTO basicContract
+    BasicContractInfoDTO basicContract,
+    Integer version
 ) {}

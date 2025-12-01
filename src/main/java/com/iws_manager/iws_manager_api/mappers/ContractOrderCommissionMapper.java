@@ -24,7 +24,8 @@ public class ContractOrderCommissionMapper {
             entity.getMinCommission(),
             entity.getBasicContract() != null ? entity.getBasicContract().getId() : null,
             entity.getBasicContract() != null ? entity.getBasicContract().getContractLabel() : null,
-            entity.getBasicContract() != null ? entity.getBasicContract().getContractNo() : null
+            entity.getBasicContract() != null ? entity.getBasicContract().getContractNo() : null,
+            entity.getVersion()
         );
     }
 
@@ -51,7 +52,8 @@ public class ContractOrderCommissionMapper {
             entity.getCommission(),
             entity.getFromOrderValue(),
             entity.getMinCommission(),
-            basicContractDTO
+            basicContractDTO,
+            entity.getVersion()
         );
     }
 

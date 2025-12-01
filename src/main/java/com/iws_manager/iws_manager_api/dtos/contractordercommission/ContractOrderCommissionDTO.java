@@ -9,5 +9,6 @@ public record ContractOrderCommissionDTO(
     BigDecimal minCommission, 
     Long basicContractId,
     String contractLabel,
-    Integer contractNo
+    Integer contractNo,
+    Integer version
 ) {}
