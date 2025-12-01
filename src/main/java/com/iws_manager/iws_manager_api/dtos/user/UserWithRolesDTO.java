@@ -12,6 +12,7 @@ public record UserWithRolesDTO(
         String password,
         boolean active,
         String email,
-        List<RoleDTO> roles
+        List<RoleDTO> roles,
+        Integer version
 ) {
 }

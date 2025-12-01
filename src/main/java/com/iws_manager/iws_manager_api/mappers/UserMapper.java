@@ -21,7 +21,8 @@ public class UserMapper {
                 user.getLastName(),
                 user.getEmail(),
                 user.isActive(),
-                user.getEmail()
+                user.getEmail(),
+                user.getVersion()
         );
     }
 
@@ -36,7 +37,8 @@ public class UserMapper {
                 user.getEmail(),
                 user.getRoles().stream()
                         .map(role -> new RoleDTO(role.getId(), role.getName()))
-                        .collect(Collectors.toList())
+                        .collect(Collectors.toList()),
+                user.getVersion()
         );
     }
 
