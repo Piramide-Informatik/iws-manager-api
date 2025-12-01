@@ -59,6 +59,9 @@ public class ProjectPackageServiceImplV2 implements ProjectPackageServiceV2 {
                         Project project = projectRepository.findById(dto.projectId())
                                 .orElseThrow(() -> new RuntimeException("Project not found"));
                         existing.setProject(project);
+                    } else {
+                        // If null comes -> delete relationship
+                        existing.setProject(null);
                     }
                     ProjectPackageMapper.updateEntity(existing, dto);
                     return projectPackageRepository.save(existing);

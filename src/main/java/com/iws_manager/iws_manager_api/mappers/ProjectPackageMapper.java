@@ -13,6 +13,9 @@ public class ProjectPackageMapper {
     }
 
     public static ProjectPackageDTO toDTO(ProjectPackage projectPackage) {
+        Long projectId = projectPackage.getProject() != null
+                ? projectPackage.getProject().getId()
+                : null;
         return  new ProjectPackageDTO(
                 projectPackage.getId(),
                 projectPackage.getPackageTitle(),
@@ -20,11 +23,20 @@ public class ProjectPackageMapper {
                 projectPackage.getPackageNo(),
                 projectPackage.getStartDate(),
                 projectPackage.getEndDate(),
-                projectPackage.getProject().getId()
+                projectId,
+                projectPackage.getVersion()
         );
     }
 
     public static ProjectPackageWithProjectDTO toDTOWithProject(ProjectPackage projectPackage) {
+        ProjectDTO projectDTO = null;
+
+        if (projectPackage.getProject() != null) {
+            projectDTO = new ProjectDTO(
+                    projectPackage.getProject().getId(),
+                    projectPackage.getProject().getProjectName()
+            );
+        }
         return  new ProjectPackageWithProjectDTO(
                 projectPackage.getId(),
                 projectPackage.getPackageTitle(),
@@ -32,10 +44,8 @@ public class ProjectPackageMapper {
                 projectPackage.getPackageNo(),
                 projectPackage.getStartDate(),
                 projectPackage.getEndDate(),
-                new ProjectDTO(
-                        projectPackage.getProject().getId(),
-                        projectPackage.getProject().getProjectName()
-                )
+                projectDTO,
+                projectPackage.getVersion()
         );
     }
 
