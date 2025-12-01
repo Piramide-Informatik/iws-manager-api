@@ -48,4 +48,7 @@ public interface ProjectPackageRepository extends JpaRepository<ProjectPackage, 
 
     @Query("SELECT p FROM ProjectPackage p LEFT JOIN FETCH p.project WHERE p.id = :id")
     Optional<ProjectPackage> findByIdFetchProject(Long id);
+
+    @Query("SELECT DISTINCT p FROM ProjectPackage p LEFT JOIN FETCH p.project pr WHERE pr.id = :projectId ORDER BY p.packageTitle ASC")
+    List<ProjectPackage> findAllByProjectIdFetchProject(Long projectId);
 }
