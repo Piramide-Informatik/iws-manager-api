@@ -9,6 +9,7 @@ public record ProjectPackageDTO(
         String packageNo,
         LocalDate startDate,
         LocalDate endDate,
-        Long projectId
+        Long projectId,
+        Integer version
 ) {
 }
