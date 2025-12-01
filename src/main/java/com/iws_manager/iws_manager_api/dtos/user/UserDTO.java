@@ -8,6 +8,7 @@ public record UserDTO(
         String lastName,
         String password,
         boolean active,
-        String email
+        String email,
+        Integer version
 ) {
 }
