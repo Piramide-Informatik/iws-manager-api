@@ -41,40 +41,54 @@ public class EmployeeMapper {
             return;
         }
 
-        // Manejar relaciones con version
-        if (dto.customer() != null) {
+        // Customer
+        if (dto.customer() != null && dto.customer().id() != null) {
             Customer customer = new Customer();
             customer.setId(dto.customer().id());
             customer.setVersion(dto.customer().version());
             entity.setCustomer(customer);
+        } else {
+            entity.setCustomer(null);  //Desasignar si viene null o sin id
         }
 
-        if (dto.qualificationFZ() != null) {
+        // QualificationFZ
+        if (dto.qualificationFZ() != null && dto.qualificationFZ().id() != null) {
             QualificationFZ qualificationFZ = new QualificationFZ();
             qualificationFZ.setId(dto.qualificationFZ().id());
             qualificationFZ.setVersion(dto.qualificationFZ().version());
             entity.setQualificationFZ(qualificationFZ);
+        } else {
+            entity.setQualificationFZ(null); 
         }
 
-        if (dto.salutation() != null) {
+        // Salutation
+        if (dto.salutation() != null && dto.salutation().id() != null) {
             Salutation salutation = new Salutation();
             salutation.setId(dto.salutation().id());
             salutation.setVersion(dto.salutation().version());
             entity.setSalutation(salutation);
+        } else {
+            entity.setSalutation(null); 
         }
 
-        if (dto.title() != null) {
+        // Title
+        if (dto.title() != null && dto.title().id() != null) {
             Title title = new Title();
             title.setId(dto.title().id());
             title.setVersion(dto.title().version());
             entity.setTitle(title);
+        } else {
+            entity.setTitle(null); 
         }
 
-        if (dto.employeeCategory() != null) {
+        // EmployeeCategory
+        if (dto.employeeCategory() != null && dto.employeeCategory().id() != null) {
             EmployeeCategory employeeCategory = new EmployeeCategory();
             employeeCategory.setId(dto.employeeCategory().id());
             employeeCategory.setVersion(dto.employeeCategory().version());
             entity.setEmployeeCategory(employeeCategory);
+        } else {
+            entity.setEmployeeCategory(null); 
         }
     }
 
