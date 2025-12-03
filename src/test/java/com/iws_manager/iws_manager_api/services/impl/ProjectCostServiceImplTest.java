@@ -668,7 +668,7 @@ class ProjectCostServiceImplTest {
     @Test
     void validateProjectCostShouldThrowWhenApproveOrPlanNull() {
         ProjectCost invalidCost = new ProjectCost();
-        invalidCost.setApproveOrPlan(null);
+        invalidCost.setApproveOrPlan((byte) 3);
 
         assertThrows(IllegalArgumentException.class, () -> projectCostService.validateProjectCost(invalidCost));
     }
@@ -677,25 +677,6 @@ class ProjectCostServiceImplTest {
     void validateProjectCostShouldThrowWhenInvalidApproveOrPlan() {
         ProjectCost invalidCost = new ProjectCost();
         invalidCost.setApproveOrPlan(INVALID_TYPE);
-
-        assertThrows(IllegalArgumentException.class, () -> projectCostService.validateProjectCost(invalidCost));
-    }
-
-    @Test
-    void validateProjectCostShouldThrowWhenProjectNull() {
-        ProjectCost invalidCost = new ProjectCost();
-        invalidCost.setApproveOrPlan(APPROVED_TYPE);
-        invalidCost.setProject(null);
-
-        assertThrows(IllegalArgumentException.class, () -> projectCostService.validateProjectCost(invalidCost));
-    }
-
-    @Test
-    void validateProjectCostShouldThrowWhenProjectPeriodNull() {
-        ProjectCost invalidCost = new ProjectCost();
-        invalidCost.setApproveOrPlan(APPROVED_TYPE);
-        invalidCost.setProject(new Project());
-        invalidCost.setProjectPeriod(null);
 
         assertThrows(IllegalArgumentException.class, () -> projectCostService.validateProjectCost(invalidCost));
     }

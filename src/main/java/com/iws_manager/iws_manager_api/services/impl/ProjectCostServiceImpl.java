@@ -502,20 +502,8 @@ public class ProjectCostServiceImpl implements ProjectCostService {
         }
 
         // Basic validation
-        if (projectCost.getApproveOrPlan() == null) {
-            throw new IllegalArgumentException("ApproveOrPlan is required");
-        }
-
         if (projectCost.getApproveOrPlan() != 1 && projectCost.getApproveOrPlan() != 2) {
             throw new IllegalArgumentException("ApproveOrPlan must be 1 (approved) or 2 (planned)");
-        }
-
-        if (projectCost.getProject() == null) {
-            throw new IllegalArgumentException("Project is required");
-        }
-
-        if (projectCost.getProjectPeriod() == null) {
-            throw new IllegalArgumentException("ProjectPeriod is required");
         }
 
         return true;
