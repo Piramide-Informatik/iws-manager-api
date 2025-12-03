@@ -181,13 +181,13 @@ class ProjectCostTest {
         assertTrue(toStringResult.contains("ProjectPeriod") || toStringResult.contains("2024"));
     }
 
-    private Project createProject(Long id, String name) {
+    private Project createProject(Long id) {
         Project project = new Project();
         project.setId(id);
         return project;
     }
 
-    private ProjectPeriod createProjectPeriod(Long id, String description) {
+    private ProjectPeriod createProjectPeriod(Long id) {
         ProjectPeriod projectPeriod = new ProjectPeriod();
         projectPeriod.setId(id);
         return projectPeriod;
