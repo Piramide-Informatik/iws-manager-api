@@ -830,9 +830,9 @@ class ProjectCostServiceImplTest {
         newCost.setApproveOrPlan(APPROVED_TYPE);
         newCost.setCosts(costs);
 
-        Project project = new Project();
-        project.setId(PROJECT_ID_1);
-        newCost.setProject(project);
+        Project project1 = new Project();
+        project1.setId(PROJECT_ID_1);
+        newCost.setProject(project1);
 
         ProjectPeriod period = new ProjectPeriod();
         period.setId(PROJECT_PERIOD_ID_2024);
