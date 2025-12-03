@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 import com.iws_manager.iws_manager_api.models.Customer;
 import com.iws_manager.iws_manager_api.repositories.CustomerRepository;
@@ -115,13 +116,17 @@ public class ProjectServiceImplV2 implements ProjectServiceV2 {
                     Project updatedProject = projectRepository.save(existingProject);
                     return ProjectMapper.toResponseDTO(updatedProject);
                 })
-                .orElseThrow(() -> new RuntimeException("Project not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Project not found with id: " + id));
     }
 
     @Override
     public void delete(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
+        }
+
+        if (!projectRepository.existsById(id)) {
+            throw new EntityNotFoundException("Project not found with id: " + id);
         }
         projectRepository.deleteById(id);
     }
