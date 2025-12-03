@@ -1,6 +1,7 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,6 +32,23 @@ import com.iws_manager.iws_manager_api.services.interfaces.ProjectCostService;
 public class ProjectCostServiceImpl implements ProjectCostService {
 
     private final ProjectCostRepository projectCostRepository;
+
+    /**
+     * Comparador que maneja valores nulos para orden descendente de costs.
+     * Los valores nulos se tratan como mayores que los no nulos.
+     */
+    private final Comparator<ProjectCost> costsDescComparator = Comparator
+            .nullsLast(Comparator.comparing(ProjectCost::getCosts,
+                    Comparator.nullsLast(BigDecimal::compareTo)))
+            .reversed();
+
+    /**
+     * Comparador que maneja valores nulos para orden ascendente de costs.
+     * Los valores nulos se tratan como mayores que los no nulos.
+     */
+    private final Comparator<ProjectCost> costsAscComparator = Comparator
+            .nullsLast(Comparator.comparing(ProjectCost::getCosts,
+                    Comparator.nullsLast(BigDecimal::compareTo)));
 
     /**
      * Constructs a new ProjectCostService with the required repository dependency.
@@ -152,15 +170,7 @@ public class ProjectCostServiceImpl implements ProjectCostService {
             throw new IllegalArgumentException("Project ID cannot be null");
         }
         return projectCostRepository.findByProjectIdOrderByProjectPeriodIdAsc(projectId).stream()
-                .sorted((pc1, pc2) -> {
-                    if (pc1.getCosts() == null && pc2.getCosts() == null)
-                        return 0;
-                    if (pc1.getCosts() == null)
-                        return 1;
-                    if (pc2.getCosts() == null)
-                        return -1;
-                    return pc1.getCosts().compareTo(pc2.getCosts());
-                })
+                .sorted(costsAscComparator)
                 .collect(Collectors.toList());
     }
 
@@ -171,15 +181,7 @@ public class ProjectCostServiceImpl implements ProjectCostService {
             throw new IllegalArgumentException("Project ID cannot be null");
         }
         return getByProjectIdOrderByCostsAsc(projectId).stream()
-                .sorted((pc1, pc2) -> {
-                    if (pc1.getCosts() == null && pc2.getCosts() == null)
-                        return 0;
-                    if (pc1.getCosts() == null)
-                        return 1;
-                    if (pc2.getCosts() == null)
-                        return -1;
-                    return pc2.getCosts().compareTo(pc1.getCosts());
-                })
+                .sorted(costsDescComparator)
                 .collect(Collectors.toList());
     }
 
@@ -217,15 +219,7 @@ public class ProjectCostServiceImpl implements ProjectCostService {
             throw new IllegalArgumentException("Project Period ID cannot be null");
         }
         return projectCostRepository.findByProjectPeriodId(projectPeriodId).stream()
-                .sorted((pc1, pc2) -> {
-                    if (pc1.getCosts() == null && pc2.getCosts() == null)
-                        return 0;
-                    if (pc1.getCosts() == null)
-                        return 1;
-                    if (pc2.getCosts() == null)
-                        return -1;
-                    return pc1.getCosts().compareTo(pc2.getCosts());
-                })
+                .sorted(costsAscComparator)
                 .collect(Collectors.toList());
     }
 
@@ -236,15 +230,7 @@ public class ProjectCostServiceImpl implements ProjectCostService {
             throw new IllegalArgumentException("Project Period ID cannot be null");
         }
         return getByProjectPeriodIdOrderByCostsAsc(projectPeriodId).stream()
-                .sorted((pc1, pc2) -> {
-                    if (pc1.getCosts() == null && pc2.getCosts() == null)
-                        return 0;
-                    if (pc1.getCosts() == null)
-                        return 1;
-                    if (pc2.getCosts() == null)
-                        return -1;
-                    return pc2.getCosts().compareTo(pc1.getCosts());
-                })
+                .sorted(costsDescComparator)
                 .collect(Collectors.toList());
     }
 
@@ -451,17 +437,8 @@ public class ProjectCostServiceImpl implements ProjectCostService {
     @Override
     @Transactional(readOnly = true)
     public List<ProjectCost> getAllOrderByCostsDesc() {
-        // El repositorio no tiene este método, lo implementamos manualmente
         return getAllOrderByCostsAsc().stream()
-                .sorted((pc1, pc2) -> {
-                    if (pc1.getCosts() == null && pc2.getCosts() == null)
-                        return 0;
-                    if (pc1.getCosts() == null)
-                        return 1;
-                    if (pc2.getCosts() == null)
-                        return -1;
-                    return pc2.getCosts().compareTo(pc1.getCosts());
-                })
+                .sorted(costsDescComparator)
                 .collect(Collectors.toList());
     }
 
