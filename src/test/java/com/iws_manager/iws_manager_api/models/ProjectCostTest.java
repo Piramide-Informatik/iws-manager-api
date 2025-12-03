@@ -27,8 +27,8 @@ class ProjectCostTest {
         // Arrange
         Byte approveOrPlan = APPROVED_COST_TYPE;
         BigDecimal costs = COST_15000_75;
-        Project project = createProject(1001L, "Proyecto 1001");
-        ProjectPeriod projectPeriod = createProjectPeriod(2024L, "2024");
+        Project project = createProject(1001L);
+        ProjectPeriod projectPeriod = createProjectPeriod(2024L);
 
         // Act
         ProjectCost projectCost = new ProjectCost();
@@ -49,7 +49,7 @@ class ProjectCostTest {
         // Arrange
         ProjectCost projectCost = new ProjectCost();
         projectCost.setApproveOrPlan(PLANNED_COST_TYPE);
-        projectCost.setProject(createProject(2001L, "Proyecto 2001"));
+        projectCost.setProject(createProject(2001L));
         LocalDateTime now = LocalDateTime.now();
 
         // Act
@@ -64,7 +64,7 @@ class ProjectCostTest {
     @Test
     void testEqualsAndHashCode() {
         // Arrange
-        Project project = createProject(3001L, "Proyecto 3001");
+        Project project = createProject(3001L);
 
         ProjectCost projectCost1 = new ProjectCost();
         projectCost1.setApproveOrPlan(APPROVED_COST_TYPE);
@@ -90,8 +90,8 @@ class ProjectCostTest {
         projectCost.setId(ENTITY_ID_1);
         projectCost.setApproveOrPlan(PLANNED_COST_TYPE);
         projectCost.setCosts(COST_75000_50);
-        projectCost.setProject(createProject(123L, "Proyecto 123"));
-        projectCost.setProjectPeriod(createProjectPeriod(2024L, "2024"));
+        projectCost.setProject(createProject(123L));
+        projectCost.setProjectPeriod(createProjectPeriod(2024L));
 
         // Assert
         assertAll("ProjectCost properties",
@@ -125,7 +125,7 @@ class ProjectCostTest {
         projectCost.setId(ENTITY_ID_3);
         projectCost.setApproveOrPlan(APPROVED_COST_TYPE);
         projectCost.setCosts(COST_100000_00);
-        projectCost.setProject(createProject(456L, "Proyecto 456"));
+        projectCost.setProject(createProject(456L));
 
         projectCost.setProjectPeriod(null);
 
@@ -140,8 +140,8 @@ class ProjectCostTest {
         // Arrange
         Byte approveOrPlan = APPROVED_COST_TYPE;
         BigDecimal costs = COST_25000_25;
-        Project project = createProject(789L, "Proyecto 789");
-        ProjectPeriod projectPeriod = createProjectPeriod(2025L, "2025");
+        Project project = createProject(789L);
+        ProjectPeriod projectPeriod = createProjectPeriod(2025L);
 
         // Act
         ProjectCost projectCost = new ProjectCost();
@@ -167,8 +167,8 @@ class ProjectCostTest {
         projectCost.setId(ENTITY_ID_5);
         projectCost.setApproveOrPlan(APPROVED_COST_TYPE);
         projectCost.setCosts(COST_15000_75);
-        projectCost.setProject(createProject(999L, "Proyecto 999"));
-        projectCost.setProjectPeriod(createProjectPeriod(2024L, "2024"));
+        projectCost.setProject(createProject(999L));
+        projectCost.setProjectPeriod(createProjectPeriod(2024L));
 
         // Act
         String toStringResult = projectCost.toString();
