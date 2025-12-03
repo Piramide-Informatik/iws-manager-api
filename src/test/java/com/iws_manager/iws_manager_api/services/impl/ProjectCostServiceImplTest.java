@@ -33,23 +33,53 @@ class ProjectCostServiceImplTest {
     @InjectMocks
     private ProjectCostServiceImpl projectCostService;
 
+    // Constantes para IDs y valores de prueba
+    private static final Long PROJECT_ID_1 = 1L;
+    private static final Long PROJECT_ID_99 = 99L;
+    private static final Long PROJECT_PERIOD_ID_2024 = 2024L;
+    private static final Long PROJECT_COST_ID_1 = 1L;
+    private static final Long PROJECT_COST_ID_2 = 2L;
+    private static final Long PROJECT_COST_ID_3 = 3L;
+    private static final Long PROJECT_COST_ID_5 = 5L;
+
+    // Constantes para valores BigDecimal
+    private static final BigDecimal COST_10000_50 = new BigDecimal("10000.50");
+    private static final BigDecimal COST_15000_75 = new BigDecimal("15000.75");
+    private static final BigDecimal COST_20000_00 = new BigDecimal("20000.00");
+    private static final BigDecimal COST_25000_50 = new BigDecimal("25000.50");
+    private static final BigDecimal COST_15000_00 = new BigDecimal("15000.00");
+    private static final BigDecimal COST_15000_50 = new BigDecimal("15000.50");
+    private static final BigDecimal COST_10000_00 = new BigDecimal("10000.00");
+    private static final BigDecimal COST_8000_50 = new BigDecimal("8000.50");
+    private static final BigDecimal COST_2000_00 = new BigDecimal("2000.00");
+    private static final BigDecimal COST_5000_00 = new BigDecimal("5000.00");
+    private static final BigDecimal COST_1000_00 = new BigDecimal("1000.00");
+    private static final BigDecimal COST_3000_00 = new BigDecimal("3000.00");
+    private static final BigDecimal COST_6000_00 = new BigDecimal("6000.00");
+    private static final BigDecimal COST_12000_00 = new BigDecimal("12000.00");
+
+    // Constantes para tipos de costo
+    private static final Byte APPROVED_TYPE = 1;
+    private static final Byte PLANNED_TYPE = 2;
+    private static final Byte INVALID_TYPE = 3;
+
     private ProjectCost projectCost;
     private Project project;
     private ProjectPeriod projectPeriod;
 
     @BeforeEach
     void setUp() {
-        // Crear objetos mock para las entidades relacionadas
+        // Crear objetos para las entidades relacionadas
         project = new Project();
-        project.setId(1L);
+        project.setId(PROJECT_ID_1);
 
         projectPeriod = new ProjectPeriod();
-        projectPeriod.setId(2024L);
+        projectPeriod.setId(PROJECT_PERIOD_ID_2024);
 
         projectCost = new ProjectCost();
-        projectCost.setId(1L);
-        projectCost.setApproveOrPlan((byte) 1); // Approved
-        projectCost.setCosts(new BigDecimal("10000.50"));
+        projectCost.setId(PROJECT_COST_ID_1);
+        projectCost.setApproveOrPlan(APPROVED_TYPE);
+        projectCost.setCosts(COST_10000_50);
         projectCost.setProject(project);
         projectCost.setProjectPeriod(projectPeriod);
     }
@@ -73,9 +103,9 @@ class ProjectCostServiceImplTest {
 
     @Test
     void getByIdShouldReturnProjectCost() {
-        when(projectCostRepository.findById(1L)).thenReturn(Optional.of(projectCost));
+        when(projectCostRepository.findById(PROJECT_COST_ID_1)).thenReturn(Optional.of(projectCost));
 
-        Optional<ProjectCost> result = projectCostService.getById(1L);
+        Optional<ProjectCost> result = projectCostService.getById(PROJECT_COST_ID_1);
 
         assertTrue(result.isPresent());
         assertEquals(projectCost, result.get());
@@ -100,18 +130,18 @@ class ProjectCostServiceImplTest {
     void updateShouldModifyAndSaveProjectCost() {
         // Crear un ProjectCost actualizado con todas las entidades requeridas
         ProjectCost updated = new ProjectCost();
-        updated.setApproveOrPlan((byte) 2); // Planned
-        updated.setCosts(new BigDecimal("15000.75"));
+        updated.setApproveOrPlan(PLANNED_TYPE);
+        updated.setCosts(COST_15000_75);
         updated.setProject(project);
         updated.setProjectPeriod(projectPeriod);
 
-        when(projectCostRepository.findById(1L)).thenReturn(Optional.of(projectCost));
+        when(projectCostRepository.findById(PROJECT_COST_ID_1)).thenReturn(Optional.of(projectCost));
         when(projectCostRepository.save(any(ProjectCost.class))).thenReturn(updated);
 
-        ProjectCost result = projectCostService.update(1L, updated);
+        ProjectCost result = projectCostService.update(PROJECT_COST_ID_1, updated);
 
-        assertEquals((byte) 2, result.getApproveOrPlan());
-        assertEquals(new BigDecimal("15000.75"), result.getCosts());
+        assertEquals(PLANNED_TYPE, result.getApproveOrPlan());
+        assertEquals(COST_15000_75, result.getCosts());
         verify(projectCostRepository).save(any(ProjectCost.class));
     }
 
@@ -122,24 +152,24 @@ class ProjectCostServiceImplTest {
 
     @Test
     void updateShouldThrowWhenDetailsNull() {
-        assertThrows(IllegalArgumentException.class, () -> projectCostService.update(1L, null));
+        assertThrows(IllegalArgumentException.class, () -> projectCostService.update(PROJECT_COST_ID_1, null));
     }
 
     @Test
     void updateShouldThrowWhenNotFound() {
-        when(projectCostRepository.findById(99L)).thenReturn(Optional.empty());
+        when(projectCostRepository.findById(PROJECT_ID_99)).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> projectCostService.update(99L, projectCost));
+        assertThrows(RuntimeException.class, () -> projectCostService.update(PROJECT_ID_99, projectCost));
     }
 
     @Test
     void deleteShouldDeleteProjectCost() {
-        when(projectCostRepository.existsById(1L)).thenReturn(true);
-        doNothing().when(projectCostRepository).deleteById(1L);
+        when(projectCostRepository.existsById(PROJECT_COST_ID_1)).thenReturn(true);
+        doNothing().when(projectCostRepository).deleteById(PROJECT_COST_ID_1);
 
-        projectCostService.delete(1L);
+        projectCostService.delete(PROJECT_COST_ID_1);
 
-        verify(projectCostRepository).deleteById(1L);
+        verify(projectCostRepository).deleteById(PROJECT_COST_ID_1);
     }
 
     @Test
@@ -149,18 +179,18 @@ class ProjectCostServiceImplTest {
 
     @Test
     void deleteShouldThrowWhenNotFound() {
-        when(projectCostRepository.existsById(99L)).thenReturn(false);
+        when(projectCostRepository.existsById(PROJECT_ID_99)).thenReturn(false);
 
-        assertThrows(RuntimeException.class, () -> projectCostService.delete(99L));
+        assertThrows(RuntimeException.class, () -> projectCostService.delete(PROJECT_ID_99));
     }
 
     // ========== Get Operations by Project Tests ==========
 
     @Test
     void getByProjectIdShouldReturnList() {
-        when(projectCostRepository.findByProjectId(1L)).thenReturn(List.of(projectCost));
+        when(projectCostRepository.findByProjectId(PROJECT_ID_1)).thenReturn(List.of(projectCost));
 
-        List<ProjectCost> result = projectCostService.getByProjectId(1L);
+        List<ProjectCost> result = projectCostService.getByProjectId(PROJECT_ID_1);
 
         assertEquals(1, result.size());
         assertEquals(projectCost, result.get(0));
@@ -173,40 +203,40 @@ class ProjectCostServiceImplTest {
 
     @Test
     void getByProjectIdOrderByCostsAscShouldReturnSortedList() {
-        ProjectCost cost1 = createValidProjectCost(1L, new BigDecimal("5000.00"));
-        ProjectCost cost2 = createValidProjectCost(2L, new BigDecimal("10000.00"));
+        ProjectCost cost1 = createValidProjectCost(PROJECT_COST_ID_1, COST_5000_00);
+        ProjectCost cost2 = createValidProjectCost(PROJECT_COST_ID_2, COST_10000_00);
 
-        when(projectCostRepository.findByProjectIdOrderByProjectPeriodIdAsc(1L))
+        when(projectCostRepository.findByProjectIdOrderByProjectPeriodIdAsc(PROJECT_ID_1))
                 .thenReturn(Arrays.asList(cost1, cost2));
 
-        List<ProjectCost> result = projectCostService.getByProjectIdOrderByCostsAsc(1L);
+        List<ProjectCost> result = projectCostService.getByProjectIdOrderByCostsAsc(PROJECT_ID_1);
 
         assertEquals(2, result.size());
-        assertEquals(new BigDecimal("5000.00"), result.get(0).getCosts());
-        assertEquals(new BigDecimal("10000.00"), result.get(1).getCosts());
+        assertEquals(COST_5000_00, result.get(0).getCosts());
+        assertEquals(COST_10000_00, result.get(1).getCosts());
     }
 
     @Test
     void getByProjectIdOrderByCostsDescShouldReturnSortedList() {
-        ProjectCost cost1 = createValidProjectCost(1L, new BigDecimal("5000.00"));
-        ProjectCost cost2 = createValidProjectCost(2L, new BigDecimal("10000.00"));
+        ProjectCost cost1 = createValidProjectCost(PROJECT_COST_ID_1, COST_5000_00);
+        ProjectCost cost2 = createValidProjectCost(PROJECT_COST_ID_2, COST_10000_00);
 
-        when(projectCostRepository.findByProjectIdOrderByProjectPeriodIdAsc(1L))
+        when(projectCostRepository.findByProjectIdOrderByProjectPeriodIdAsc(PROJECT_ID_1))
                 .thenReturn(Arrays.asList(cost1, cost2));
 
-        List<ProjectCost> result = projectCostService.getByProjectIdOrderByCostsDesc(1L);
+        List<ProjectCost> result = projectCostService.getByProjectIdOrderByCostsDesc(PROJECT_ID_1);
 
         assertEquals(2, result.size());
-        assertEquals(new BigDecimal("10000.00"), result.get(0).getCosts());
-        assertEquals(new BigDecimal("5000.00"), result.get(1).getCosts());
+        assertEquals(COST_10000_00, result.get(0).getCosts());
+        assertEquals(COST_5000_00, result.get(1).getCosts());
     }
 
     @Test
     void getByProjectIdOrderByProjectPeriodIdAscShouldReturnList() {
-        when(projectCostRepository.findByProjectIdOrderByProjectPeriodIdAsc(1L))
+        when(projectCostRepository.findByProjectIdOrderByProjectPeriodIdAsc(PROJECT_ID_1))
                 .thenReturn(List.of(projectCost));
 
-        List<ProjectCost> result = projectCostService.getByProjectIdOrderByProjectPeriodIdAsc(1L);
+        List<ProjectCost> result = projectCostService.getByProjectIdOrderByProjectPeriodIdAsc(PROJECT_ID_1);
 
         assertEquals(1, result.size());
         assertEquals(projectCost, result.get(0));
@@ -214,10 +244,10 @@ class ProjectCostServiceImplTest {
 
     @Test
     void getByProjectIdOrderByApproveOrPlanAscShouldReturnList() {
-        when(projectCostRepository.findByProjectIdOrderByApproveOrPlanAsc(1L))
+        when(projectCostRepository.findByProjectIdOrderByApproveOrPlanAsc(PROJECT_ID_1))
                 .thenReturn(List.of(projectCost));
 
-        List<ProjectCost> result = projectCostService.getByProjectIdOrderByApproveOrPlanAsc(1L);
+        List<ProjectCost> result = projectCostService.getByProjectIdOrderByApproveOrPlanAsc(PROJECT_ID_1);
 
         assertEquals(1, result.size());
         assertEquals(projectCost, result.get(0));
@@ -227,9 +257,9 @@ class ProjectCostServiceImplTest {
 
     @Test
     void getByProjectPeriodIdShouldReturnList() {
-        when(projectCostRepository.findByProjectPeriodId(2024L)).thenReturn(List.of(projectCost));
+        when(projectCostRepository.findByProjectPeriodId(PROJECT_PERIOD_ID_2024)).thenReturn(List.of(projectCost));
 
-        List<ProjectCost> result = projectCostService.getByProjectPeriodId(2024L);
+        List<ProjectCost> result = projectCostService.getByProjectPeriodId(PROJECT_PERIOD_ID_2024);
 
         assertEquals(1, result.size());
         assertEquals(projectCost, result.get(0));
@@ -244,9 +274,9 @@ class ProjectCostServiceImplTest {
 
     @Test
     void getByApproveOrPlanShouldReturnList() {
-        when(projectCostRepository.findByApproveOrPlan((byte) 1)).thenReturn(List.of(projectCost));
+        when(projectCostRepository.findByApproveOrPlan(APPROVED_TYPE)).thenReturn(List.of(projectCost));
 
-        List<ProjectCost> result = projectCostService.getByApproveOrPlan((byte) 1);
+        List<ProjectCost> result = projectCostService.getByApproveOrPlan(APPROVED_TYPE);
 
         assertEquals(1, result.size());
         assertEquals(projectCost, result.get(0));
@@ -259,35 +289,36 @@ class ProjectCostServiceImplTest {
 
     @Test
     void getApprovedCostsShouldReturnList() {
-        when(projectCostRepository.findByApproveOrPlan((byte) 1)).thenReturn(List.of(projectCost));
+        when(projectCostRepository.findByApproveOrPlan(APPROVED_TYPE)).thenReturn(List.of(projectCost));
 
         List<ProjectCost> result = projectCostService.getApprovedCosts();
 
         assertEquals(1, result.size());
-        assertEquals((byte) 1, result.get(0).getApproveOrPlan());
+        assertEquals(APPROVED_TYPE, result.get(0).getApproveOrPlan());
     }
 
     @Test
     void getPlannedCostsShouldReturnList() {
-        ProjectCost plannedCost = createValidProjectCost(2L, new BigDecimal("20000.00"));
-        plannedCost.setApproveOrPlan((byte) 2);
+        ProjectCost plannedCost = createValidProjectCost(PROJECT_COST_ID_2, COST_20000_00);
+        plannedCost.setApproveOrPlan(PLANNED_TYPE);
 
-        when(projectCostRepository.findByApproveOrPlan((byte) 2)).thenReturn(List.of(plannedCost));
+        when(projectCostRepository.findByApproveOrPlan(PLANNED_TYPE)).thenReturn(List.of(plannedCost));
 
         List<ProjectCost> result = projectCostService.getPlannedCosts();
 
         assertEquals(1, result.size());
-        assertEquals((byte) 2, result.get(0).getApproveOrPlan());
+        assertEquals(PLANNED_TYPE, result.get(0).getApproveOrPlan());
     }
 
     // ========== Get Operations by Project and Period Tests ==========
 
     @Test
     void getByProjectIdAndProjectPeriodIdShouldReturnList() {
-        when(projectCostRepository.findByProjectIdAndProjectPeriodId(1L, 2024L))
+        when(projectCostRepository.findByProjectIdAndProjectPeriodId(PROJECT_ID_1, PROJECT_PERIOD_ID_2024))
                 .thenReturn(List.of(projectCost));
 
-        List<ProjectCost> result = projectCostService.getByProjectIdAndProjectPeriodId(1L, 2024L);
+        List<ProjectCost> result = projectCostService.getByProjectIdAndProjectPeriodId(PROJECT_ID_1,
+                PROJECT_PERIOD_ID_2024);
 
         assertEquals(1, result.size());
         assertEquals(projectCost, result.get(0));
@@ -296,44 +327,46 @@ class ProjectCostServiceImplTest {
     @Test
     void getByProjectIdAndProjectPeriodIdShouldThrowWhenNull() {
         assertThrows(IllegalArgumentException.class,
-                () -> projectCostService.getByProjectIdAndProjectPeriodId(null, 2024L));
+                () -> projectCostService.getByProjectIdAndProjectPeriodId(null, PROJECT_PERIOD_ID_2024));
         assertThrows(IllegalArgumentException.class,
-                () -> projectCostService.getByProjectIdAndProjectPeriodId(1L, null));
+                () -> projectCostService.getByProjectIdAndProjectPeriodId(PROJECT_ID_1, null));
     }
 
     @Test
     void getApprovedCostsByProjectAndPeriodShouldReturnList() {
-        when(projectCostRepository.findApprovedCostsByProjectAndPeriod(1L, 2024L))
+        when(projectCostRepository.findApprovedCostsByProjectAndPeriod(PROJECT_ID_1, PROJECT_PERIOD_ID_2024))
                 .thenReturn(List.of(projectCost));
 
-        List<ProjectCost> result = projectCostService.getApprovedCostsByProjectAndPeriod(1L, 2024L);
+        List<ProjectCost> result = projectCostService.getApprovedCostsByProjectAndPeriod(PROJECT_ID_1,
+                PROJECT_PERIOD_ID_2024);
 
         assertEquals(1, result.size());
-        assertEquals((byte) 1, result.get(0).getApproveOrPlan());
+        assertEquals(APPROVED_TYPE, result.get(0).getApproveOrPlan());
     }
 
     @Test
     void getPlannedCostsByProjectAndPeriodShouldReturnList() {
-        ProjectCost plannedCost = createValidProjectCost(2L, new BigDecimal("20000.00"));
-        plannedCost.setApproveOrPlan((byte) 2);
+        ProjectCost plannedCost = createValidProjectCost(PROJECT_COST_ID_2, COST_20000_00);
+        plannedCost.setApproveOrPlan(PLANNED_TYPE);
 
-        when(projectCostRepository.findPlannedCostsByProjectAndPeriod(1L, 2024L))
+        when(projectCostRepository.findPlannedCostsByProjectAndPeriod(PROJECT_ID_1, PROJECT_PERIOD_ID_2024))
                 .thenReturn(List.of(plannedCost));
 
-        List<ProjectCost> result = projectCostService.getPlannedCostsByProjectAndPeriod(1L, 2024L);
+        List<ProjectCost> result = projectCostService.getPlannedCostsByProjectAndPeriod(PROJECT_ID_1,
+                PROJECT_PERIOD_ID_2024);
 
         assertEquals(1, result.size());
-        assertEquals((byte) 2, result.get(0).getApproveOrPlan());
+        assertEquals(PLANNED_TYPE, result.get(0).getApproveOrPlan());
     }
 
     // ========== Get Operations by Project and Type Tests ==========
 
     @Test
     void getByProjectIdAndApproveOrPlanShouldReturnList() {
-        when(projectCostRepository.findByProjectIdAndApproveOrPlan(1L, (byte) 1))
+        when(projectCostRepository.findByProjectIdAndApproveOrPlan(PROJECT_ID_1, APPROVED_TYPE))
                 .thenReturn(List.of(projectCost));
 
-        List<ProjectCost> result = projectCostService.getByProjectIdAndApproveOrPlan(1L, (byte) 1);
+        List<ProjectCost> result = projectCostService.getByProjectIdAndApproveOrPlan(PROJECT_ID_1, APPROVED_TYPE);
 
         assertEquals(1, result.size());
         assertEquals(projectCost, result.get(0));
@@ -341,38 +374,39 @@ class ProjectCostServiceImplTest {
 
     @Test
     void getApprovedCostsByProjectShouldReturnList() {
-        when(projectCostRepository.findByProjectIdAndApproveOrPlan(1L, (byte) 1))
+        when(projectCostRepository.findByProjectIdAndApproveOrPlan(PROJECT_ID_1, APPROVED_TYPE))
                 .thenReturn(List.of(projectCost));
 
-        List<ProjectCost> result = projectCostService.getApprovedCostsByProject(1L);
+        List<ProjectCost> result = projectCostService.getApprovedCostsByProject(PROJECT_ID_1);
 
         assertEquals(1, result.size());
-        assertEquals((byte) 1, result.get(0).getApproveOrPlan());
+        assertEquals(APPROVED_TYPE, result.get(0).getApproveOrPlan());
     }
 
     @Test
     void getPlannedCostsByProjectShouldReturnList() {
-        ProjectCost plannedCost = createValidProjectCost(2L, new BigDecimal("20000.00"));
-        plannedCost.setApproveOrPlan((byte) 2);
+        ProjectCost plannedCost = createValidProjectCost(PROJECT_COST_ID_2, COST_20000_00);
+        plannedCost.setApproveOrPlan(PLANNED_TYPE);
 
-        when(projectCostRepository.findByProjectIdAndApproveOrPlan(1L, (byte) 2))
+        when(projectCostRepository.findByProjectIdAndApproveOrPlan(PROJECT_ID_1, PLANNED_TYPE))
                 .thenReturn(List.of(plannedCost));
 
-        List<ProjectCost> result = projectCostService.getPlannedCostsByProject(1L);
+        List<ProjectCost> result = projectCostService.getPlannedCostsByProject(PROJECT_ID_1);
 
         assertEquals(1, result.size());
-        assertEquals((byte) 2, result.get(0).getApproveOrPlan());
+        assertEquals(PLANNED_TYPE, result.get(0).getApproveOrPlan());
     }
 
     // ========== Get Operations by Project, Period and Type Tests ==========
 
     @Test
     void getByProjectIdAndProjectPeriodIdAndApproveOrPlanShouldReturnList() {
-        when(projectCostRepository.findByProjectIdAndProjectPeriodIdAndApproveOrPlan(1L, 2024L, (byte) 1))
+        when(projectCostRepository.findByProjectIdAndProjectPeriodIdAndApproveOrPlan(PROJECT_ID_1,
+                PROJECT_PERIOD_ID_2024, APPROVED_TYPE))
                 .thenReturn(List.of(projectCost));
 
-        List<ProjectCost> result = projectCostService.getByProjectIdAndProjectPeriodIdAndApproveOrPlan(1L, 2024L,
-                (byte) 1);
+        List<ProjectCost> result = projectCostService.getByProjectIdAndProjectPeriodIdAndApproveOrPlan(PROJECT_ID_1,
+                PROJECT_PERIOD_ID_2024, APPROVED_TYPE);
 
         assertEquals(1, result.size());
         assertEquals(projectCost, result.get(0));
@@ -381,20 +415,23 @@ class ProjectCostServiceImplTest {
     @Test
     void getByProjectIdAndProjectPeriodIdAndApproveOrPlanShouldThrowWhenNull() {
         assertThrows(IllegalArgumentException.class,
-                () -> projectCostService.getByProjectIdAndProjectPeriodIdAndApproveOrPlan(null, 2024L, (byte) 1));
+                () -> projectCostService.getByProjectIdAndProjectPeriodIdAndApproveOrPlan(null, PROJECT_PERIOD_ID_2024,
+                        APPROVED_TYPE));
         assertThrows(IllegalArgumentException.class,
-                () -> projectCostService.getByProjectIdAndProjectPeriodIdAndApproveOrPlan(1L, null, (byte) 1));
+                () -> projectCostService.getByProjectIdAndProjectPeriodIdAndApproveOrPlan(PROJECT_ID_1, null,
+                        APPROVED_TYPE));
         assertThrows(IllegalArgumentException.class,
-                () -> projectCostService.getByProjectIdAndProjectPeriodIdAndApproveOrPlan(1L, 2024L, null));
+                () -> projectCostService.getByProjectIdAndProjectPeriodIdAndApproveOrPlan(PROJECT_ID_1,
+                        PROJECT_PERIOD_ID_2024, null));
     }
 
     // ========== Project Totals Tests ==========
 
     @Test
     void getProjectTotalsShouldReturnList() {
-        when(projectCostRepository.findProjectTotals(1L)).thenReturn(List.of(projectCost));
+        when(projectCostRepository.findProjectTotals(PROJECT_ID_1)).thenReturn(List.of(projectCost));
 
-        List<ProjectCost> result = projectCostService.getProjectTotals(1L);
+        List<ProjectCost> result = projectCostService.getProjectTotals(PROJECT_ID_1);
 
         assertEquals(1, result.size());
         assertEquals(projectCost, result.get(0));
@@ -402,108 +439,115 @@ class ProjectCostServiceImplTest {
 
     @Test
     void getApprovedProjectTotalsShouldReturnList() {
-        when(projectCostRepository.findApprovedProjectTotals(1L)).thenReturn(List.of(projectCost));
+        when(projectCostRepository.findApprovedProjectTotals(PROJECT_ID_1)).thenReturn(List.of(projectCost));
 
-        List<ProjectCost> result = projectCostService.getApprovedProjectTotals(1L);
+        List<ProjectCost> result = projectCostService.getApprovedProjectTotals(PROJECT_ID_1);
 
         assertEquals(1, result.size());
-        assertEquals((byte) 1, result.get(0).getApproveOrPlan());
+        assertEquals(APPROVED_TYPE, result.get(0).getApproveOrPlan());
     }
 
     @Test
     void getPlannedProjectTotalsShouldReturnList() {
-        ProjectCost plannedCost = createValidProjectCost(2L, new BigDecimal("20000.00"));
-        plannedCost.setApproveOrPlan((byte) 2);
+        ProjectCost plannedCost = createValidProjectCost(PROJECT_COST_ID_2, COST_20000_00);
+        plannedCost.setApproveOrPlan(PLANNED_TYPE);
 
-        when(projectCostRepository.findPlannedProjectTotals(1L)).thenReturn(List.of(plannedCost));
+        when(projectCostRepository.findPlannedProjectTotals(PROJECT_ID_1)).thenReturn(List.of(plannedCost));
 
-        List<ProjectCost> result = projectCostService.getPlannedProjectTotals(1L);
+        List<ProjectCost> result = projectCostService.getPlannedProjectTotals(PROJECT_ID_1);
 
         assertEquals(1, result.size());
-        assertEquals((byte) 2, result.get(0).getApproveOrPlan());
+        assertEquals(PLANNED_TYPE, result.get(0).getApproveOrPlan());
     }
 
     // ========== Sum Operations Tests ==========
 
     @Test
     void getTotalCostsByProjectShouldReturnSum() {
-        when(projectCostRepository.sumCostsByProject(1L)).thenReturn(new BigDecimal("25000.50"));
+        when(projectCostRepository.sumCostsByProject(PROJECT_ID_1)).thenReturn(COST_25000_50);
 
-        BigDecimal result = projectCostService.getTotalCostsByProject(1L);
+        BigDecimal result = projectCostService.getTotalCostsByProject(PROJECT_ID_1);
 
-        assertEquals(new BigDecimal("25000.50"), result);
+        assertEquals(COST_25000_50, result);
     }
 
     @Test
     void getTotalApprovedCostsByProjectShouldReturnSum() {
-        when(projectCostRepository.sumApprovedCostsByProject(1L)).thenReturn(new BigDecimal("15000.50"));
+        when(projectCostRepository.sumApprovedCostsByProject(PROJECT_ID_1)).thenReturn(COST_15000_50);
 
-        BigDecimal result = projectCostService.getTotalApprovedCostsByProject(1L);
+        BigDecimal result = projectCostService.getTotalApprovedCostsByProject(PROJECT_ID_1);
 
-        assertEquals(new BigDecimal("15000.50"), result);
+        assertEquals(COST_15000_50, result);
     }
 
     @Test
     void getTotalPlannedCostsByProjectShouldReturnSum() {
-        when(projectCostRepository.sumPlannedCostsByProject(1L)).thenReturn(new BigDecimal("10000.00"));
+        when(projectCostRepository.sumPlannedCostsByProject(PROJECT_ID_1)).thenReturn(COST_10000_00);
 
-        BigDecimal result = projectCostService.getTotalPlannedCostsByProject(1L);
+        BigDecimal result = projectCostService.getTotalPlannedCostsByProject(PROJECT_ID_1);
 
-        assertEquals(new BigDecimal("10000.00"), result);
+        assertEquals(COST_10000_00, result);
     }
 
     @Test
     void getTotalCostsByProjectAndPeriodShouldReturnSum() {
-        when(projectCostRepository.sumCostsByProjectAndPeriod(1L, 2024L)).thenReturn(new BigDecimal("10000.50"));
+        when(projectCostRepository.sumCostsByProjectAndPeriod(PROJECT_ID_1, PROJECT_PERIOD_ID_2024))
+                .thenReturn(COST_10000_50);
 
-        BigDecimal result = projectCostService.getTotalCostsByProjectAndPeriod(1L, 2024L);
+        BigDecimal result = projectCostService.getTotalCostsByProjectAndPeriod(PROJECT_ID_1, PROJECT_PERIOD_ID_2024);
 
-        assertEquals(new BigDecimal("10000.50"), result);
+        assertEquals(COST_10000_50, result);
     }
 
     @Test
     void getTotalApprovedCostsByProjectAndPeriodShouldReturnSum() {
-        when(projectCostRepository.sumApprovedCostsByProjectAndPeriod(1L, 2024L)).thenReturn(new BigDecimal("8000.50"));
+        when(projectCostRepository.sumApprovedCostsByProjectAndPeriod(PROJECT_ID_1, PROJECT_PERIOD_ID_2024))
+                .thenReturn(COST_8000_50);
 
-        BigDecimal result = projectCostService.getTotalApprovedCostsByProjectAndPeriod(1L, 2024L);
+        BigDecimal result = projectCostService.getTotalApprovedCostsByProjectAndPeriod(PROJECT_ID_1,
+                PROJECT_PERIOD_ID_2024);
 
-        assertEquals(new BigDecimal("8000.50"), result);
+        assertEquals(COST_8000_50, result);
     }
 
     @Test
     void getTotalPlannedCostsByProjectAndPeriodShouldReturnSum() {
-        when(projectCostRepository.sumPlannedCostsByProjectAndPeriod(1L, 2024L)).thenReturn(new BigDecimal("2000.00"));
+        when(projectCostRepository.sumPlannedCostsByProjectAndPeriod(PROJECT_ID_1, PROJECT_PERIOD_ID_2024))
+                .thenReturn(COST_2000_00);
 
-        BigDecimal result = projectCostService.getTotalPlannedCostsByProjectAndPeriod(1L, 2024L);
+        BigDecimal result = projectCostService.getTotalPlannedCostsByProjectAndPeriod(PROJECT_ID_1,
+                PROJECT_PERIOD_ID_2024);
 
-        assertEquals(new BigDecimal("2000.00"), result);
+        assertEquals(COST_2000_00, result);
     }
 
     // ========== Existence Check Tests ==========
 
     @Test
     void existsByProjectAndPeriodShouldReturnTrue() {
-        when(projectCostRepository.existsByProjectAndPeriod(1L, 2024L)).thenReturn(true);
+        when(projectCostRepository.existsByProjectAndPeriod(PROJECT_ID_1, PROJECT_PERIOD_ID_2024)).thenReturn(true);
 
-        boolean result = projectCostService.existsByProjectAndPeriod(1L, 2024L);
+        boolean result = projectCostService.existsByProjectAndPeriod(PROJECT_ID_1, PROJECT_PERIOD_ID_2024);
 
         assertTrue(result);
     }
 
     @Test
     void existsApprovedCostsByProjectAndPeriodShouldReturnTrue() {
-        when(projectCostRepository.existsApprovedCostsByProjectAndPeriod(1L, 2024L)).thenReturn(true);
+        when(projectCostRepository.existsApprovedCostsByProjectAndPeriod(PROJECT_ID_1, PROJECT_PERIOD_ID_2024))
+                .thenReturn(true);
 
-        boolean result = projectCostService.existsApprovedCostsByProjectAndPeriod(1L, 2024L);
+        boolean result = projectCostService.existsApprovedCostsByProjectAndPeriod(PROJECT_ID_1, PROJECT_PERIOD_ID_2024);
 
         assertTrue(result);
     }
 
     @Test
     void existsPlannedCostsByProjectAndPeriodShouldReturnTrue() {
-        when(projectCostRepository.existsPlannedCostsByProjectAndPeriod(1L, 2024L)).thenReturn(true);
+        when(projectCostRepository.existsPlannedCostsByProjectAndPeriod(PROJECT_ID_1, PROJECT_PERIOD_ID_2024))
+                .thenReturn(true);
 
-        boolean result = projectCostService.existsPlannedCostsByProjectAndPeriod(1L, 2024L);
+        boolean result = projectCostService.existsPlannedCostsByProjectAndPeriod(PROJECT_ID_1, PROJECT_PERIOD_ID_2024);
 
         assertTrue(result);
     }
@@ -512,30 +556,30 @@ class ProjectCostServiceImplTest {
 
     @Test
     void getAllOrderByCostsAscShouldReturnSortedList() {
-        ProjectCost cost1 = createValidProjectCost(1L, new BigDecimal("1000.00"));
-        ProjectCost cost2 = createValidProjectCost(2L, new BigDecimal("5000.00"));
+        ProjectCost cost1 = createValidProjectCost(PROJECT_COST_ID_1, COST_1000_00);
+        ProjectCost cost2 = createValidProjectCost(PROJECT_COST_ID_2, COST_5000_00);
 
         when(projectCostRepository.findAllByOrderByCostsAsc()).thenReturn(Arrays.asList(cost1, cost2));
 
         List<ProjectCost> result = projectCostService.getAllOrderByCostsAsc();
 
         assertEquals(2, result.size());
-        assertEquals(new BigDecimal("1000.00"), result.get(0).getCosts());
-        assertEquals(new BigDecimal("5000.00"), result.get(1).getCosts());
+        assertEquals(COST_1000_00, result.get(0).getCosts());
+        assertEquals(COST_5000_00, result.get(1).getCosts());
     }
 
     @Test
     void getAllOrderByCostsDescShouldReturnSortedList() {
-        ProjectCost cost1 = createValidProjectCost(1L, new BigDecimal("1000.00"));
-        ProjectCost cost2 = createValidProjectCost(2L, new BigDecimal("5000.00"));
+        ProjectCost cost1 = createValidProjectCost(PROJECT_COST_ID_1, COST_1000_00);
+        ProjectCost cost2 = createValidProjectCost(PROJECT_COST_ID_2, COST_5000_00);
 
         when(projectCostRepository.findAllByOrderByCostsAsc()).thenReturn(Arrays.asList(cost1, cost2));
 
         List<ProjectCost> result = projectCostService.getAllOrderByCostsDesc();
 
         assertEquals(2, result.size());
-        assertEquals(new BigDecimal("5000.00"), result.get(0).getCosts());
-        assertEquals(new BigDecimal("1000.00"), result.get(1).getCosts());
+        assertEquals(COST_5000_00, result.get(0).getCosts());
+        assertEquals(COST_1000_00, result.get(1).getCosts());
     }
 
     @Test
@@ -562,49 +606,48 @@ class ProjectCostServiceImplTest {
 
     @Test
     void getByCostsGreaterThanShouldReturnFilteredList() {
-        ProjectCost cost1 = createValidProjectCost(1L, new BigDecimal("5000.00"));
-        ProjectCost cost2 = createValidProjectCost(2L, new BigDecimal("10000.00"));
+        ProjectCost cost1 = createValidProjectCost(PROJECT_COST_ID_1, COST_5000_00);
+        ProjectCost cost2 = createValidProjectCost(PROJECT_COST_ID_2, COST_10000_00);
 
         when(projectCostRepository.findAll()).thenReturn(Arrays.asList(cost1, cost2));
 
-        List<ProjectCost> result = projectCostService.getByCostsGreaterThan(new BigDecimal("6000.00"));
+        List<ProjectCost> result = projectCostService.getByCostsGreaterThan(COST_6000_00);
 
         assertEquals(1, result.size());
-        assertEquals(new BigDecimal("10000.00"), result.get(0).getCosts());
+        assertEquals(COST_10000_00, result.get(0).getCosts());
     }
 
     @Test
     void getByCostsLessThanShouldReturnFilteredList() {
-        ProjectCost cost1 = createValidProjectCost(1L, new BigDecimal("5000.00"));
-        ProjectCost cost2 = createValidProjectCost(2L, new BigDecimal("10000.00"));
+        ProjectCost cost1 = createValidProjectCost(PROJECT_COST_ID_1, COST_5000_00);
+        ProjectCost cost2 = createValidProjectCost(PROJECT_COST_ID_2, COST_10000_00);
 
         when(projectCostRepository.findAll()).thenReturn(Arrays.asList(cost1, cost2));
 
-        List<ProjectCost> result = projectCostService.getByCostsLessThan(new BigDecimal("6000.00"));
+        List<ProjectCost> result = projectCostService.getByCostsLessThan(COST_6000_00);
 
         assertEquals(1, result.size());
-        assertEquals(new BigDecimal("5000.00"), result.get(0).getCosts());
+        assertEquals(COST_5000_00, result.get(0).getCosts());
     }
 
     @Test
     void getByCostsBetweenShouldReturnFilteredList() {
-        ProjectCost cost1 = createValidProjectCost(1L, new BigDecimal("5000.00"));
-        ProjectCost cost2 = createValidProjectCost(2L, new BigDecimal("10000.00"));
-        ProjectCost cost3 = createValidProjectCost(3L, new BigDecimal("15000.00"));
+        ProjectCost cost1 = createValidProjectCost(PROJECT_COST_ID_1, COST_5000_00);
+        ProjectCost cost2 = createValidProjectCost(PROJECT_COST_ID_2, COST_10000_00);
+        ProjectCost cost3 = createValidProjectCost(PROJECT_COST_ID_3, COST_15000_00);
 
         when(projectCostRepository.findAll()).thenReturn(Arrays.asList(cost1, cost2, cost3));
 
-        List<ProjectCost> result = projectCostService.getByCostsBetween(new BigDecimal("6000.00"),
-                new BigDecimal("12000.00"));
+        List<ProjectCost> result = projectCostService.getByCostsBetween(COST_6000_00, COST_12000_00);
 
         assertEquals(1, result.size());
-        assertEquals(new BigDecimal("10000.00"), result.get(0).getCosts());
+        assertEquals(COST_10000_00, result.get(0).getCosts());
     }
 
     @Test
     void getByCostsBetweenShouldThrowWhenMinGreaterThanMax() {
         assertThrows(IllegalArgumentException.class,
-                () -> projectCostService.getByCostsBetween(new BigDecimal("10000.00"), new BigDecimal("5000.00")));
+                () -> projectCostService.getByCostsBetween(COST_10000_00, COST_5000_00));
     }
 
     // ========== Validation Tests ==========
@@ -633,7 +676,7 @@ class ProjectCostServiceImplTest {
     @Test
     void validateProjectCostShouldThrowWhenInvalidApproveOrPlan() {
         ProjectCost invalidCost = new ProjectCost();
-        invalidCost.setApproveOrPlan((byte) 3);
+        invalidCost.setApproveOrPlan(INVALID_TYPE);
 
         assertThrows(IllegalArgumentException.class, () -> projectCostService.validateProjectCost(invalidCost));
     }
@@ -641,7 +684,7 @@ class ProjectCostServiceImplTest {
     @Test
     void validateProjectCostShouldThrowWhenProjectNull() {
         ProjectCost invalidCost = new ProjectCost();
-        invalidCost.setApproveOrPlan((byte) 1);
+        invalidCost.setApproveOrPlan(APPROVED_TYPE);
         invalidCost.setProject(null);
 
         assertThrows(IllegalArgumentException.class, () -> projectCostService.validateProjectCost(invalidCost));
@@ -650,7 +693,7 @@ class ProjectCostServiceImplTest {
     @Test
     void validateProjectCostShouldThrowWhenProjectPeriodNull() {
         ProjectCost invalidCost = new ProjectCost();
-        invalidCost.setApproveOrPlan((byte) 1);
+        invalidCost.setApproveOrPlan(APPROVED_TYPE);
         invalidCost.setProject(new Project());
         invalidCost.setProjectPeriod(null);
 
@@ -661,32 +704,34 @@ class ProjectCostServiceImplTest {
 
     @Test
     void canCreateProjectCostShouldReturnFalseWhenNull() {
-        boolean result = projectCostService.canCreateProjectCost(null, 2024L, (byte) 1);
+        boolean result = projectCostService.canCreateProjectCost(null, PROJECT_PERIOD_ID_2024, APPROVED_TYPE);
         assertFalse(result);
 
-        result = projectCostService.canCreateProjectCost(1L, null, (byte) 1);
+        result = projectCostService.canCreateProjectCost(PROJECT_ID_1, null, APPROVED_TYPE);
         assertFalse(result);
 
-        result = projectCostService.canCreateProjectCost(1L, 2024L, null);
+        result = projectCostService.canCreateProjectCost(PROJECT_ID_1, PROJECT_PERIOD_ID_2024, null);
         assertFalse(result);
     }
 
     @Test
     void canCreateProjectCostShouldReturnTrueWhenCostExists() {
-        when(projectCostRepository.findByProjectIdAndProjectPeriodIdAndApproveOrPlan(1L, 2024L, (byte) 1))
+        when(projectCostRepository.findByProjectIdAndProjectPeriodIdAndApproveOrPlan(PROJECT_ID_1,
+                PROJECT_PERIOD_ID_2024, APPROVED_TYPE))
                 .thenReturn(List.of(projectCost));
 
-        boolean result = projectCostService.canCreateProjectCost(1L, 2024L, (byte) 1);
+        boolean result = projectCostService.canCreateProjectCost(PROJECT_ID_1, PROJECT_PERIOD_ID_2024, APPROVED_TYPE);
 
         assertTrue(result);
     }
 
     @Test
     void canCreateProjectCostShouldReturnFalseWhenCostNotExists() {
-        when(projectCostRepository.findByProjectIdAndProjectPeriodIdAndApproveOrPlan(1L, 2024L, (byte) 1))
+        when(projectCostRepository.findByProjectIdAndProjectPeriodIdAndApproveOrPlan(PROJECT_ID_1,
+                PROJECT_PERIOD_ID_2024, APPROVED_TYPE))
                 .thenReturn(Collections.emptyList());
 
-        boolean result = projectCostService.canCreateProjectCost(1L, 2024L, (byte) 1);
+        boolean result = projectCostService.canCreateProjectCost(PROJECT_ID_1, PROJECT_PERIOD_ID_2024, APPROVED_TYPE);
 
         assertFalse(result);
     }
@@ -696,8 +741,8 @@ class ProjectCostServiceImplTest {
     @Test
     void createAllShouldSaveAllProjectCosts() {
         List<ProjectCost> costs = Arrays.asList(
-                createValidProjectCost(1L, new BigDecimal("10000.00")),
-                createValidProjectCost(2L, new BigDecimal("20000.00")));
+                createValidProjectCost(PROJECT_COST_ID_1, COST_10000_00),
+                createValidProjectCost(PROJECT_COST_ID_2, COST_20000_00));
 
         when(projectCostRepository.saveAll(costs)).thenReturn(costs);
 
@@ -720,10 +765,10 @@ class ProjectCostServiceImplTest {
     @Test
     void deleteByProjectIdShouldDeleteAll() {
         List<ProjectCost> costs = List.of(projectCost);
-        when(projectCostRepository.findByProjectId(1L)).thenReturn(costs);
+        when(projectCostRepository.findByProjectId(PROJECT_ID_1)).thenReturn(costs);
         doNothing().when(projectCostRepository).deleteAll(costs);
 
-        projectCostService.deleteByProjectId(1L);
+        projectCostService.deleteByProjectId(PROJECT_ID_1);
 
         verify(projectCostRepository).deleteAll(costs);
     }
@@ -731,10 +776,10 @@ class ProjectCostServiceImplTest {
     @Test
     void deleteByProjectPeriodIdShouldDeleteAll() {
         List<ProjectCost> costs = List.of(projectCost);
-        when(projectCostRepository.findByProjectPeriodId(2024L)).thenReturn(costs);
+        when(projectCostRepository.findByProjectPeriodId(PROJECT_PERIOD_ID_2024)).thenReturn(costs);
         doNothing().when(projectCostRepository).deleteAll(costs);
 
-        projectCostService.deleteByProjectPeriodId(2024L);
+        projectCostService.deleteByProjectPeriodId(PROJECT_PERIOD_ID_2024);
 
         verify(projectCostRepository).deleteAll(costs);
     }
@@ -743,15 +788,15 @@ class ProjectCostServiceImplTest {
 
     @Test
     void getMaxIdShouldReturnMaximumId() {
-        ProjectCost cost1 = createValidProjectCost(1L, new BigDecimal("1000.00"));
-        ProjectCost cost2 = createValidProjectCost(5L, new BigDecimal("5000.00"));
-        ProjectCost cost3 = createValidProjectCost(3L, new BigDecimal("3000.00"));
+        ProjectCost cost1 = createValidProjectCost(PROJECT_COST_ID_1, COST_1000_00);
+        ProjectCost cost2 = createValidProjectCost(PROJECT_COST_ID_5, COST_5000_00);
+        ProjectCost cost3 = createValidProjectCost(PROJECT_COST_ID_3, COST_3000_00);
 
         when(projectCostRepository.findAll()).thenReturn(Arrays.asList(cost1, cost2, cost3));
 
         Long result = projectCostService.getMaxId();
 
-        assertEquals(5L, result);
+        assertEquals(PROJECT_COST_ID_5, result);
     }
 
     @Test
@@ -765,12 +810,13 @@ class ProjectCostServiceImplTest {
 
     @Test
     void getByProjectIdWithNullCostsShouldReturnFilteredList() {
-        ProjectCost costWithNull = createValidProjectCost(1L, null);
-        ProjectCost costWithValue = createValidProjectCost(2L, new BigDecimal("5000.00"));
+        ProjectCost costWithNull = createValidProjectCost(PROJECT_COST_ID_1, null);
+        ProjectCost costWithValue = createValidProjectCost(PROJECT_COST_ID_2, COST_5000_00);
 
-        when(projectCostRepository.findByProjectId(1L)).thenReturn(Arrays.asList(costWithNull, costWithValue));
+        when(projectCostRepository.findByProjectId(PROJECT_ID_1))
+                .thenReturn(Arrays.asList(costWithNull, costWithValue));
 
-        List<ProjectCost> result = projectCostService.getByProjectIdWithNullCosts(1L);
+        List<ProjectCost> result = projectCostService.getByProjectIdWithNullCosts(PROJECT_ID_1);
 
         assertEquals(1, result.size());
         assertNull(result.get(0).getCosts());
@@ -781,15 +827,15 @@ class ProjectCostServiceImplTest {
     private ProjectCost createValidProjectCost(Long id, BigDecimal costs) {
         ProjectCost newCost = new ProjectCost();
         newCost.setId(id);
-        newCost.setApproveOrPlan((byte) 1);
+        newCost.setApproveOrPlan(APPROVED_TYPE);
         newCost.setCosts(costs);
 
         Project project = new Project();
-        project.setId(1L);
+        project.setId(PROJECT_ID_1);
         newCost.setProject(project);
 
         ProjectPeriod period = new ProjectPeriod();
-        period.setId(2024L);
+        period.setId(PROJECT_PERIOD_ID_2024);
         newCost.setProjectPeriod(period);
 
         return newCost;
