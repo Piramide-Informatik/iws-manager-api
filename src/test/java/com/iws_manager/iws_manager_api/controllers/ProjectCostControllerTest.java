@@ -28,7 +28,20 @@ class ProjectCostControllerTest {
     private static final Long PROJECT_ID = 2L;
     private static final Long PROJECT_PERIOD_ID = 3L;
     private static final Byte APPROVE_OR_PLAN = 1;
-    private static final BigDecimal COSTS = new BigDecimal("15000.50");
+    private static final Byte PLANNED_TYPE = 2;
+
+    // Constantes para valores numéricos repetidos
+    private static final String COSTS_VALUE = "15000.50";
+    private static final String TOTAL_VALUE_1 = "35000.25";
+    private static final String TOTAL_VALUE_2 = "20000.75";
+    private static final String AMOUNT_10000 = "10000.00";
+    private static final String AMOUNT_30000 = "30000.00";
+
+    private static final BigDecimal COSTS = new BigDecimal(COSTS_VALUE);
+    private static final BigDecimal TOTAL_1 = new BigDecimal(TOTAL_VALUE_1);
+    private static final BigDecimal TOTAL_2 = new BigDecimal(TOTAL_VALUE_2);
+    private static final BigDecimal AMOUNT_10K = new BigDecimal(AMOUNT_10000);
+    private static final BigDecimal AMOUNT_30K = new BigDecimal(AMOUNT_30000);
 
     @Mock
     private ProjectCostService projectCostService;
@@ -250,8 +263,7 @@ class ProjectCostControllerTest {
 
     @Test
     void getPlannedCostsReturnsList() {
-        Byte plannedType = 2;
-        projectCost.setApproveOrPlan(plannedType);
+        projectCost.setApproveOrPlan(PLANNED_TYPE);
         List<ProjectCost> list = Arrays.asList(projectCost);
         when(projectCostService.getPlannedCosts()).thenReturn(list);
 
@@ -289,8 +301,7 @@ class ProjectCostControllerTest {
 
     @Test
     void getPlannedCostsByProjectAndPeriodReturnsList() {
-        Byte plannedType = 2;
-        projectCost.setApproveOrPlan(plannedType);
+        projectCost.setApproveOrPlan(PLANNED_TYPE);
         List<ProjectCost> list = Arrays.asList(projectCost);
         when(projectCostService.getPlannedCostsByProjectAndPeriod(PROJECT_ID, PROJECT_PERIOD_ID)).thenReturn(list);
 
@@ -328,8 +339,7 @@ class ProjectCostControllerTest {
 
     @Test
     void getPlannedCostsByProjectReturnsList() {
-        Byte plannedType = 2;
-        projectCost.setApproveOrPlan(plannedType);
+        projectCost.setApproveOrPlan(PLANNED_TYPE);
         List<ProjectCost> list = Arrays.asList(projectCost);
         when(projectCostService.getPlannedCostsByProject(PROJECT_ID)).thenReturn(list);
 
@@ -380,8 +390,7 @@ class ProjectCostControllerTest {
 
     @Test
     void getPlannedProjectTotalsReturnsList() {
-        Byte plannedType = 2;
-        projectCost.setApproveOrPlan(plannedType);
+        projectCost.setApproveOrPlan(PLANNED_TYPE);
         List<ProjectCost> list = Arrays.asList(projectCost);
         when(projectCostService.getPlannedProjectTotals(PROJECT_ID)).thenReturn(list);
 
@@ -395,73 +404,67 @@ class ProjectCostControllerTest {
 
     @Test
     void getTotalCostsByProjectReturnsBigDecimal() {
-        BigDecimal total = new BigDecimal("35000.25");
-        when(projectCostService.getTotalCostsByProject(PROJECT_ID)).thenReturn(total);
+        when(projectCostService.getTotalCostsByProject(PROJECT_ID)).thenReturn(TOTAL_1);
 
         ResponseEntity<BigDecimal> response = projectCostController.getTotalCostsByProject(PROJECT_ID);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(total, response.getBody());
+        assertEquals(TOTAL_1, response.getBody());
     }
 
     @Test
     void getTotalApprovedCostsByProjectReturnsBigDecimal() {
-        BigDecimal total = new BigDecimal("15000.50");
-        when(projectCostService.getTotalApprovedCostsByProject(PROJECT_ID)).thenReturn(total);
+        when(projectCostService.getTotalApprovedCostsByProject(PROJECT_ID)).thenReturn(COSTS);
 
         ResponseEntity<BigDecimal> response = projectCostController.getTotalApprovedCostsByProject(PROJECT_ID);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(total, response.getBody());
+        assertEquals(COSTS, response.getBody());
     }
 
     @Test
     void getTotalPlannedCostsByProjectReturnsBigDecimal() {
-        BigDecimal total = new BigDecimal("20000.75");
-        when(projectCostService.getTotalPlannedCostsByProject(PROJECT_ID)).thenReturn(total);
+        when(projectCostService.getTotalPlannedCostsByProject(PROJECT_ID)).thenReturn(TOTAL_2);
 
         ResponseEntity<BigDecimal> response = projectCostController.getTotalPlannedCostsByProject(PROJECT_ID);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(total, response.getBody());
+        assertEquals(TOTAL_2, response.getBody());
     }
 
     @Test
     void getTotalCostsByProjectAndPeriodReturnsBigDecimal() {
-        BigDecimal total = new BigDecimal("15000.50");
-        when(projectCostService.getTotalCostsByProjectAndPeriod(PROJECT_ID, PROJECT_PERIOD_ID)).thenReturn(total);
+        when(projectCostService.getTotalCostsByProjectAndPeriod(PROJECT_ID, PROJECT_PERIOD_ID)).thenReturn(COSTS);
 
         ResponseEntity<BigDecimal> response = projectCostController.getTotalCostsByProjectAndPeriod(PROJECT_ID,
                 PROJECT_PERIOD_ID);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(total, response.getBody());
+        assertEquals(COSTS, response.getBody());
     }
 
     @Test
     void getTotalApprovedCostsByProjectAndPeriodReturnsBigDecimal() {
-        BigDecimal total = new BigDecimal("15000.50");
         when(projectCostService.getTotalApprovedCostsByProjectAndPeriod(PROJECT_ID, PROJECT_PERIOD_ID))
-                .thenReturn(total);
+                .thenReturn(COSTS);
 
         ResponseEntity<BigDecimal> response = projectCostController.getTotalApprovedCostsByProjectAndPeriod(PROJECT_ID,
                 PROJECT_PERIOD_ID);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(total, response.getBody());
+        assertEquals(COSTS, response.getBody());
     }
 
     @Test
     void getTotalPlannedCostsByProjectAndPeriodReturnsBigDecimal() {
-        BigDecimal total = new BigDecimal("20000.75");
         when(projectCostService.getTotalPlannedCostsByProjectAndPeriod(PROJECT_ID, PROJECT_PERIOD_ID))
-                .thenReturn(total);
+                .thenReturn(TOTAL_2);
 
         ResponseEntity<BigDecimal> response = projectCostController.getTotalPlannedCostsByProjectAndPeriod(PROJECT_ID,
                 PROJECT_PERIOD_ID);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(total, response.getBody());
+        assertEquals(TOTAL_2, response.getBody());
     }
 
     // Check existence operations tests
@@ -560,11 +563,10 @@ class ProjectCostControllerTest {
 
     @Test
     void getByCostsGreaterThanReturnsList() {
-        BigDecimal amount = new BigDecimal("10000.00");
         List<ProjectCost> list = Arrays.asList(projectCost);
-        when(projectCostService.getByCostsGreaterThan(amount)).thenReturn(list);
+        when(projectCostService.getByCostsGreaterThan(AMOUNT_10K)).thenReturn(list);
 
-        ResponseEntity<List<ProjectCost>> response = projectCostController.getByCostsGreaterThan(amount);
+        ResponseEntity<List<ProjectCost>> response = projectCostController.getByCostsGreaterThan(AMOUNT_10K);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(list, response.getBody());
@@ -572,11 +574,10 @@ class ProjectCostControllerTest {
 
     @Test
     void getByCostsLessThanReturnsList() {
-        BigDecimal amount = new BigDecimal("30000.00");
         List<ProjectCost> list = Arrays.asList(projectCost);
-        when(projectCostService.getByCostsLessThan(amount)).thenReturn(list);
+        when(projectCostService.getByCostsLessThan(AMOUNT_30K)).thenReturn(list);
 
-        ResponseEntity<List<ProjectCost>> response = projectCostController.getByCostsLessThan(amount);
+        ResponseEntity<List<ProjectCost>> response = projectCostController.getByCostsLessThan(AMOUNT_30K);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(list, response.getBody());
@@ -584,12 +585,10 @@ class ProjectCostControllerTest {
 
     @Test
     void getByCostsBetweenReturnsList() {
-        BigDecimal minAmount = new BigDecimal("10000.00");
-        BigDecimal maxAmount = new BigDecimal("30000.00");
         List<ProjectCost> list = Arrays.asList(projectCost);
-        when(projectCostService.getByCostsBetween(minAmount, maxAmount)).thenReturn(list);
+        when(projectCostService.getByCostsBetween(AMOUNT_10K, AMOUNT_30K)).thenReturn(list);
 
-        ResponseEntity<List<ProjectCost>> response = projectCostController.getByCostsBetween(minAmount, maxAmount);
+        ResponseEntity<List<ProjectCost>> response = projectCostController.getByCostsBetween(AMOUNT_10K, AMOUNT_30K);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(list, response.getBody());
@@ -700,15 +699,12 @@ class ProjectCostControllerTest {
 
     @Test
     void getByCostsBetweenThrowsIllegalArgumentException() {
-        BigDecimal minAmount = new BigDecimal("30000.00");
-        BigDecimal maxAmount = new BigDecimal("10000.00");
-
-        when(projectCostService.getByCostsBetween(minAmount, maxAmount))
+        when(projectCostService.getByCostsBetween(AMOUNT_30K, AMOUNT_10K))
                 .thenThrow(new IllegalArgumentException("Min amount cannot be greater than max amount"));
 
         assertThrows(IllegalArgumentException.class,
-                () -> projectCostController.getByCostsBetween(minAmount, maxAmount));
-        verify(projectCostService, times(1)).getByCostsBetween(minAmount, maxAmount);
+                () -> projectCostController.getByCostsBetween(AMOUNT_30K, AMOUNT_10K));
+        verify(projectCostService, times(1)).getByCostsBetween(AMOUNT_30K, AMOUNT_10K);
     }
 
     @Test
