@@ -7,6 +7,9 @@ import com.iws_manager.iws_manager_api.models.base.BaseEntity;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -27,15 +30,17 @@ import java.math.BigDecimal;
 @AttributeOverride(name = "id", column = @Column(name = "projectcostid"))
 public class ProjectCost extends BaseEntity {
 
-    @Column(name = "approveorplan", nullable = false)
+    @Column(name = "approveorplan", columnDefinition = "TINYINT")
     private Byte approveOrPlan;
 
     @Column(name = "costs", precision = 10, scale = 2)
     private BigDecimal costs;
 
-    @Column(name = "projectid")
-    private Integer projectId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "projectid", referencedColumnName = "projectid")
+    private Project project;
 
-    @Column(name = "projectperiodid")
-    private Integer projectPeriodId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "projectperiodid", referencedColumnName = "projectperiodid")
+    private ProjectPeriod projectPeriod;
 }
