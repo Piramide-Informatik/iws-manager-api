@@ -28,6 +28,8 @@ class OrderEmployeeServiceImplTest {
     private static final Long ORDER_ID = 2L;
     private static final Long QUALIFICATION_FZ_ID = 3L;
     private static final String KEYWORD = "Developer";
+    private static final String HOURLY_RATE_50 = "50.00";
+    private static final String HOURLY_RATE_40 = "40.00";
 
     @Mock
     private OrderEmployeeRepository orderEmployeeRepository;
@@ -97,7 +99,7 @@ class OrderEmployeeServiceImplTest {
         OrderEmployee updated = new OrderEmployee();
         updated.setQualificationkmui("Updated Qualification");
         updated.setTitle("Updated Title");
-        updated.setHourlyrate(new BigDecimal("50.00"));
+        updated.setHourlyrate(new BigDecimal(HOURLY_RATE_50));
         updated.setPlannedhours(new BigDecimal("180.00"));
 
         when(orderEmployeeRepository.findById(1L)).thenReturn(Optional.of(sampleOrderEmployee));
@@ -325,8 +327,8 @@ class OrderEmployeeServiceImplTest {
 
     @Test
     void testGetByHourlyrateBetween() {
-        BigDecimal minRate = new BigDecimal("40.00");
-        BigDecimal maxRate = new BigDecimal("50.00");
+        BigDecimal minRate = new BigDecimal(HOURLY_RATE_40);
+        BigDecimal maxRate = new BigDecimal(HOURLY_RATE_50);
         when(orderEmployeeRepository.findByHourlyrateBetween(minRate, maxRate))
                 .thenReturn(List.of(sampleOrderEmployee));
         List<OrderEmployee> result = orderEmployeeService.getByHourlyrateBetween(minRate, maxRate);
@@ -336,8 +338,8 @@ class OrderEmployeeServiceImplTest {
 
     @Test
     void testGetByHourlyrateBetweenThrowsExceptionWhenMinGreaterThanMax() {
-        BigDecimal minRate = new BigDecimal("50.00");
-        BigDecimal maxRate = new BigDecimal("40.00");
+        BigDecimal minRate = new BigDecimal(HOURLY_RATE_50);
+        BigDecimal maxRate = new BigDecimal(HOURLY_RATE_40);
 
         assertThrows(IllegalArgumentException.class,
                 () -> orderEmployeeService.getByHourlyrateBetween(minRate, maxRate));
@@ -375,7 +377,7 @@ class OrderEmployeeServiceImplTest {
 
     @Test
     void testGetWithMinimumRateAndHours() {
-        BigDecimal minRate = new BigDecimal("40.00");
+        BigDecimal minRate = new BigDecimal(HOURLY_RATE_40);
         BigDecimal minHours = new BigDecimal("150.00");
         when(orderEmployeeRepository.findWithMinimumRateAndHours(minRate, minHours))
                 .thenReturn(List.of(sampleOrderEmployee));
