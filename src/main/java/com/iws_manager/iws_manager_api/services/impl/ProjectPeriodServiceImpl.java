@@ -53,7 +53,7 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
                     existingProjectPeriod.setPeriodNo(projectPeriodDetails.getPeriodNo());
                     existingProjectPeriod.setStartDate(projectPeriodDetails.getStartDate());
                     existingProjectPeriod.setEndDate(projectPeriodDetails.getEndDate());
-
+                    existingProjectPeriod.setProject(projectPeriodDetails.getProject());
                     return projectPeriodRepository.save(existingProjectPeriod);
                 })
                 .orElseThrow(()-> new RuntimeException("ProjectPeriod not found with id " + id));
@@ -83,5 +83,11 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
     @Transactional(readOnly = true)
     public List<ProjectPeriod> getAllProjectPeriodsByEndDateAsc() {
         return projectPeriodRepository.findAllByOrderByEndDateAsc();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProjectPeriod> findAllByProjectId(Long id) {
+        return projectPeriodRepository.findAllByProjectIdFetchProject(id);
     }
 }

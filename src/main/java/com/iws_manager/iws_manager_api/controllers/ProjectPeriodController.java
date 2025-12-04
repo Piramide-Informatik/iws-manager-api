@@ -84,4 +84,10 @@ public class ProjectPeriodController {
         List<ProjectPeriod> projectPeriods = projectPeriodService.getAllProjectPeriodsByEndDateAsc();
         return new ResponseEntity<>(projectPeriods, HttpStatus.OK);
     }
+
+    @GetMapping("/project/{id}")
+    public ResponseEntity<List<ProjectPeriod>> getAllByProjectId(@PathVariable Long id){
+        List<ProjectPeriod> list = projectPeriodService.findAllByProjectId(id);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }
