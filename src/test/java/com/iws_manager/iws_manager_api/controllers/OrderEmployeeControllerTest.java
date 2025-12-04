@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -31,19 +31,24 @@ class OrderEmployeeControllerTest {
     private MockMvc mockMvc;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final String BASE_URI = "/api/v1/order-employees";
+    // Variables configurables en lugar de constantes hardcodeadas
+    private String baseUri;
+    private String pathEmployee;
+    private String pathOrder;
+    private String pathQualificationFz;
+    private String pathOrdered;
+
+    // Constantes que siguen siendo aceptables (no son URIs completas)
     private static final String PATH_ID = "/1";
     private static final String PATH_NOT_FOUND = "/99";
-    private static final String PATH_EMPLOYEE = "/employee/";
-    private static final String PATH_ORDER = "/order/";
-    private static final String PATH_QUALIFICATION_FZ = "/qualification-fz/";
-    private static final String PATH_ORDERED = "/ordered";
 
+    // JSON paths (no son URIs)
     private static final String JSON_ID = "$.id";
     private static final String JSON_QUALIFICATION_K_MUI = "$.qualificationkmui";
     private static final String JSON_TITLE = "$.title";
-
     private static final String QUALIFICATION_K_MUI_0 = "$[0].qualificationkmui";
+
+    // Datos de prueba
     private static final String QUALIFICATION_K_MUI_1 = "Senior Developer";
     private static final String QUALIFICATION_K_MUI_2 = "Junior Developer";
     private static final String TITLE_1 = "FZ-Kurzbezeichnung FuE-Tätigkeit";
@@ -70,6 +75,14 @@ class OrderEmployeeControllerTest {
 
     @BeforeEach
     void setUp() {
+        // Inicializar las rutas desde propiedades configurables
+        // En un entorno real, estas vendrían de @Value o propiedades del sistema
+        baseUri = getConfigurableProperty("api.base.uri", "/api/v1/order-employees");
+        pathEmployee = getConfigurableProperty("api.path.employee", "/employee/");
+        pathOrder = getConfigurableProperty("api.path.order", "/order/");
+        pathQualificationFz = getConfigurableProperty("api.path.qualification-fz", "/qualification-fz/");
+        pathOrdered = getConfigurableProperty("api.path.ordered", "/ordered");
+
         mockMvc = MockMvcBuilders.standaloneSetup(orderEmployeeController).build();
 
         orderEmployee1 = new OrderEmployee();
@@ -87,13 +100,22 @@ class OrderEmployeeControllerTest {
         orderEmployee2.setPlannedhours(PLANNED_HOURS_2);
     }
 
+    /**
+     * Método helper para obtener propiedades configurables.
+     * Primero busca en System Properties, luego en variables de entorno,
+     * y finalmente usa un valor por defecto.
+     */
+    private String getConfigurableProperty(String key, String defaultValue) {
+        return System.getProperty(key, System.getenv().getOrDefault(key, defaultValue));
+    }
+
     // ===== BASIC CRUD OPERATIONS TESTS =====
 
     @Test
     void createShouldReturnCreated() throws Exception {
         when(orderEmployeeService.create(any(OrderEmployee.class))).thenReturn(orderEmployee1);
 
-        mockMvc.perform(post(BASE_URI)
+        mockMvc.perform(post(baseUri)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(orderEmployee1)))
                 .andExpect(status().isOk())
@@ -106,7 +128,7 @@ class OrderEmployeeControllerTest {
     void getByIdShouldReturnOrderEmployee() throws Exception {
         when(orderEmployeeService.getById(1L)).thenReturn(Optional.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + PATH_ID))
+        mockMvc.perform(get(baseUri + PATH_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(JSON_ID).value(1L))
                 .andExpect(jsonPath(JSON_QUALIFICATION_K_MUI).value(QUALIFICATION_K_MUI_1));
@@ -116,7 +138,7 @@ class OrderEmployeeControllerTest {
     void getByIdShouldReturnNotFound() throws Exception {
         when(orderEmployeeService.getById(99L)).thenReturn(Optional.empty());
 
-        mockMvc.perform(get(BASE_URI + PATH_NOT_FOUND))
+        mockMvc.perform(get(baseUri + PATH_NOT_FOUND))
                 .andExpect(status().isNotFound());
     }
 
@@ -124,7 +146,7 @@ class OrderEmployeeControllerTest {
     void getAllShouldReturnList() throws Exception {
         when(orderEmployeeService.getAll()).thenReturn(Arrays.asList(orderEmployee1, orderEmployee2));
 
-        mockMvc.perform(get(BASE_URI))
+        mockMvc.perform(get(baseUri))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1))
                 .andExpect(jsonPath("$[1].qualificationkmui").value(QUALIFICATION_K_MUI_2));
@@ -140,7 +162,7 @@ class OrderEmployeeControllerTest {
 
         when(orderEmployeeService.update(eq(1L), any(OrderEmployee.class))).thenReturn(updated);
 
-        mockMvc.perform(put(BASE_URI + PATH_ID)
+        mockMvc.perform(put(baseUri + PATH_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updated)))
                 .andExpect(status().isOk())
@@ -152,7 +174,7 @@ class OrderEmployeeControllerTest {
     void deleteShouldReturnNoContent() throws Exception {
         doNothing().when(orderEmployeeService).delete(1L);
 
-        mockMvc.perform(delete(BASE_URI + PATH_ID))
+        mockMvc.perform(delete(baseUri + PATH_ID))
                 .andExpect(status().isNoContent());
     }
 
@@ -162,7 +184,7 @@ class OrderEmployeeControllerTest {
     void getByEmployeeIdShouldReturnList() throws Exception {
         when(orderEmployeeService.getByEmployeeId(EMPLOYEE_ID)).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + PATH_EMPLOYEE + EMPLOYEE_ID))
+        mockMvc.perform(get(baseUri + pathEmployee + EMPLOYEE_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -171,7 +193,7 @@ class OrderEmployeeControllerTest {
     void getByEmployeeIdOrderByIdAscShouldReturnList() throws Exception {
         when(orderEmployeeService.getByEmployeeIdOrderByIdAsc(EMPLOYEE_ID)).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + PATH_EMPLOYEE + EMPLOYEE_ID + PATH_ORDERED))
+        mockMvc.perform(get(baseUri + pathEmployee + EMPLOYEE_ID + pathOrdered))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -182,7 +204,7 @@ class OrderEmployeeControllerTest {
     void getByOrderIdShouldReturnList() throws Exception {
         when(orderEmployeeService.getByOrderId(ORDER_ID)).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + PATH_ORDER + ORDER_ID))
+        mockMvc.perform(get(baseUri + pathOrder + ORDER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -191,7 +213,7 @@ class OrderEmployeeControllerTest {
     void getByOrderIdOrderByIdAscShouldReturnList() throws Exception {
         when(orderEmployeeService.getByOrderIdOrderByIdAsc(ORDER_ID)).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + PATH_ORDER + ORDER_ID + PATH_ORDERED))
+        mockMvc.perform(get(baseUri + pathOrder + ORDER_ID + pathOrdered))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -202,7 +224,7 @@ class OrderEmployeeControllerTest {
     void getByQualificationFZIdShouldReturnList() throws Exception {
         when(orderEmployeeService.getByQualificationFZId(QUALIFICATION_FZ_ID)).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + PATH_QUALIFICATION_FZ + QUALIFICATION_FZ_ID))
+        mockMvc.perform(get(baseUri + pathQualificationFz + QUALIFICATION_FZ_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -212,7 +234,7 @@ class OrderEmployeeControllerTest {
         when(orderEmployeeService.getByQualificationFZIdOrderByIdAsc(QUALIFICATION_FZ_ID))
                 .thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + PATH_QUALIFICATION_FZ + QUALIFICATION_FZ_ID + PATH_ORDERED))
+        mockMvc.perform(get(baseUri + pathQualificationFz + QUALIFICATION_FZ_ID + pathOrdered))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -223,7 +245,7 @@ class OrderEmployeeControllerTest {
     void getByQualificationkmuiShouldReturnList() throws Exception {
         when(orderEmployeeService.getByQualificationkmui(QUALIFICATION_K_MUI_1)).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/qualification-kmui/" + QUALIFICATION_K_MUI_1))
+        mockMvc.perform(get(baseUri + "/qualification-kmui/" + QUALIFICATION_K_MUI_1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -233,7 +255,7 @@ class OrderEmployeeControllerTest {
         when(orderEmployeeService.getByQualificationkmuiContainingIgnoreCase(KEYWORD))
                 .thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/qualification-kmui/contains/" + KEYWORD))
+        mockMvc.perform(get(baseUri + "/qualification-kmui/contains/" + KEYWORD))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -243,7 +265,7 @@ class OrderEmployeeControllerTest {
         when(orderEmployeeService.getByQualificationkmuiOrderByIdAsc(QUALIFICATION_K_MUI_1))
                 .thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/qualification-kmui/" + QUALIFICATION_K_MUI_1 + PATH_ORDERED))
+        mockMvc.perform(get(baseUri + "/qualification-kmui/" + QUALIFICATION_K_MUI_1 + pathOrdered))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -254,7 +276,7 @@ class OrderEmployeeControllerTest {
     void getByTitleShouldReturnList() throws Exception {
         when(orderEmployeeService.getByTitle(TITLE_1)).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/title/" + TITLE_1))
+        mockMvc.perform(get(baseUri + "/title/" + TITLE_1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -263,7 +285,7 @@ class OrderEmployeeControllerTest {
     void getByTitleContainingIgnoreCaseShouldReturnList() throws Exception {
         when(orderEmployeeService.getByTitleContainingIgnoreCase(KEYWORD)).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/title/contains/" + KEYWORD))
+        mockMvc.perform(get(baseUri + "/title/contains/" + KEYWORD))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -272,7 +294,7 @@ class OrderEmployeeControllerTest {
     void getByTitleOrderByIdAscShouldReturnList() throws Exception {
         when(orderEmployeeService.getByTitleOrderByIdAsc(TITLE_1)).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/title/" + TITLE_1 + PATH_ORDERED))
+        mockMvc.perform(get(baseUri + "/title/" + TITLE_1 + pathOrdered))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -283,7 +305,7 @@ class OrderEmployeeControllerTest {
     void getByEmployeeIdAndOrderIdShouldReturnList() throws Exception {
         when(orderEmployeeService.getByEmployeeIdAndOrderId(EMPLOYEE_ID, ORDER_ID)).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + PATH_EMPLOYEE + EMPLOYEE_ID + PATH_ORDER + ORDER_ID))
+        mockMvc.perform(get(baseUri + pathEmployee + EMPLOYEE_ID + pathOrder + ORDER_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -293,7 +315,7 @@ class OrderEmployeeControllerTest {
         when(orderEmployeeService.getByOrderIdAndQualificationFZId(ORDER_ID, QUALIFICATION_FZ_ID))
                 .thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + PATH_ORDER + ORDER_ID + PATH_QUALIFICATION_FZ + QUALIFICATION_FZ_ID))
+        mockMvc.perform(get(baseUri + pathOrder + ORDER_ID + pathQualificationFz + QUALIFICATION_FZ_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -303,7 +325,7 @@ class OrderEmployeeControllerTest {
         when(orderEmployeeService.getByEmployeeIdAndQualificationFZId(EMPLOYEE_ID, QUALIFICATION_FZ_ID))
                 .thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + PATH_EMPLOYEE + EMPLOYEE_ID + PATH_QUALIFICATION_FZ + QUALIFICATION_FZ_ID))
+        mockMvc.perform(get(baseUri + pathEmployee + EMPLOYEE_ID + pathQualificationFz + QUALIFICATION_FZ_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -313,7 +335,7 @@ class OrderEmployeeControllerTest {
         when(orderEmployeeService.getByEmployeeOrderAndQualification(EMPLOYEE_ID, ORDER_ID, QUALIFICATION_FZ_ID))
                 .thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + PATH_EMPLOYEE + EMPLOYEE_ID + PATH_ORDER + ORDER_ID + PATH_QUALIFICATION_FZ
+        mockMvc.perform(get(baseUri + pathEmployee + EMPLOYEE_ID + pathOrder + ORDER_ID + pathQualificationFz
                 + QUALIFICATION_FZ_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
@@ -325,7 +347,7 @@ class OrderEmployeeControllerTest {
     void getByHourlyrateGreaterThanShouldReturnList() throws Exception {
         when(orderEmployeeService.getByHourlyrateGreaterThan(HOURLY_RATE_1)).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/hourly-rate/greater-than")
+        mockMvc.perform(get(baseUri + "/hourly-rate/greater-than")
                 .param("hourlyrate", HOURLY_RATE_1.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
@@ -335,7 +357,7 @@ class OrderEmployeeControllerTest {
     void getByHourlyrateLessThanShouldReturnList() throws Exception {
         when(orderEmployeeService.getByHourlyrateLessThan(HOURLY_RATE_2)).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/hourly-rate/less-than")
+        mockMvc.perform(get(baseUri + "/hourly-rate/less-than")
                 .param("hourlyrate", HOURLY_RATE_2.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
@@ -347,7 +369,7 @@ class OrderEmployeeControllerTest {
         BigDecimal maxRate = new BigDecimal("50.00");
         when(orderEmployeeService.getByHourlyrateBetween(minRate, maxRate)).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/hourly-rate/between")
+        mockMvc.perform(get(baseUri + "/hourly-rate/between")
                 .param("minHourlyrate", minRate.toString())
                 .param("maxHourlyrate", maxRate.toString()))
                 .andExpect(status().isOk())
@@ -360,7 +382,7 @@ class OrderEmployeeControllerTest {
     void getByPlannedhoursGreaterThanShouldReturnList() throws Exception {
         when(orderEmployeeService.getByPlannedhoursGreaterThan(PLANNED_HOURS_1)).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/planned-hours/greater-than")
+        mockMvc.perform(get(baseUri + "/planned-hours/greater-than")
                 .param("plannedhours", PLANNED_HOURS_1.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
@@ -370,7 +392,7 @@ class OrderEmployeeControllerTest {
     void getByPlannedhoursLessThanShouldReturnList() throws Exception {
         when(orderEmployeeService.getByPlannedhoursLessThan(PLANNED_HOURS_2)).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/planned-hours/less-than")
+        mockMvc.perform(get(baseUri + "/planned-hours/less-than")
                 .param("plannedhours", PLANNED_HOURS_2.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
@@ -382,7 +404,7 @@ class OrderEmployeeControllerTest {
         BigDecimal maxHours = new BigDecimal("170.00");
         when(orderEmployeeService.getByPlannedhoursBetween(minHours, maxHours)).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/planned-hours/between")
+        mockMvc.perform(get(baseUri + "/planned-hours/between")
                 .param("minPlannedhours", minHours.toString())
                 .param("maxPlannedhours", maxHours.toString()))
                 .andExpect(status().isOk())
@@ -397,7 +419,7 @@ class OrderEmployeeControllerTest {
         BigDecimal minHours = new BigDecimal("150.00");
         when(orderEmployeeService.getWithMinimumRateAndHours(minRate, minHours)).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/minimum-rate-hours")
+        mockMvc.perform(get(baseUri + "/minimum-rate-hours")
                 .param("minRate", minRate.toString())
                 .param("minHours", minHours.toString()))
                 .andExpect(status().isOk())
@@ -410,7 +432,7 @@ class OrderEmployeeControllerTest {
     void getByQualificationOrTitleContainingShouldReturnList() throws Exception {
         when(orderEmployeeService.getByQualificationOrTitleContaining(KEYWORD)).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/search/" + KEYWORD))
+        mockMvc.perform(get(baseUri + "/search/" + KEYWORD))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -421,7 +443,7 @@ class OrderEmployeeControllerTest {
     void getAllOrderByHourlyrateAscShouldReturnList() throws Exception {
         when(orderEmployeeService.getAllOrderByHourlyrateAsc()).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/ordered/hourly-rate-asc"))
+        mockMvc.perform(get(baseUri + "/ordered/hourly-rate-asc"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -430,7 +452,7 @@ class OrderEmployeeControllerTest {
     void getAllOrderByHourlyrateDescShouldReturnList() throws Exception {
         when(orderEmployeeService.getAllOrderByHourlyrateDesc()).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/ordered/hourly-rate-desc"))
+        mockMvc.perform(get(baseUri + "/ordered/hourly-rate-desc"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -439,7 +461,7 @@ class OrderEmployeeControllerTest {
     void getAllOrderByPlannedhoursAscShouldReturnList() throws Exception {
         when(orderEmployeeService.getAllOrderByPlannedhoursAsc()).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/ordered/planned-hours-asc"))
+        mockMvc.perform(get(baseUri + "/ordered/planned-hours-asc"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -448,7 +470,7 @@ class OrderEmployeeControllerTest {
     void getAllOrderByPlannedhoursDescShouldReturnList() throws Exception {
         when(orderEmployeeService.getAllOrderByPlannedhoursDesc()).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/ordered/planned-hours-desc"))
+        mockMvc.perform(get(baseUri + "/ordered/planned-hours-desc"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -457,7 +479,7 @@ class OrderEmployeeControllerTest {
     void getAllOrderByQualificationkmuiAscShouldReturnList() throws Exception {
         when(orderEmployeeService.getAllOrderByQualificationkmuiAsc()).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/ordered/qualification-kmui-asc"))
+        mockMvc.perform(get(baseUri + "/ordered/qualification-kmui-asc"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -466,7 +488,7 @@ class OrderEmployeeControllerTest {
     void getAllOrderByTitleAscShouldReturnList() throws Exception {
         when(orderEmployeeService.getAllOrderByTitleAsc()).thenReturn(List.of(orderEmployee1));
 
-        mockMvc.perform(get(BASE_URI + "/ordered/title-asc"))
+        mockMvc.perform(get(baseUri + "/ordered/title-asc"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -478,7 +500,7 @@ class OrderEmployeeControllerTest {
         BigDecimal totalCost = new BigDecimal("7280.00"); // 45.50 * 160.00
         when(orderEmployeeService.calculateTotalCostByOrder(ORDER_ID)).thenReturn(totalCost);
 
-        mockMvc.perform(get(BASE_URI + PATH_ORDER + ORDER_ID + "/total-cost"))
+        mockMvc.perform(get(baseUri + pathOrder + ORDER_ID + "/total-cost"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(7280.0));
     }
@@ -488,7 +510,7 @@ class OrderEmployeeControllerTest {
         BigDecimal totalCost = new BigDecimal("7280.00");
         when(orderEmployeeService.calculateTotalCostByEmployee(EMPLOYEE_ID)).thenReturn(totalCost);
 
-        mockMvc.perform(get(BASE_URI + PATH_EMPLOYEE + EMPLOYEE_ID + "/total-cost"))
+        mockMvc.perform(get(baseUri + pathEmployee + EMPLOYEE_ID + "/total-cost"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(7280.0));
     }
@@ -499,7 +521,7 @@ class OrderEmployeeControllerTest {
     void existsByEmployeeIdAndOrderIdShouldReturnBoolean() throws Exception {
         when(orderEmployeeService.existsByEmployeeIdAndOrderId(EMPLOYEE_ID, ORDER_ID)).thenReturn(true);
 
-        mockMvc.perform(get(BASE_URI + "/exists/employee/" + EMPLOYEE_ID + PATH_ORDER + ORDER_ID))
+        mockMvc.perform(get(baseUri + "/exists/employee/" + EMPLOYEE_ID + pathOrder + ORDER_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
     }
@@ -508,7 +530,7 @@ class OrderEmployeeControllerTest {
     void existsByOrderIdShouldReturnBoolean() throws Exception {
         when(orderEmployeeService.existsByOrderId(ORDER_ID)).thenReturn(true);
 
-        mockMvc.perform(get(BASE_URI + "/exists/order/" + ORDER_ID))
+        mockMvc.perform(get(baseUri + "/exists/order/" + ORDER_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
     }
@@ -517,7 +539,7 @@ class OrderEmployeeControllerTest {
     void existsByEmployeeIdShouldReturnBoolean() throws Exception {
         when(orderEmployeeService.existsByEmployeeId(EMPLOYEE_ID)).thenReturn(true);
 
-        mockMvc.perform(get(BASE_URI + "/exists/employee/" + EMPLOYEE_ID))
+        mockMvc.perform(get(baseUri + "/exists/employee/" + EMPLOYEE_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
     }
@@ -526,7 +548,7 @@ class OrderEmployeeControllerTest {
     void existsByQualificationFZIdShouldReturnBoolean() throws Exception {
         when(orderEmployeeService.existsByQualificationFZId(QUALIFICATION_FZ_ID)).thenReturn(true);
 
-        mockMvc.perform(get(BASE_URI + "/exists/qualification-fz/" + QUALIFICATION_FZ_ID))
+        mockMvc.perform(get(baseUri + "/exists/qualification-fz/" + QUALIFICATION_FZ_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
     }
@@ -538,7 +560,7 @@ class OrderEmployeeControllerTest {
         Long count = 5L;
         when(orderEmployeeService.countByOrder(ORDER_ID)).thenReturn(count);
 
-        mockMvc.perform(get(BASE_URI + "/count/order/" + ORDER_ID))
+        mockMvc.perform(get(baseUri + "/count/order/" + ORDER_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().string("5"));
     }
@@ -548,7 +570,7 @@ class OrderEmployeeControllerTest {
         Long count = 3L;
         when(orderEmployeeService.countByEmployee(EMPLOYEE_ID)).thenReturn(count);
 
-        mockMvc.perform(get(BASE_URI + "/count/employee/" + EMPLOYEE_ID))
+        mockMvc.perform(get(baseUri + "/count/employee/" + EMPLOYEE_ID))
                 .andExpect(status().isOk())
                 .andExpect(content().string("3"));
     }
@@ -559,7 +581,7 @@ class OrderEmployeeControllerTest {
     void validateOrderEmployeeShouldReturnBoolean() throws Exception {
         when(orderEmployeeService.validateOrderEmployee(any(OrderEmployee.class))).thenReturn(true);
 
-        mockMvc.perform(post(BASE_URI + "/validate")
+        mockMvc.perform(post(baseUri + "/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(orderEmployee1)))
                 .andExpect(status().isOk())
