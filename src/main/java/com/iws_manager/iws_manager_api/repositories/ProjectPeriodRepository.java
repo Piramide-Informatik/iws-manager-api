@@ -3,6 +3,7 @@ package com.iws_manager.iws_manager_api.repositories;
 import com.iws_manager.iws_manager_api.models.ProjectPeriod;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,4 +21,7 @@ public interface ProjectPeriodRepository extends JpaRepository<ProjectPeriod, Lo
 
     @EntityGraph(attributePaths = {"project", "project.customer", "project.customer.branch", "project.customer.companytype", "project.customer.country", "project.customer.state"})
     List<ProjectPeriod> findAll();
+
+    @Query("SELECT DISTINCT p FROM ProjectPeriod p LEFT JOIN FETCH p.project pr WHERE pr.id = :projectId ORDER BY p.periodNo ASC")
+    List<ProjectPeriod> findAllByProjectIdFetchProject(Long projectId);
 }

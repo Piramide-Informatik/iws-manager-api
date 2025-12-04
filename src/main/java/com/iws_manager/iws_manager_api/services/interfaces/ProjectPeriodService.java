@@ -15,4 +15,6 @@ public interface ProjectPeriodService {
     List<ProjectPeriod> getAllProjectPeriodsByPeriodNoAsc();
     List<ProjectPeriod> getAllProjectPeriodsByStartDateAsc();
     List<ProjectPeriod> getAllProjectPeriodsByEndDateAsc();
+
+    List<ProjectPeriod> findAllByProjectId(Long id);
 }
