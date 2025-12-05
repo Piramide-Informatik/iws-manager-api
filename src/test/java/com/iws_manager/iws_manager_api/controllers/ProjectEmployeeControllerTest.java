@@ -234,7 +234,7 @@ class ProjectEmployeeControllerTest {
         when(projectEmployeeService.getByQualificationkmuiOrderByIdAsc(QUALIFICATION_K_MUI_1))
                 .thenReturn(List.of(projectEmployee1));
 
-        mockMvc.perform(get(baseUri + "/qualification-kmui/" + QUALIFICATION_K_MUI_1 + pathOrdered))
+        mockMvc.perform(get(baseUri + "/qualification-kmui/Senior Developer/" + pathOrdered))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
@@ -266,7 +266,7 @@ class ProjectEmployeeControllerTest {
         when(projectEmployeeService.getByEmployeeIdAndQualificationkmui(EMPLOYEE_ID, QUALIFICATION_K_MUI_1))
                 .thenReturn(List.of(projectEmployee1));
 
-        mockMvc.perform(get(baseUri + pathEmployee + EMPLOYEE_ID + "/qualification-kmui/" + QUALIFICATION_K_MUI_1))
+        mockMvc.perform(get(baseUri + pathEmployee + EMPLOYEE_ID + "/qualification-kmui/Senior Developer"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
