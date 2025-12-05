@@ -214,7 +214,7 @@ class ProjectEmployeeControllerTest {
         when(projectEmployeeService.getByQualificationkmui(QUALIFICATION_K_MUI_1))
                 .thenReturn(List.of(projectEmployee1));
 
-        mockMvc.perform(get(baseUri + "/qualification-kmui/" + QUALIFICATION_K_MUI_1))
+        mockMvc.perform(get(baseUri + "/qualification-kmui/Senior Developer"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(QUALIFICATION_K_MUI_0).value(QUALIFICATION_K_MUI_1));
     }
