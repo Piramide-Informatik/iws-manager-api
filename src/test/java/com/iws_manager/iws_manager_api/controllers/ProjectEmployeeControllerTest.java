@@ -595,7 +595,7 @@ class ProjectEmployeeControllerTest {
 
     @Test
     void getProjectStatisticsShouldReturnArray() throws Exception {
-        Object[] stats = new Object[] { 5L, new BigDecimal("800.00"), new BigDecimal("45.50"),
+        Object[] stats = new Object[] { 5L, new BigDecimal("800.00"), HOURLY_RATE_1,
                 new BigDecimal("36400.00") };
         when(projectEmployeeService.getProjectStatistics(PROJECT_ID)).thenReturn(stats);
 
@@ -609,7 +609,7 @@ class ProjectEmployeeControllerTest {
 
     @Test
     void getEmployeeStatisticsShouldReturnArray() throws Exception {
-        Object[] stats = new Object[] { 3L, new BigDecimal("480.00"), new BigDecimal("45.50"),
+        Object[] stats = new Object[] { 3L, new BigDecimal("480.00"), HOURLY_RATE_1,
                 new BigDecimal("21840.00") };
         when(projectEmployeeService.getEmployeeStatistics(EMPLOYEE_ID)).thenReturn(stats);
 
