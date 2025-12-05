@@ -27,6 +27,7 @@ class ProjectEmployeeServiceImplTest {
     private static final String KEYWORD = "Developer";
     private static final String HOURLY_RATE_50 = "50.00";
     private static final String HOURLY_RATE_40 = "40.00";
+    private static final String HOURLY_RATE_150 = "150.00";
 
     @Mock
     private ProjectEmployeeRepository projectEmployeeRepository;
@@ -329,7 +330,7 @@ class ProjectEmployeeServiceImplTest {
 
     @Test
     void testGetByPlannedhoursBetween() {
-        BigDecimal minHours = new BigDecimal("150.00");
+        BigDecimal minHours = new BigDecimal(HOURLY_RATE_150);
         BigDecimal maxHours = new BigDecimal("170.00");
         when(projectEmployeeRepository.findByPlannedhoursBetween(minHours, maxHours))
                 .thenReturn(List.of(sampleProjectEmployee));
@@ -341,7 +342,7 @@ class ProjectEmployeeServiceImplTest {
     @Test
     void testGetByPlannedhoursBetweenThrowsExceptionWhenMinGreaterThanMax() {
         BigDecimal minHours = new BigDecimal("170.00");
-        BigDecimal maxHours = new BigDecimal("150.00");
+        BigDecimal maxHours = new BigDecimal(HOURLY_RATE_150);
 
         assertThrows(IllegalArgumentException.class,
                 () -> projectEmployeeService.getByPlannedhoursBetween(minHours, maxHours));
@@ -394,7 +395,7 @@ class ProjectEmployeeServiceImplTest {
     @Test
     void testGetWithMinimumRateAndHours() {
         BigDecimal minRate = new BigDecimal(HOURLY_RATE_40);
-        BigDecimal minHours = new BigDecimal("150.00");
+        BigDecimal minHours = new BigDecimal(HOURLY_RATE_150);
         when(projectEmployeeRepository.findWithMinimumRateAndHours(minRate, minHours))
                 .thenReturn(List.of(sampleProjectEmployee));
         List<ProjectEmployee> result = projectEmployeeService.getWithMinimumRateAndHours(minRate, minHours);
@@ -597,7 +598,7 @@ class ProjectEmployeeServiceImplTest {
     // Get statistics operations tests
     @Test
     void testGetProjectStatistics() {
-        Object[] stats = new Object[] { 5L, new BigDecimal("800.00"), new BigDecimal("45.50"),
+        Object[] stats = new Object[] { 5L, new BigDecimal("800.00"), HOURLY_RATE,
                 new BigDecimal("36400.00") };
         when(projectEmployeeRepository.getProjectStatistics(PROJECT_ID)).thenReturn(stats);
         Object[] result = projectEmployeeService.getProjectStatistics(PROJECT_ID);
@@ -607,7 +608,7 @@ class ProjectEmployeeServiceImplTest {
 
     @Test
     void testGetEmployeeStatistics() {
-        Object[] stats = new Object[] { 3L, new BigDecimal("480.00"), new BigDecimal("45.50"),
+        Object[] stats = new Object[] { 3L, new BigDecimal("480.00"), HOURLY_RATE,
                 new BigDecimal("21840.00") };
         when(projectEmployeeRepository.getEmployeeStatistics(EMPLOYEE_ID)).thenReturn(stats);
         Object[] result = projectEmployeeService.getEmployeeStatistics(EMPLOYEE_ID);
