@@ -417,7 +417,7 @@ class ProjectEmployeeServiceImplTest {
     // Get operations by multiple qualifications tests
     @Test
     void testGetByQualificationsIn() {
-        List<String> qualifications = Arrays.asList("Senior Developer", "Junior Developer");
+        List<String> qualifications = Arrays.asList(QUALIFICATION_K_MUI, "Junior Developer");
         when(projectEmployeeRepository.findByQualificationsIn(qualifications))
                 .thenReturn(List.of(sampleProjectEmployee));
         List<ProjectEmployee> result = projectEmployeeService.getByQualificationsIn(qualifications);
