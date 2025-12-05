@@ -21,5 +21,11 @@ public interface RoleRepository extends JpaRepository<Role,Long> {
     @EntityGraph(attributePaths = {"roleRights", "roleRights.systemFunction", "roleRights.systemFunction.module"})
     List<Role> findAllByOrderByNameAsc();
 
+    @Query("SELECT DISTINCT r FROM Role r LEFT JOIN FETCH r.roleRights ORDER BY r.name ASC")
+    List<Role> findAllFetchRoleRight();
+
+    @Query("SELECT r FROM Role r LEFT JOIN FETCH r.roleRights WHERE r.id = :id")
+    Optional<Role> findByIdFetchRoleRight(Long id);
+
     boolean existsByName(String name);
 }
