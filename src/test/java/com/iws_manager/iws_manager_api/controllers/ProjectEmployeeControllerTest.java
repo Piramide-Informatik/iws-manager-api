@@ -57,7 +57,7 @@ class ProjectEmployeeControllerTest {
     private static final String KEYWORD = "Developer";
     private static final Long EMPLOYEE_ID = 1L;
     private static final Long PROJECT_ID = 2L;
-    private static final List<String> QUALIFICATIONS_LIST = Arrays.asList("Senior Developer", "Junior Developer");
+    private static final List<String> QUALIFICATIONS_LIST = Arrays.asList(QUALIFICATION_K_MUI_1, QUALIFICATION_K_MUI_2);
 
     @Mock
     private ProjectEmployeeService projectEmployeeService;
