@@ -28,6 +28,7 @@ class ProjectEmployeeServiceImplTest {
     private static final String HOURLY_RATE_50 = "50.00";
     private static final String HOURLY_RATE_40 = "40.00";
     private static final String HOURLY_RATE_150 = "150.00";
+    private static final String HOURLY_RATE_1000 = "1000.00";
 
     @Mock
     private ProjectEmployeeRepository projectEmployeeRepository;
@@ -352,7 +353,7 @@ class ProjectEmployeeServiceImplTest {
     // Get operations by estimated cost range tests
     @Test
     void testGetByEstimatedCostGreaterThan() {
-        BigDecimal minCost = new BigDecimal("1000.00");
+        BigDecimal minCost = new BigDecimal(HOURLY_RATE_1000);
         when(projectEmployeeRepository.findByEstimatedCostGreaterThan(minCost))
                 .thenReturn(List.of(sampleProjectEmployee));
         List<ProjectEmployee> result = projectEmployeeService.getByEstimatedCostGreaterThan(minCost);
@@ -372,7 +373,7 @@ class ProjectEmployeeServiceImplTest {
 
     @Test
     void testGetByEstimatedCostBetween() {
-        BigDecimal minCost = new BigDecimal("1000.00");
+        BigDecimal minCost = new BigDecimal(HOURLY_RATE_1000);
         BigDecimal maxCost = new BigDecimal("5000.00");
         when(projectEmployeeRepository.findByEstimatedCostBetween(minCost, maxCost))
                 .thenReturn(List.of(sampleProjectEmployee));
@@ -384,7 +385,7 @@ class ProjectEmployeeServiceImplTest {
     @Test
     void testGetByEstimatedCostBetweenThrowsExceptionWhenMinGreaterThanMax() {
         BigDecimal minCost = new BigDecimal("5000.00");
-        BigDecimal maxCost = new BigDecimal("1000.00");
+        BigDecimal maxCost = new BigDecimal(HOURLY_RATE_1000);
 
         assertThrows(IllegalArgumentException.class,
                 () -> projectEmployeeService.getByEstimatedCostBetween(minCost, maxCost));
