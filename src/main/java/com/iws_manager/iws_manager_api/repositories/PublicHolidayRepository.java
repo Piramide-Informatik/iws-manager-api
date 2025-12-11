@@ -31,4 +31,13 @@ public interface PublicHolidayRepository extends JpaRepository<PublicHoliday, Lo
     // Method to get holidays by year
     @Query("SELECT p FROM PublicHoliday p WHERE YEAR(p.date) = :year")
     List<PublicHoliday> findHolidaysByYear(Integer year);
+
+    // Get all holidays with fixed date by day and month
+    @Query("SELECT p FROM PublicHoliday p WHERE p.isFixedDate = true AND MONTH(p.date) = :month AND DAY(p.date) = :day")
+    List<PublicHoliday> findFixedHolidaysByDayAndMonth(Integer day, Integer month);
+    
+    // Get all holidays with fixed date
+    @Query("SELECT p FROM PublicHoliday p WHERE p.isFixedDate = true")
+    List<PublicHoliday> findAllFixedHolidays();
+    
 }
