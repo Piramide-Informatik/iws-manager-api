@@ -228,25 +228,30 @@ public class PublicHolidayServiceV2Impl implements PublicHolidayServiceV2 {
     
     @Override
     @Transactional(readOnly = true)
-    public List<SimpleHolidayDTO> getDatabaseHolidays(Integer year) {
+     public List<SimpleHolidayDTO> getDatabaseHolidays(Integer year) {
         if (year == null) {
             year = LocalDate.now().getYear();
         }
         
-        List<PublicHoliday> holidays = publicHolidayRepository.findHolidaysByYear(year);
-        return PublicHolidayMapper.toSimpleDTOList(holidays);
+        LocalDate startDate = LocalDate.of(year, 1, 1);
+        LocalDate endDate = LocalDate.of(year, 12, 31);
+        
+        Map<LocalDate, String> holidaysMap = getDatabaseHolidaysMap(startDate, endDate);
+        
+        return holidaysMap.entrySet().stream()
+            .map(entry -> PublicHolidayMapper.createHolidayDTO(entry.getValue(), entry.getKey()))
+            .sorted(Comparator.comparing(SimpleHolidayDTO::date))
+            .collect(Collectors.toList());
     }
     
     @Override
     @Transactional(readOnly = true)
-    public List<SimpleHolidayDTO> getDatabaseHolidaysInRange(LocalDate startDate, LocalDate endDate) {
+     public List<SimpleHolidayDTO> getDatabaseHolidaysInRange(LocalDate startDate, LocalDate endDate) {
         validateDateRange(startDate, endDate);
         
         List<PublicHoliday> holidays = publicHolidayRepository.findHolidaysBetweenDates(startDate, endDate);
         return PublicHolidayMapper.toSimpleDTOList(holidays);
     }
-    
-    // ========== MÉTODOS PRIVADOS AUXILIARES ==========
     
     /**
      * Validates that start date is not after end date
@@ -265,13 +270,36 @@ public class PublicHolidayServiceV2Impl implements PublicHolidayServiceV2 {
      * Gets database holidays as a Map for faster lookup
      */
     private Map<LocalDate, String> getDatabaseHolidaysMap(LocalDate startDate, LocalDate endDate) {
-        List<PublicHoliday> holidays = publicHolidayRepository.findHolidaysBetweenDates(startDate, endDate);
+        Map<LocalDate, String> holidaysMap = new HashMap<>();
         
-        return holidays.stream()
-            .collect(Collectors.toMap(
-                PublicHoliday::getDate,
-                PublicHoliday::getName,
-                (existing, replacement) -> existing // In case of duplicates, keep the first one
-            ));
+        List<PublicHoliday> exactDateHolidays = publicHolidayRepository.findHolidaysBetweenDates(startDate, endDate);
+        exactDateHolidays.forEach(holiday -> 
+            holidaysMap.put(holiday.getDate(), holiday.getName())
+        );
+        
+        addFixedHolidaysToMap(holidaysMap, startDate, endDate);
+        
+        return holidaysMap;
+    }
+
+    /**
+     * Adds fixed holidays to the map for the given date range
+     */
+    private void addFixedHolidaysToMap(Map<LocalDate, String> holidaysMap, LocalDate startDate, LocalDate endDate) {
+        List<PublicHoliday> fixedHolidays = publicHolidayRepository.findAllFixedHolidays();
+        
+        int startYear = startDate.getYear();
+        int endYear = endDate.getYear();
+        
+        for (int year = startYear; year <= endYear; year++) {
+            for (PublicHoliday fixedHoliday : fixedHolidays) {
+                LocalDate originalDate = fixedHoliday.getDate();
+                LocalDate holidayDate = LocalDate.of(year, originalDate.getMonth(), originalDate.getDayOfMonth());
+                
+                if (!holidayDate.isBefore(startDate) && !holidayDate.isAfter(endDate)) {
+                    holidaysMap.putIfAbsent(holidayDate, fixedHoliday.getName());
+                }
+            }
+        }
     }
 }
