@@ -2,7 +2,9 @@ package com.iws_manager.iws_manager_api.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iws_manager.iws_manager_api.models.PublicHoliday;
-import com.iws_manager.iws_manager_api.services.interfaces.PublicHolidayService;
+import com.iws_manager.iws_manager_api.services.v2.interfaces.PublicHolidayServiceV2;
+import com.iws_manager.iws_manager_api.controllers.v2.PublicHolidayControllerV2;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,14 +34,14 @@ public class PublicHolidayControllerTest {
     private  static  final String SECOND_NAME = "Corpus Christi";
 
     private MockMvc mockMvc;
-    private String uri = "/api/v1/holidays";
+    private String uri = "/api/v2/holidays";
     private String name = "$.name";
 
     @Mock
-    private PublicHolidayService publicHolidayService;
+    private PublicHolidayServiceV2 publicHolidayService;
 
     @InjectMocks
-    private PublicHolidayController publicHolidayController;
+    private PublicHolidayControllerV2 publicHolidayController;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private PublicHoliday publicHoliday1;
     private PublicHoliday publicHoliday2;
