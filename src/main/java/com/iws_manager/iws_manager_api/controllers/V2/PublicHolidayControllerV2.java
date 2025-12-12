@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v2/holidays")
+@RequestMapping("/api/v2/holidays") 
 public class PublicHolidayControllerV2 {
     
     private final PublicHolidayServiceV2 publicHolidayServiceV2;

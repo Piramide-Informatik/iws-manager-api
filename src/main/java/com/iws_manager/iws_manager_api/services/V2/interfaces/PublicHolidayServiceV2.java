@@ -23,7 +23,7 @@ public interface PublicHolidayServiceV2 {
     List<PublicHoliday> findAllByOrderBySequenceNo();
     List<PublicHoliday> findAllByOrderBySequenceNoDesc();
     Long getNextSequenceNo();
-    
+
     // ========== V2 ==========
     List<SimpleHolidayDTO> getSimpleHolidaysWithWeekends(Integer year);
     List<SimpleHolidayDTO> getSimpleHolidaysInRange(LocalDate startDate, LocalDate endDate);

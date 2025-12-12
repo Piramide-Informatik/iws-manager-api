@@ -26,7 +26,7 @@ public class PublicHolidayServiceV2Impl implements PublicHolidayServiceV2 {
     private final PublicHolidayRepository publicHolidayRepository;
     private final StateRepository stateRepository;
     private final StateHolidayRepository stateHolidayRepository;
-    
+ 
     @Autowired
     public PublicHolidayServiceV2Impl(PublicHolidayRepository publicHolidayRepository,
                                       StateRepository stateRepository,
