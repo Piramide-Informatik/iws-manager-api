@@ -2,8 +2,8 @@ package com.iws_manager.iws_manager_api.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iws_manager.iws_manager_api.models.PublicHoliday;
-import com.iws_manager.iws_manager_api.services.V2.interfaces.PublicHolidayServiceV2;
-import com.iws_manager.iws_manager_api.controllers.V2.PublicHolidayControllerV2;
+import com.iws_manager.iws_manager_api.services.v2.interfaces.PublicHolidayServiceV2;
+import com.iws_manager.iws_manager_api.controllers.v2.PublicHolidayControllerV2;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

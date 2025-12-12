@@ -1,4 +1,4 @@
-package com.iws_manager.iws_manager_api.services.V2.interfaces;
+package com.iws_manager.iws_manager_api.services.v2.interfaces;
 
 import com.iws_manager.iws_manager_api.dtos.publicholiday.SimpleHolidayDTO;
 import com.iws_manager.iws_manager_api.models.PublicHoliday;
