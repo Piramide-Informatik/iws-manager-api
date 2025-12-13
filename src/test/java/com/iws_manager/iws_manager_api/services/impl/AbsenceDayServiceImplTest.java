@@ -3,9 +3,11 @@ package com.iws_manager.iws_manager_api.services.impl;
 import com.iws_manager.iws_manager_api.models.AbsenceDay;
 import com.iws_manager.iws_manager_api.models.Employee;
 import com.iws_manager.iws_manager_api.models.AbsenceType;
+import com.iws_manager.iws_manager_api.models.PublicHoliday;
 import com.iws_manager.iws_manager_api.repositories.AbsenceDayRepository;
 import com.iws_manager.iws_manager_api.repositories.EmployeeRepository;
 import com.iws_manager.iws_manager_api.repositories.AbsenceTypeRepository;
+import com.iws_manager.iws_manager_api.repositories.PublicHolidayRepository;
 import com.iws_manager.iws_manager_api.exception.exceptions.DuplicateResourceException;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +41,9 @@ class AbsenceDayServiceImplTest {
 
     @Mock
     private AbsenceTypeRepository absenceTypeRepository;
+
+    @Mock
+    private PublicHolidayRepository publicHolidayRepository;
 
     @InjectMocks
     private AbsenceDayServiceImpl absenceDayService;
@@ -168,7 +173,9 @@ class AbsenceDayServiceImplTest {
         when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
         when(absenceTypeRepository.findById(1L)).thenReturn(Optional.of(absenceType));
         
-        // IMPORTANTE: Usar el nuevo método en lugar de findAll()
+        // Mock para PublicHolidayRepository
+        when(publicHolidayRepository.existsByDate(updatedDate)).thenReturn(false);
+        
         when(absenceDayRepository.existsByEmployeeIdAndAbsenceDateExcludingId(
             employeeId, updatedDate, absenceDayId)).thenReturn(false);
         
@@ -185,6 +192,7 @@ class AbsenceDayServiceImplTest {
         verify(absenceDayRepository).findById(absenceDayId);
         verify(employeeRepository).findById(employeeId);
         verify(absenceTypeRepository).findById(1L);
+        verify(publicHolidayRepository).existsByDate(updatedDate);  // <-- AÑADIR
         verify(absenceDayRepository).existsByEmployeeIdAndAbsenceDateExcludingId(
             employeeId, updatedDate, absenceDayId);
         verify(absenceDayRepository).save(any(AbsenceDay.class));
@@ -237,22 +245,24 @@ class AbsenceDayServiceImplTest {
         verify(absenceDayRepository).findById(absenceDayId);
         verify(employeeRepository).findById(employeeId);
         verify(absenceTypeRepository).findById(2L);
+        verify(publicHolidayRepository, never()).existsByDate(any());
         verify(absenceDayRepository, never()).existsByEmployeeIdAndAbsenceDateExcludingId(
             anyLong(), any(LocalDate.class), anyLong());
         verify(absenceDayRepository).save(any(AbsenceDay.class));
     }
 
-    @Test
+   @Test
     void updateShouldNotThrowWhenNoDuplicateAbsence() {
         // Arrange
         Long absenceDayId = 1L;
         Long employeeId = 1L;
+        LocalDate originalDate = LocalDate.of(2024, 1, 15);
         LocalDate newDate = LocalDate.of(2024, 1, 17);
         
         // Existing absence day
         AbsenceDay existingAbsenceDay = new AbsenceDay();
         existingAbsenceDay.setId(absenceDayId);
-        existingAbsenceDay.setAbsenceDate(LocalDate.of(2024, 1, 15));
+        existingAbsenceDay.setAbsenceDate(originalDate);
         existingAbsenceDay.setEmployee(employee);
         existingAbsenceDay.setAbsenceType(absenceType);
         
@@ -262,19 +272,17 @@ class AbsenceDayServiceImplTest {
         updatedDetails.setEmployee(employee);
         updatedDetails.setAbsenceType(absenceType);
         
-        AbsenceDay savedAbsenceDay = new AbsenceDay();
-        savedAbsenceDay.setId(absenceDayId);
-        savedAbsenceDay.setAbsenceDate(newDate);
-        savedAbsenceDay.setEmployee(employee);
-        savedAbsenceDay.setAbsenceType(absenceType);
-        
         // Stubbing
         when(absenceDayRepository.findById(absenceDayId)).thenReturn(Optional.of(existingAbsenceDay));
         when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
         when(absenceTypeRepository.findById(1L)).thenReturn(Optional.of(absenceType));
+        
+        // IMPORTANTE: Mock para PublicHolidayRepository
+        when(publicHolidayRepository.existsByDate(newDate)).thenReturn(false);
+        
         when(absenceDayRepository.existsByEmployeeIdAndAbsenceDateExcludingId(
             employeeId, newDate, absenceDayId)).thenReturn(false);
-        when(absenceDayRepository.save(any(AbsenceDay.class))).thenReturn(savedAbsenceDay);
+        when(absenceDayRepository.save(any(AbsenceDay.class))).thenReturn(existingAbsenceDay);
 
         // Act
         AbsenceDay result = absenceDayService.update(absenceDayId, updatedDetails);
@@ -287,6 +295,7 @@ class AbsenceDayServiceImplTest {
         verify(absenceDayRepository).findById(absenceDayId);
         verify(employeeRepository).findById(employeeId);
         verify(absenceTypeRepository).findById(1L);
+        verify(publicHolidayRepository).existsByDate(newDate);  // <-- VERIFICA ESTA LLAMADA
         verify(absenceDayRepository).existsByEmployeeIdAndAbsenceDateExcludingId(
             employeeId, newDate, absenceDayId);
         verify(absenceDayRepository).save(any(AbsenceDay.class));
@@ -319,14 +328,14 @@ class AbsenceDayServiceImplTest {
         // Existing absence day to update
         AbsenceDay existingAbsenceDay = new AbsenceDay();
         existingAbsenceDay.setId(absenceDayId);
-        existingAbsenceDay.setAbsenceDate(LocalDate.of(2024, 1, 15)); // Fecha original
+        existingAbsenceDay.setAbsenceDate(LocalDate.of(2024, 1, 15)); 
         existingAbsenceDay.setEmployee(employee);
         existingAbsenceDay.setAbsenceType(absenceType);
         
         // Updated details with date that already exists for another absence
         AbsenceDay updatedDetails = new AbsenceDay();
-        updatedDetails.setAbsenceDate(duplicateDate); // Cambia a fecha que ya existe
-        updatedDetails.setEmployee(employee); // Mismo empleado
+        updatedDetails.setAbsenceDate(duplicateDate); 
+        updatedDetails.setEmployee(employee); 
         updatedDetails.setAbsenceType(absenceType);
         
         // Stubbing
@@ -334,7 +343,7 @@ class AbsenceDayServiceImplTest {
         when(employeeRepository.findById(duplicateEmployeeId)).thenReturn(Optional.of(employee));
         when(absenceTypeRepository.findById(1L)).thenReturn(Optional.of(absenceType));
         
-        // Simula que existe otra ausencia con la misma fecha para el mismo empleado
+        // Simulates that exists another absence with the same date for the same employee
         when(absenceDayRepository.existsByEmployeeIdAndAbsenceDateExcludingId(
             duplicateEmployeeId, duplicateDate, absenceDayId)).thenReturn(true);
 
@@ -344,18 +353,18 @@ class AbsenceDayServiceImplTest {
             () -> absenceDayService.update(absenceDayId, updatedDetails)
         );
         
-        // Verificar el mensaje de la excepción
+        // Verifies the exception message
         assertTrue(exception.getMessage().contains("Absence already exists for employee ID"));
         assertTrue(exception.getMessage().contains("on date " + duplicateDate));
         
-        // Verificar interacciones con los mocks
+        // Verifies interactions with mocks
         verify(absenceDayRepository).findById(absenceDayId);
         verify(employeeRepository).findById(duplicateEmployeeId);
         verify(absenceTypeRepository).findById(1L);
         verify(absenceDayRepository).existsByEmployeeIdAndAbsenceDateExcludingId(
             duplicateEmployeeId, duplicateDate, absenceDayId);
         
-        // Verificar que save NO fue llamado
+        // Verifies that save was never called
         verify(absenceDayRepository, never()).save(any(AbsenceDay.class));
     }
 
@@ -487,5 +496,41 @@ class AbsenceDayServiceImplTest {
     void existsByEmployeeIdAndAbsenceDateShouldThrowWhenAbsenceDateNull() {
         assertThrows(IllegalArgumentException.class, () -> 
             absenceDayService.existsByEmployeeIdAndAbsenceDate(1L, null));
+    }
+
+    @Test
+    void updateShouldThrowWhenNewDateIsPublicHoliday() {
+        LocalDate originalDate = LocalDate.of(2024, 6, 15);
+        LocalDate holidayDate = LocalDate.of(2024, 12, 25);
+        
+        AbsenceDay existingAbsenceDay = new AbsenceDay();
+        existingAbsenceDay.setId(1L);
+        existingAbsenceDay.setAbsenceDate(originalDate);
+        existingAbsenceDay.setEmployee(employee);
+        existingAbsenceDay.setAbsenceType(absenceType);
+        
+        AbsenceDay updatedDetails = new AbsenceDay();
+        updatedDetails.setAbsenceDate(holidayDate);
+        updatedDetails.setEmployee(employee);
+        updatedDetails.setAbsenceType(absenceType);
+        
+        when(absenceDayRepository.findById(1L)).thenReturn(Optional.of(existingAbsenceDay));
+        when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
+        when(absenceTypeRepository.findById(1L)).thenReturn(Optional.of(absenceType));
+        when(publicHolidayRepository.existsByDate(holidayDate)).thenReturn(true);
+        
+        PublicHoliday publicHoliday = new PublicHoliday();
+        publicHoliday.setName("Navidad");
+        publicHoliday.setDate(holidayDate);
+        when(publicHolidayRepository.findByDate(holidayDate))
+            .thenReturn(Optional.of(publicHoliday));
+
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class, 
+            () -> absenceDayService.update(1L, updatedDetails)
+        );
+        
+        assertTrue(exception.getMessage().contains("public holiday"));
+        verify(publicHolidayRepository).existsByDate(holidayDate);
     }
 }
