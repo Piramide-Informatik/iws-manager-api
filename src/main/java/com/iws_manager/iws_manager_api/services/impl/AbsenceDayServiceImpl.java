@@ -141,7 +141,12 @@ public class AbsenceDayServiceImpl implements AbsenceDayService {
      * Validates that related entities (Employee, AbsenceType) exist.
      */
     private void validateAbsenceDayForCreation(AbsenceDay absenceDay) {
-        // Check if employee exists
+        validateAndSetEmployee(absenceDay);
+        validateAndSetAbsenceType(absenceDay);
+        checkForDuplicateAbsence(absenceDay);
+    }
+
+    private void validateAndSetEmployee(AbsenceDay absenceDay) {
         if (absenceDay.getEmployee() == null || absenceDay.getEmployee().getId() == null) {
             throw new IllegalArgumentException("Employee must be specified");
         }
@@ -150,8 +155,9 @@ public class AbsenceDayServiceImpl implements AbsenceDayService {
                 .orElseThrow(() -> new EntityNotFoundException(
                     "Employee not found with id: " + absenceDay.getEmployee().getId()));
         absenceDay.setEmployee(employee);
+    }
 
-        // Check if absence type exists
+    private void validateAndSetAbsenceType(AbsenceDay absenceDay) {
         if (absenceDay.getAbsenceType() == null || absenceDay.getAbsenceType().getId() == null) {
             throw new IllegalArgumentException("AbsenceType must be specified");
         }
@@ -160,15 +166,15 @@ public class AbsenceDayServiceImpl implements AbsenceDayService {
                 .orElseThrow(() -> new EntityNotFoundException(
                     "AbsenceType not found with id: " + absenceDay.getAbsenceType().getId()));
         absenceDay.setAbsenceType(absenceType);
+    }
 
-        // Check for duplicate absence on the same date for the same employee
-        if (absenceDay.getAbsenceDate() != null) {
-            if (absenceDayRepository.existsByEmployeeIdAndAbsenceDate(
+    private void checkForDuplicateAbsence(AbsenceDay absenceDay) {
+        if (absenceDay.getAbsenceDate() != null && 
+            absenceDayRepository.existsByEmployeeIdAndAbsenceDate(
                     absenceDay.getEmployee().getId(), absenceDay.getAbsenceDate())) {
-                throw new DuplicateResourceException(
-                    "Absence already exists for employee ID " + absenceDay.getEmployee().getId() + 
-                    " on date " + absenceDay.getAbsenceDate());
-            }
+            throw new DuplicateResourceException(
+                "Absence already exists for employee ID " + absenceDay.getEmployee().getId() + 
+                " on date " + absenceDay.getAbsenceDate());
         }
     }
 
