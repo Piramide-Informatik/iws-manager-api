@@ -41,17 +41,14 @@ class AbsenceDayControllerTest {
     private AbsenceDayController absenceDayController;
 
     private AbsenceDay absenceDay;
-    private Employee employee;
-    private AbsenceType absenceType;
+    private Employee employee = new Employee();
+    private AbsenceType absenceType = new AbsenceType();
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        
-        employee = new Employee();
-        employee.setId(EMPLOYEE_ID);
-        
-        absenceType = new AbsenceType();
+
+        employee.setId(EMPLOYEE_ID);        
         absenceType.setId(ABSENCE_TYPE_ID);
         
         absenceDay = new AbsenceDay();
