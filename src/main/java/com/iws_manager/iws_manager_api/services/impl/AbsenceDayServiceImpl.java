@@ -178,40 +178,46 @@ public class AbsenceDayServiceImpl implements AbsenceDayService {
      * Validates that related entities exist.
      */
     private void validateAbsenceDayForUpdate(AbsenceDay existingAbsenceDay, AbsenceDay newAbsenceDay, Long id) {
-        // Validate employee if changed
+        // Determine the employee ID to use
+        Long employeeId = newAbsenceDay.getEmployee() != null && newAbsenceDay.getEmployee().getId() != null
+                ? newAbsenceDay.getEmployee().getId()
+                : existingAbsenceDay.getEmployee().getId();
+        
+        // Determine the absence date to use
+        LocalDate absenceDate = newAbsenceDay.getAbsenceDate() != null
+                ? newAbsenceDay.getAbsenceDate()
+                : existingAbsenceDay.getAbsenceDate();
+        
+        // Check if date changed
+        boolean dateChanged = newAbsenceDay.getAbsenceDate() != null && 
+                !existingAbsenceDay.getAbsenceDate().equals(newAbsenceDay.getAbsenceDate());
+        
+        // Check if employee changed
+        boolean employeeChanged = newAbsenceDay.getEmployee() != null && 
+                newAbsenceDay.getEmployee().getId() != null &&
+                !existingAbsenceDay.getEmployee().getId().equals(newAbsenceDay.getEmployee().getId());
+
+        // Validate employee if provided
         if (newAbsenceDay.getEmployee() != null && newAbsenceDay.getEmployee().getId() != null) {
-            if (!existingAbsenceDay.getEmployee().getId().equals(newAbsenceDay.getEmployee().getId())) {
-                Employee employee = employeeRepository.findById(newAbsenceDay.getEmployee().getId())
-                        .orElseThrow(() -> new EntityNotFoundException(
-                            "Employee not found with id: " + newAbsenceDay.getEmployee().getId()));
-                existingAbsenceDay.setEmployee(employee);
-            }
+            Employee emp = employeeRepository.findById(newAbsenceDay.getEmployee().getId())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                        "Employee not found with id: " + newAbsenceDay.getEmployee().getId()));
+            existingAbsenceDay.setEmployee(emp);
         }
 
-        // Validate absence type if changed
+        // Validate absence type if provided
         if (newAbsenceDay.getAbsenceType() != null && newAbsenceDay.getAbsenceType().getId() != null) {
-            if (!existingAbsenceDay.getAbsenceType().getId().equals(newAbsenceDay.getAbsenceType().getId())) {
-                AbsenceType absenceType = absenceTypeRepository.findById(newAbsenceDay.getAbsenceType().getId())
-                        .orElseThrow(() -> new EntityNotFoundException(
-                            "AbsenceType not found with id: " + newAbsenceDay.getAbsenceType().getId()));
-                existingAbsenceDay.setAbsenceType(absenceType);
-            }
+            AbsenceType at = absenceTypeRepository.findById(newAbsenceDay.getAbsenceType().getId())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                        "AbsenceType not found with id: " + newAbsenceDay.getAbsenceType().getId()));
+            existingAbsenceDay.setAbsenceType(at);
         }
 
         // Check for duplicate absence if date or employee changed
-        if (newAbsenceDay.getAbsenceDate() != null && 
-            (!existingAbsenceDay.getAbsenceDate().equals(newAbsenceDay.getAbsenceDate()) ||
-             !existingAbsenceDay.getEmployee().getId().equals(newAbsenceDay.getEmployee().getId()))) {
-            
-            Long employeeId = newAbsenceDay.getEmployee() != null ? 
-                newAbsenceDay.getEmployee().getId() : existingAbsenceDay.getEmployee().getId();
-            LocalDate absenceDate = newAbsenceDay.getAbsenceDate();
-            
-            // Check if another absence exists for the same employee on the same date
-            boolean duplicateExists = absenceDayRepository.findAll().stream()
-                    .filter(ad -> !ad.getId().equals(id)) // Exclude current record
-                    .anyMatch(ad -> ad.getEmployee().getId().equals(employeeId) && 
-                                   ad.getAbsenceDate().equals(absenceDate));
+        if (dateChanged || employeeChanged) {
+            // Use the repository method to check for duplicates excluding the current record
+            boolean duplicateExists = absenceDayRepository.existsByEmployeeIdAndAbsenceDateExcludingId(
+                employeeId, absenceDate, id);
             
             if (duplicateExists) {
                 throw new DuplicateResourceException(
