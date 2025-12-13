@@ -68,4 +68,19 @@ public interface AbsenceDayRepository extends JpaRepository<AbsenceDay, Long> {
      * @return true if an absence exists, false otherwise
      */
     boolean existsByEmployeeIdAndAbsenceDate(Long employeeId, LocalDate absenceDate);
+
+    /**
+     * Checks if an absence exists for an employee on a specific date, excluding a specific absence ID.
+     * 
+     * @param employeeId the ID of the employee
+     * @param absenceDate the date to check
+     * @param excludeAbsenceDayId the absence day ID to exclude from the check
+     * @return true if another absence exists, false otherwise
+     */
+    @Query("SELECT COUNT(a) > 0 FROM AbsenceDay a WHERE a.employee.id = :employeeId " +
+        "AND a.absenceDate = :absenceDate AND a.id != :excludeAbsenceDayId")
+    boolean existsByEmployeeIdAndAbsenceDateExcludingId(
+        Long employeeId, 
+        LocalDate absenceDate, 
+        Long excludeAbsenceDayId);
 }
