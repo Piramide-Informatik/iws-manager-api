@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Repository
 public interface PublicHolidayRepository extends JpaRepository<PublicHoliday, Long> {
@@ -39,5 +40,11 @@ public interface PublicHolidayRepository extends JpaRepository<PublicHoliday, Lo
     // Get all holidays with fixed date
     @Query("SELECT p FROM PublicHoliday p WHERE p.isFixedDate = true")
     List<PublicHoliday> findAllFixedHolidays();
+
+    // Checks if a public holiday exists on a specific date.
+    boolean existsByDate(LocalDate date);
+    
+    // Finds a public holiday by specific date.
+    Optional<PublicHoliday> findByDate(LocalDate date);
     
 }

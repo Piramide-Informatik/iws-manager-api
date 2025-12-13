@@ -3,6 +3,8 @@ package com.iws_manager.iws_manager_api.services.impl;
 import com.iws_manager.iws_manager_api.models.AbsenceDay;
 import com.iws_manager.iws_manager_api.models.Employee;
 import com.iws_manager.iws_manager_api.models.AbsenceType;
+import com.iws_manager.iws_manager_api.models.PublicHoliday;
+import com.iws_manager.iws_manager_api.repositories.PublicHolidayRepository;
 import com.iws_manager.iws_manager_api.repositories.AbsenceDayRepository;
 import com.iws_manager.iws_manager_api.repositories.EmployeeRepository;
 import com.iws_manager.iws_manager_api.repositories.AbsenceTypeRepository;
@@ -26,15 +28,18 @@ public class AbsenceDayServiceImpl implements AbsenceDayService {
     private final AbsenceDayRepository absenceDayRepository;
     private final EmployeeRepository employeeRepository;
     private final AbsenceTypeRepository absenceTypeRepository;
+    private final PublicHolidayRepository publicHolidayRepository;
 
     @Autowired
     public AbsenceDayServiceImpl(
             AbsenceDayRepository absenceDayRepository,
             EmployeeRepository employeeRepository,
-            AbsenceTypeRepository absenceTypeRepository) {
+            AbsenceTypeRepository absenceTypeRepository,
+            PublicHolidayRepository publicHolidayRepository) {
         this.absenceDayRepository = absenceDayRepository;
         this.employeeRepository = employeeRepository;
         this.absenceTypeRepository = absenceTypeRepository;
+        this.publicHolidayRepository = publicHolidayRepository;
     }
 
     @Override
@@ -141,9 +146,29 @@ public class AbsenceDayServiceImpl implements AbsenceDayService {
      * Validates that related entities (Employee, AbsenceType) exist.
      */
     private void validateAbsenceDayForCreation(AbsenceDay absenceDay) {
+        if (absenceDay.getAbsenceDate() == null) {
+            throw new IllegalArgumentException("Absence date must be specified");
+        }
+        
+        validateNotPublicHoliday(absenceDay.getAbsenceDate());
         validateAndSetEmployee(absenceDay);
         validateAndSetAbsenceType(absenceDay);
         checkForDuplicateAbsence(absenceDay);
+    }
+
+    private void validateNotPublicHoliday(LocalDate date) {
+        if (date == null) {
+            throw new IllegalArgumentException("Date cannot be null");
+        }
+        
+        if (publicHolidayRepository.existsByDate(date)) {
+            Optional<PublicHoliday> holiday = publicHolidayRepository.findByDate(date);
+            String holidayName = holiday.map(PublicHoliday::getName).orElse("Public Holiday");
+            
+            throw new IllegalArgumentException(
+                String.format("Cannot create absence on public holiday: %s (%s)", 
+                    date, holidayName));
+        }
     }
 
     private void validateAndSetEmployee(AbsenceDay absenceDay) {
@@ -169,9 +194,8 @@ public class AbsenceDayServiceImpl implements AbsenceDayService {
     }
 
     private void checkForDuplicateAbsence(AbsenceDay absenceDay) {
-        if (absenceDay.getAbsenceDate() != null && 
-            absenceDayRepository.existsByEmployeeIdAndAbsenceDate(
-                    absenceDay.getEmployee().getId(), absenceDay.getAbsenceDate())) {
+        if (absenceDayRepository.existsByEmployeeIdAndAbsenceDate(
+                absenceDay.getEmployee().getId(), absenceDay.getAbsenceDate())) {
             throw new DuplicateResourceException(
                 "Absence already exists for employee ID " + absenceDay.getEmployee().getId() + 
                 " on date " + absenceDay.getAbsenceDate());
@@ -182,7 +206,8 @@ public class AbsenceDayServiceImpl implements AbsenceDayService {
      * Validates the absence day for update.
      * Checks for duplicate absence on the same date for the same employee (excluding current record).
      * Validates that related entities exist.
-     */
+    */
+
     private void validateAbsenceDayForUpdate(AbsenceDay existingAbsenceDay, AbsenceDay newAbsenceDay, Long id) {
         // Determine the employee ID to use
         Long employeeId = newAbsenceDay.getEmployee() != null && newAbsenceDay.getEmployee().getId() != null
@@ -217,6 +242,11 @@ public class AbsenceDayServiceImpl implements AbsenceDayService {
                     .orElseThrow(() -> new EntityNotFoundException(
                         "AbsenceType not found with id: " + newAbsenceDay.getAbsenceType().getId()));
             existingAbsenceDay.setAbsenceType(at);
+        }
+
+        // Si la fecha cambió, validar que no sea feriado
+        if (dateChanged) {
+            validateNotPublicHoliday(absenceDate);
         }
 
         // Check for duplicate absence if date or employee changed
