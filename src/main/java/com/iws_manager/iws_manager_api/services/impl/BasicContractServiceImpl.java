@@ -5,6 +5,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import com.iws_manager.iws_manager_api.models.ContractOrderCommission;
+import com.iws_manager.iws_manager_api.models.IwsCommission;
+import com.iws_manager.iws_manager_api.repositories.ContractOrderCommissionRepository;
+import com.iws_manager.iws_manager_api.repositories.IwsCommissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +30,8 @@ import jakarta.persistence.EntityNotFoundException;
 public class BasicContractServiceImpl implements BasicContractService {
 
     private final BasicContractRepository basicContractRepository;
+    private final IwsCommissionRepository iwsCommissionRepository;
+    private final ContractOrderCommissionRepository contractOrderCommissionRepository;
     
     /**
      * Constructs a new BasicContractService with the required repository dependency.
@@ -33,8 +39,10 @@ public class BasicContractServiceImpl implements BasicContractService {
      * @param basicContractRepository the repository for BasicContract entity operations
      */
     @Autowired
-    public BasicContractServiceImpl(BasicContractRepository basicContractRepository) {
+    public BasicContractServiceImpl(BasicContractRepository basicContractRepository, IwsCommissionRepository iwsCommissionRepository, ContractOrderCommissionRepository contractOrderCommissionRepository) {
         this.basicContractRepository = basicContractRepository;
+        this.iwsCommissionRepository = iwsCommissionRepository;
+        this.contractOrderCommissionRepository = contractOrderCommissionRepository;
     }
 
 
@@ -50,7 +58,23 @@ public class BasicContractServiceImpl implements BasicContractService {
         if (basicContract == null) {
             throw new IllegalArgumentException("BasicContract cannot be null");
         }
-        return basicContractRepository.save(basicContract);
+
+        BasicContract savedContract = basicContractRepository.save(basicContract);
+
+        List<IwsCommission> iwsCommissions = iwsCommissionRepository.findAll();
+
+        List<ContractOrderCommission> contractOrderCommissions = iwsCommissions.stream()
+                .map(iws -> {
+                    ContractOrderCommission c = new ContractOrderCommission();
+                    c.setCommission(iws.getCommission());
+                    c.setFromOrderValue(iws.getFromOrderValue());
+                    c.setMinCommission(iws.getMinCommission());
+                    c.setBasicContract(savedContract);
+                    return c;
+                })
+                .toList();
+        contractOrderCommissionRepository.saveAll(contractOrderCommissions);
+        return savedContract;
     }
 
     /**
