@@ -17,4 +17,6 @@ public interface AbsenceDayService {
     List<AbsenceDay> getByEmployeeIdAndDateRange(Long employeeId, LocalDate startDate, LocalDate endDate);
     List<AbsenceDay> getByEmployeeIdAndAbsenceTypeId(Long employeeId, Long absenceTypeId);
     boolean existsByEmployeeIdAndAbsenceDate(Long employeeId, LocalDate absenceDate);
+    List<AbsenceDay> getByEmployeeIdAndYear(Long employeeId, int year);
+    long countByEmployeeIdAndAbsenceTypeIdAndYear(Long employeeId, Long absenceTypeId, int year);
 }
