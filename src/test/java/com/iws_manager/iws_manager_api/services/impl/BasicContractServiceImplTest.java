@@ -1,7 +1,10 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.models.BasicContract;
+import com.iws_manager.iws_manager_api.models.IwsCommission;
 import com.iws_manager.iws_manager_api.repositories.BasicContractRepository;
+import com.iws_manager.iws_manager_api.repositories.ContractOrderCommissionRepository;
+import com.iws_manager.iws_manager_api.repositories.IwsCommissionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +20,13 @@ class BasicContractServiceImplTest {
 
     @Mock
     private BasicContractRepository basicContractRepository;
+
+    @Mock
+    private IwsCommissionRepository iwsCommissionRepository;
+
+    @Mock
+    private ContractOrderCommissionRepository contractOrderCommissionRepository;
+
 
     @InjectMocks
     private BasicContractServiceImpl basicContractService;
@@ -42,10 +52,32 @@ class BasicContractServiceImplTest {
 
     @Test
     void testCreateValidBasicContract() {
-        when(basicContractRepository.save(sampleBasicContract)).thenReturn(sampleBasicContract);
+        // GIVEN
+        sampleBasicContract = new BasicContract();
+        sampleBasicContract.setId(1L);
+
+        when(basicContractRepository.save(sampleBasicContract))
+                .thenReturn(sampleBasicContract);
+
+        when(iwsCommissionRepository.findAll())
+                .thenReturn(List.of(
+                        new IwsCommission(),
+                        new IwsCommission()
+                ));
+
+        when(contractOrderCommissionRepository.saveAll(anyList()))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        // WHEN
         BasicContract result = basicContractService.create(sampleBasicContract);
+
+        // THEN
+        assertNotNull(result);
         assertEquals(sampleBasicContract, result);
+
         verify(basicContractRepository).save(sampleBasicContract);
+        verify(iwsCommissionRepository).findAll();
+        verify(contractOrderCommissionRepository).saveAll(anyList());
     }
 
     @Test
