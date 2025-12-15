@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.iws_manager.iws_manager_api.models.AbsenceDay;
@@ -83,4 +84,32 @@ public interface AbsenceDayRepository extends JpaRepository<AbsenceDay, Long> {
         Long employeeId, 
         LocalDate absenceDate, 
         Long excludeAbsenceDayId);
+
+    /**
+     * Finds all absence days for a specific employee in a specific year.
+     * 
+     * @param employeeId the ID of the employee
+     * @param year the year to filter by
+     * @return list of absence days matching the criteria
+     */
+    @Query("SELECT a FROM AbsenceDay a WHERE a.employee.id = :employeeId " +
+        "AND YEAR(a.absenceDate) = :year")
+    List<AbsenceDay> findByEmployeeIdAndYear(@Param("employeeId") Long employeeId, 
+                                            @Param("year") int year);
+
+    /**
+     * Counts absence days for a specific employee and absence type in a specific year.
+     * 
+     * @param employeeId the ID of the employee
+     * @param absenceTypeId the ID of the absence type
+     * @param year the year to filter by
+     * @return count of absence days matching the criteria
+     */
+    @Query("SELECT COUNT(a) FROM AbsenceDay a WHERE a.employee.id = :employeeId " +
+        "AND a.absenceType.id = :absenceTypeId " +
+        "AND YEAR(a.absenceDate) = :year")
+    long countByEmployeeIdAndAbsenceTypeIdAndYear(@Param("employeeId") Long employeeId,
+                                                @Param("absenceTypeId") Long absenceTypeId,
+                                                @Param("year") int year);
+
 }

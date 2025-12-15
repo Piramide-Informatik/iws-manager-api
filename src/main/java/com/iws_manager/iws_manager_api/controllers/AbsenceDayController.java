@@ -88,4 +88,24 @@ public class AbsenceDayController {
         boolean exists = absenceDayService.existsByEmployeeIdAndAbsenceDate(employeeId, absenceDate);
         return ResponseEntity.ok(exists);
     }
+
+    @GetMapping("/by-employee/{employeeId}/year/{year}")
+    public ResponseEntity<List<AbsenceDay>> getByEmployeeIdAndYear(
+            @PathVariable Long employeeId,
+            @PathVariable int year) {
+        
+        List<AbsenceDay> absenceDays = absenceDayService.getByEmployeeIdAndYear(employeeId, year);
+        return new ResponseEntity<>(absenceDays, HttpStatus.OK);
+    }
+
+    @GetMapping("/count/by-employee/{employeeId}/absence-type/{absenceTypeId}/year/{year}")
+    public ResponseEntity<Long> countByEmployeeIdAndAbsenceTypeIdAndYear(
+            @PathVariable Long employeeId,
+            @PathVariable Long absenceTypeId,
+            @PathVariable int year) {
+        
+        long count = absenceDayService.countByEmployeeIdAndAbsenceTypeIdAndYear(
+            employeeId, absenceTypeId, year);
+        return ResponseEntity.ok(count);
+    }
 }

@@ -140,6 +140,34 @@ public class AbsenceDayServiceImpl implements AbsenceDayService {
         return absenceDayRepository.existsByEmployeeIdAndAbsenceDate(employeeId, absenceDate);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<AbsenceDay> getByEmployeeIdAndYear(Long employeeId, int year) {
+        if (employeeId == null) {
+            throw new IllegalArgumentException("Employee ID cannot be null");
+        }
+        
+        if (year <= 0) {
+            throw new IllegalArgumentException("Year must be a positive number");
+        }
+        
+        return absenceDayRepository.findByEmployeeIdAndYear(employeeId, year);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long countByEmployeeIdAndAbsenceTypeIdAndYear(Long employeeId, Long absenceTypeId, int year) {
+        if (employeeId == null || absenceTypeId == null) {
+            throw new IllegalArgumentException("Employee ID and AbsenceType ID cannot be null");
+        }
+        
+        if (year <= 0) {
+            throw new IllegalArgumentException("Year must be a positive number");
+        }
+        
+        return absenceDayRepository.countByEmployeeIdAndAbsenceTypeIdAndYear(employeeId, absenceTypeId, year);
+    }
+
     /**
      * Validates the absence day for creation.
      * Checks for duplicate absence on the same date for the same employee.
