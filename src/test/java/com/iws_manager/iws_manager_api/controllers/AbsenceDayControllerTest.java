@@ -10,6 +10,7 @@ import com.iws_manager.iws_manager_api.models.AbsenceDay;
 import com.iws_manager.iws_manager_api.models.Employee;
 import com.iws_manager.iws_manager_api.models.AbsenceType;
 import com.iws_manager.iws_manager_api.services.v2.interfaces.AbsenceDayServiceV2;
+import com.iws_manager.iws_manager_api.controllers.v2.AbsenceDayControllerV2;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -501,7 +502,7 @@ class AbsenceDayControllerTest {
     @Test
     void getByIdWithRelations_ShouldReturnAbsenceDayDetailDTO_WhenFound() {
         // Arrange
-        when(absenceDayService.findByIdWithRelations(ABSENCE_DAY_ID)).thenReturn(Optional.of(absenceDay));
+        when(absenceDayService.findById(ABSENCE_DAY_ID)).thenReturn(Optional.of(absenceDay));
         when(absenceDayMapper.toDetailDTO(absenceDay)).thenReturn(detailDTO);
 
         // Act
@@ -513,14 +514,14 @@ class AbsenceDayControllerTest {
         assertNotNull(response.getBody());
         assertEquals(detailDTO, response.getBody());
         
-        verify(absenceDayService).findByIdWithRelations(ABSENCE_DAY_ID);
+        verify(absenceDayService).findById(ABSENCE_DAY_ID);
         verify(absenceDayMapper).toDetailDTO(absenceDay);
     }
 
     @Test
     void getByIdWithRelations_ShouldReturnNotFound_WhenNotFound() {
         // Arrange
-        when(absenceDayService.findByIdWithRelations(ABSENCE_DAY_ID)).thenReturn(Optional.empty());
+        when(absenceDayService.findById(ABSENCE_DAY_ID)).thenReturn(Optional.empty());
 
         // Act
         ResponseEntity<AbsenceDayDetailDTO> response = 
@@ -530,7 +531,7 @@ class AbsenceDayControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
         
-        verify(absenceDayService).findByIdWithRelations(ABSENCE_DAY_ID);
+        verify(absenceDayService).findById(ABSENCE_DAY_ID);
         verify(absenceDayMapper, never()).toDetailDTO(any());
     }
 
