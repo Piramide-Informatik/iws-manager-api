@@ -3,6 +3,7 @@ package com.iws_manager.iws_manager_api.mappers;
 import com.iws_manager.iws_manager_api.dtos.absenceday.*;
 import com.iws_manager.iws_manager_api.dtos.shared.AbsenceTypeInfoDTO;
 import com.iws_manager.iws_manager_api.dtos.shared.BasicReferenceDTO;
+import com.iws_manager.iws_manager_api.dtos.shared.EmployeeBasicDTO;
 import com.iws_manager.iws_manager_api.dtos.shared.EmployeeInfoDTO;
 import com.iws_manager.iws_manager_api.models.AbsenceDay;
 import com.iws_manager.iws_manager_api.models.AbsenceType;
@@ -10,6 +11,7 @@ import com.iws_manager.iws_manager_api.models.Employee;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -24,8 +26,8 @@ public class AbsenceDayMapper {
         return new AbsenceDayInfoDTO(
             absenceDay.getId(),
             absenceDay.getAbsenceDate(),
-            toBasicReferenceDTO(absenceDay.getAbsenceType()),
-            toBasicReferenceDTO(absenceDay.getEmployee()),
+            toAbsenceTypeInfoDTO(absenceDay.getAbsenceType()),
+            toEmployeeBasicDTO(absenceDay.getEmployee()),
             absenceDay.getVersion()
         );
     }
@@ -56,9 +58,6 @@ public class AbsenceDayMapper {
         AbsenceDay absenceDay = new AbsenceDay();
         absenceDay.setAbsenceDate(requestDTO.absenceDate());
         
-        // NOTE: The relationships (employee and absenceType) will be set in the service
-        // using the BasicReferenceDTO from the requestDTO
-        
         return absenceDay;
     }
 
@@ -84,25 +83,20 @@ public class AbsenceDayMapper {
                 .collect(Collectors.toList());
     }
 
-    // Helper: Entity -> BasicReferenceDTO
-    private BasicReferenceDTO toBasicReferenceDTO(Object entity) {
-        if (entity == null) {
+    // NUEVO MÉTODO: Employee -> EmployeeBasicDTO
+    private EmployeeBasicDTO toEmployeeBasicDTO(Employee employee) {
+        if (employee == null) {
             return null;
         }
-        
-        if (entity instanceof AbsenceType absenceType) {
-            return new BasicReferenceDTO(
-                absenceType.getId(),
-                absenceType.getVersion()
-            );
-        } else if (entity instanceof Employee employee) {
-            return new BasicReferenceDTO(
-                employee.getId(),
-                employee.getVersion()
-            );
-        }
-        
-        return null;
+
+        return new EmployeeBasicDTO(
+            employee.getId(),
+            employee.getEmployeeno(),
+            employee.getFirstname(),
+            employee.getLastname(),
+            employee.getLabel(),
+            employee.getVersion()
+        );
     }
 
     // Helper: AbsenceType -> AbsenceTypeInfoDTO
@@ -150,6 +144,26 @@ public class AbsenceDayMapper {
         );
     }
 
+    private BasicReferenceDTO toBasicReferenceDTO(Object entity) {
+        if (entity == null) {
+            return null;
+        }
+        
+        if (entity instanceof AbsenceType absenceType) {
+            return new BasicReferenceDTO(
+                absenceType.getId(),
+                absenceType.getVersion()
+            );
+        } else if (entity instanceof Employee employee) {
+            return new BasicReferenceDTO(
+                employee.getId(),
+                employee.getVersion()
+            );
+        }
+        
+        return null;
+    }
+
     public AbsenceDayCountDTO toCountDTO(Object[] result) {
         if (result == null || result.length < 2) {
             return null;
@@ -171,11 +185,10 @@ public class AbsenceDayMapper {
         
         return results.stream()
                 .map(this::toCountDTO)
-                .filter(dto -> dto != null)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
-    // Update entity from DTO
     public void updateEntityFromDTO(AbsenceDay entity, AbsenceDayRequestDTO dto) {
         if (entity == null || dto == null) {
             return;
