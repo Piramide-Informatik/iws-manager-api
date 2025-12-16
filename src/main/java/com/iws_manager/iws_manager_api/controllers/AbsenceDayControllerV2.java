@@ -1,8 +1,8 @@
-package com.iws_manager.iws_manager_api.controllers.v2;
+package com.iws_manager.iws_manager_api.controllers;
 
 import com.iws_manager.iws_manager_api.dtos.absenceday.*;
 import com.iws_manager.iws_manager_api.mappers.AbsenceDayMapper;
-import com.iws_manager.iws_manager_api.services.v2.interfaces.AbsenceDayServiceV2;
+import com.iws_manager.iws_manager_api.services.interfaces.AbsenceDayServiceV2;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;

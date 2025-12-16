@@ -1,4 +1,4 @@
-package com.iws_manager.iws_manager_api.services.v2.interfaces;
+package com.iws_manager.iws_manager_api.services.interfaces;
 
 import com.iws_manager.iws_manager_api.dtos.absenceday.AbsenceDayFilterDTO;
 import com.iws_manager.iws_manager_api.dtos.absenceday.AbsenceDayRequestDTO;

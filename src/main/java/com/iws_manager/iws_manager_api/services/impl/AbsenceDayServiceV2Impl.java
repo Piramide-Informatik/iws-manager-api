@@ -1,4 +1,4 @@
-package com.iws_manager.iws_manager_api.services.v2.impl;
+package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.dtos.absenceday.AbsenceDayFilterDTO;
 import com.iws_manager.iws_manager_api.dtos.absenceday.AbsenceDayRequestDTO;
@@ -11,7 +11,7 @@ import com.iws_manager.iws_manager_api.repositories.PublicHolidayRepository;
 import com.iws_manager.iws_manager_api.repositories.AbsenceDayRepository;
 import com.iws_manager.iws_manager_api.repositories.EmployeeRepository;
 import com.iws_manager.iws_manager_api.repositories.AbsenceTypeRepository;
-import com.iws_manager.iws_manager_api.services.v2.interfaces.AbsenceDayServiceV2;
+import com.iws_manager.iws_manager_api.services.interfaces.AbsenceDayServiceV2;
 import com.iws_manager.iws_manager_api.exception.exceptions.DuplicateResourceException;
 
 import org.springframework.beans.factory.annotation.Autowired;

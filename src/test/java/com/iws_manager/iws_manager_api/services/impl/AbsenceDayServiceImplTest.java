@@ -12,7 +12,7 @@ import com.iws_manager.iws_manager_api.repositories.EmployeeRepository;
 import com.iws_manager.iws_manager_api.repositories.AbsenceTypeRepository;
 import com.iws_manager.iws_manager_api.repositories.PublicHolidayRepository;
 import com.iws_manager.iws_manager_api.exception.exceptions.DuplicateResourceException;
-import  com.iws_manager.iws_manager_api.services.v2.impl.AbsenceDayServiceV2Impl;
+import  com.iws_manager.iws_manager_api.services.impl.AbsenceDayServiceV2Impl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

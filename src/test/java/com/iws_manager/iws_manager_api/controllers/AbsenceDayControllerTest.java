@@ -9,8 +9,8 @@ import com.iws_manager.iws_manager_api.mappers.AbsenceDayMapper;
 import com.iws_manager.iws_manager_api.models.AbsenceDay;
 import com.iws_manager.iws_manager_api.models.Employee;
 import com.iws_manager.iws_manager_api.models.AbsenceType;
-import com.iws_manager.iws_manager_api.services.v2.interfaces.AbsenceDayServiceV2;
-import com.iws_manager.iws_manager_api.controllers.v2.AbsenceDayControllerV2;
+import com.iws_manager.iws_manager_api.services.interfaces.AbsenceDayServiceV2;
+import com.iws_manager.iws_manager_api.controllers.AbsenceDayControllerV2;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
