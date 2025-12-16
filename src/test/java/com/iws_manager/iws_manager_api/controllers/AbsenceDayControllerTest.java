@@ -168,7 +168,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void create_ShouldReturnCreatedAbsenceDayDetailDTO_WhenValidRequest() {
+    void createShouldReturnCreatedAbsenceDayDetailDTOWhenValidRequest() {
         // Arrange
         when(absenceDayService.createFromDTO(requestDTO)).thenReturn(absenceDay);
         when(absenceDayMapper.toDetailDTO(absenceDay)).thenReturn(detailDTO);
@@ -188,7 +188,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void getById_ShouldReturnAbsenceDayDetailDTO_WhenFound() {
+    void getByIdShouldReturnAbsenceDayDetailDTOWhenFound() {
         // Arrange
         when(absenceDayService.findById(ABSENCE_DAY_ID)).thenReturn(Optional.of(absenceDay));
         when(absenceDayMapper.toDetailDTO(absenceDay)).thenReturn(detailDTO);
@@ -206,7 +206,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void getById_ShouldReturnNotFound_WhenNotFound() {
+    void getByIdShouldReturnNotFoundWhenNotFound() {
         // Arrange
         when(absenceDayService.findById(ABSENCE_DAY_ID)).thenReturn(Optional.empty());
 
@@ -222,7 +222,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void getAll_ShouldReturnListOfAbsenceDayInfoDTOs() {
+    void getAllShouldReturnListOfAbsenceDayInfoDTOs() {
         // Arrange
         List<AbsenceDay> absenceDays = Arrays.asList(absenceDay);
         List<AbsenceDayInfoDTO> infoDTOs = Arrays.asList(infoDTO);
@@ -244,7 +244,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void getAll_ShouldReturnEmptyList() {
+    void getAllShouldReturnEmptyList() {
         // Arrange
         when(absenceDayService.findAll()).thenReturn(Collections.emptyList());
         when(absenceDayMapper.toInfoDTOList(any())).thenReturn(Collections.emptyList());
@@ -262,7 +262,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void update_ShouldReturnUpdatedAbsenceDayDetailDTO() {
+    void updateShouldReturnUpdatedAbsenceDayDetailDTO() {
         // Arrange
         when(absenceDayService.updateFromDTO(ABSENCE_DAY_ID, requestDTO)).thenReturn(absenceDay);
         when(absenceDayMapper.toDetailDTO(absenceDay)).thenReturn(detailDTO);
@@ -281,7 +281,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void delete_ShouldReturnNoContent() {
+    void deleteShouldReturnNoContent() {
         // Act
         ResponseEntity<Void> response = absenceDayControllerV2.delete(ABSENCE_DAY_ID);
 
@@ -293,7 +293,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void getByEmployeeId_ShouldReturnListOfAbsenceDayInfoDTOs() {
+    void getByEmployeeIdShouldReturnListOfAbsenceDayInfoDTOs() {
         // Arrange
         List<AbsenceDay> absenceDays = Arrays.asList(absenceDay);
         List<AbsenceDayInfoDTO> infoDTOs = Arrays.asList(infoDTO);
@@ -316,7 +316,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void getByEmployeeIdAndDateRange_ShouldReturnListOfAbsenceDayInfoDTOs() {
+    void getByEmployeeIdAndDateRangeShouldReturnListOfAbsenceDayInfoDTOs() {
         // Arrange
         List<AbsenceDay> absenceDays = Arrays.asList(absenceDay);
         List<AbsenceDayInfoDTO> infoDTOs = Arrays.asList(infoDTO);
@@ -339,7 +339,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void getByEmployeeIdAndAbsenceTypeId_ShouldReturnListOfAbsenceDayInfoDTOs() {
+    void getByEmployeeIdAndAbsenceTypeIdShouldReturnListOfAbsenceDayInfoDTOs() {
         // Arrange
         List<AbsenceDay> absenceDays = Arrays.asList(absenceDay);
         List<AbsenceDayInfoDTO> infoDTOs = Arrays.asList(infoDTO);
@@ -362,7 +362,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void existsByEmployeeIdAndAbsenceDate_ShouldReturnTrue() {
+    void existsByEmployeeIdAndAbsenceDateShouldReturnTrue() {
         // Arrange
         when(absenceDayService.existsByEmployeeIdAndAbsenceDate(EMPLOYEE_ID, TEST_DATE))
             .thenReturn(true);
@@ -379,7 +379,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void getByEmployeeIdAndYear_ShouldReturnListOfAbsenceDayInfoDTOs() {
+    void getByEmployeeIdAndYearShouldReturnListOfAbsenceDayInfoDTOs() {
         // Arrange
         List<AbsenceDay> absenceDays = Arrays.asList(absenceDay);
         List<AbsenceDayInfoDTO> infoDTOs = Arrays.asList(infoDTO);
@@ -401,7 +401,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void countByEmployeeIdAndAbsenceTypeIdAndYear_ShouldReturnCount() {
+    void countByEmployeeIdAndAbsenceTypeIdAndYearShouldReturnCount() {
         // Arrange
         long expectedCount = 5L;
         when(absenceDayService.countByEmployeeIdAndAbsenceTypeIdAndYear(EMPLOYEE_ID, ABSENCE_TYPE_ID, YEAR))
@@ -419,7 +419,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void countByTypeForEmployee_ShouldReturnListOfAbsenceDayCountDTOs() {
+    void countByTypeForEmployeeShouldReturnListOfAbsenceDayCountDTOs() {
         // Arrange
         Object[] resultArray = new Object[]{absenceType, 5L};
         List<Object[]> results = Collections.singletonList(resultArray);
@@ -443,7 +443,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void countByTypeForEmployeeAndYear_ShouldReturnListOfAbsenceDayCountDTOs() {
+    void countByTypeForEmployeeAndYearShouldReturnListOfAbsenceDayCountDTOs() {
         // Arrange
         Object[] resultArray = new Object[]{absenceType, 5L};
         List<Object[]> results = Collections.singletonList(resultArray);
@@ -468,7 +468,7 @@ class AbsenceDayControllerTest {
         verify(absenceDayMapper).toCountDTOList(results);
     }
     @Test
-    void filter_ShouldReturnListOfAbsenceDayInfoDTOs() {
+    void filterShouldReturnListOfAbsenceDayInfoDTOs() {
         // Arrange
         AbsenceDayFilterDTO filterDTO = new AbsenceDayFilterDTO(
             EMPLOYEE_ID,
@@ -500,7 +500,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void getByIdWithRelations_ShouldReturnAbsenceDayDetailDTO_WhenFound() {
+    void getByIdWithRelationsShouldReturnAbsenceDayDetailDTOWhenFound() {
         // Arrange
         when(absenceDayService.findById(ABSENCE_DAY_ID)).thenReturn(Optional.of(absenceDay));
         when(absenceDayMapper.toDetailDTO(absenceDay)).thenReturn(detailDTO);
@@ -519,7 +519,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void getByIdWithRelations_ShouldReturnNotFound_WhenNotFound() {
+    void getByIdWithRelationsShouldReturnNotFoundWhenNotFound() {
         // Arrange
         when(absenceDayService.findById(ABSENCE_DAY_ID)).thenReturn(Optional.empty());
 
@@ -536,7 +536,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void create_ShouldPropagateIllegalArgumentException() {
+    void createShouldPropagateIllegalArgumentException() {
         // Arrange
         when(absenceDayService.createFromDTO(requestDTO))
             .thenThrow(new IllegalArgumentException("Invalid data"));
@@ -554,7 +554,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void update_ShouldPropagateEntityNotFoundException() {
+    void updateShouldPropagateEntityNotFoundException() {
         // Arrange
         when(absenceDayService.updateFromDTO(ABSENCE_DAY_ID, requestDTO))
             .thenThrow(new jakarta.persistence.EntityNotFoundException("Not found"));
@@ -567,7 +567,7 @@ class AbsenceDayControllerTest {
     }
 
     @Test
-    void delete_ShouldPropagateEntityNotFoundException() {
+    void deleteShouldPropagateEntityNotFoundException() {
         // Arrange
         doThrow(new jakarta.persistence.EntityNotFoundException("Not found"))
             .when(absenceDayService).delete(ABSENCE_DAY_ID);
