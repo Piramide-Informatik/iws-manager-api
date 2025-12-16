@@ -54,29 +54,34 @@ class AbsenceDayControllerTest {
     private AbsenceDayControllerV2 absenceDayControllerV2;
 
     private AbsenceDay absenceDay;
-    private Employee employee;
+    private Employee employee = new Employee();
     private AbsenceType absenceType;
     private AbsenceDayRequestDTO requestDTO;
     private AbsenceDayInfoDTO infoDTO;
     private AbsenceDayDetailDTO detailDTO;
     private AbsenceDayCountDTO countDTO;
 
+    private static final String EMPLOYEE_LASTNAME = "Müller";
+    private static final String EMPLOYEE_LABEL = "Desarrolladora Senior";
+    private static final String ABSENCE_TYPE_LABEL = "VAC";
+    private static final String ABSENCE_TYPE_NAME = "Vacaciones";
+
+
     @BeforeEach
     void setUp() {
         // Setup entities
-        employee = new Employee();
         employee.setId(EMPLOYEE_ID);
         employee.setVersion(1);
         employee.setEmployeeno(1001);
         employee.setFirstname("Ana");
-        employee.setLastname("Müller");
-        employee.setLabel("Desarrolladora Senior");
+        employee.setLastname(EMPLOYEE_LASTNAME);
+        employee.setLabel(EMPLOYEE_LABEL);
         
         absenceType = new AbsenceType();
         absenceType.setId(ABSENCE_TYPE_ID);
         absenceType.setVersion(0);
-        absenceType.setName("Vacaciones");
-        absenceType.setLabel("VAC");
+        absenceType.setName(ABSENCE_TYPE_NAME);
+        absenceType.setLabel(ABSENCE_TYPE_LABEL);
         absenceType.setHours((byte) 8);
         absenceType.setIsHoliday((byte) 0);
         absenceType.setShareOfDay(new BigDecimal("1.0"));
@@ -102,8 +107,8 @@ class AbsenceDayControllerTest {
             TEST_DATE,
             new AbsenceTypeInfoDTO(
                 ABSENCE_TYPE_ID,
-                "Vacaciones",
-                "VAC",
+                ABSENCE_TYPE_NAME,
+                ABSENCE_TYPE_LABEL,
                 (byte) 8,
                 (byte) 0,
                 new BigDecimal("1.0"),
@@ -113,8 +118,8 @@ class AbsenceDayControllerTest {
                 EMPLOYEE_ID,
                 1001,
                 "Ana",
-                "Müller",
-                "Desarrolladora Senior",
+                EMPLOYEE_LASTNAME,
+                EMPLOYEE_LABEL,
                 1
             ),
             0
@@ -128,8 +133,8 @@ class AbsenceDayControllerTest {
             0,
             new AbsenceTypeInfoDTO(
                 ABSENCE_TYPE_ID,
-                "Vacaciones",
-                "VAC",
+                ABSENCE_TYPE_NAME,
+                ABSENCE_TYPE_LABEL,
                 (byte) 8,
                 (byte) 0,
                 new BigDecimal("1.0"),
@@ -138,10 +143,10 @@ class AbsenceDayControllerTest {
             new EmployeeInfoDTO(
                 EMPLOYEE_ID,
                 "Ana",
-                "Müller",
+                EMPLOYEE_LASTNAME,
                 "ana.mueller@example.com",
                 1001,
-                "Desarrolladora Senior",
+                EMPLOYEE_LABEL,
                 "+123456789",
                 null,
                 null,
@@ -156,8 +161,8 @@ class AbsenceDayControllerTest {
         countDTO = new AbsenceDayCountDTO(
             new AbsenceTypeInfoDTO(
                 ABSENCE_TYPE_ID,
-                "Vacaciones",
-                "VAC",
+                ABSENCE_TYPE_NAME,
+                ABSENCE_TYPE_LABEL,
                 (byte) 8,
                 (byte) 0,
                 new BigDecimal("1.0"),
