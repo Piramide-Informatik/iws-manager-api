@@ -1,4 +1,4 @@
-package com.iws_manager.iws_manager_api.controllers;
+package com.iws_manager.iws_manager_api.controllers.v2;
 
 import com.iws_manager.iws_manager_api.dtos.absenceday.*;
 import com.iws_manager.iws_manager_api.mappers.AbsenceDayMapper;

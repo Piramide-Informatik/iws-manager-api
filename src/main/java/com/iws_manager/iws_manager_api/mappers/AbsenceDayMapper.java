@@ -144,26 +144,6 @@ public class AbsenceDayMapper {
         );
     }
 
-    private BasicReferenceDTO toBasicReferenceDTO(Object entity) {
-        if (entity == null) {
-            return null;
-        }
-        
-        if (entity instanceof AbsenceType absenceType) {
-            return new BasicReferenceDTO(
-                absenceType.getId(),
-                absenceType.getVersion()
-            );
-        } else if (entity instanceof Employee employee) {
-            return new BasicReferenceDTO(
-                employee.getId(),
-                employee.getVersion()
-            );
-        }
-        
-        return null;
-    }
-
     public AbsenceDayCountDTO toCountDTO(Object[] result) {
         if (result == null || result.length < 2) {
             return null;
