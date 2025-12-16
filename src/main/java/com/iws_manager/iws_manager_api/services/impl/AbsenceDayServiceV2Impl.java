@@ -1,5 +1,8 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
+import com.iws_manager.iws_manager_api.dtos.absenceday.AbsenceDayFilterDTO;
+import com.iws_manager.iws_manager_api.dtos.absenceday.AbsenceDayRequestDTO;
+import com.iws_manager.iws_manager_api.mappers.AbsenceDayMapper;
 import com.iws_manager.iws_manager_api.models.AbsenceDay;
 import com.iws_manager.iws_manager_api.models.Employee;
 import com.iws_manager.iws_manager_api.models.AbsenceType;
@@ -8,7 +11,7 @@ import com.iws_manager.iws_manager_api.repositories.PublicHolidayRepository;
 import com.iws_manager.iws_manager_api.repositories.AbsenceDayRepository;
 import com.iws_manager.iws_manager_api.repositories.EmployeeRepository;
 import com.iws_manager.iws_manager_api.repositories.AbsenceTypeRepository;
-import com.iws_manager.iws_manager_api.services.interfaces.AbsenceDayService;
+import com.iws_manager.iws_manager_api.services.interfaces.AbsenceDayServiceV2;
 import com.iws_manager.iws_manager_api.exception.exceptions.DuplicateResourceException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +26,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class AbsenceDayServiceImpl implements AbsenceDayService {
+public class AbsenceDayServiceV2Impl implements AbsenceDayServiceV2 {
 
     private final AbsenceDayRepository absenceDayRepository;
     private final EmployeeRepository employeeRepository;
@@ -31,7 +34,7 @@ public class AbsenceDayServiceImpl implements AbsenceDayService {
     private final PublicHolidayRepository publicHolidayRepository;
 
     @Autowired
-    public AbsenceDayServiceImpl(
+    public AbsenceDayServiceV2Impl(
             AbsenceDayRepository absenceDayRepository,
             EmployeeRepository employeeRepository,
             AbsenceTypeRepository absenceTypeRepository,
@@ -43,12 +46,46 @@ public class AbsenceDayServiceImpl implements AbsenceDayService {
     }
 
     @Override
-    public AbsenceDay create(AbsenceDay absenceDay) {
-        if (absenceDay == null) {
-            throw new IllegalArgumentException("AbsenceDay cannot be null");
+    public AbsenceDay createFromDTO(AbsenceDayRequestDTO requestDTO) {
+        if (requestDTO == null) {
+            throw new IllegalArgumentException("AbsenceDayRequestDTO cannot be null");
         }
 
-        validateAbsenceDayForCreation(absenceDay);
+        if (requestDTO.absenceDate() == null) {
+            throw new IllegalArgumentException("Absence date must be specified");
+        }
+        
+        if (requestDTO.employee() == null || requestDTO.employee().id() == null) {
+            throw new IllegalArgumentException("Employee must be specified");
+        }
+        
+        if (requestDTO.absenceType() == null || requestDTO.absenceType().id() == null) {
+            throw new IllegalArgumentException("AbsenceType must be specified");
+        }
+
+        validateNotPublicHoliday(requestDTO.absenceDate());
+
+        if (absenceDayRepository.existsByEmployeeIdAndAbsenceDate(
+                requestDTO.employee().id(), requestDTO.absenceDate())) {
+            throw new DuplicateResourceException(
+                "Absence already exists for employee ID " + requestDTO.employee().id() + 
+                " on date " + requestDTO.absenceDate());
+        }
+
+        // Load related entities
+        Employee employee = employeeRepository.findById(requestDTO.employee().id())
+                .orElseThrow(() -> new EntityNotFoundException(
+                    "Employee not found with id: " + requestDTO.employee().id()));
+        
+        AbsenceType absenceType = absenceTypeRepository.findById(requestDTO.absenceType().id())
+                .orElseThrow(() -> new EntityNotFoundException(
+                    "AbsenceType not found with id: " + requestDTO.absenceType().id()));
+
+        // Create entity
+        AbsenceDay absenceDay = new AbsenceDay();
+        absenceDay.setAbsenceDate(requestDTO.absenceDate());
+        absenceDay.setEmployee(employee);
+        absenceDay.setAbsenceType(absenceType);
 
         return absenceDayRepository.save(absenceDay);
     }
@@ -69,18 +106,35 @@ public class AbsenceDayServiceImpl implements AbsenceDayService {
     }
 
     @Override
-    public AbsenceDay update(Long id, AbsenceDay absenceDayDetails) {
-        if (id == null || absenceDayDetails == null) {
-            throw new IllegalArgumentException("ID and AbsenceDay details cannot be null");
+    public AbsenceDay updateFromDTO(Long id, AbsenceDayRequestDTO requestDTO) {
+        if (id == null || requestDTO == null) {
+            throw new IllegalArgumentException("ID and AbsenceDayRequestDTO cannot be null");
         }
 
         return absenceDayRepository.findById(id)
                 .map(existingAbsenceDay -> {
-                    validateAbsenceDayForUpdate(existingAbsenceDay, absenceDayDetails, id);
-
-                    existingAbsenceDay.setAbsenceDate(absenceDayDetails.getAbsenceDate());
-                    existingAbsenceDay.setAbsenceType(absenceDayDetails.getAbsenceType());
-                    existingAbsenceDay.setEmployee(absenceDayDetails.getEmployee());
+                    // Validate changes
+                    validateUpdateFromDTO(existingAbsenceDay, requestDTO, id);
+                    
+                    // Update basic fields
+                    if (requestDTO.absenceDate() != null) {
+                        existingAbsenceDay.setAbsenceDate(requestDTO.absenceDate());
+                    }
+                    
+                    // Update relationships if provided
+                    if (requestDTO.employee() != null && requestDTO.employee().id() != null) {
+                        Employee employee = employeeRepository.findById(requestDTO.employee().id())
+                                .orElseThrow(() -> new EntityNotFoundException(
+                                    "Employee not found with id: " + requestDTO.employee().id()));
+                        existingAbsenceDay.setEmployee(employee);
+                    }
+                    
+                    if (requestDTO.absenceType() != null && requestDTO.absenceType().id() != null) {
+                        AbsenceType absenceType = absenceTypeRepository.findById(requestDTO.absenceType().id())
+                                .orElseThrow(() -> new EntityNotFoundException(
+                                    "AbsenceType not found with id: " + requestDTO.absenceType().id()));
+                        existingAbsenceDay.setAbsenceType(absenceType);
+                    }
 
                     return absenceDayRepository.save(existingAbsenceDay);
                 })
@@ -168,22 +222,55 @@ public class AbsenceDayServiceImpl implements AbsenceDayService {
         return absenceDayRepository.countByEmployeeIdAndAbsenceTypeIdAndYear(employeeId, absenceTypeId, year);
     }
 
-    /**
-     * Validates the absence day for creation.
-     * Checks for duplicate absence on the same date for the same employee.
-     * Validates that related entities (Employee, AbsenceType) exist.
-     */
-    private void validateAbsenceDayForCreation(AbsenceDay absenceDay) {
-        if (absenceDay.getAbsenceDate() == null) {
-            throw new IllegalArgumentException("Absence date must be specified");
+    @Override
+    @Transactional(readOnly = true)
+    public List<Object[]> countAbsenceDaysByTypeForEmployee(Long employeeId) {
+        if (employeeId == null) {
+            throw new IllegalArgumentException("Employee ID cannot be null");
         }
-        
-        validateNotPublicHoliday(absenceDay.getAbsenceDate());
-        validateAndSetEmployee(absenceDay);
-        validateAndSetAbsenceType(absenceDay);
-        checkForDuplicateAbsence(absenceDay);
+        return absenceDayRepository.countAbsenceDaysByTypeForEmployee(employeeId);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<AbsenceDay> filter(AbsenceDayFilterDTO filterDTO) {
+        if (filterDTO == null) {
+            throw new IllegalArgumentException("FilterDTO cannot be null");
+        }
+
+        // Validate that at least employeeId is present
+        if (filterDTO.employeeId() == null) {
+            throw new IllegalArgumentException("At least employeeId must be specified for filtering");
+        }
+
+        // Filtering logic based on parameters
+        if (filterDTO.startDate() != null && filterDTO.endDate() != null) {
+            return getByEmployeeIdAndDateRange(filterDTO.employeeId(), filterDTO.startDate(), filterDTO.endDate());
+        } else if (filterDTO.year() != null) {
+            return getByEmployeeIdAndYear(filterDTO.employeeId(), filterDTO.year());
+        } else if (filterDTO.absenceTypeId() != null) {
+            return getByEmployeeIdAndAbsenceTypeId(filterDTO.employeeId(), filterDTO.absenceTypeId());
+        } else {
+            return getByEmployeeId(filterDTO.employeeId());
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Object[]> countAbsenceDaysByTypeForEmployeeAndYear(Long employeeId, int year) {
+        if (employeeId == null) {
+            throw new IllegalArgumentException("Employee ID cannot be null");
+        }
+        
+        if (year <= 0) {
+            throw new IllegalArgumentException("Year must be a positive number");
+        }
+        
+        return absenceDayRepository.countAbsenceDaysByTypeForEmployeeAndYear(employeeId, year);
+    }
+
+    // ========== Private methods ==========
+    
     private void validateNotPublicHoliday(LocalDate date) {
         if (date == null) {
             throw new IllegalArgumentException("Date cannot be null");
@@ -199,87 +286,33 @@ public class AbsenceDayServiceImpl implements AbsenceDayService {
         }
     }
 
-    private void validateAndSetEmployee(AbsenceDay absenceDay) {
-        if (absenceDay.getEmployee() == null || absenceDay.getEmployee().getId() == null) {
-            throw new IllegalArgumentException("Employee must be specified");
-        }
-        
-        Employee employee = employeeRepository.findById(absenceDay.getEmployee().getId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                    "Employee not found with id: " + absenceDay.getEmployee().getId()));
-        absenceDay.setEmployee(employee);
-    }
-
-    private void validateAndSetAbsenceType(AbsenceDay absenceDay) {
-        if (absenceDay.getAbsenceType() == null || absenceDay.getAbsenceType().getId() == null) {
-            throw new IllegalArgumentException("AbsenceType must be specified");
-        }
-        
-        AbsenceType absenceType = absenceTypeRepository.findById(absenceDay.getAbsenceType().getId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                    "AbsenceType not found with id: " + absenceDay.getAbsenceType().getId()));
-        absenceDay.setAbsenceType(absenceType);
-    }
-
-    private void checkForDuplicateAbsence(AbsenceDay absenceDay) {
-        if (absenceDayRepository.existsByEmployeeIdAndAbsenceDate(
-                absenceDay.getEmployee().getId(), absenceDay.getAbsenceDate())) {
-            throw new DuplicateResourceException(
-                "Absence already exists for employee ID " + absenceDay.getEmployee().getId() + 
-                " on date " + absenceDay.getAbsenceDate());
-        }
-    }
-
-    /**
-     * Validates the absence day for update.
-     * Checks for duplicate absence on the same date for the same employee (excluding current record).
-     * Validates that related entities exist.
-    */
-
-    private void validateAbsenceDayForUpdate(AbsenceDay existingAbsenceDay, AbsenceDay newAbsenceDay, Long id) {
-        // Determine the employee ID to use
-        Long employeeId = newAbsenceDay.getEmployee() != null && newAbsenceDay.getEmployee().getId() != null
-                ? newAbsenceDay.getEmployee().getId()
+    private void validateUpdateFromDTO(AbsenceDay existingAbsenceDay, AbsenceDayRequestDTO requestDTO, Long id) {
+        // Determine the employeeId to use
+        Long employeeId = requestDTO.employee() != null && requestDTO.employee().id() != null
+                ? requestDTO.employee().id()
                 : existingAbsenceDay.getEmployee().getId();
         
-        // Determine the absence date to use
-        LocalDate absenceDate = newAbsenceDay.getAbsenceDate() != null
-                ? newAbsenceDay.getAbsenceDate()
+        // Determine the date to use
+        LocalDate absenceDate = requestDTO.absenceDate() != null
+                ? requestDTO.absenceDate()
                 : existingAbsenceDay.getAbsenceDate();
         
-        // Check if date changed
-        boolean dateChanged = newAbsenceDay.getAbsenceDate() != null && 
-                !existingAbsenceDay.getAbsenceDate().equals(newAbsenceDay.getAbsenceDate());
+        // Verify if the date changed
+        boolean dateChanged = requestDTO.absenceDate() != null && 
+                !existingAbsenceDay.getAbsenceDate().equals(requestDTO.absenceDate());
         
-        // Check if employee changed
-        boolean employeeChanged = newAbsenceDay.getEmployee() != null && 
-                newAbsenceDay.getEmployee().getId() != null &&
-                !existingAbsenceDay.getEmployee().getId().equals(newAbsenceDay.getEmployee().getId());
+        // Verify if the employee changed
+        boolean employeeChanged = requestDTO.employee() != null && 
+                requestDTO.employee().id() != null &&
+                !existingAbsenceDay.getEmployee().getId().equals(requestDTO.employee().id());
 
-        // Validate employee if provided
-        if (newAbsenceDay.getEmployee() != null && newAbsenceDay.getEmployee().getId() != null) {
-            Employee emp = employeeRepository.findById(newAbsenceDay.getEmployee().getId())
-                    .orElseThrow(() -> new EntityNotFoundException(
-                        "Employee not found with id: " + newAbsenceDay.getEmployee().getId()));
-            existingAbsenceDay.setEmployee(emp);
-        }
-
-        // Validate absence type if provided
-        if (newAbsenceDay.getAbsenceType() != null && newAbsenceDay.getAbsenceType().getId() != null) {
-            AbsenceType at = absenceTypeRepository.findById(newAbsenceDay.getAbsenceType().getId())
-                    .orElseThrow(() -> new EntityNotFoundException(
-                        "AbsenceType not found with id: " + newAbsenceDay.getAbsenceType().getId()));
-            existingAbsenceDay.setAbsenceType(at);
-        }
-
-        // Si la fecha cambió, validar que no sea feriado
+        // If the date changed, validate that it's not a public holiday
         if (dateChanged) {
             validateNotPublicHoliday(absenceDate);
         }
 
-        // Check for duplicate absence if date or employee changed
+        // Verify duplicates if date or employee changed
         if (dateChanged || employeeChanged) {
-            // Use the repository method to check for duplicates excluding the current record
             boolean duplicateExists = absenceDayRepository.existsByEmployeeIdAndAbsenceDateExcludingId(
                 employeeId, absenceDate, id);
             
