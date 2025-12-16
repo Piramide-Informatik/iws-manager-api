@@ -155,7 +155,7 @@ public class AbsenceDayControllerV2 {
 
     @GetMapping("/{id}/detail")
     public ResponseEntity<AbsenceDayDetailDTO> getByIdWithRelations(@PathVariable Long id) {
-        return absenceDayService.findByIdWithRelations(id)
+        return absenceDayService.findById(id)
                 .map(absenceDayMapper::toDetailDTO)
                 .map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
