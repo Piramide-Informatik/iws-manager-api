@@ -160,4 +160,14 @@ public class AbsenceDayControllerV2 {
                 .map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    @GetMapping("/count/by-type/employee/{employeeId}/year/{year}")
+    public ResponseEntity<List<AbsenceDayCountDTO>> countByTypeForEmployeeAndYear(
+            @PathVariable Long employeeId,
+            @PathVariable int year) {
+        
+        var results = absenceDayService.countAbsenceDaysByTypeForEmployeeAndYear(employeeId, year);
+        var countDTOs = absenceDayMapper.toCountDTOList(results);
+        return new ResponseEntity<>(countDTOs, HttpStatus.OK);
+    }
 }

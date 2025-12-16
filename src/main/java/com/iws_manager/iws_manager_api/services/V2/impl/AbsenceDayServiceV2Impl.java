@@ -270,6 +270,20 @@ public class AbsenceDayServiceV2Impl implements AbsenceDayServiceV2 {
         }
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<Object[]> countAbsenceDaysByTypeForEmployeeAndYear(Long employeeId, int year) {
+        if (employeeId == null) {
+            throw new IllegalArgumentException("Employee ID cannot be null");
+        }
+        
+        if (year <= 0) {
+            throw new IllegalArgumentException("Year must be a positive number");
+        }
+        
+        return absenceDayRepository.countAbsenceDaysByTypeForEmployeeAndYear(employeeId, year);
+    }
+
     // ========== Private methods ==========
     
     private void validateNotPublicHoliday(LocalDate date) {

@@ -112,4 +112,20 @@ public interface AbsenceDayRepository extends JpaRepository<AbsenceDay, Long> {
                                                 @Param("absenceTypeId") Long absenceTypeId,
                                                 @Param("year") int year);
 
+    /**
+     * Custom query to count absence days by type for a specific employee in a specific year.
+     * Returns an array of objects where each contains:
+     * - [0] AbsenceType entity
+     * - [1] Count of days for that type
+     * 
+     * @param employeeId the ID of the employee
+     * @param year the year to filter by
+     * @return list of Object arrays containing absence type and count pairs
+     */
+    @Query("SELECT a.absenceType, COUNT(a) FROM AbsenceDay a " +
+        "WHERE a.employee.id = :employeeId AND YEAR(a.absenceDate) = :year " +
+        "GROUP BY a.absenceType")
+    List<Object[]> countAbsenceDaysByTypeForEmployeeAndYear(
+        @Param("employeeId") Long employeeId, 
+        @Param("year") int year);
 }
