@@ -93,7 +93,7 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void createFromDTO_ShouldSaveAbsenceDay_WhenValidInput() {
+    void createFromDTOShouldSaveAbsenceDayWhenValidInput() {
         // Arrange
         when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
         when(absenceTypeRepository.findById(1L)).thenReturn(Optional.of(absenceType));
@@ -118,13 +118,13 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void createFromDTO_ShouldThrow_WhenRequestDTONull() {
+    void createFromDTOShouldThrowWhenRequestDTONull() {
         assertThrows(IllegalArgumentException.class, () -> 
             absenceDayServiceV2.createFromDTO(null));
     }
 
     @Test
-    void createFromDTO_ShouldThrow_WhenAbsenceDateNull() {
+    void createFromDTOShouldThrowWhenAbsenceDateNull() {
         AbsenceDayRequestDTO invalidDTO = new AbsenceDayRequestDTO(
             null,
             new BasicReferenceDTO(1L, 0),
@@ -136,7 +136,7 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void createFromDTO_ShouldThrow_WhenEmployeeNotSpecified() {
+    void createFromDTOShouldThrowWhenEmployeeNotSpecified() {
         AbsenceDayRequestDTO invalidDTO = new AbsenceDayRequestDTO(
             testDate,
             new BasicReferenceDTO(1L, 0),
@@ -148,7 +148,7 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void createFromDTO_ShouldThrow_WhenAbsenceTypeNotSpecified() {
+    void createFromDTOShouldThrowWhenAbsenceTypeNotSpecified() {
         AbsenceDayRequestDTO invalidDTO = new AbsenceDayRequestDTO(
             testDate,
             null, // AbsenceType null
@@ -160,7 +160,7 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void createFromDTO_ShouldThrow_WhenEmployeeNotFound() {
+    void createFromDTOShouldThrowWhenEmployeeNotFound() {
         when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
         
         assertThrows(EntityNotFoundException.class, () -> 
@@ -168,7 +168,7 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void createFromDTO_ShouldThrow_WhenAbsenceTypeNotFound() {
+    void createFromDTOShouldThrowWhenAbsenceTypeNotFound() {
         when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
         when(absenceTypeRepository.findById(1L)).thenReturn(Optional.empty());
         
@@ -177,7 +177,7 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void createFromDTO_ShouldThrow_WhenDateIsPublicHoliday() {
+    void createFromDTOShouldThrowWhenDateIsPublicHoliday() {
         // Arrange
         lenient().when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
         lenient().when(absenceTypeRepository.findById(1L)).thenReturn(Optional.of(absenceType));
@@ -195,7 +195,7 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void createFromDTO_ShouldThrow_WhenDuplicateAbsence() {
+    void createFromDTOShouldThrowWhenDuplicateAbsence() {
         // Arrange
         lenient().when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
         lenient().when(absenceTypeRepository.findById(1L)).thenReturn(Optional.of(absenceType));
@@ -210,7 +210,7 @@ class AbsenceDayServiceImplTest {
     }
     
     @Test
-    void updateFromDTO_ShouldUpdateAbsenceDay_WhenValidInput() {
+    void updateFromDTOShouldUpdateAbsenceDayWhenValidInput() {
         // Arrange
         Long id = 1L;
         LocalDate newDate = LocalDate.of(2024, 1, 16);
@@ -241,19 +241,19 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void updateFromDTO_ShouldThrow_WhenIdNull() {
+    void updateFromDTOShouldThrowWhenIdNull() {
         assertThrows(IllegalArgumentException.class, () -> 
             absenceDayServiceV2.updateFromDTO(null, requestDTO));
     }
 
     @Test
-    void updateFromDTO_ShouldThrow_WhenRequestDTONull() {
+    void updateFromDTOShouldThrowWhenRequestDTONull() {
         assertThrows(IllegalArgumentException.class, () -> 
             absenceDayServiceV2.updateFromDTO(1L, null));
     }
 
     @Test
-    void updateFromDTO_ShouldThrow_WhenNotFound() {
+    void updateFromDTOShouldThrowWhenNotFound() {
         when(absenceDayRepository.findById(99L)).thenReturn(Optional.empty());
         
         assertThrows(EntityNotFoundException.class, () -> 
@@ -261,7 +261,7 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void updateFromDTO_ShouldUpdateOnlyDate_WhenOtherFieldsNull() {
+    void updateFromDTOShouldUpdateOnlyDateWhenOtherFieldsNull() {
         // Arrange
         Long id = 1L;
         LocalDate newDate = LocalDate.of(2024, 1, 16);
@@ -290,7 +290,7 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void filter_ShouldReturnFilteredList_WhenDateRangeProvided() {
+    void filterShouldReturnFilteredListWhenDateRangeProvided() {
         // Arrange
         LocalDate startDate = LocalDate.of(2024, 1, 1);
         LocalDate endDate = LocalDate.of(2024, 12, 31);
@@ -316,7 +316,7 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void filter_ShouldReturnFilteredList_WhenYearProvided() {
+    void filterShouldReturnFilteredListWhenYearProvided() {
         // Arrange
         AbsenceDayFilterDTO filterDTO = new AbsenceDayFilterDTO(
             1L,  // employeeId
@@ -340,7 +340,7 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void filter_ShouldReturnFilteredList_WhenAbsenceTypeIdProvided() {
+    void filterShouldReturnFilteredListWhenAbsenceTypeIdProvided() {
         // Arrange
         AbsenceDayFilterDTO filterDTO = new AbsenceDayFilterDTO(
             1L,     // employeeId
@@ -364,7 +364,7 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void filter_ShouldReturnFilteredList_WhenOnlyEmployeeIdProvided() {
+    void filterShouldReturnFilteredListWhenOnlyEmployeeIdProvided() {
         // Arrange
         AbsenceDayFilterDTO filterDTO = new AbsenceDayFilterDTO(
             1L,     // employeeId
@@ -388,13 +388,13 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void filter_ShouldThrow_WhenFilterDTONull() {
+    void filterShouldThrowWhenFilterDTONull() {
         assertThrows(IllegalArgumentException.class, () -> 
             absenceDayServiceV2.filter(null));
     }
 
     @Test
-    void filter_ShouldThrow_WhenEmployeeIdNull() {
+    void filterShouldThrowWhenEmployeeIdNull() {
         AbsenceDayFilterDTO filterDTO = new AbsenceDayFilterDTO(
             null,   // employeeId (null)
             1L,     // absenceTypeId
@@ -409,7 +409,7 @@ class AbsenceDayServiceImplTest {
     }   
     
     @Test
-    void countAbsenceDaysByTypeForEmployeeAndYear_ShouldReturnCounts() {
+    void countAbsenceDaysByTypeForEmployeeAndYearShouldReturnCounts() {
         // Arrange
         Long employeeId = 1L;
         int year = 2024;
@@ -428,13 +428,13 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void countAbsenceDaysByTypeForEmployeeAndYear_ShouldThrow_WhenEmployeeIdNull() {
+    void countAbsenceDaysByTypeForEmployeeAndYearShouldThrowWhenEmployeeIdNull() {
         assertThrows(IllegalArgumentException.class, () -> 
             absenceDayServiceV2.countAbsenceDaysByTypeForEmployeeAndYear(null, 2024));
     }
 
     @Test
-    void countAbsenceDaysByTypeForEmployeeAndYear_ShouldThrow_WhenYearInvalid() {
+    void countAbsenceDaysByTypeForEmployeeAndYearShouldThrowWhenYearInvalid() {
         assertThrows(IllegalArgumentException.class, () -> 
             absenceDayServiceV2.countAbsenceDaysByTypeForEmployeeAndYear(1L, 0));
         
@@ -443,7 +443,7 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void findById_ShouldReturnAbsenceDay() {
+    void findByIdShouldReturnAbsenceDay() {
         when(absenceDayRepository.findById(1L)).thenReturn(Optional.of(absenceDay));
 
         Optional<AbsenceDay> result = absenceDayServiceV2.findById(1L);
@@ -453,7 +453,7 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void findAll_ShouldReturnList() {
+    void findAllShouldReturnList() {
         when(absenceDayRepository.findAll()).thenReturn(List.of(absenceDay));
 
         List<AbsenceDay> result = absenceDayServiceV2.findAll();
@@ -463,7 +463,7 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void getByEmployeeId_ShouldReturnList() {
+    void getByEmployeeIdShouldReturnList() {
         when(absenceDayRepository.findByEmployeeId(1L)).thenReturn(List.of(absenceDay));
 
         List<AbsenceDay> result = absenceDayServiceV2.getByEmployeeId(1L);
@@ -473,7 +473,7 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void existsByEmployeeIdAndAbsenceDate_ShouldReturnTrue() {
+    void existsByEmployeeIdAndAbsenceDateShouldReturnTrue() {
         when(absenceDayRepository.existsByEmployeeIdAndAbsenceDate(1L, testDate)).thenReturn(true);
 
         boolean result = absenceDayServiceV2.existsByEmployeeIdAndAbsenceDate(1L, testDate);
@@ -482,7 +482,7 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void countByEmployeeIdAndAbsenceTypeIdAndYear_ShouldReturnCount() {
+    void countByEmployeeIdAndAbsenceTypeIdAndYearShouldReturnCount() {
         when(absenceDayRepository.countByEmployeeIdAndAbsenceTypeIdAndYear(1L, 1L, 2024))
             .thenReturn(5L);
 
@@ -492,7 +492,7 @@ class AbsenceDayServiceImplTest {
     }
 
     @Test
-    void delete_ShouldDeleteAbsenceDay() {
+    void deleteShouldDeleteAbsenceDay() {
         when(absenceDayRepository.existsById(1L)).thenReturn(true);
         
         absenceDayServiceV2.delete(1L);
