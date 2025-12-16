@@ -71,7 +71,7 @@ public class ProjectPackageServiceImplV2 implements ProjectPackageServiceV2 {
     @Override
     public void delete(Long id) {
         validateIdNotNull(id);
-        if (projectPackageRepository.existsById(id)) {
+        if (!projectPackageRepository.existsById(id)) {
             throw new EntityNotFoundException("Project Package not found with id: " + id);
         }
         projectPackageRepository.deleteById(id);
