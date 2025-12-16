@@ -32,20 +32,17 @@ public class AbsenceDayServiceV2Impl implements AbsenceDayServiceV2 {
     private final EmployeeRepository employeeRepository;
     private final AbsenceTypeRepository absenceTypeRepository;
     private final PublicHolidayRepository publicHolidayRepository;
-    private final AbsenceDayMapper absenceDayMapper;
 
     @Autowired
     public AbsenceDayServiceV2Impl(
             AbsenceDayRepository absenceDayRepository,
             EmployeeRepository employeeRepository,
             AbsenceTypeRepository absenceTypeRepository,
-            PublicHolidayRepository publicHolidayRepository,
-            AbsenceDayMapper absenceDayMapper) {
+            PublicHolidayRepository publicHolidayRepository) {
         this.absenceDayRepository = absenceDayRepository;
         this.employeeRepository = employeeRepository;
         this.absenceTypeRepository = absenceTypeRepository;
         this.publicHolidayRepository = publicHolidayRepository;
-        this.absenceDayMapper = absenceDayMapper;
     }
 
     @Override
@@ -99,18 +96,6 @@ public class AbsenceDayServiceV2Impl implements AbsenceDayServiceV2 {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
         }
-        return absenceDayRepository.findById(id);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<AbsenceDay> findByIdWithRelations(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("ID cannot be null");
-        }
-        
-        // Use a custom method in the repository if you need to load
-        // specific relationships eagerly
         return absenceDayRepository.findById(id);
     }
 
