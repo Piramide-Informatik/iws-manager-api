@@ -10,6 +10,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import com.iws_manager.iws_manager_api.models.BasicContract;
+import com.iws_manager.iws_manager_api.models.ContractOrderCommission;
+import com.iws_manager.iws_manager_api.repositories.ContractOrderCommissionRepository;
+import com.iws_manager.iws_manager_api.repositories.OrderCommissionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,14 +50,25 @@ public class OrderServiceImplTest {
     @Mock
     private OrderRepository orderRepository;
 
+    @Mock
+    private OrderCommissionRepository orderCommissionRepository;
+
+    @Mock
+    private ContractOrderCommissionRepository contractOrderCommissionRepository;
+
     @InjectMocks
     private OrderServiceImpl orderService;
 
     private Order order1;
     private Order order2;
+    private ContractOrderCommission contractCommission;
+    private BasicContract basicContract;
 
     @BeforeEach
     void setUp() {
+        basicContract = new BasicContract();
+        basicContract.setId(1L);
+
         order1 = new Order();
         order1.setId(ORDER_1_ID);
         order1.setAcronym(ACRONYM_1);
@@ -67,6 +82,7 @@ public class OrderServiceImplTest {
         order1.setOrderTitle(ORDER_TITLE_1);
         order1.setOrderLabel(ORDER_LABEL_1);
         order1.setSignatureDate(SIGNATURE_DATE_1);
+        order1.setBasiccontract(basicContract);
 
         order2 = new Order();
         order2.setId(ORDER_2_ID);
@@ -77,6 +93,12 @@ public class OrderServiceImplTest {
         order2.setContractData1(CONTRACT_DATA_2);
         order2.setContractData2(CONTRACT_DATA_B);
         order2.setOrderTitle(ORDER_TITLE_2);
+        contractCommission = new ContractOrderCommission();
+        contractCommission.setId(1L);
+        contractCommission.setCommission(new BigDecimal("100.00"));
+        contractCommission.setFromOrderValue(new BigDecimal("1000.00"));
+        contractCommission.setMinCommission(new BigDecimal("50.00"));
+        contractCommission.setBasicContract(basicContract);
     }
 
     /* **********************
@@ -84,8 +106,15 @@ public class OrderServiceImplTest {
      * **********************/
     @Test
     void createShouldSaveOrder() {
-        when(orderRepository.save(any(Order.class))).thenReturn(order1);
+        when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        when(orderCommissionRepository.saveAll(anyList())).thenAnswer(invocation -> invocation.getArgument(0));
+
         Order result = orderService.create(order1);
+
+        verify(orderRepository).save(order1);
+        verify(orderCommissionRepository).saveAll(anyList());
+        assertNotNull(result);
         assertEquals(ORDER_1_ID, result.getId());
     }
 

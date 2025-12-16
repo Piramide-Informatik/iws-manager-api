@@ -5,6 +5,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import com.iws_manager.iws_manager_api.models.BasicContract;
+import com.iws_manager.iws_manager_api.models.ContractOrderCommission;
+import com.iws_manager.iws_manager_api.models.OrderCommission;
+import com.iws_manager.iws_manager_api.repositories.BasicContractRepository;
+import com.iws_manager.iws_manager_api.repositories.ContractOrderCommissionRepository;
+import com.iws_manager.iws_manager_api.repositories.OrderCommissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +33,8 @@ import jakarta.persistence.EntityNotFoundException;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final OrderCommissionRepository orderCommissionRepository;
+    private final ContractOrderCommissionRepository contractOrderCommissionRepository;
     
     /**
      * Constructs a new OrderService with the required repository dependency.
@@ -34,8 +42,10 @@ public class OrderServiceImpl implements OrderService {
      * @param orderRepository the repository for Order entity operations
      */
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, OrderCommissionRepository orderCommissionRepository, ContractOrderCommissionRepository contractOrderCommissionRepository) {
         this.orderRepository = orderRepository;
+        this.orderCommissionRepository = orderCommissionRepository;
+        this.contractOrderCommissionRepository = contractOrderCommissionRepository;
     }
 
 
@@ -51,7 +61,24 @@ public class OrderServiceImpl implements OrderService {
         if (order == null) {
             throw new IllegalArgumentException("Order cannot be null");
         }
-        return orderRepository.save(order);
+
+        Order savedOrder = orderRepository.save(order);
+
+        List<ContractOrderCommission> contractOrderCommissions = contractOrderCommissionRepository.findAll();
+
+        List<OrderCommission> orderCommissions = contractOrderCommissions.stream()
+                .map(cc -> {
+                    OrderCommission oc = new OrderCommission();
+                    oc.setCommission(cc.getCommission());
+                    oc.setFromOrderValue(cc.getFromOrderValue());
+                    oc.setMinCommission(cc.getMinCommission());
+                    oc.setOrder(savedOrder);
+                    return oc;
+                })
+                .toList();
+
+        orderCommissionRepository.saveAll(orderCommissions);
+        return savedOrder;
     }
 
     /**
