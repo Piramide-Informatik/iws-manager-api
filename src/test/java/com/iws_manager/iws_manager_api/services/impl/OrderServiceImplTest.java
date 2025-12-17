@@ -61,12 +61,10 @@ public class OrderServiceImplTest {
 
     private Order order1;
     private Order order2;
-    private ContractOrderCommission contractCommission;
-    private BasicContract basicContract;
 
     @BeforeEach
     void setUp() {
-        basicContract = new BasicContract();
+        BasicContract basicContract = new BasicContract();
         basicContract.setId(1L);
 
         order1 = new Order();
@@ -93,7 +91,8 @@ public class OrderServiceImplTest {
         order2.setContractData1(CONTRACT_DATA_2);
         order2.setContractData2(CONTRACT_DATA_B);
         order2.setOrderTitle(ORDER_TITLE_2);
-        contractCommission = new ContractOrderCommission();
+
+        ContractOrderCommission contractCommission = new ContractOrderCommission();
         contractCommission.setId(1L);
         contractCommission.setCommission(new BigDecimal("100.00"));
         contractCommission.setFromOrderValue(new BigDecimal("1000.00"));
