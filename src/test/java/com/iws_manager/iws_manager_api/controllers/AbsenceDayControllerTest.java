@@ -1,30 +1,39 @@
 package com.iws_manager.iws_manager_api.controllers;
 
+import com.iws_manager.iws_manager_api.dtos.absenceday.*;
+import com.iws_manager.iws_manager_api.dtos.shared.AbsenceTypeInfoDTO;
+import com.iws_manager.iws_manager_api.dtos.shared.BasicReferenceDTO;
+import com.iws_manager.iws_manager_api.dtos.shared.EmployeeBasicDTO;
+import com.iws_manager.iws_manager_api.dtos.shared.EmployeeInfoDTO;
+import com.iws_manager.iws_manager_api.mappers.AbsenceDayMapper;
 import com.iws_manager.iws_manager_api.models.AbsenceDay;
 import com.iws_manager.iws_manager_api.models.Employee;
 import com.iws_manager.iws_manager_api.models.AbsenceType;
-import com.iws_manager.iws_manager_api.services.interfaces.AbsenceDayService;
+import com.iws_manager.iws_manager_api.services.interfaces.AbsenceDayServiceV2;
+import com.iws_manager.iws_manager_api.controllers.AbsenceDayControllerV2;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import jakarta.persistence.EntityNotFoundException;
-
+@ExtendWith(MockitoExtension.class)
 class AbsenceDayControllerTest {
 
     private static final Long ABSENCE_DAY_ID = 1L;
@@ -33,246 +42,545 @@ class AbsenceDayControllerTest {
     private static final LocalDate TEST_DATE = LocalDate.of(2024, 1, 15);
     private static final LocalDate START_DATE = LocalDate.of(2024, 1, 1);
     private static final LocalDate END_DATE = LocalDate.of(2024, 1, 31);
+    private static final int YEAR = 2024;
 
     @Mock
-    private AbsenceDayService absenceDayService;
+    private AbsenceDayServiceV2 absenceDayService;
+
+    @Mock
+    private AbsenceDayMapper absenceDayMapper;
 
     @InjectMocks
-    private AbsenceDayController absenceDayController;
+    private AbsenceDayControllerV2 absenceDayControllerV2;
 
     private AbsenceDay absenceDay;
     private Employee employee = new Employee();
-    private AbsenceType absenceType = new AbsenceType();
+    private AbsenceType absenceType;
+    private AbsenceDayRequestDTO requestDTO;
+    private AbsenceDayInfoDTO infoDTO;
+    private AbsenceDayDetailDTO detailDTO;
+    private AbsenceDayCountDTO countDTO;
+
+    private static final String EMPLOYEE_LASTNAME = "Müller";
+    private static final String EMPLOYEE_LABEL = "Desarrolladora Senior";
+    private static final String ABSENCE_TYPE_LABEL = "VAC";
+    private static final String ABSENCE_TYPE_NAME = "Vacaciones";
+
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
-
-        employee.setId(EMPLOYEE_ID);        
+        // Setup entities
+        employee.setId(EMPLOYEE_ID);
+        employee.setVersion(1);
+        employee.setEmployeeno(1001);
+        employee.setFirstname("Ana");
+        employee.setLastname(EMPLOYEE_LASTNAME);
+        employee.setLabel(EMPLOYEE_LABEL);
+        
+        absenceType = new AbsenceType();
         absenceType.setId(ABSENCE_TYPE_ID);
+        absenceType.setVersion(0);
+        absenceType.setName(ABSENCE_TYPE_NAME);
+        absenceType.setLabel(ABSENCE_TYPE_LABEL);
+        absenceType.setHours((byte) 8);
+        absenceType.setIsHoliday((byte) 0);
+        absenceType.setShareOfDay(new BigDecimal("1.0"));
         
         absenceDay = new AbsenceDay();
         absenceDay.setId(ABSENCE_DAY_ID);
         absenceDay.setAbsenceDate(TEST_DATE);
         absenceDay.setEmployee(employee);
         absenceDay.setAbsenceType(absenceType);
+        absenceDay.setCreatedAt(LocalDateTime.now());
+        absenceDay.setUpdatedAt(LocalDateTime.now());
+        absenceDay.setVersion(0);
+
+        // Setup DTOs
+        requestDTO = new AbsenceDayRequestDTO(
+            TEST_DATE,
+            new BasicReferenceDTO(ABSENCE_TYPE_ID, 0),
+            new BasicReferenceDTO(EMPLOYEE_ID, 1)
+        );
+
+        infoDTO = new AbsenceDayInfoDTO(
+            ABSENCE_DAY_ID,
+            TEST_DATE,
+            new AbsenceTypeInfoDTO(
+                ABSENCE_TYPE_ID,
+                ABSENCE_TYPE_NAME,
+                ABSENCE_TYPE_LABEL,
+                (byte) 8,
+                (byte) 0,
+                new BigDecimal("1.0"),
+                0
+            ),
+            new EmployeeBasicDTO(
+                EMPLOYEE_ID,
+                1001,
+                "Ana",
+                EMPLOYEE_LASTNAME,
+                EMPLOYEE_LABEL,
+                1
+            ),
+            0
+        );
+
+        detailDTO = new AbsenceDayDetailDTO(
+            ABSENCE_DAY_ID,
+            TEST_DATE,
+            LocalDateTime.now(),
+            LocalDateTime.now(),
+            0,
+            new AbsenceTypeInfoDTO(
+                ABSENCE_TYPE_ID,
+                ABSENCE_TYPE_NAME,
+                ABSENCE_TYPE_LABEL,
+                (byte) 8,
+                (byte) 0,
+                new BigDecimal("1.0"),
+                0
+            ),
+            new EmployeeInfoDTO(
+                EMPLOYEE_ID,
+                "Ana",
+                EMPLOYEE_LASTNAME,
+                "ana.mueller@example.com",
+                1001,
+                EMPLOYEE_LABEL,
+                "+123456789",
+                null,
+                null,
+                null,
+                null,
+                "Java, Spring Boot",
+                1,
+                null, null, null, null, null
+            )
+        );
+
+        countDTO = new AbsenceDayCountDTO(
+            new AbsenceTypeInfoDTO(
+                ABSENCE_TYPE_ID,
+                ABSENCE_TYPE_NAME,
+                ABSENCE_TYPE_LABEL,
+                (byte) 8,
+                (byte) 0,
+                new BigDecimal("1.0"),
+                0
+            ),
+            5L
+        );
     }
 
     @Test
-    void createReturnsCreatedAbsenceDay() {
-        when(absenceDayService.create(absenceDay)).thenReturn(absenceDay);
+    void createShouldReturnCreatedAbsenceDayDetailDTOWhenValidRequest() {
+        // Arrange
+        when(absenceDayService.createFromDTO(requestDTO)).thenReturn(absenceDay);
+        when(absenceDayMapper.toDetailDTO(absenceDay)).thenReturn(detailDTO);
 
-        ResponseEntity<AbsenceDay> response = absenceDayController.create(absenceDay);
+        // Act
+        ResponseEntity<AbsenceDayDetailDTO> response = absenceDayControllerV2.create(requestDTO);
 
+        // Assert
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(absenceDay, response.getBody());
-        verify(absenceDayService, times(1)).create(absenceDay);
+        assertNotNull(response.getBody());
+        assertEquals(detailDTO, response.getBody());
+        
+        verify(absenceDayService).createFromDTO(requestDTO);
+        verify(absenceDayMapper).toDetailDTO(absenceDay);
+        
+        verify(absenceDayMapper, never()).toEntity(any());
     }
 
     @Test
-    void getByIdFound() {
+    void getByIdShouldReturnAbsenceDayDetailDTOWhenFound() {
+        // Arrange
         when(absenceDayService.findById(ABSENCE_DAY_ID)).thenReturn(Optional.of(absenceDay));
+        when(absenceDayMapper.toDetailDTO(absenceDay)).thenReturn(detailDTO);
 
-        ResponseEntity<AbsenceDay> response = absenceDayController.getById(ABSENCE_DAY_ID);
+        // Act
+        ResponseEntity<AbsenceDayDetailDTO> response = absenceDayControllerV2.getById(ABSENCE_DAY_ID);
 
+        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(absenceDay, response.getBody());
+        assertNotNull(response.getBody());
+        assertEquals(detailDTO, response.getBody());
+        
+        verify(absenceDayService).findById(ABSENCE_DAY_ID);
+        verify(absenceDayMapper).toDetailDTO(absenceDay);
     }
 
     @Test
-    void getByIdNotFound() {
+    void getByIdShouldReturnNotFoundWhenNotFound() {
+        // Arrange
         when(absenceDayService.findById(ABSENCE_DAY_ID)).thenReturn(Optional.empty());
 
-        ResponseEntity<AbsenceDay> response = absenceDayController.getById(ABSENCE_DAY_ID);
+        // Act
+        ResponseEntity<AbsenceDayDetailDTO> response = absenceDayControllerV2.getById(ABSENCE_DAY_ID);
 
+        // Assert
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+        
+        verify(absenceDayService).findById(ABSENCE_DAY_ID);
+        verify(absenceDayMapper, never()).toDetailDTO(any());
     }
 
     @Test
-    void getAllReturnsList() {
-        List<AbsenceDay> list = Arrays.asList(absenceDay);
-        when(absenceDayService.findAll()).thenReturn(list);
+    void getAllShouldReturnListOfAbsenceDayInfoDTOs() {
+        // Arrange
+        List<AbsenceDay> absenceDays = Arrays.asList(absenceDay);
+        List<AbsenceDayInfoDTO> infoDTOs = Arrays.asList(infoDTO);
+        
+        when(absenceDayService.findAll()).thenReturn(absenceDays);
+        when(absenceDayMapper.toInfoDTOList(absenceDays)).thenReturn(infoDTOs);
 
-        ResponseEntity<List<AbsenceDay>> response = absenceDayController.getAll();
+        // Act
+        ResponseEntity<List<AbsenceDayInfoDTO>> response = absenceDayControllerV2.getAll();
 
+        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(list, response.getBody());
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+        assertEquals(infoDTO, response.getBody().get(0));
+        
+        verify(absenceDayService).findAll();
+        verify(absenceDayMapper).toInfoDTOList(absenceDays);
     }
 
     @Test
-    void getAllReturnsEmptyList() {
+    void getAllShouldReturnEmptyList() {
+        // Arrange
         when(absenceDayService.findAll()).thenReturn(Collections.emptyList());
+        when(absenceDayMapper.toInfoDTOList(any())).thenReturn(Collections.emptyList());
 
-        ResponseEntity<List<AbsenceDay>> response = absenceDayController.getAll();
+        // Act
+        ResponseEntity<List<AbsenceDayInfoDTO>> response = absenceDayControllerV2.getAll();
 
+        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(0, response.getBody().size());
-    }
-
-    @Test
-    void updateFound() {
-        when(absenceDayService.update(ABSENCE_DAY_ID, absenceDay)).thenReturn(absenceDay);
-
-        ResponseEntity<AbsenceDay> response = absenceDayController.update(ABSENCE_DAY_ID, absenceDay);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(absenceDay, response.getBody());
-        verify(absenceDayService, times(1)).update(ABSENCE_DAY_ID, absenceDay);
-    }
-
-    @Test
-    void updateNotFound() {
-        when(absenceDayService.update(ABSENCE_DAY_ID, absenceDay))
-            .thenThrow(new EntityNotFoundException("AbsenceDay not found with id: " + ABSENCE_DAY_ID));
-
-        assertThrows(EntityNotFoundException.class, () -> 
-            absenceDayController.update(ABSENCE_DAY_ID, absenceDay));
+        assertNotNull(response.getBody());
+        assertTrue(response.getBody().isEmpty());
         
-        verify(absenceDayService, times(1)).update(ABSENCE_DAY_ID, absenceDay);
+        verify(absenceDayService).findAll();
+        verify(absenceDayMapper).toInfoDTOList(any());
     }
 
     @Test
-    void deleteSuccess() {
-        ResponseEntity<Void> response = absenceDayController.delete(ABSENCE_DAY_ID);
+    void updateShouldReturnUpdatedAbsenceDayDetailDTO() {
+        // Arrange
+        when(absenceDayService.updateFromDTO(ABSENCE_DAY_ID, requestDTO)).thenReturn(absenceDay);
+        when(absenceDayMapper.toDetailDTO(absenceDay)).thenReturn(detailDTO);
 
+        // Act
+        ResponseEntity<AbsenceDayDetailDTO> response = 
+            absenceDayControllerV2.update(ABSENCE_DAY_ID, requestDTO);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(detailDTO, response.getBody());
+        
+        verify(absenceDayService).updateFromDTO(ABSENCE_DAY_ID, requestDTO);
+        verify(absenceDayMapper).toDetailDTO(absenceDay);
+    }
+
+    @Test
+    void deleteShouldReturnNoContent() {
+        // Act
+        ResponseEntity<Void> response = absenceDayControllerV2.delete(ABSENCE_DAY_ID);
+
+        // Assert
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(absenceDayService, times(1)).delete(ABSENCE_DAY_ID);
-    }
-
-    @Test
-    void deleteNotFound() {
-        doThrow(new EntityNotFoundException("AbsenceDay not found with id: " + ABSENCE_DAY_ID))
-            .when(absenceDayService).delete(ABSENCE_DAY_ID);
-
-        assertThrows(EntityNotFoundException.class, () -> 
-            absenceDayController.delete(ABSENCE_DAY_ID));
+        assertNull(response.getBody());
         
-        verify(absenceDayService, times(1)).delete(ABSENCE_DAY_ID);
+        verify(absenceDayService).delete(ABSENCE_DAY_ID);
     }
 
     @Test
-    void getByEmployeeIdReturnsList() {
-        List<AbsenceDay> list = Arrays.asList(absenceDay);
-        when(absenceDayService.getByEmployeeId(EMPLOYEE_ID)).thenReturn(list);
+    void getByEmployeeIdShouldReturnListOfAbsenceDayInfoDTOs() {
+        // Arrange
+        List<AbsenceDay> absenceDays = Arrays.asList(absenceDay);
+        List<AbsenceDayInfoDTO> infoDTOs = Arrays.asList(infoDTO);
+        
+        when(absenceDayService.getByEmployeeId(EMPLOYEE_ID)).thenReturn(absenceDays);
+        when(absenceDayMapper.toInfoDTOList(absenceDays)).thenReturn(infoDTOs);
 
-        ResponseEntity<List<AbsenceDay>> response = absenceDayController.getByEmployeeId(EMPLOYEE_ID);
+        // Act
+        ResponseEntity<List<AbsenceDayInfoDTO>> response = 
+            absenceDayControllerV2.getByEmployeeId(EMPLOYEE_ID);
 
+        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(list, response.getBody());
-        verify(absenceDayService, times(1)).getByEmployeeId(EMPLOYEE_ID);
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+        assertEquals(infoDTO, response.getBody().get(0));
+        
+        verify(absenceDayService).getByEmployeeId(EMPLOYEE_ID);
+        verify(absenceDayMapper).toInfoDTOList(absenceDays);
     }
 
     @Test
-    void getByEmployeeIdReturnsEmptyList() {
-        when(absenceDayService.getByEmployeeId(EMPLOYEE_ID)).thenReturn(Collections.emptyList());
-
-        ResponseEntity<List<AbsenceDay>> response = absenceDayController.getByEmployeeId(EMPLOYEE_ID);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(0, response.getBody().size());
-    }
-
-    @Test
-    void getByEmployeeIdAndDateRangeReturnsList() {
-        List<AbsenceDay> list = Arrays.asList(absenceDay);
+    void getByEmployeeIdAndDateRangeShouldReturnListOfAbsenceDayInfoDTOs() {
+        // Arrange
+        List<AbsenceDay> absenceDays = Arrays.asList(absenceDay);
+        List<AbsenceDayInfoDTO> infoDTOs = Arrays.asList(infoDTO);
+        
         when(absenceDayService.getByEmployeeIdAndDateRange(EMPLOYEE_ID, START_DATE, END_DATE))
-            .thenReturn(list);
+            .thenReturn(absenceDays);
+        when(absenceDayMapper.toInfoDTOList(absenceDays)).thenReturn(infoDTOs);
 
-        ResponseEntity<List<AbsenceDay>> response = absenceDayController
-            .getByEmployeeIdAndDateRange(EMPLOYEE_ID, START_DATE, END_DATE);
+        // Act
+        ResponseEntity<List<AbsenceDayInfoDTO>> response = 
+            absenceDayControllerV2.getByEmployeeIdAndDateRange(EMPLOYEE_ID, START_DATE, END_DATE);
 
+        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(list, response.getBody());
-        verify(absenceDayService, times(1))
-            .getByEmployeeIdAndDateRange(EMPLOYEE_ID, START_DATE, END_DATE);
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+        
+        verify(absenceDayService).getByEmployeeIdAndDateRange(EMPLOYEE_ID, START_DATE, END_DATE);
+        verify(absenceDayMapper).toInfoDTOList(absenceDays);
     }
 
     @Test
-    void getByEmployeeIdAndDateRangeReturnsEmptyList() {
-        when(absenceDayService.getByEmployeeIdAndDateRange(EMPLOYEE_ID, START_DATE, END_DATE))
-            .thenReturn(Collections.emptyList());
-
-        ResponseEntity<List<AbsenceDay>> response = absenceDayController
-            .getByEmployeeIdAndDateRange(EMPLOYEE_ID, START_DATE, END_DATE);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(0, response.getBody().size());
-    }
-
-    @Test
-    void getByEmployeeIdAndAbsenceTypeIdReturnsList() {
-        List<AbsenceDay> list = Arrays.asList(absenceDay);
+    void getByEmployeeIdAndAbsenceTypeIdShouldReturnListOfAbsenceDayInfoDTOs() {
+        // Arrange
+        List<AbsenceDay> absenceDays = Arrays.asList(absenceDay);
+        List<AbsenceDayInfoDTO> infoDTOs = Arrays.asList(infoDTO);
+        
         when(absenceDayService.getByEmployeeIdAndAbsenceTypeId(EMPLOYEE_ID, ABSENCE_TYPE_ID))
-            .thenReturn(list);
+            .thenReturn(absenceDays);
+        when(absenceDayMapper.toInfoDTOList(absenceDays)).thenReturn(infoDTOs);
 
-        ResponseEntity<List<AbsenceDay>> response = absenceDayController
-            .getByEmployeeIdAndAbsenceTypeId(EMPLOYEE_ID, ABSENCE_TYPE_ID);
+        // Act
+        ResponseEntity<List<AbsenceDayInfoDTO>> response = 
+            absenceDayControllerV2.getByEmployeeIdAndAbsenceTypeId(EMPLOYEE_ID, ABSENCE_TYPE_ID);
 
+        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(list, response.getBody());
-        verify(absenceDayService, times(1))
-            .getByEmployeeIdAndAbsenceTypeId(EMPLOYEE_ID, ABSENCE_TYPE_ID);
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+        
+        verify(absenceDayService).getByEmployeeIdAndAbsenceTypeId(EMPLOYEE_ID, ABSENCE_TYPE_ID);
+        verify(absenceDayMapper).toInfoDTOList(absenceDays);
     }
 
     @Test
-    void getByEmployeeIdAndAbsenceTypeIdReturnsEmptyList() {
-        when(absenceDayService.getByEmployeeIdAndAbsenceTypeId(EMPLOYEE_ID, ABSENCE_TYPE_ID))
-            .thenReturn(Collections.emptyList());
-
-        ResponseEntity<List<AbsenceDay>> response = absenceDayController
-            .getByEmployeeIdAndAbsenceTypeId(EMPLOYEE_ID, ABSENCE_TYPE_ID);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(0, response.getBody().size());
-    }
-
-    @Test
-    void existsByEmployeeIdAndAbsenceDateReturnsTrue() {
+    void existsByEmployeeIdAndAbsenceDateShouldReturnTrue() {
+        // Arrange
         when(absenceDayService.existsByEmployeeIdAndAbsenceDate(EMPLOYEE_ID, TEST_DATE))
             .thenReturn(true);
 
-        ResponseEntity<Boolean> response = absenceDayController
-            .existsByEmployeeIdAndAbsenceDate(EMPLOYEE_ID, TEST_DATE);
+        // Act
+        ResponseEntity<Boolean> response = 
+            absenceDayControllerV2.existsByEmployeeIdAndAbsenceDate(EMPLOYEE_ID, TEST_DATE);
 
+        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(true, response.getBody());
-        verify(absenceDayService, times(1))
-            .existsByEmployeeIdAndAbsenceDate(EMPLOYEE_ID, TEST_DATE);
+        assertTrue(response.getBody());
+        
+        verify(absenceDayService).existsByEmployeeIdAndAbsenceDate(EMPLOYEE_ID, TEST_DATE);
     }
 
     @Test
-    void existsByEmployeeIdAndAbsenceDateReturnsFalse() {
-        when(absenceDayService.existsByEmployeeIdAndAbsenceDate(EMPLOYEE_ID, TEST_DATE))
-            .thenReturn(false);
+    void getByEmployeeIdAndYearShouldReturnListOfAbsenceDayInfoDTOs() {
+        // Arrange
+        List<AbsenceDay> absenceDays = Arrays.asList(absenceDay);
+        List<AbsenceDayInfoDTO> infoDTOs = Arrays.asList(infoDTO);
+        
+        when(absenceDayService.getByEmployeeIdAndYear(EMPLOYEE_ID, YEAR)).thenReturn(absenceDays);
+        when(absenceDayMapper.toInfoDTOList(absenceDays)).thenReturn(infoDTOs);
 
-        ResponseEntity<Boolean> response = absenceDayController
-            .existsByEmployeeIdAndAbsenceDate(EMPLOYEE_ID, TEST_DATE);
+        // Act
+        ResponseEntity<List<AbsenceDayInfoDTO>> response = 
+            absenceDayControllerV2.getByEmployeeIdAndYear(EMPLOYEE_ID, YEAR);
 
+        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(false, response.getBody());
-        verify(absenceDayService, times(1))
-            .existsByEmployeeIdAndAbsenceDate(EMPLOYEE_ID, TEST_DATE);
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+        
+        verify(absenceDayService).getByEmployeeIdAndYear(EMPLOYEE_ID, YEAR);
+        verify(absenceDayMapper).toInfoDTOList(absenceDays);
     }
 
     @Test
-    void createThrowsIllegalArgumentException() {
-        when(absenceDayService.create(absenceDay))
-            .thenThrow(new IllegalArgumentException("AbsenceDay cannot be null"));
+    void countByEmployeeIdAndAbsenceTypeIdAndYearShouldReturnCount() {
+        // Arrange
+        long expectedCount = 5L;
+        when(absenceDayService.countByEmployeeIdAndAbsenceTypeIdAndYear(EMPLOYEE_ID, ABSENCE_TYPE_ID, YEAR))
+            .thenReturn(expectedCount);
 
-        assertThrows(IllegalArgumentException.class, () -> 
-            absenceDayController.create(absenceDay));
+        // Act
+        ResponseEntity<Long> response = 
+            absenceDayControllerV2.countByEmployeeIdAndAbsenceTypeIdAndYear(EMPLOYEE_ID, ABSENCE_TYPE_ID, YEAR);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expectedCount, response.getBody());
         
-        verify(absenceDayService, times(1)).create(absenceDay);
+        verify(absenceDayService).countByEmployeeIdAndAbsenceTypeIdAndYear(EMPLOYEE_ID, ABSENCE_TYPE_ID, YEAR);
     }
 
     @Test
-    void createThrowsEntityNotFoundException() {
-        when(absenceDayService.create(absenceDay))
-            .thenThrow(new EntityNotFoundException("Employee not found"));
-
-        assertThrows(EntityNotFoundException.class, () -> 
-            absenceDayController.create(absenceDay));
+    void countByTypeForEmployeeShouldReturnListOfAbsenceDayCountDTOs() {
+        // Arrange
+        Object[] resultArray = new Object[]{absenceType, 5L};
+        List<Object[]> results = Collections.singletonList(resultArray);
+        List<AbsenceDayCountDTO> countDTOs = Collections.singletonList(countDTO);
         
-        verify(absenceDayService, times(1)).create(absenceDay);
+        when(absenceDayService.countAbsenceDaysByTypeForEmployee(EMPLOYEE_ID)).thenReturn(results);
+        when(absenceDayMapper.toCountDTOList(results)).thenReturn(countDTOs);
+
+        // Act
+        ResponseEntity<List<AbsenceDayCountDTO>> response = 
+            absenceDayControllerV2.countByTypeForEmployee(EMPLOYEE_ID);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+        assertEquals(countDTO, response.getBody().get(0));
+        
+        verify(absenceDayService).countAbsenceDaysByTypeForEmployee(EMPLOYEE_ID);
+        verify(absenceDayMapper).toCountDTOList(results);
+    }
+
+    @Test
+    void countByTypeForEmployeeAndYearShouldReturnListOfAbsenceDayCountDTOs() {
+        // Arrange
+        Object[] resultArray = new Object[]{absenceType, 5L};
+        List<Object[]> results = Collections.singletonList(resultArray);
+        
+        List<AbsenceDayCountDTO> countDTOs = Collections.singletonList(countDTO);
+        
+        when(absenceDayService.countAbsenceDaysByTypeForEmployeeAndYear(EMPLOYEE_ID, YEAR))
+            .thenReturn(results);
+        when(absenceDayMapper.toCountDTOList(results)).thenReturn(countDTOs);
+
+        // Act
+        ResponseEntity<List<AbsenceDayCountDTO>> response = 
+            absenceDayControllerV2.countByTypeForEmployeeAndYear(EMPLOYEE_ID, YEAR);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+        assertEquals(countDTO, response.getBody().get(0));
+        
+        verify(absenceDayService).countAbsenceDaysByTypeForEmployeeAndYear(EMPLOYEE_ID, YEAR);
+        verify(absenceDayMapper).toCountDTOList(results);
+    }
+    @Test
+    void filterShouldReturnListOfAbsenceDayInfoDTOs() {
+        // Arrange
+        AbsenceDayFilterDTO filterDTO = new AbsenceDayFilterDTO(
+            EMPLOYEE_ID,
+            ABSENCE_TYPE_ID,
+            START_DATE,
+            END_DATE,
+            YEAR,
+            false
+        );
+        
+        List<AbsenceDay> absenceDays = Arrays.asList(absenceDay);
+        List<AbsenceDayInfoDTO> infoDTOs = Arrays.asList(infoDTO);
+        
+        when(absenceDayService.filter(filterDTO)).thenReturn(absenceDays);
+        when(absenceDayMapper.toInfoDTOList(absenceDays)).thenReturn(infoDTOs);
+
+        // Act
+        ResponseEntity<List<AbsenceDayInfoDTO>> response = 
+            absenceDayControllerV2.filter(filterDTO);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+        assertEquals(infoDTO, response.getBody().get(0));
+        
+        verify(absenceDayService).filter(filterDTO);
+        verify(absenceDayMapper).toInfoDTOList(absenceDays);
+    }
+
+    @Test
+    void getByIdWithRelationsShouldReturnAbsenceDayDetailDTOWhenFound() {
+        // Arrange
+        when(absenceDayService.findById(ABSENCE_DAY_ID)).thenReturn(Optional.of(absenceDay));
+        when(absenceDayMapper.toDetailDTO(absenceDay)).thenReturn(detailDTO);
+
+        // Act
+        ResponseEntity<AbsenceDayDetailDTO> response = 
+            absenceDayControllerV2.getByIdWithRelations(ABSENCE_DAY_ID);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(detailDTO, response.getBody());
+        
+        verify(absenceDayService).findById(ABSENCE_DAY_ID);
+        verify(absenceDayMapper).toDetailDTO(absenceDay);
+    }
+
+    @Test
+    void getByIdWithRelationsShouldReturnNotFoundWhenNotFound() {
+        // Arrange
+        when(absenceDayService.findById(ABSENCE_DAY_ID)).thenReturn(Optional.empty());
+
+        // Act
+        ResponseEntity<AbsenceDayDetailDTO> response = 
+            absenceDayControllerV2.getByIdWithRelations(ABSENCE_DAY_ID);
+
+        // Assert
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+        
+        verify(absenceDayService).findById(ABSENCE_DAY_ID);
+        verify(absenceDayMapper, never()).toDetailDTO(any());
+    }
+
+    @Test
+    void createShouldPropagateIllegalArgumentException() {
+        // Arrange
+        when(absenceDayService.createFromDTO(requestDTO))
+            .thenThrow(new IllegalArgumentException("Invalid data"));
+
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class, 
+            () -> absenceDayControllerV2.create(requestDTO)
+        );
+        
+        assertEquals("Invalid data", exception.getMessage());
+        
+        verify(absenceDayService).createFromDTO(requestDTO);
+        verify(absenceDayMapper, never()).toDetailDTO(any());
+    }
+
+    @Test
+    void updateShouldPropagateEntityNotFoundException() {
+        // Arrange
+        when(absenceDayService.updateFromDTO(ABSENCE_DAY_ID, requestDTO))
+            .thenThrow(new jakarta.persistence.EntityNotFoundException("Not found"));
+
+        // Act & Assert
+        assertThrows(jakarta.persistence.EntityNotFoundException.class, () -> 
+            absenceDayControllerV2.update(ABSENCE_DAY_ID, requestDTO));
+        
+        verify(absenceDayService).updateFromDTO(ABSENCE_DAY_ID, requestDTO);
+    }
+
+    @Test
+    void deleteShouldPropagateEntityNotFoundException() {
+        // Arrange
+        doThrow(new jakarta.persistence.EntityNotFoundException("Not found"))
+            .when(absenceDayService).delete(ABSENCE_DAY_ID);
+
+        // Act & Assert
+        assertThrows(jakarta.persistence.EntityNotFoundException.class, () -> 
+            absenceDayControllerV2.delete(ABSENCE_DAY_ID));
+        
+        verify(absenceDayService).delete(ABSENCE_DAY_ID);
     }
 }

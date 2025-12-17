@@ -1,5 +1,8 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
+import com.iws_manager.iws_manager_api.dtos.absenceday.AbsenceDayFilterDTO;
+import com.iws_manager.iws_manager_api.dtos.absenceday.AbsenceDayRequestDTO;
+import com.iws_manager.iws_manager_api.dtos.shared.BasicReferenceDTO;
 import com.iws_manager.iws_manager_api.models.AbsenceDay;
 import com.iws_manager.iws_manager_api.models.Employee;
 import com.iws_manager.iws_manager_api.models.AbsenceType;
@@ -9,6 +12,7 @@ import com.iws_manager.iws_manager_api.repositories.EmployeeRepository;
 import com.iws_manager.iws_manager_api.repositories.AbsenceTypeRepository;
 import com.iws_manager.iws_manager_api.repositories.PublicHolidayRepository;
 import com.iws_manager.iws_manager_api.exception.exceptions.DuplicateResourceException;
+import  com.iws_manager.iws_manager_api.services.impl.AbsenceDayServiceV2Impl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,14 +24,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import jakarta.persistence.EntityNotFoundException;
 
 import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,12 +49,13 @@ class AbsenceDayServiceImplTest {
     private PublicHolidayRepository publicHolidayRepository;
 
     @InjectMocks
-    private AbsenceDayServiceImpl absenceDayService;
+    private AbsenceDayServiceV2Impl absenceDayServiceV2;
 
     private AbsenceDay absenceDay;
     private Employee employee;
     private AbsenceType absenceType;
     private LocalDate testDate;
+    private AbsenceDayRequestDTO requestDTO;
 
     @BeforeEach
     void setUp() {
@@ -59,478 +63,440 @@ class AbsenceDayServiceImplTest {
         
         employee = new Employee();
         employee.setId(1L);
+        employee.setVersion(1);
+        employee.setEmployeeno(1001);
+        employee.setFirstname("Ana");
+        employee.setLastname("Müller");
+        employee.setLabel("Desarrolladora Senior");
         
         absenceType = new AbsenceType();
         absenceType.setId(1L);
+        absenceType.setVersion(0);
+        absenceType.setName("Vacaciones");
+        absenceType.setLabel("VAC");
+        absenceType.setHours((byte) 8);
+        absenceType.setIsHoliday((byte) 0);
+        absenceType.setShareOfDay(new BigDecimal("1.0"));
         
         absenceDay = new AbsenceDay();
         absenceDay.setId(1L);
         absenceDay.setAbsenceDate(testDate);
         absenceDay.setEmployee(employee);
         absenceDay.setAbsenceType(absenceType);
+        
+        // Crear RequestDTO para tests
+        requestDTO = new AbsenceDayRequestDTO(
+            testDate,
+            new BasicReferenceDTO(1L, 0),
+            new BasicReferenceDTO(1L, 1)
+        );
     }
 
     @Test
-    void createShouldSaveAbsenceDay() {
+    void createFromDTOShouldSaveAbsenceDayWhenValidInput() {
+        // Arrange
         when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
         when(absenceTypeRepository.findById(1L)).thenReturn(Optional.of(absenceType));
+        when(publicHolidayRepository.existsByDate(testDate)).thenReturn(false);
         when(absenceDayRepository.existsByEmployeeIdAndAbsenceDate(1L, testDate)).thenReturn(false);
         when(absenceDayRepository.save(any(AbsenceDay.class))).thenReturn(absenceDay);
 
-        AbsenceDay result = absenceDayService.create(absenceDay);
+        // Act
+        AbsenceDay result = absenceDayServiceV2.createFromDTO(requestDTO);
 
+        // Assert
         assertNotNull(result);
-        assertEquals(absenceDay, result);
+        assertEquals(testDate, result.getAbsenceDate());
+        assertEquals(employee.getId(), result.getEmployee().getId());
+        assertEquals(absenceType.getId(), result.getAbsenceType().getId());
+        
+        verify(employeeRepository).findById(1L);
+        verify(absenceTypeRepository).findById(1L);
+        verify(publicHolidayRepository).existsByDate(testDate);
+        verify(absenceDayRepository).existsByEmployeeIdAndAbsenceDate(1L, testDate);
         verify(absenceDayRepository).save(any(AbsenceDay.class));
     }
 
     @Test
-    void createShouldThrowWhenNull() {
-        assertThrows(IllegalArgumentException.class, () -> absenceDayService.create(null));
+    void createFromDTOShouldThrowWhenRequestDTONull() {
+        assertThrows(IllegalArgumentException.class, () -> 
+            absenceDayServiceV2.createFromDTO(null));
     }
 
     @Test
-    void createShouldThrowWhenEmployeeNotFound() {
+    void createFromDTOShouldThrowWhenAbsenceDateNull() {
+        AbsenceDayRequestDTO invalidDTO = new AbsenceDayRequestDTO(
+            null,
+            new BasicReferenceDTO(1L, 0),
+            new BasicReferenceDTO(1L, 1)
+        );
+        
+        assertThrows(IllegalArgumentException.class, () -> 
+            absenceDayServiceV2.createFromDTO(invalidDTO));
+    }
+
+    @Test
+    void createFromDTOShouldThrowWhenEmployeeNotSpecified() {
+        AbsenceDayRequestDTO invalidDTO = new AbsenceDayRequestDTO(
+            testDate,
+            new BasicReferenceDTO(1L, 0),
+            null // Employee null
+        );
+        
+        assertThrows(IllegalArgumentException.class, () -> 
+            absenceDayServiceV2.createFromDTO(invalidDTO));
+    }
+
+    @Test
+    void createFromDTOShouldThrowWhenAbsenceTypeNotSpecified() {
+        AbsenceDayRequestDTO invalidDTO = new AbsenceDayRequestDTO(
+            testDate,
+            null, // AbsenceType null
+            new BasicReferenceDTO(1L, 1)
+        );
+        
+        assertThrows(IllegalArgumentException.class, () -> 
+            absenceDayServiceV2.createFromDTO(invalidDTO));
+    }
+
+    @Test
+    void createFromDTOShouldThrowWhenEmployeeNotFound() {
         when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
-
-        assertThrows(EntityNotFoundException.class, () -> absenceDayService.create(absenceDay));
+        
+        assertThrows(EntityNotFoundException.class, () -> 
+            absenceDayServiceV2.createFromDTO(requestDTO));
     }
 
     @Test
-    void createShouldThrowWhenAbsenceTypeNotFound() {
+    void createFromDTOShouldThrowWhenAbsenceTypeNotFound() {
         when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
         when(absenceTypeRepository.findById(1L)).thenReturn(Optional.empty());
-
-        assertThrows(EntityNotFoundException.class, () -> absenceDayService.create(absenceDay));
+        
+        assertThrows(EntityNotFoundException.class, () -> 
+            absenceDayServiceV2.createFromDTO(requestDTO));
     }
 
     @Test
-    void createShouldThrowWhenDuplicateAbsence() {
+    void createFromDTOShouldThrowWhenDateIsPublicHoliday() {
+        // Arrange
+        lenient().when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
+        lenient().when(absenceTypeRepository.findById(1L)).thenReturn(Optional.of(absenceType));
+        
+        when(publicHolidayRepository.existsByDate(testDate)).thenReturn(true);
+        
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class,
+            () -> absenceDayServiceV2.createFromDTO(requestDTO)
+        );
+        
+        assertTrue(exception.getMessage().contains("public holiday"));
+        verify(publicHolidayRepository).existsByDate(testDate);
+    }
+
+    @Test
+    void createFromDTOShouldThrowWhenDuplicateAbsence() {
+        // Arrange
+        lenient().when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
+        lenient().when(absenceTypeRepository.findById(1L)).thenReturn(Optional.of(absenceType));
+        lenient().when(publicHolidayRepository.existsByDate(testDate)).thenReturn(false);
+        
+        when(absenceDayRepository.existsByEmployeeIdAndAbsenceDate(1L, testDate)).thenReturn(true);
+        
+        assertThrows(DuplicateResourceException.class, () -> 
+            absenceDayServiceV2.createFromDTO(requestDTO));
+        
+        verify(absenceDayRepository).existsByEmployeeIdAndAbsenceDate(1L, testDate);
+    }
+    
+    @Test
+    void updateFromDTOShouldUpdateAbsenceDayWhenValidInput() {
+        // Arrange
+        Long id = 1L;
+        LocalDate newDate = LocalDate.of(2024, 1, 16);
+        AbsenceDayRequestDTO updateDTO = new AbsenceDayRequestDTO(
+            newDate,
+            new BasicReferenceDTO(1L, 0),
+            new BasicReferenceDTO(1L, 1)
+        );
+        
+        when(absenceDayRepository.findById(id)).thenReturn(Optional.of(absenceDay));
         when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
         when(absenceTypeRepository.findById(1L)).thenReturn(Optional.of(absenceType));
-        when(absenceDayRepository.existsByEmployeeIdAndAbsenceDate(1L, testDate)).thenReturn(true);
+        when(publicHolidayRepository.existsByDate(newDate)).thenReturn(false);
+        when(absenceDayRepository.existsByEmployeeIdAndAbsenceDateExcludingId(1L, newDate, id))
+            .thenReturn(false);
+        when(absenceDayRepository.save(any(AbsenceDay.class))).thenReturn(absenceDay);
 
-        assertThrows(DuplicateResourceException.class, () -> absenceDayService.create(absenceDay));
+        // Act
+        AbsenceDay result = absenceDayServiceV2.updateFromDTO(id, updateDTO);
+
+        // Assert
+        assertNotNull(result);
+        verify(absenceDayRepository).findById(id);
+        verify(employeeRepository).findById(1L);
+        verify(absenceTypeRepository).findById(1L);
+        verify(publicHolidayRepository).existsByDate(newDate);
+        verify(absenceDayRepository).save(any(AbsenceDay.class));
+    }
+
+    @Test
+    void updateFromDTOShouldThrowWhenIdNull() {
+        assertThrows(IllegalArgumentException.class, () -> 
+            absenceDayServiceV2.updateFromDTO(null, requestDTO));
+    }
+
+    @Test
+    void updateFromDTOShouldThrowWhenRequestDTONull() {
+        assertThrows(IllegalArgumentException.class, () -> 
+            absenceDayServiceV2.updateFromDTO(1L, null));
+    }
+
+    @Test
+    void updateFromDTOShouldThrowWhenNotFound() {
+        when(absenceDayRepository.findById(99L)).thenReturn(Optional.empty());
+        
+        assertThrows(EntityNotFoundException.class, () -> 
+            absenceDayServiceV2.updateFromDTO(99L, requestDTO));
+    }
+
+    @Test
+    void updateFromDTOShouldUpdateOnlyDateWhenOtherFieldsNull() {
+        // Arrange
+        Long id = 1L;
+        LocalDate newDate = LocalDate.of(2024, 1, 16);
+        AbsenceDayRequestDTO updateDTO = new AbsenceDayRequestDTO(
+            newDate,
+            null, // No change to absenceType
+            null  // No change to employee
+        );
+        
+        when(absenceDayRepository.findById(id)).thenReturn(Optional.of(absenceDay));
+        when(publicHolidayRepository.existsByDate(newDate)).thenReturn(false);
+        when(absenceDayRepository.existsByEmployeeIdAndAbsenceDateExcludingId(1L, newDate, id))
+            .thenReturn(false);
+        when(absenceDayRepository.save(any(AbsenceDay.class))).thenReturn(absenceDay);
+
+        // Act
+        AbsenceDay result = absenceDayServiceV2.updateFromDTO(id, updateDTO);
+
+        // Assert
+        assertNotNull(result);
+        verify(absenceDayRepository).findById(id);
+        verify(employeeRepository, never()).findById(anyLong()); // Should not be called
+        verify(absenceTypeRepository, never()).findById(anyLong()); // Should not be called
+        verify(publicHolidayRepository).existsByDate(newDate);
+        verify(absenceDayRepository).save(any(AbsenceDay.class));
+    }
+
+    @Test
+    void filterShouldReturnFilteredListWhenDateRangeProvided() {
+        // Arrange
+        LocalDate startDate = LocalDate.of(2024, 1, 1);
+        LocalDate endDate = LocalDate.of(2024, 12, 31);
+        AbsenceDayFilterDTO filterDTO = new AbsenceDayFilterDTO(
+            1L,  // employeeId
+            null, // absenceTypeId
+            startDate,
+            endDate,
+            2024, // year
+            false // includePublicHolidays
+        );
+        
+        when(absenceDayRepository.findByEmployeeIdAndAbsenceDateBetween(1L, startDate, endDate))
+            .thenReturn(List.of(absenceDay));
+
+        // Act
+        List<AbsenceDay> result = absenceDayServiceV2.filter(filterDTO);
+
+        // Assert
+        assertEquals(1, result.size());
+        assertEquals(absenceDay, result.get(0));
+        verify(absenceDayRepository).findByEmployeeIdAndAbsenceDateBetween(1L, startDate, endDate);
+    }
+
+    @Test
+    void filterShouldReturnFilteredListWhenYearProvided() {
+        // Arrange
+        AbsenceDayFilterDTO filterDTO = new AbsenceDayFilterDTO(
+            1L,  // employeeId
+            null, // absenceTypeId
+            null, // startDate
+            null, // endDate
+            2024, // year
+            false // includePublicHolidays
+        );
+        
+        when(absenceDayRepository.findByEmployeeIdAndYear(1L, 2024))
+            .thenReturn(List.of(absenceDay));
+
+        // Act
+        List<AbsenceDay> result = absenceDayServiceV2.filter(filterDTO);
+
+        // Assert
+        assertEquals(1, result.size());
+        assertEquals(absenceDay, result.get(0));
+        verify(absenceDayRepository).findByEmployeeIdAndYear(1L, 2024);
+    }
+
+    @Test
+    void filterShouldReturnFilteredListWhenAbsenceTypeIdProvided() {
+        // Arrange
+        AbsenceDayFilterDTO filterDTO = new AbsenceDayFilterDTO(
+            1L,     // employeeId
+            1L,     // absenceTypeId
+            null,   // startDate
+            null,   // endDate
+            null,   // year
+            false   // includePublicHolidays
+        );
+        
+        when(absenceDayRepository.findByEmployeeIdAndAbsenceTypeId(1L, 1L))
+            .thenReturn(List.of(absenceDay));
+
+        // Act
+        List<AbsenceDay> result = absenceDayServiceV2.filter(filterDTO);
+
+        // Assert
+        assertEquals(1, result.size());
+        assertEquals(absenceDay, result.get(0));
+        verify(absenceDayRepository).findByEmployeeIdAndAbsenceTypeId(1L, 1L);
+    }
+
+    @Test
+    void filterShouldReturnFilteredListWhenOnlyEmployeeIdProvided() {
+        // Arrange
+        AbsenceDayFilterDTO filterDTO = new AbsenceDayFilterDTO(
+            1L,     // employeeId
+            null,   // absenceTypeId
+            null,   // startDate
+            null,   // endDate
+            null,   // year
+            false   // includePublicHolidays
+        );
+        
+        when(absenceDayRepository.findByEmployeeId(1L))
+            .thenReturn(List.of(absenceDay));
+
+        // Act
+        List<AbsenceDay> result = absenceDayServiceV2.filter(filterDTO);
+
+        // Assert
+        assertEquals(1, result.size());
+        assertEquals(absenceDay, result.get(0));
+        verify(absenceDayRepository).findByEmployeeId(1L);
+    }
+
+    @Test
+    void filterShouldThrowWhenFilterDTONull() {
+        assertThrows(IllegalArgumentException.class, () -> 
+            absenceDayServiceV2.filter(null));
+    }
+
+    @Test
+    void filterShouldThrowWhenEmployeeIdNull() {
+        AbsenceDayFilterDTO filterDTO = new AbsenceDayFilterDTO(
+            null,   // employeeId (null)
+            1L,     // absenceTypeId
+            null,   // startDate
+            null,   // endDate
+            2024,   // year
+            false   // includePublicHolidays
+        );
+        
+        assertThrows(IllegalArgumentException.class, () -> 
+            absenceDayServiceV2.filter(filterDTO));
+    }   
+    
+    @Test
+    void countAbsenceDaysByTypeForEmployeeAndYearShouldReturnCounts() {
+        // Arrange
+        Long employeeId = 1L;
+        int year = 2024;
+        Object[] result1 = new Object[]{absenceType, 2L};
+        Object[] result2 = new Object[]{absenceType, 3L};
+        
+        when(absenceDayRepository.countAbsenceDaysByTypeForEmployeeAndYear(employeeId, year))
+            .thenReturn(List.of(result1, result2));
+
+        // Act
+        List<Object[]> results = absenceDayServiceV2.countAbsenceDaysByTypeForEmployeeAndYear(employeeId, year);
+
+        // Assert
+        assertEquals(2, results.size());
+        verify(absenceDayRepository).countAbsenceDaysByTypeForEmployeeAndYear(employeeId, year);
+    }
+
+    @Test
+    void countAbsenceDaysByTypeForEmployeeAndYearShouldThrowWhenEmployeeIdNull() {
+        assertThrows(IllegalArgumentException.class, () -> 
+            absenceDayServiceV2.countAbsenceDaysByTypeForEmployeeAndYear(null, 2024));
+    }
+
+    @Test
+    void countAbsenceDaysByTypeForEmployeeAndYearShouldThrowWhenYearInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> 
+            absenceDayServiceV2.countAbsenceDaysByTypeForEmployeeAndYear(1L, 0));
+        
+        assertThrows(IllegalArgumentException.class, () -> 
+            absenceDayServiceV2.countAbsenceDaysByTypeForEmployeeAndYear(1L, -1));
     }
 
     @Test
     void findByIdShouldReturnAbsenceDay() {
         when(absenceDayRepository.findById(1L)).thenReturn(Optional.of(absenceDay));
 
-        Optional<AbsenceDay> result = absenceDayService.findById(1L);
+        Optional<AbsenceDay> result = absenceDayServiceV2.findById(1L);
 
         assertTrue(result.isPresent());
         assertEquals(absenceDay, result.get());
     }
 
     @Test
-    void findByIdShouldThrowWhenIdNull() {
-        assertThrows(IllegalArgumentException.class, () -> absenceDayService.findById(null));
-    }
-
-    @Test
     void findAllShouldReturnList() {
         when(absenceDayRepository.findAll()).thenReturn(List.of(absenceDay));
 
-        List<AbsenceDay> result = absenceDayService.findAll();
+        List<AbsenceDay> result = absenceDayServiceV2.findAll();
 
         assertEquals(1, result.size());
         assertEquals(absenceDay, result.get(0));
-    }
-
-    @Test
-    void findAllShouldReturnEmptyList() {
-        when(absenceDayRepository.findAll()).thenReturn(Collections.emptyList());
-
-        List<AbsenceDay> result = absenceDayService.findAll();
-
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
-    void updateShouldModifyAndSaveAbsenceDay() {
-        // Arrange
-        Long absenceDayId = 1L;
-        Long employeeId = 1L;
-        LocalDate originalDate = LocalDate.of(2024, 1, 15);
-        LocalDate updatedDate = LocalDate.of(2024, 1, 16);
-        
-        // Existing absence day
-        AbsenceDay existingAbsenceDay = new AbsenceDay();
-        existingAbsenceDay.setId(absenceDayId);
-        existingAbsenceDay.setAbsenceDate(originalDate);
-        existingAbsenceDay.setEmployee(employee);
-        existingAbsenceDay.setAbsenceType(absenceType);
-        
-        // Updated details
-        AbsenceDay updatedDetails = new AbsenceDay();
-        updatedDetails.setAbsenceDate(updatedDate);
-        updatedDetails.setEmployee(employee);
-        updatedDetails.setAbsenceType(absenceType);
-        
-        // Stubbing
-        when(absenceDayRepository.findById(absenceDayId)).thenReturn(Optional.of(existingAbsenceDay));
-        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
-        when(absenceTypeRepository.findById(1L)).thenReturn(Optional.of(absenceType));
-        
-        // Mock para PublicHolidayRepository
-        when(publicHolidayRepository.existsByDate(updatedDate)).thenReturn(false);
-        
-        when(absenceDayRepository.existsByEmployeeIdAndAbsenceDateExcludingId(
-            employeeId, updatedDate, absenceDayId)).thenReturn(false);
-        
-        when(absenceDayRepository.save(any(AbsenceDay.class))).thenReturn(existingAbsenceDay);
-
-        // Act
-        AbsenceDay result = absenceDayService.update(absenceDayId, updatedDetails);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(updatedDate, result.getAbsenceDate());
-        
-        // Verificar interacciones
-        verify(absenceDayRepository).findById(absenceDayId);
-        verify(employeeRepository).findById(employeeId);
-        verify(absenceTypeRepository).findById(1L);
-        verify(publicHolidayRepository).existsByDate(updatedDate);  // <-- AÑADIR
-        verify(absenceDayRepository).existsByEmployeeIdAndAbsenceDateExcludingId(
-            employeeId, updatedDate, absenceDayId);
-        verify(absenceDayRepository).save(any(AbsenceDay.class));
-    }
-
-    @Test
-    void updateShouldModifyAndSaveAbsenceDayWhenOnlyTypeChanges() {
-        // Arrange
-        Long absenceDayId = 1L;
-        Long employeeId = 1L;
-        LocalDate sameDate = LocalDate.of(2024, 1, 15);
-        
-        // Existing absence day
-        AbsenceDay existingAbsenceDay = new AbsenceDay();
-        existingAbsenceDay.setId(absenceDayId);
-        existingAbsenceDay.setAbsenceDate(sameDate);
-        existingAbsenceDay.setEmployee(employee);
-        existingAbsenceDay.setAbsenceType(absenceType);
-        
-        // New absence type
-        AbsenceType newAbsenceType = new AbsenceType();
-        newAbsenceType.setId(2L);
-        
-        // Updated details 
-        AbsenceDay updatedDetails = new AbsenceDay();
-        updatedDetails.setAbsenceDate(sameDate); // Same date
-        updatedDetails.setEmployee(employee); // Same employee
-        updatedDetails.setAbsenceType(newAbsenceType); // Only type changes
-        
-        AbsenceDay savedAbsenceDay = new AbsenceDay();
-        savedAbsenceDay.setId(absenceDayId);
-        savedAbsenceDay.setAbsenceDate(sameDate);
-        savedAbsenceDay.setEmployee(employee);
-        savedAbsenceDay.setAbsenceType(newAbsenceType);
-        
-        // Stubbing
-        when(absenceDayRepository.findById(absenceDayId)).thenReturn(Optional.of(existingAbsenceDay));
-        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
-        when(absenceTypeRepository.findById(2L)).thenReturn(Optional.of(newAbsenceType));
-        when(absenceDayRepository.save(any(AbsenceDay.class))).thenReturn(savedAbsenceDay);
-
-        // Act
-        AbsenceDay result = absenceDayService.update(absenceDayId, updatedDetails);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(sameDate, result.getAbsenceDate());
-        assertEquals(newAbsenceType.getId(), result.getAbsenceType().getId());
-        
-        verify(absenceDayRepository).findById(absenceDayId);
-        verify(employeeRepository).findById(employeeId);
-        verify(absenceTypeRepository).findById(2L);
-        verify(publicHolidayRepository, never()).existsByDate(any());
-        verify(absenceDayRepository, never()).existsByEmployeeIdAndAbsenceDateExcludingId(
-            anyLong(), any(LocalDate.class), anyLong());
-        verify(absenceDayRepository).save(any(AbsenceDay.class));
-    }
-
-   @Test
-    void updateShouldNotThrowWhenNoDuplicateAbsence() {
-        // Arrange
-        Long absenceDayId = 1L;
-        Long employeeId = 1L;
-        LocalDate originalDate = LocalDate.of(2024, 1, 15);
-        LocalDate newDate = LocalDate.of(2024, 1, 17);
-        
-        // Existing absence day
-        AbsenceDay existingAbsenceDay = new AbsenceDay();
-        existingAbsenceDay.setId(absenceDayId);
-        existingAbsenceDay.setAbsenceDate(originalDate);
-        existingAbsenceDay.setEmployee(employee);
-        existingAbsenceDay.setAbsenceType(absenceType);
-        
-        // Updated details
-        AbsenceDay updatedDetails = new AbsenceDay();
-        updatedDetails.setAbsenceDate(newDate);
-        updatedDetails.setEmployee(employee);
-        updatedDetails.setAbsenceType(absenceType);
-        
-        // Stubbing
-        when(absenceDayRepository.findById(absenceDayId)).thenReturn(Optional.of(existingAbsenceDay));
-        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
-        when(absenceTypeRepository.findById(1L)).thenReturn(Optional.of(absenceType));
-        
-        // IMPORTANTE: Mock para PublicHolidayRepository
-        when(publicHolidayRepository.existsByDate(newDate)).thenReturn(false);
-        
-        when(absenceDayRepository.existsByEmployeeIdAndAbsenceDateExcludingId(
-            employeeId, newDate, absenceDayId)).thenReturn(false);
-        when(absenceDayRepository.save(any(AbsenceDay.class))).thenReturn(existingAbsenceDay);
-
-        // Act
-        AbsenceDay result = absenceDayService.update(absenceDayId, updatedDetails);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(newDate, result.getAbsenceDate());
-        
-        // Verificar interacciones
-        verify(absenceDayRepository).findById(absenceDayId);
-        verify(employeeRepository).findById(employeeId);
-        verify(absenceTypeRepository).findById(1L);
-        verify(publicHolidayRepository).existsByDate(newDate);  // <-- VERIFICA ESTA LLAMADA
-        verify(absenceDayRepository).existsByEmployeeIdAndAbsenceDateExcludingId(
-            employeeId, newDate, absenceDayId);
-        verify(absenceDayRepository).save(any(AbsenceDay.class));
-    }
-
-    @Test
-    void updateShouldThrowWhenIdNull() {
-        assertThrows(IllegalArgumentException.class, () -> absenceDayService.update(null, absenceDay));
-    }
-
-    @Test
-    void updateShouldThrowWhenDetailsNull() {
-        assertThrows(IllegalArgumentException.class, () -> absenceDayService.update(1L, null));
-    }
-
-    @Test
-    void updateShouldThrowWhenNotFound() {
-        when(absenceDayRepository.findById(99L)).thenReturn(Optional.empty());
-
-        assertThrows(EntityNotFoundException.class, () -> absenceDayService.update(99L, absenceDay));
-    }
-
-   @Test
-    void updateShouldThrowWhenDuplicateAbsence() {
-        // Arrange
-        Long absenceDayId = 1L;
-        Long duplicateEmployeeId = 1L;
-        LocalDate duplicateDate = LocalDate.of(2024, 1, 16);
-        
-        // Existing absence day to update
-        AbsenceDay existingAbsenceDay = new AbsenceDay();
-        existingAbsenceDay.setId(absenceDayId);
-        existingAbsenceDay.setAbsenceDate(LocalDate.of(2024, 1, 15)); 
-        existingAbsenceDay.setEmployee(employee);
-        existingAbsenceDay.setAbsenceType(absenceType);
-        
-        // Updated details with date that already exists for another absence
-        AbsenceDay updatedDetails = new AbsenceDay();
-        updatedDetails.setAbsenceDate(duplicateDate); 
-        updatedDetails.setEmployee(employee); 
-        updatedDetails.setAbsenceType(absenceType);
-        
-        // Stubbing
-        when(absenceDayRepository.findById(absenceDayId)).thenReturn(Optional.of(existingAbsenceDay));
-        when(employeeRepository.findById(duplicateEmployeeId)).thenReturn(Optional.of(employee));
-        when(absenceTypeRepository.findById(1L)).thenReturn(Optional.of(absenceType));
-        
-        // Simulates that exists another absence with the same date for the same employee
-        when(absenceDayRepository.existsByEmployeeIdAndAbsenceDateExcludingId(
-            duplicateEmployeeId, duplicateDate, absenceDayId)).thenReturn(true);
-
-        // Act & Assert
-        DuplicateResourceException exception = assertThrows(
-            DuplicateResourceException.class, 
-            () -> absenceDayService.update(absenceDayId, updatedDetails)
-        );
-        
-        // Verifies the exception message
-        assertTrue(exception.getMessage().contains("Absence already exists for employee ID"));
-        assertTrue(exception.getMessage().contains("on date " + duplicateDate));
-        
-        // Verifies interactions with mocks
-        verify(absenceDayRepository).findById(absenceDayId);
-        verify(employeeRepository).findById(duplicateEmployeeId);
-        verify(absenceTypeRepository).findById(1L);
-        verify(absenceDayRepository).existsByEmployeeIdAndAbsenceDateExcludingId(
-            duplicateEmployeeId, duplicateDate, absenceDayId);
-        
-        // Verifies that save was never called
-        verify(absenceDayRepository, never()).save(any(AbsenceDay.class));
-    }
-
-    @Test
-    void deleteShouldRemoveAbsenceDay() {
-        when(absenceDayRepository.existsById(1L)).thenReturn(true);
-        
-        absenceDayService.delete(1L);
-        
-        verify(absenceDayRepository).deleteById(1L);
-    }
-
-    @Test
-    void deleteShouldThrowWhenIdNull() {
-        assertThrows(IllegalArgumentException.class, () -> absenceDayService.delete(null));
-    }
-
-    @Test
-    void deleteShouldThrowWhenNotFound() {
-        when(absenceDayRepository.existsById(99L)).thenReturn(false);
-
-        assertThrows(EntityNotFoundException.class, () -> absenceDayService.delete(99L));
     }
 
     @Test
     void getByEmployeeIdShouldReturnList() {
         when(absenceDayRepository.findByEmployeeId(1L)).thenReturn(List.of(absenceDay));
 
-        List<AbsenceDay> result = absenceDayService.getByEmployeeId(1L);
+        List<AbsenceDay> result = absenceDayServiceV2.getByEmployeeId(1L);
 
         assertEquals(1, result.size());
         assertEquals(absenceDay, result.get(0));
-    }
-
-    @Test
-    void getByEmployeeIdShouldThrowWhenIdNull() {
-        assertThrows(IllegalArgumentException.class, () -> absenceDayService.getByEmployeeId(null));
-    }
-
-    @Test
-    void getByEmployeeIdAndDateRangeShouldReturnList() {
-        LocalDate startDate = LocalDate.of(2024, 1, 1);
-        LocalDate endDate = LocalDate.of(2024, 1, 31);
-        
-        when(absenceDayRepository.findByEmployeeIdAndAbsenceDateBetween(1L, startDate, endDate))
-                .thenReturn(List.of(absenceDay));
-
-        List<AbsenceDay> result = absenceDayService.getByEmployeeIdAndDateRange(1L, startDate, endDate);
-
-        assertEquals(1, result.size());
-        assertEquals(absenceDay, result.get(0));
-    }
-
-    @Test
-    void getByEmployeeIdAndDateRangeShouldThrowWhenEmployeeIdNull() {
-        assertThrows(IllegalArgumentException.class, () -> 
-            absenceDayService.getByEmployeeIdAndDateRange(null, LocalDate.now(), LocalDate.now()));
-    }
-
-    @Test
-    void getByEmployeeIdAndDateRangeShouldThrowWhenStartDateNull() {
-        assertThrows(IllegalArgumentException.class, () -> 
-            absenceDayService.getByEmployeeIdAndDateRange(1L, null, LocalDate.now()));
-    }
-
-    @Test
-    void getByEmployeeIdAndDateRangeShouldThrowWhenEndDateNull() {
-        assertThrows(IllegalArgumentException.class, () -> 
-            absenceDayService.getByEmployeeIdAndDateRange(1L, LocalDate.now(), null));
-    }
-
-    @Test
-    void getByEmployeeIdAndDateRangeShouldThrowWhenStartDateAfterEndDate() {
-        LocalDate startDate = LocalDate.of(2024, 1, 31);
-        LocalDate endDate = LocalDate.of(2024, 1, 1);
-        
-        assertThrows(IllegalArgumentException.class, () -> 
-            absenceDayService.getByEmployeeIdAndDateRange(1L, startDate, endDate));
-    }
-
-    @Test
-    void getByEmployeeIdAndAbsenceTypeIdShouldReturnList() {
-        when(absenceDayRepository.findByEmployeeIdAndAbsenceTypeId(1L, 1L))
-                .thenReturn(List.of(absenceDay));
-
-        List<AbsenceDay> result = absenceDayService.getByEmployeeIdAndAbsenceTypeId(1L, 1L);
-
-        assertEquals(1, result.size());
-        assertEquals(absenceDay, result.get(0));
-    }
-
-    @Test
-    void getByEmployeeIdAndAbsenceTypeIdShouldThrowWhenEmployeeIdNull() {
-        assertThrows(IllegalArgumentException.class, () -> 
-            absenceDayService.getByEmployeeIdAndAbsenceTypeId(null, 1L));
-    }
-
-    @Test
-    void getByEmployeeIdAndAbsenceTypeIdShouldThrowWhenAbsenceTypeIdNull() {
-        assertThrows(IllegalArgumentException.class, () -> 
-            absenceDayService.getByEmployeeIdAndAbsenceTypeId(1L, null));
     }
 
     @Test
     void existsByEmployeeIdAndAbsenceDateShouldReturnTrue() {
         when(absenceDayRepository.existsByEmployeeIdAndAbsenceDate(1L, testDate)).thenReturn(true);
 
-        boolean result = absenceDayService.existsByEmployeeIdAndAbsenceDate(1L, testDate);
+        boolean result = absenceDayServiceV2.existsByEmployeeIdAndAbsenceDate(1L, testDate);
 
         assertTrue(result);
     }
 
     @Test
-    void existsByEmployeeIdAndAbsenceDateShouldReturnFalse() {
-        when(absenceDayRepository.existsByEmployeeIdAndAbsenceDate(1L, testDate)).thenReturn(false);
+    void countByEmployeeIdAndAbsenceTypeIdAndYearShouldReturnCount() {
+        when(absenceDayRepository.countByEmployeeIdAndAbsenceTypeIdAndYear(1L, 1L, 2024))
+            .thenReturn(5L);
 
-        boolean result = absenceDayService.existsByEmployeeIdAndAbsenceDate(1L, testDate);
+        long result = absenceDayServiceV2.countByEmployeeIdAndAbsenceTypeIdAndYear(1L, 1L, 2024);
 
-        assertFalse(result);
+        assertEquals(5L, result);
     }
 
     @Test
-    void existsByEmployeeIdAndAbsenceDateShouldThrowWhenEmployeeIdNull() {
-        assertThrows(IllegalArgumentException.class, () -> 
-            absenceDayService.existsByEmployeeIdAndAbsenceDate(null, testDate));
-    }
-
-    @Test
-    void existsByEmployeeIdAndAbsenceDateShouldThrowWhenAbsenceDateNull() {
-        assertThrows(IllegalArgumentException.class, () -> 
-            absenceDayService.existsByEmployeeIdAndAbsenceDate(1L, null));
-    }
-
-    @Test
-    void updateShouldThrowWhenNewDateIsPublicHoliday() {
-        LocalDate originalDate = LocalDate.of(2024, 6, 15);
-        LocalDate holidayDate = LocalDate.of(2024, 12, 25);
+    void deleteShouldDeleteAbsenceDay() {
+        when(absenceDayRepository.existsById(1L)).thenReturn(true);
         
-        AbsenceDay existingAbsenceDay = new AbsenceDay();
-        existingAbsenceDay.setId(1L);
-        existingAbsenceDay.setAbsenceDate(originalDate);
-        existingAbsenceDay.setEmployee(employee);
-        existingAbsenceDay.setAbsenceType(absenceType);
+        absenceDayServiceV2.delete(1L);
         
-        AbsenceDay updatedDetails = new AbsenceDay();
-        updatedDetails.setAbsenceDate(holidayDate);
-        updatedDetails.setEmployee(employee);
-        updatedDetails.setAbsenceType(absenceType);
-        
-        when(absenceDayRepository.findById(1L)).thenReturn(Optional.of(existingAbsenceDay));
-        when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
-        when(absenceTypeRepository.findById(1L)).thenReturn(Optional.of(absenceType));
-        when(publicHolidayRepository.existsByDate(holidayDate)).thenReturn(true);
-        
-        PublicHoliday publicHoliday = new PublicHoliday();
-        publicHoliday.setName("Navidad");
-        publicHoliday.setDate(holidayDate);
-        when(publicHolidayRepository.findByDate(holidayDate))
-            .thenReturn(Optional.of(publicHoliday));
-
-        IllegalArgumentException exception = assertThrows(
-            IllegalArgumentException.class, 
-            () -> absenceDayService.update(1L, updatedDetails)
-        );
-        
-        assertTrue(exception.getMessage().contains("public holiday"));
-        verify(publicHolidayRepository).existsByDate(holidayDate);
+        verify(absenceDayRepository).deleteById(1L);
     }
 }
