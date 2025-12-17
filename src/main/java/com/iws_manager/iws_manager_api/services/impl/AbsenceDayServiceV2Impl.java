@@ -28,6 +28,8 @@ import java.util.Optional;
 @Service
 @Transactional
 public class AbsenceDayServiceV2Impl implements AbsenceDayServiceV2 {
+    private static final String EMPLOYEE = "Employee not found with id: ";
+    private static final String ABSENCE_TYPE = "AbsenceType not found with id: ";
 
     private final AbsenceDayRepository absenceDayRepository;
     private final EmployeeRepository employeeRepository;
@@ -76,11 +78,11 @@ public class AbsenceDayServiceV2Impl implements AbsenceDayServiceV2 {
         // Load related entities
         Employee employee = employeeRepository.findById(requestDTO.employee().id())
                 .orElseThrow(() -> new EntityNotFoundException(
-                    "Employee not found with id: " + requestDTO.employee().id()));
+                        EMPLOYEE + requestDTO.employee().id()));
         
         AbsenceType absenceType = absenceTypeRepository.findById(requestDTO.absenceType().id())
                 .orElseThrow(() -> new EntityNotFoundException(
-                    "AbsenceType not found with id: " + requestDTO.absenceType().id()));
+                        ABSENCE_TYPE + requestDTO.absenceType().id()));
 
         // Create entity
         AbsenceDay absenceDay = new AbsenceDay();
@@ -126,14 +128,14 @@ public class AbsenceDayServiceV2Impl implements AbsenceDayServiceV2 {
                     if (requestDTO.employee() != null && requestDTO.employee().id() != null) {
                         Employee employee = employeeRepository.findById(requestDTO.employee().id())
                                 .orElseThrow(() -> new EntityNotFoundException(
-                                    "Employee not found with id: " + requestDTO.employee().id()));
+                                        EMPLOYEE + requestDTO.employee().id()));
                         existingAbsenceDay.setEmployee(employee);
                     }
                     
                     if (requestDTO.absenceType() != null && requestDTO.absenceType().id() != null) {
                         AbsenceType absenceType = absenceTypeRepository.findById(requestDTO.absenceType().id())
                                 .orElseThrow(() -> new EntityNotFoundException(
-                                    "AbsenceType not found with id: " + requestDTO.absenceType().id()));
+                                        ABSENCE_TYPE + requestDTO.absenceType().id()));
                         existingAbsenceDay.setAbsenceType(absenceType);
                     }
 
@@ -306,11 +308,11 @@ public class AbsenceDayServiceV2Impl implements AbsenceDayServiceV2 {
 
             Employee employee = employeeRepository.findById(dto.employee().id())
                     .orElseThrow(() -> new EntityNotFoundException(
-                            "Employee not found with id: " + dto.employee().id()));
+                            EMPLOYEE + dto.employee().id()));
 
             AbsenceType absenceType = absenceTypeRepository.findById(dto.absenceType().id())
                     .orElseThrow(() -> new EntityNotFoundException(
-                            "AbsenceType not found with id: " + dto.absenceType().id()));
+                            ABSENCE_TYPE + dto.absenceType().id()));
 
             AbsenceDay absenceDay = new AbsenceDay();
             absenceDay.setAbsenceDate(dto.absenceDate());
