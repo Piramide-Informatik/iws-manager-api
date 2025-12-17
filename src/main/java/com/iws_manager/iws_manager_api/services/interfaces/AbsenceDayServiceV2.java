@@ -25,4 +25,5 @@ public interface AbsenceDayServiceV2 {
     List<AbsenceDay> filter(AbsenceDayFilterDTO filterDTO);
 
     List<Object[]> countAbsenceDaysByTypeForEmployeeAndYear(Long employeeId, int year);
+    List<AbsenceDay> createBulkFromDTO(List<AbsenceDayRequestDTO> requestDTOs);
 }

@@ -170,4 +170,17 @@ public class AbsenceDayControllerV2 {
         var countDTOs = absenceDayMapper.toCountDTOList(results);
         return new ResponseEntity<>(countDTOs, HttpStatus.OK);
     }
+
+    @PostMapping("/bulk")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<List<AbsenceDayDetailDTO>> createBulk(
+            @Valid @RequestBody List<AbsenceDayRequestDTO> requestDTOs) {
+
+        var createdAbsences = absenceDayService.createBulkFromDTO(requestDTOs);
+        var responseDTOs = createdAbsences.stream()
+                .map(absenceDayMapper::toDetailDTO)
+                .toList();
+
+        return new ResponseEntity<>(responseDTOs, HttpStatus.CREATED);
+    }
 }

@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityNotFoundException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -267,6 +268,60 @@ public class AbsenceDayServiceV2Impl implements AbsenceDayServiceV2 {
         }
         
         return absenceDayRepository.countAbsenceDaysByTypeForEmployeeAndYear(employeeId, year);
+    }
+
+    @Override
+    @Transactional
+    public List<AbsenceDay> createBulkFromDTO(List<AbsenceDayRequestDTO> requestDTOs) {
+        if (requestDTOs == null || requestDTOs.isEmpty()) {
+            throw new IllegalArgumentException("Absence list cannot be null or empty");
+        }
+
+        List<AbsenceDay> absencesToSave = new ArrayList<>();
+
+        for (AbsenceDayRequestDTO dto : requestDTOs) {
+
+            if (dto.absenceDate() == null) {
+                throw new IllegalArgumentException("Absence date must be specified");
+            }
+
+            if (dto.employee() == null || dto.employee().id() == null) {
+                throw new IllegalArgumentException("Employee must be specified");
+            }
+
+            if (dto.absenceType() == null || dto.absenceType().id() == null) {
+                throw new IllegalArgumentException("AbsenceType must be specified");
+            }
+
+            // Validate holiday
+            validateNotPublicHoliday(dto.absenceDate());
+
+            // Validate duplicates
+            if (absenceDayRepository.existsByEmployeeIdAndAbsenceDate(
+                    dto.employee().id(), dto.absenceDate())) {
+                throw new DuplicateResourceException(
+                        "Absence already exists for employee ID " + dto.employee().id() +
+                                " on date " + dto.absenceDate());
+            }
+
+            Employee employee = employeeRepository.findById(dto.employee().id())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Employee not found with id: " + dto.employee().id()));
+
+            AbsenceType absenceType = absenceTypeRepository.findById(dto.absenceType().id())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "AbsenceType not found with id: " + dto.absenceType().id()));
+
+            AbsenceDay absenceDay = new AbsenceDay();
+            absenceDay.setAbsenceDate(dto.absenceDate());
+            absenceDay.setEmployee(employee);
+            absenceDay.setAbsenceType(absenceType);
+
+            absencesToSave.add(absenceDay);
+        }
+
+        // Mass saving
+        return absenceDayRepository.saveAll(absencesToSave);
     }
 
     // ========== Private methods ==========
