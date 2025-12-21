@@ -27,6 +27,7 @@ import com.iws_manager.iws_manager_api.repositories.NetworkRepository;
 import com.iws_manager.iws_manager_api.repositories.FundingProgramRepository;
 import com.iws_manager.iws_manager_api.repositories.PromoterRepository;
 import com.iws_manager.iws_manager_api.repositories.ProjectStatusRepository;
+import com.iws_manager.iws_manager_api.exception.exceptions.DuplicateResourceException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -77,6 +78,7 @@ public class ProjectServiceImplV2 implements ProjectServiceV2 {
             throw new IllegalArgumentException("ProjectRequestDTO cannot be null");
         }
 
+        validateUniqueProjectNameForCreation(projectRequest.projectName());
         // Convert DTO to Entity
         Project project = convertToEntity(projectRequest);
         Project savedProject = projectRepository.save(project);
@@ -111,6 +113,7 @@ public class ProjectServiceImplV2 implements ProjectServiceV2 {
 
         return projectRepository.findById(id)
                 .map(existingProject -> {
+                    validateUniqueProjectNameForUpdate(existingProject, projectDetails, id);
                     // Update fields from DTO
                     updateEntityFromDTO(existingProject, projectDetails);
                     Project updatedProject = projectRepository.save(existingProject);
@@ -129,6 +132,43 @@ public class ProjectServiceImplV2 implements ProjectServiceV2 {
             throw new EntityNotFoundException("Project not found with id: " + id);
         }
         projectRepository.deleteById(id);
+    }
+
+    // VALIDATIONS
+    /**
+     * Validates that the projectName is unique for creation (case-insensitive) across all projects.
+     */
+    private void validateUniqueProjectNameForCreation(String projectName) {
+        if (projectName != null && projectRepository.existsByProjectNameIgnoreCase(projectName)) {
+            throw new DuplicateResourceException(
+                "Project duplication with attribute 'projectName' = '" + projectName + "'. " +
+                "A project with this name already exists."
+            );
+        }
+    }
+
+    /**
+     * Validates that the projectName is unique for update, considering only other records (case-insensitive).
+     * Only validates if the projectName has changed.
+     */
+    private void validateUniqueProjectNameForUpdate(Project existingProject, 
+                                                ProjectRequestDTO newProjectDTO, 
+                                                Long id) {
+        
+        // Check if projectName has changed
+        boolean projectNameChanged = !existingProject.getProjectName().equals(newProjectDTO.projectName());
+        
+        if (projectNameChanged) {
+            boolean projectNameExists = projectRepository
+                .existsByProjectNameIgnoreCaseAndIdNot(newProjectDTO.projectName(), id);
+            
+            if (projectNameExists) {
+                throw new DuplicateResourceException(
+                    "Project duplication with attribute 'projectName' = '" + newProjectDTO.projectName() + "'. " +
+                    "A project with this name already exists."
+                );
+            }
+        }
     }
 
     // Date Fields
