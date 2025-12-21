@@ -8,7 +8,10 @@ import com.iws_manager.iws_manager_api.models.Project;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
@@ -237,4 +240,14 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
                         "customer.state", "fundingProgram", "promoter", "promoter.country", "orderFue", "orderAdmin",
                         "empiws20", "empiws30", "empiws50", "network", "status" })
         List<Project> findByCustomerIdOrderByStartDateDesc(Long customerId);
+
+        // VALIDATIONS
+        // PROJECTNAME must be unique
+        // CREATION - verify if projectName exists (case-insensitive)
+        @Query("SELECT COUNT(p) > 0 FROM Project p WHERE UPPER(p.projectName) = UPPER(:projectName)")
+        boolean existsByProjectNameIgnoreCase(@Param("projectName") String projectName);
+
+        // UPDATE - verify if projectName exists (case-insensitive)
+        @Query("SELECT COUNT(p) > 0 FROM Project p WHERE UPPER(p.projectName) = UPPER(:projectName) AND p.id != :excludeId")
+        boolean existsByProjectNameIgnoreCaseAndIdNot(@Param("projectName") String projectName, @Param("excludeId") Long excludeId);
 }
