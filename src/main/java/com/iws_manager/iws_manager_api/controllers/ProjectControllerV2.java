@@ -47,12 +47,8 @@ public class ProjectControllerV2 {
     @PutMapping("/{id}")
     public ResponseEntity<ProjectResponseDTO> update(@PathVariable Long id,
             @RequestBody ProjectRequestDTO projectDetails) {
-        try {
-            ProjectResponseDTO updatedProject = projectServiceV2.update(id, projectDetails);
-            return new ResponseEntity<>(updatedProject, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        ProjectResponseDTO updatedProject = projectServiceV2.update(id, projectDetails);
+        return new ResponseEntity<>(updatedProject, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
