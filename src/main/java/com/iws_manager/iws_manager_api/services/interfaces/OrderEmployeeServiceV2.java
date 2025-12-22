@@ -2,6 +2,7 @@ package com.iws_manager.iws_manager_api.services.interfaces;
 
 import com.iws_manager.iws_manager_api.dtos.orderemployee.OrderEmployeeRequestDTO;
 import com.iws_manager.iws_manager_api.dtos.orderemployee.OrderEmployeeResponseDTO;
+import com.iws_manager.iws_manager_api.dtos.shared.ProjectReferenceDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -81,4 +82,11 @@ public interface OrderEmployeeServiceV2 {
     // ========== COUNT OPERATIONS ==========
     Long countByOrder(Long orderId);
     Long countByEmployee(Long employeeId);
+
+    /**
+     * Obtiene el project relacionado a un orderemployee específico
+     * @param orderEmployeeId ID del orderemployee
+     * @return ProjectReferenceDTO con la información del project
+     */
+    ProjectReferenceDTO getProjectByOrderEmployeeId(Long orderEmployeeId);
 }
