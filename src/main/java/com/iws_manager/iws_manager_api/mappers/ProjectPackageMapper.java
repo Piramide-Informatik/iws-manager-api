@@ -69,12 +69,11 @@ public class ProjectPackageMapper {
         if(dto.packageNo() != null && !dto.packageNo().isEmpty()){
             projectPackage.setPackageNo(dto.packageNo());
         }
-        if (dto.startDate() != null){
-            projectPackage.setStartDate(dto.startDate());
-        }
-        if (dto.endDate() != null){
-            projectPackage.setEndDate(dto.endDate());
-        }
+        // Update startDate even if it is null
+        projectPackage.setStartDate(dto.startDate());
+
+        // // Update endDate even if it is null
+        projectPackage.setEndDate(dto.endDate());
     }
 
     public static ProjectPackage toEntityWithProject(CreateProjectPackageDTO dto, Project project) {
