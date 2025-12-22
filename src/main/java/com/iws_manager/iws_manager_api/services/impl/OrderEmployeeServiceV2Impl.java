@@ -2,6 +2,7 @@ package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.dtos.orderemployee.OrderEmployeeRequestDTO;
 import com.iws_manager.iws_manager_api.dtos.orderemployee.OrderEmployeeResponseDTO;
+import com.iws_manager.iws_manager_api.dtos.shared.ProjectReferenceDTO;
 import com.iws_manager.iws_manager_api.mappers.OrderEmployeeMapper;
 import com.iws_manager.iws_manager_api.models.Employee;
 import com.iws_manager.iws_manager_api.models.Order;
@@ -403,6 +404,26 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     public Long countByEmployee(Long employeeId) {
         validateId(employeeId, "Employee ID");
         return orderEmployeeRepository.countByEmployee(employeeId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ProjectReferenceDTO getProjectByOrderEmployeeId(Long orderEmployeeId) {
+        OrderEmployee orderEmployee = orderEmployeeRepository.findById(orderEmployeeId)
+            .orElseThrow(() -> new EntityNotFoundException(
+                "OrderEmployee not found with id: " + orderEmployeeId));
+        
+        if (orderEmployee.getOrder() == null) {
+            throw new EntityNotFoundException(
+                "OrderEmployee with id " + orderEmployeeId + " has no associated order");
+        }
+        
+        if (orderEmployee.getOrder().getProject() == null) {
+            throw new EntityNotFoundException(
+                "Order with id " + orderEmployee.getOrder().getId() + " has no associated project");
+        }
+        
+        return orderEmployeeMapper.toProjectReferenceDTO(orderEmployee.getOrder().getProject());
     }
 
     // ========== MÉTODOS PRIVADOS DE VALIDACIÓN ==========

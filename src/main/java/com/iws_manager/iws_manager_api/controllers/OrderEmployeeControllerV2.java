@@ -3,6 +3,7 @@ package com.iws_manager.iws_manager_api.controllers;
 import com.iws_manager.iws_manager_api.dtos.orderemployee.OrderEmployeeRequestDTO;
 import com.iws_manager.iws_manager_api.dtos.orderemployee.OrderEmployeeResponseDTO;
 import com.iws_manager.iws_manager_api.services.interfaces.OrderEmployeeServiceV2;
+import com.iws_manager.iws_manager_api.dtos.shared.ProjectReferenceDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -328,4 +329,9 @@ public class OrderEmployeeControllerV2 {
         return ResponseEntity.ok(count);
     }
 
+    @GetMapping("/{id}/get-project")
+    public ResponseEntity<ProjectReferenceDTO> getProjectByOrderEmployeeId(@PathVariable Long id) {
+        ProjectReferenceDTO project = orderEmployeeService.getProjectByOrderEmployeeId(id);
+        return ResponseEntity.ok(project);
+    }
 }
