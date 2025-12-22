@@ -15,7 +15,7 @@ public record OrderEmployeeResponseDTO(
     BigDecimal plannedhours,
     String qualificationkmui,
     String title,
-    Long version,
+    Integer version,
     
     EmployeeBasicDTO employee,
     OrderReferenceDTO order,
