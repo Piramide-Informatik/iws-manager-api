@@ -79,6 +79,12 @@ public class AbsenceTypeServiceImpl implements AbsenceTypeService {
         absenceTypeRepository.deleteById(id);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<AbsenceType> getAllByOrderByLabelAsc() {
+        return absenceTypeRepository.findAllByOrderByLabelAsc();
+    }
+
     private void validateUniqueConstraintsForCreation(AbsenceType absenceType) {
         boolean nameExists = absenceTypeRepository.existsByName(absenceType.getName());
         boolean labelExists = absenceTypeRepository.existsByLabel(absenceType.getLabel());
