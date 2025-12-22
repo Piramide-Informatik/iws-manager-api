@@ -35,9 +35,8 @@ public class OrderEmployee extends BaseEntity {
     @JoinColumn(name = "employeeid", referencedColumnName = "employeeid")
     private Employee employee;
 
-    // Redundancia con Employee
-    // @Column(name = "employeeno")
-    // private Integer employeeno;
+    @Column(name = "orderemployeeno")
+    private Integer orderemployeeno;
 
     @Column(name = "hourlyrate", precision = 5, scale = 2)
     private BigDecimal hourlyrate;
