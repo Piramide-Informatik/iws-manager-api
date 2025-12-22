@@ -2,7 +2,6 @@ package com.iws_manager.iws_manager_api.mappers;
 
 import com.iws_manager.iws_manager_api.dtos.orderemployee.OrderEmployeeRequestDTO;
 import com.iws_manager.iws_manager_api.dtos.orderemployee.OrderEmployeeResponseDTO;
-import com.iws_manager.iws_manager_api.dtos.shared.BasicReferenceDTO;
 import com.iws_manager.iws_manager_api.dtos.shared.EmployeeBasicDTO;
 import com.iws_manager.iws_manager_api.dtos.shared.OrderReferenceDTO;
 import com.iws_manager.iws_manager_api.dtos.shared.ProjectReferenceDTO;
@@ -12,12 +11,22 @@ import com.iws_manager.iws_manager_api.models.Order;
 import com.iws_manager.iws_manager_api.models.OrderEmployee;
 import com.iws_manager.iws_manager_api.models.Project;
 import com.iws_manager.iws_manager_api.models.QualificationFZ;
+import com.iws_manager.iws_manager_api.repositories.EmployeeRepository;
+import com.iws_manager.iws_manager_api.repositories.OrderRepository;
+import com.iws_manager.iws_manager_api.repositories.QualificationFZRepository;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class OrderEmployeeMapper {
+    
+    private final EmployeeRepository employeeRepository;
+    private final OrderRepository orderRepository;
+    private final QualificationFZRepository qualificationFZRepository;
     
     // ========== Entity → ResponseDTO ==========
     
@@ -67,36 +76,102 @@ public class OrderEmployeeMapper {
     public void updateEntityFromDTO(OrderEmployee entity, OrderEmployeeRequestDTO dto) {
         if (dto == null) return;
         
-        // Employee - puede ser null para desasignar
+        // Employee - CARGAR desde la base de datos
         if (dto.employee() != null && dto.employee().id() != null) {
-            Employee employee = new Employee();
-            employee.setId(dto.employee().id());
+            Employee employee = employeeRepository.findById(dto.employee().id())
+                .orElseThrow(() -> new EntityNotFoundException(
+                    "Employee not found with id: " + dto.employee().id()));
             entity.setEmployee(employee);
         } else {
             // Si employee viene como null o con id null, desasignamos
             entity.setEmployee(null);
         }
         
-        // Order - requerido para CREATE, pero para UPDATE podría ser opcional
+        // Order - CARGAR desde la base de datos
         if (dto.order() != null && dto.order().id() != null) {
-            Order order = new Order();
-            order.setId(dto.order().id());
+            Order order = orderRepository.findById(dto.order().id())
+                .orElseThrow(() -> new EntityNotFoundException(
+                    "Order not found with id: " + dto.order().id()));
             entity.setOrder(order);
+        } else if (dto.order() != null) {
+            // Si order viene pero sin id, es un error
+            throw new IllegalArgumentException("Order ID is required when order is provided");
         }
-        // Nota: Para UPDATE, si order no viene, no lo cambiamos
+        // Nota: Para UPDATE, si order no viene en el DTO, no lo cambiamos
         
-        // QualificationFZ - puede ser null para desasignar
+        // QualificationFZ - CARGAR desde la base de datos
         if (dto.qualificationFZ() != null && dto.qualificationFZ().id() != null) {
-            QualificationFZ qualificationFZ = new QualificationFZ();
-            qualificationFZ.setId(dto.qualificationFZ().id());
+            QualificationFZ qualificationFZ = qualificationFZRepository.findById(dto.qualificationFZ().id())
+                .orElseThrow(() -> new EntityNotFoundException(
+                    "QualificationFZ not found with id: " + dto.qualificationFZ().id()));
             entity.setQualificationFZ(qualificationFZ);
         } else {
+            // Si qualificationFZ viene como null o con id null, desasignamos
             entity.setQualificationFZ(null);
         }
         
-        // Campos simples - solo actualizar si vienen en el DTO
-        // Para CREATE, estos campos vienen; para UPDATE, pueden venir o no
+        // Campos simples
+        if (dto.orderemployeeno() != null) {
+            entity.setOrderemployeeno(dto.orderemployeeno());
+        }
         
+        if (dto.hourlyrate() != null) {
+            entity.setHourlyrate(dto.hourlyrate());
+        }
+        
+        if (dto.plannedhours() != null) {
+            entity.setPlannedhours(dto.plannedhours());
+        }
+        
+        if (dto.qualificationkmui() != null) {
+            entity.setQualificationkmui(dto.qualificationkmui());
+        }
+        
+        if (dto.title() != null) {
+            entity.setTitle(dto.title());
+        }
+    }
+    
+    // ========== Método para PATCH (actualización parcial) ==========
+    
+    public void applyPartialUpdate(OrderEmployee entity, OrderEmployeeRequestDTO dto) {
+        if (dto == null) return;
+        
+        // Employee - CARGAR desde la base de datos si se proporciona
+        if (dto.employee() != null) {
+            if (dto.employee().id() != null) {
+                Employee employee = employeeRepository.findById(dto.employee().id())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                        "Employee not found with id: " + dto.employee().id()));
+                entity.setEmployee(employee);
+            } else {
+                // Si viene employee con id null, desasignamos
+                entity.setEmployee(null);
+            }
+        }
+        
+        // Order - CARGAR desde la base de datos si se proporciona
+        if (dto.order() != null && dto.order().id() != null) {
+            Order order = orderRepository.findById(dto.order().id())
+                .orElseThrow(() -> new EntityNotFoundException(
+                    "Order not found with id: " + dto.order().id()));
+            entity.setOrder(order);
+        }
+        
+        // QualificationFZ - CARGAR desde la base de datos si se proporciona
+        if (dto.qualificationFZ() != null) {
+            if (dto.qualificationFZ().id() != null) {
+                QualificationFZ qualificationFZ = qualificationFZRepository.findById(dto.qualificationFZ().id())
+                    .orElseThrow(() -> new EntityNotFoundException(
+                        "QualificationFZ not found with id: " + dto.qualificationFZ().id()));
+                entity.setQualificationFZ(qualificationFZ);
+            } else {
+                // Si viene qualificationFZ con id null, desasignamos
+                entity.setQualificationFZ(null);
+            }
+        }
+        
+        // Campos simples - solo si vienen en el DTO
         if (dto.orderemployeeno() != null) {
             entity.setOrderemployeeno(dto.orderemployeeno());
         }
@@ -142,7 +217,8 @@ public class OrderEmployeeMapper {
             order.getOrderLabel(),
             order.getOrderNo(),
             order.getOrderTitle(),
-            toProjectReferenceDTO(order.getProject())
+            toProjectReferenceDTO(order.getProject()),
+            order.getVersion()
         );
     }
     
