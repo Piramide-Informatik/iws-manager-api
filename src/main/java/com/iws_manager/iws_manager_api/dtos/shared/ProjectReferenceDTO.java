@@ -4,5 +4,6 @@ public record ProjectReferenceDTO(
     Long id,
     String projectName,
     String projectLabel,
-    String title
+    String title,
+    Integer version
 ) {}
