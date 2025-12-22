@@ -63,4 +63,10 @@ public class AbsenceTypeController {
         absenceTypeService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/sort-by-label-asc")
+    public ResponseEntity<List<AbsenceType>> getAllByOrderByLabelAsc() {
+        List<AbsenceType> absenceTypes = absenceTypeService.getAllByOrderByLabelAsc();
+        return new ResponseEntity<>(absenceTypes, HttpStatus.OK);
+    }
 }

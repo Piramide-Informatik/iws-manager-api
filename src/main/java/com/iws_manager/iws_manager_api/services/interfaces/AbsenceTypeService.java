@@ -11,4 +11,6 @@ public interface AbsenceTypeService {
     List<AbsenceType> findAll();
     AbsenceType update(Long id, AbsenceType absenceTypeDetails);
     void delete(Long id);
+
+    List<AbsenceType> getAllByOrderByLabelAsc();
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AbsenceTypeRepository extends JpaRepository<AbsenceType,Long> {
     List<AbsenceType> findAllByOrderByNameAsc();
+    List<AbsenceType> findAllByOrderByLabelAsc();
 
     // CREATION - verify if name and label exist
     boolean existsByName(String name);
