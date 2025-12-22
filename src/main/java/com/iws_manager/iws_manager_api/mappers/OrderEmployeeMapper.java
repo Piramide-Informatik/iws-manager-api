@@ -222,14 +222,15 @@ public class OrderEmployeeMapper {
         );
     }
     
-    private ProjectReferenceDTO toProjectReferenceDTO(Project project) {
+    public ProjectReferenceDTO toProjectReferenceDTO(Project project) {
         if (project == null) return null;
         
         return new ProjectReferenceDTO(
             project.getId(),
             project.getProjectName(),
             project.getProjectLabel(),
-            project.getTitle()
+            project.getTitle(),
+            project.getVersion()
         );
     }
     
