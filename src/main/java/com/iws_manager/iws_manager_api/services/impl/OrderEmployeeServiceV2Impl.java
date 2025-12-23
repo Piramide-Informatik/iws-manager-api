@@ -26,12 +26,12 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     private final OrderEmployeeRepository orderEmployeeRepository;
     private final OrderEmployeeMapper orderEmployeeMapper;
 
-    private static final String orderEmployeeNotFound = "OrderEmployee not found with id: ";
-    private static final String employeeIdString = "Employee ID";
-    private static final String orderIdString = "Order ID";
-    private static final String qualificationFZIdString = "Qualification FZ ID";
-    private static final String qualificationkmuiString = "Qualification K MUI";
-    private static final String titleString = "Title";
+    private static final String ORDER_EMPLOYEE_NOT_FOUND = "OrderEmployee not found with id: ";
+    private static final String EMPLOYEE_ID = "Employee ID";
+    private static final String ORDER_ID = "Order ID";
+    private static final String QUALIFICATION_FZ_ID = "Qualification FZ ID";
+    private static final String QUALIFICATION_KMUI = "Qualification K MUI";
+    private static final String TITLE = "Title";
 
     // ========== BASIC CRUD ==========
     @Override
@@ -47,7 +47,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Transactional(readOnly = true)
     public OrderEmployeeResponseDTO getById(Long id) {
         OrderEmployee entity = orderEmployeeRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException(orderEmployeeNotFound + id));
+            .orElseThrow(() -> new EntityNotFoundException(ORDER_EMPLOYEE_NOT_FOUND + id));
         return orderEmployeeMapper.toResponseDTO(entity);
     }
 
@@ -63,7 +63,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
         validateForUpdate(orderEmployeeDTO);
         
         OrderEmployee entity = orderEmployeeRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException(orderEmployeeNotFound + id));
+            .orElseThrow(() -> new EntityNotFoundException(ORDER_EMPLOYEE_NOT_FOUND + id));
         
         orderEmployeeMapper.updateEntityFromDTO(entity, orderEmployeeDTO);
         OrderEmployee updatedEntity = orderEmployeeRepository.save(entity);
@@ -73,7 +73,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     public OrderEmployeeResponseDTO partialUpdate(Long id, OrderEmployeeRequestDTO orderEmployeeDTO) {
         OrderEmployee entity = orderEmployeeRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException(orderEmployeeNotFound + id));
+            .orElseThrow(() -> new EntityNotFoundException(ORDER_EMPLOYEE_NOT_FOUND + id));
         
         applyPartialUpdate(entity, orderEmployeeDTO);
         OrderEmployee updatedEntity = orderEmployeeRepository.save(entity);
@@ -83,7 +83,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     public void delete(Long id) {
         if (!orderEmployeeRepository.existsById(id)) {
-            throw new EntityNotFoundException(orderEmployeeNotFound + id);
+            throw new EntityNotFoundException(ORDER_EMPLOYEE_NOT_FOUND + id);
         }
         orderEmployeeRepository.deleteById(id);
     }
@@ -92,7 +92,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByEmployeeId(Long employeeId) {
-        validateId(employeeId, employeeIdString);
+        validateId(employeeId, EMPLOYEE_ID);
         List<OrderEmployee> entities = orderEmployeeRepository.findByEmployeeId(employeeId);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -100,7 +100,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByEmployeeIdOrderByIdAsc(Long employeeId) {
-        validateId(employeeId, employeeIdString);
+        validateId(employeeId, EMPLOYEE_ID);
         List<OrderEmployee> entities = orderEmployeeRepository.findByEmployeeIdOrderByIdAsc(employeeId);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -109,7 +109,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByOrderId(Long orderId) {
-        validateId(orderId, orderIdString);
+        validateId(orderId, ORDER_ID);
         List<OrderEmployee> entities = orderEmployeeRepository.findByOrderId(orderId);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -117,7 +117,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByOrderIdOrderByIdAsc(Long orderId) {
-        validateId(orderId, orderIdString);
+        validateId(orderId, ORDER_ID);
         List<OrderEmployee> entities = orderEmployeeRepository.findByOrderIdOrderByIdAsc(orderId);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -126,7 +126,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByQualificationFZId(Long qualificationFZId) {
-        validateId(qualificationFZId, qualificationFZIdString);
+        validateId(qualificationFZId, QUALIFICATION_FZ_ID);
         List<OrderEmployee> entities = orderEmployeeRepository.findByQualificationFZId(qualificationFZId);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -134,7 +134,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByQualificationFZIdOrderByIdAsc(Long qualificationFZId) {
-        validateId(qualificationFZId, qualificationFZIdString);
+        validateId(qualificationFZId, QUALIFICATION_FZ_ID);
         List<OrderEmployee> entities = orderEmployeeRepository.findByQualificationFZIdOrderByIdAsc(qualificationFZId);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -143,7 +143,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByQualificationkmui(String qualificationkmui) {
-        validateString(qualificationkmui, qualificationkmuiString);
+        validateString(qualificationkmui, QUALIFICATION_KMUI);
         List<OrderEmployee> entities = orderEmployeeRepository.findByQualificationkmui(qualificationkmui);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -151,7 +151,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByQualificationkmuiContainingIgnoreCase(String qualificationkmui) {
-        validateString(qualificationkmui, qualificationkmuiString);
+        validateString(qualificationkmui, QUALIFICATION_KMUI);
         List<OrderEmployee> entities = orderEmployeeRepository.findByQualificationkmuiContainingIgnoreCase(qualificationkmui);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -159,7 +159,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByQualificationkmuiOrderByIdAsc(String qualificationkmui) {
-        validateString(qualificationkmui, qualificationkmuiString);
+        validateString(qualificationkmui, QUALIFICATION_KMUI);
         List<OrderEmployee> entities = orderEmployeeRepository.findByQualificationkmuiOrderByIdAsc(qualificationkmui);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -168,7 +168,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByTitle(String title) {
-        validateString(title, titleString);
+        validateString(title, TITLE);
         List<OrderEmployee> entities = orderEmployeeRepository.findByTitle(title);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -176,7 +176,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByTitleContainingIgnoreCase(String title) {
-        validateString(title, titleString);
+        validateString(title, TITLE);
         List<OrderEmployee> entities = orderEmployeeRepository.findByTitleContainingIgnoreCase(title);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -184,7 +184,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByTitleOrderByIdAsc(String title) {
-        validateString(title, titleString);
+        validateString(title, TITLE);
         List<OrderEmployee> entities = orderEmployeeRepository.findByTitleOrderByIdAsc(title);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -193,8 +193,8 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByEmployeeIdAndOrderId(Long employeeId, Long orderId) {
-        validateId(employeeId, employeeIdString);
-        validateId(orderId, orderIdString);
+        validateId(employeeId, EMPLOYEE_ID);
+        validateId(orderId, ORDER_ID);
         List<OrderEmployee> entities = orderEmployeeRepository.findByEmployeeIdAndOrderId(employeeId, orderId);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -202,8 +202,8 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByOrderIdAndQualificationFZId(Long orderId, Long qualificationFZId) {
-        validateId(orderId, orderIdString);
-        validateId(qualificationFZId, qualificationFZIdString);
+        validateId(orderId, ORDER_ID);
+        validateId(qualificationFZId, QUALIFICATION_FZ_ID);
         List<OrderEmployee> entities = orderEmployeeRepository.findByOrderIdAndQualificationFZId(orderId, qualificationFZId);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -211,8 +211,8 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByEmployeeIdAndQualificationFZId(Long employeeId, Long qualificationFZId) {
-        validateId(employeeId, employeeIdString);
-        validateId(qualificationFZId, qualificationFZIdString);
+        validateId(employeeId, EMPLOYEE_ID);
+        validateId(qualificationFZId, QUALIFICATION_FZ_ID);
         List<OrderEmployee> entities = orderEmployeeRepository.findByEmployeeIdAndQualificationFZId(employeeId, qualificationFZId);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -220,9 +220,9 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByEmployeeOrderAndQualification(Long employeeId, Long orderId, Long qualificationFZId) {
-        validateId(employeeId, employeeIdString);
-        validateId(orderId, orderIdString);
-        validateId(qualificationFZId, qualificationFZIdString);
+        validateId(employeeId, EMPLOYEE_ID);
+        validateId(orderId, ORDER_ID);
+        validateId(qualificationFZId, QUALIFICATION_FZ_ID);
         List<OrderEmployee> entities = orderEmployeeRepository.findByEmployeeOrderAndQualification(employeeId, orderId, qualificationFZId);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -355,7 +355,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public BigDecimal calculateTotalCostByOrder(Long orderId) {
-        validateId(orderId, orderIdString);
+        validateId(orderId, ORDER_ID);
         BigDecimal total = orderEmployeeRepository.calculateTotalCostByOrder(orderId);
         return total != null ? total : BigDecimal.ZERO;
     }
@@ -363,7 +363,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public BigDecimal calculateTotalCostByEmployee(Long employeeId) {
-        validateId(employeeId, employeeIdString);
+        validateId(employeeId, EMPLOYEE_ID);
         BigDecimal total = orderEmployeeRepository.calculateTotalCostByEmployee(employeeId);
         return total != null ? total : BigDecimal.ZERO;
     }
@@ -372,29 +372,29 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public boolean existsByEmployeeIdAndOrderId(Long employeeId, Long orderId) {
-        validateId(employeeId, employeeIdString);
-        validateId(orderId, orderIdString);
+        validateId(employeeId, EMPLOYEE_ID);
+        validateId(orderId, ORDER_ID);
         return orderEmployeeRepository.existsByEmployeeIdAndOrderId(employeeId, orderId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public boolean existsByOrderId(Long orderId) {
-        validateId(orderId, orderIdString);
+        validateId(orderId, ORDER_ID);
         return orderEmployeeRepository.existsByOrderId(orderId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public boolean existsByEmployeeId(Long employeeId) {
-        validateId(employeeId, employeeIdString);
+        validateId(employeeId, EMPLOYEE_ID);
         return orderEmployeeRepository.existsByEmployeeId(employeeId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public boolean existsByQualificationFZId(Long qualificationFZId) {
-        validateId(qualificationFZId, qualificationFZIdString);
+        validateId(qualificationFZId, QUALIFICATION_FZ_ID);
         return orderEmployeeRepository.existsByQualificationFZId(qualificationFZId);
     }
 
@@ -402,14 +402,14 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public Long countByOrder(Long orderId) {
-        validateId(orderId, orderIdString);
+        validateId(orderId, ORDER_ID);
         return orderEmployeeRepository.countByOrder(orderId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Long countByEmployee(Long employeeId) {
-        validateId(employeeId, employeeIdString);
+        validateId(employeeId, EMPLOYEE_ID);
         return orderEmployeeRepository.countByEmployee(employeeId);
     }
 
