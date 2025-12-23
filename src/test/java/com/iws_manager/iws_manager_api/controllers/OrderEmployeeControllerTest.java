@@ -35,18 +35,15 @@ class OrderEmployeeControllerTest {
     private MockMvc mockMvc;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    // Variables configurables en lugar de constantes hardcodeadas
     private String baseUri;
     private String pathEmployee;
     private String pathOrder;
     private String pathQualificationFz;
     private String pathOrdered;
 
-    // Constantes que siguen siendo aceptables (no son URIs completas)
     private static final String PATH_ID = "/1";
     private static final String PATH_NOT_FOUND = "/99";
 
-    // JSON paths (no son URIs)
     private static final String JSON_ID = "$.id";
     private static final String JSON_QUALIFICATION_K_MUI = "$.qualificationkmui";
     private static final String JSON_TITLE = "$.title";
@@ -54,7 +51,6 @@ class OrderEmployeeControllerTest {
     private static final String JSON_PLANNED_HOURS = "$.plannedhours";
     private static final String QUALIFICATION_K_MUI_0 = "$[0].qualificationkmui";
 
-    // Datos de prueba
     private static final String QUALIFICATION_K_MUI_1 = "Senior Developer";
     private static final String QUALIFICATION_K_MUI_2 = "Junior Developer";
     private static final String TITLE_1 = "FZ-Kurzbezeichnung FuE-Tätigkeit";
@@ -88,7 +84,6 @@ class OrderEmployeeControllerTest {
 
     @BeforeEach
     void setUp() {
-        // Inicializar las rutas desde propiedades configurables
         baseUri = getConfigurableProperty("api.base.uri", "/api/v2/order-employees");
         pathEmployee = getConfigurableProperty("api.path.employee", "/employee/");
         pathOrder = getConfigurableProperty("api.path.order", "/order/");
@@ -97,12 +92,9 @@ class OrderEmployeeControllerTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(orderEmployeeController).build();
 
-        // Crear BasicReferenceDTOs para las relaciones
         BasicReferenceDTO employeeRef = new BasicReferenceDTO(EMPLOYEE_ID, VERSION);
         BasicReferenceDTO orderRef = new BasicReferenceDTO(ORDER_ID, VERSION);
         BasicReferenceDTO qualificationRef = new BasicReferenceDTO(QUALIFICATION_FZ_ID, VERSION);
-
-        // Crear RequestDTOs
         requestDTO1 = new OrderEmployeeRequestDTO(
             HOURLY_RATE_1,
             PLANNED_HOURS_1,
@@ -125,7 +117,6 @@ class OrderEmployeeControllerTest {
             employeeRef
         );
 
-        // Crear EmployeeBasicDTO para ResponseDTO
         EmployeeBasicDTO employeeBasicDTO = new EmployeeBasicDTO(
             EMPLOYEE_ID,
             EMPLOYEE_NO,
@@ -135,7 +126,6 @@ class OrderEmployeeControllerTest {
             VERSION
         );
 
-        // Crear OrderReferenceDTO para ResponseDTO
         OrderReferenceDTO orderReferenceDTO = new OrderReferenceDTO(
             ORDER_ID,
             "ACRO",
@@ -146,13 +136,10 @@ class OrderEmployeeControllerTest {
             VERSION
         );
 
-        // Crear QualificationFZReferenceDTO para ResponseDTO
         QualificationFZReferenceDTO qualificationRefDTO = new QualificationFZReferenceDTO(
             QUALIFICATION_FZ_ID,
             "Senior Developer"
         );
-
-        // Crear ResponseDTOs
         responseDTO1 = new OrderEmployeeResponseDTO(
             1L,
             ORDER_EMPLOYEE_NO_1,
@@ -180,9 +167,6 @@ class OrderEmployeeControllerTest {
         );
     }
 
-    /**
-     * Método helper para obtener propiedades configurables.
-     */
     private String getConfigurableProperty(String key, String defaultValue) {
         return System.getProperty(key, System.getenv().getOrDefault(key, defaultValue));
     }
@@ -196,7 +180,7 @@ class OrderEmployeeControllerTest {
         mockMvc.perform(post(baseUri)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDTO1)))
-                .andExpect(status().isCreated()) // Cambiado de isOk() a isCreated() (201)
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath(JSON_ID).value(1L))
                 .andExpect(jsonPath(JSON_QUALIFICATION_K_MUI).value(QUALIFICATION_K_MUI_1))
                 .andExpect(jsonPath(JSON_TITLE).value(TITLE_1))
@@ -264,7 +248,7 @@ class OrderEmployeeControllerTest {
     void partialUpdateShouldReturnUpdated() throws Exception {
         OrderEmployeeRequestDTO partialRequest = new OrderEmployeeRequestDTO(
             HOURLY_RATE_1,
-            null, // Solo actualizamos hourlyrate, plannedhours queda null
+            null, 
             null,
             null,
             null,
@@ -277,9 +261,9 @@ class OrderEmployeeControllerTest {
             1L,
             ORDER_EMPLOYEE_NO_1,
             HOURLY_RATE_1,
-            PLANNED_HOURS_1, // Mantiene el valor original
-            QUALIFICATION_K_MUI_1, // Mantiene el valor original
-            TITLE_1, // Mantiene el valor original
+            PLANNED_HOURS_1,
+            QUALIFICATION_K_MUI_1,
+            TITLE_1,
             VERSION + 1,
             responseDTO1.employee(),
             responseDTO1.order(),
