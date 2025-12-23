@@ -30,6 +30,8 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     private final String EMPLOYEE_ID = "Employee ID";
     private final String ORDER_ID = "Order ID";
     private final String QUALIFICATION_FZ_ID = "Qualification FZ ID";
+    private final String QUALIFICATION_KMUI = "Qualification K MUI";
+    private final String TITLE = "title";
 
     // ========== BASIC CRUD ==========
     @Override
@@ -141,7 +143,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByQualificationkmui(String qualificationkmui) {
-        validateString(qualificationkmui, "Qualification K MUI");
+        validateString(qualificationkmui, QUALIFICATION_KMUI);
         List<OrderEmployee> entities = orderEmployeeRepository.findByQualificationkmui(qualificationkmui);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -149,7 +151,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByQualificationkmuiContainingIgnoreCase(String qualificationkmui) {
-        validateString(qualificationkmui, "Qualification K MUI");
+        validateString(qualificationkmui, QUALIFICATION_KMUI);
         List<OrderEmployee> entities = orderEmployeeRepository.findByQualificationkmuiContainingIgnoreCase(qualificationkmui);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -157,7 +159,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByQualificationkmuiOrderByIdAsc(String qualificationkmui) {
-        validateString(qualificationkmui, "Qualification K MUI");
+        validateString(qualificationkmui, QUALIFICATION_KMUI);
         List<OrderEmployee> entities = orderEmployeeRepository.findByQualificationkmuiOrderByIdAsc(qualificationkmui);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -166,7 +168,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByTitle(String title) {
-        validateString(title, "Title");
+        validateString(title, TITLE);
         List<OrderEmployee> entities = orderEmployeeRepository.findByTitle(title);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -174,7 +176,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByTitleContainingIgnoreCase(String title) {
-        validateString(title, "Title");
+        validateString(title, TITLE);
         List<OrderEmployee> entities = orderEmployeeRepository.findByTitleContainingIgnoreCase(title);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
@@ -182,7 +184,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     @Transactional(readOnly = true)
     public List<OrderEmployeeResponseDTO> getByTitleOrderByIdAsc(String title) {
-        validateString(title, "Title");
+        validateString(title, TITLE);
         List<OrderEmployee> entities = orderEmployeeRepository.findByTitleOrderByIdAsc(title);
         return orderEmployeeMapper.toResponseDTOList(entities);
     }
