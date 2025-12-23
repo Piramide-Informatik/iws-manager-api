@@ -26,12 +26,12 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     private final OrderEmployeeRepository orderEmployeeRepository;
     private final OrderEmployeeMapper orderEmployeeMapper;
 
-    private final String orderEmployeeNotFound = "OrderEmployee not found with id: ";
-    private final String employeeIdString = "Employee ID";
-    private final String orderIdString = "Order ID";
-    private final String qualificationFZIdString = "Qualification FZ ID";
-    private final String qualificationkmuiString = "Qualification K MUI";
-    private final String titleString = "Title";
+    private static final String orderEmployeeNotFound = "OrderEmployee not found with id: ";
+    private static final String employeeIdString = "Employee ID";
+    private static final String orderIdString = "Order ID";
+    private static final String qualificationFZIdString = "Qualification FZ ID";
+    private static final String qualificationkmuiString = "Qualification K MUI";
+    private static final String titleString = "Title";
 
     // ========== BASIC CRUD ==========
     @Override
