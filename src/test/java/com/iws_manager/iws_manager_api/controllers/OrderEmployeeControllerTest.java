@@ -125,7 +125,7 @@ class OrderEmployeeControllerTest {
 
         QualificationFZReferenceDTO qualificationRefDTO = new QualificationFZReferenceDTO(
             QUALIFICATION_FZ_ID,
-            "Senior Developer"
+            QUALIFICATION_K_MUI_1
         );
         responseDTO1 = new OrderEmployeeResponseDTO(
             1L,
