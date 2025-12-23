@@ -4,10 +4,7 @@ import com.iws_manager.iws_manager_api.dtos.orderemployee.OrderEmployeeRequestDT
 import com.iws_manager.iws_manager_api.dtos.orderemployee.OrderEmployeeResponseDTO;
 import com.iws_manager.iws_manager_api.dtos.shared.ProjectReferenceDTO;
 import com.iws_manager.iws_manager_api.mappers.OrderEmployeeMapper;
-import com.iws_manager.iws_manager_api.models.Employee;
-import com.iws_manager.iws_manager_api.models.Order;
 import com.iws_manager.iws_manager_api.models.OrderEmployee;
-import com.iws_manager.iws_manager_api.models.QualificationFZ;
 import com.iws_manager.iws_manager_api.repositories.OrderEmployeeRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.OrderEmployeeServiceV2;
 import jakarta.persistence.EntityNotFoundException;
@@ -75,7 +72,8 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
         OrderEmployee entity = orderEmployeeRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException(ORDER_EMPLOYEE_NOT_FOUND + id));
         
-        applyPartialUpdate(entity, orderEmployeeDTO);
+        // Usar el mapper en lugar del método privado duplicado
+        orderEmployeeMapper.applyPartialUpdate(entity, orderEmployeeDTO);
         OrderEmployee updatedEntity = orderEmployeeRepository.save(entity);
         return orderEmployeeMapper.toResponseDTO(updatedEntity);
     }
@@ -468,54 +466,6 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
         
         if (!hasData) {
             throw new IllegalArgumentException("At least one field must be provided for update");
-        }
-    }
-    
-    private void applyPartialUpdate(OrderEmployee entity, OrderEmployeeRequestDTO dto) {
-        if (dto.employee() != null) {
-            if (dto.employee().id() != null) {
-                Employee employee = new Employee();
-                employee.setId(dto.employee().id());
-                entity.setEmployee(employee);
-            } else {
-                entity.setEmployee(null);
-            }
-        }
-        
-        if (dto.order() != null && dto.order().id() != null) {
-            Order order = new Order();
-            order.setId(dto.order().id());
-            entity.setOrder(order);
-        }
-        
-        if (dto.qualificationFZ() != null) {
-            if (dto.qualificationFZ().id() != null) {
-                QualificationFZ qualificationFZ = new QualificationFZ();
-                qualificationFZ.setId(dto.qualificationFZ().id());
-                entity.setQualificationFZ(qualificationFZ);
-            } else {
-                entity.setQualificationFZ(null);
-            }
-        }
-        
-        if (dto.orderemployeeno() != null) {
-            entity.setOrderemployeeno(dto.orderemployeeno());
-        }
-        
-        if (dto.hourlyrate() != null) {
-            entity.setHourlyrate(dto.hourlyrate());
-        }
-        
-        if (dto.plannedhours() != null) {
-            entity.setPlannedhours(dto.plannedhours());
-        }
-        
-        if (dto.qualificationkmui() != null) {
-            entity.setQualificationkmui(dto.qualificationkmui());
-        }
-        
-        if (dto.title() != null) {
-            entity.setTitle(dto.title());
         }
     }
     
