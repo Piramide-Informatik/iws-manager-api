@@ -182,6 +182,7 @@ class OrderEmployeeTest {
     void testAllArgsConstructor() {
         OrderEmployee orderEmployee = new OrderEmployee(
                 null, // employee
+                null, // no
                 HOURLY_RATE, // hourlyrate
                 PLANNED_HOURS, // plannedhours
                 null, // order
