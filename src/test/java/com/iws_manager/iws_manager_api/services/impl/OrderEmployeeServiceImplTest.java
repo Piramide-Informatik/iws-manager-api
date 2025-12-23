@@ -45,6 +45,9 @@ class OrderEmployeeServiceImplTest {
     private static final String ORDER_LABEL = "Order Label";
     private static final String ORDER_TITLE = "Order Title";
     private static final String ACRONYM = "ACRO";
+    private static final String DECIMAL_180 = "180.00";
+    private static final String QUALIFICATION_UPDATED = "Updated Qualification";
+    private static final String TITLE_UPDATED = "Updated Title";
 
     @Mock
     private OrderEmployeeRepository orderEmployeeRepository;
@@ -95,7 +98,7 @@ class OrderEmployeeServiceImplTest {
         
         sampleQualificationFZ = new QualificationFZ();
         sampleQualificationFZ.setId(QUALIFICATION_FZ_ID);
-        sampleQualificationFZ.setQualification("Senior Developer");
+        sampleQualificationFZ.setQualification(QUALIFICATION_K_MUI);
         
         // Crear entidad OrderEmployee para los mocks del repository
         sampleOrderEmployee = new OrderEmployee();
@@ -110,7 +113,7 @@ class OrderEmployeeServiceImplTest {
         sampleOrderEmployee.setQualificationFZ(sampleQualificationFZ);
         sampleOrderEmployee.setVersion(VERSION);
         
-        // Crear DTOs de referencia - CORREGIDO: BasicReferenceDTO(id, version)
+        // Crear DTOs de referencia
         employeeRefDTO = new BasicReferenceDTO(EMPLOYEE_ID, VERSION);
         orderRefDTO = new BasicReferenceDTO(ORDER_ID, VERSION);
         qualificationRefDTO = new BasicReferenceDTO(QUALIFICATION_FZ_ID, VERSION);
@@ -128,8 +131,6 @@ class OrderEmployeeServiceImplTest {
         );
         
         // Crear ResponseDTO
-        // Necesito ver EmployeeBasicDTO para saber su constructor
-        // Asumo que es (Long id, Integer employeeno, String firstname, String lastname, String label, Integer version)
         EmployeeBasicDTO employeeBasicDTO = new EmployeeBasicDTO(
             EMPLOYEE_ID, 
             EMPLOYEE_NO,
@@ -139,21 +140,19 @@ class OrderEmployeeServiceImplTest {
             VERSION
         );
         
-        // Necesito ver OrderReferenceDTO para saber su constructor
-        // Asumo que es (Long id, String acronym, String orderLabel, Integer orderNo, String orderTitle, ProjectReferenceDTO project, Integer version)
         OrderReferenceDTO orderReferenceDTO = new OrderReferenceDTO(
             ORDER_ID,
             ACRONYM,
             ORDER_LABEL,
             ORDER_NO,
             ORDER_TITLE,
-            null, // project es null en este ejemplo
+            null,
             VERSION
         );
         
         QualificationFZReferenceDTO qualificationRefResponseDTO = new QualificationFZReferenceDTO(
             QUALIFICATION_FZ_ID,
-            "Senior Developer"
+            QUALIFICATION_K_MUI
         );
         
         sampleResponseDTO = new OrderEmployeeResponseDTO(
@@ -273,9 +272,9 @@ class OrderEmployeeServiceImplTest {
     void testUpdate() {
         OrderEmployeeRequestDTO updatedRequest = new OrderEmployeeRequestDTO(
             new BigDecimal(HOURLY_RATE_50),
-            new BigDecimal("180.00"),
-            "Updated Qualification",
-            "Updated Title",
+            new BigDecimal(DECIMAL_180),
+            QUALIFICATION_UPDATED,
+            TITLE_UPDATED,
             1002,
             orderRefDTO,
             qualificationRefDTO,
@@ -284,19 +283,19 @@ class OrderEmployeeServiceImplTest {
 
         OrderEmployee updatedEntity = new OrderEmployee();
         updatedEntity.setId(1L);
-        updatedEntity.setQualificationkmui("Updated Qualification");
-        updatedEntity.setTitle("Updated Title");
+        updatedEntity.setQualificationkmui(QUALIFICATION_UPDATED);
+        updatedEntity.setTitle(TITLE_UPDATED);
         updatedEntity.setHourlyrate(new BigDecimal(HOURLY_RATE_50));
-        updatedEntity.setPlannedhours(new BigDecimal("180.00"));
+        updatedEntity.setPlannedhours(new BigDecimal(DECIMAL_180));
         updatedEntity.setOrderemployeeno(1002);
 
         OrderEmployeeResponseDTO updatedResponse = new OrderEmployeeResponseDTO(
             1L,
             1002,
             new BigDecimal(HOURLY_RATE_50),
-            new BigDecimal("180.00"),
-            "Updated Qualification",
-            "Updated Title",
+            new BigDecimal(DECIMAL_180),
+            QUALIFICATION_UPDATED,
+            TITLE_UPDATED,
             VERSION + 1,
             sampleResponseDTO.employee(),
             sampleResponseDTO.order(),
@@ -311,10 +310,10 @@ class OrderEmployeeServiceImplTest {
         OrderEmployeeResponseDTO result = orderEmployeeService.update(1L, updatedRequest);
         
         assertNotNull(result);
-        assertEquals("Updated Qualification", result.qualificationkmui());
-        assertEquals("Updated Title", result.title());
+        assertEquals(QUALIFICATION_UPDATED, result.qualificationkmui());
+        assertEquals(TITLE_UPDATED, result.title());
         assertEquals(new BigDecimal(HOURLY_RATE_50), result.hourlyrate());
-        assertEquals(new BigDecimal("180.00"), result.plannedhours());
+        assertEquals(new BigDecimal(DECIMAL_180), result.plannedhours());
         verify(orderEmployeeRepository, times(1)).findById(1L);
         verify(orderEmployeeMapper, times(1)).updateEntityFromDTO(sampleOrderEmployee, updatedRequest);
         verify(orderEmployeeRepository, times(1)).save(sampleOrderEmployee);
@@ -521,7 +520,7 @@ class OrderEmployeeServiceImplTest {
         OrderEmployeeRequestDTO partialRequest = new OrderEmployeeRequestDTO(
             new BigDecimal(HOURLY_RATE_50),
             null,
-            "Updated Qualification",
+            QUALIFICATION_UPDATED,
             null,
             null,
             null,
@@ -531,7 +530,7 @@ class OrderEmployeeServiceImplTest {
 
         OrderEmployee updatedEntity = new OrderEmployee();
         updatedEntity.setId(1L);
-        updatedEntity.setQualificationkmui("Updated Qualification");
+        updatedEntity.setQualificationkmui(QUALIFICATION_UPDATED);
         updatedEntity.setHourlyrate(new BigDecimal(HOURLY_RATE_50));
         updatedEntity.setPlannedhours(PLANNED_HOURS);
         updatedEntity.setTitle(TITLE);
@@ -546,7 +545,7 @@ class OrderEmployeeServiceImplTest {
             ORDER_EMPLOYEE_NO,
             new BigDecimal(HOURLY_RATE_50),
             PLANNED_HOURS,
-            "Updated Qualification",
+            QUALIFICATION_UPDATED,
             TITLE,
             VERSION + 1,
             sampleResponseDTO.employee(),
@@ -561,7 +560,7 @@ class OrderEmployeeServiceImplTest {
         OrderEmployeeResponseDTO result = orderEmployeeService.partialUpdate(1L, partialRequest);
         
         assertNotNull(result);
-        assertEquals("Updated Qualification", result.qualificationkmui());
+        assertEquals(QUALIFICATION_UPDATED, result.qualificationkmui());
         assertEquals(new BigDecimal(HOURLY_RATE_50), result.hourlyrate());
         assertEquals(PLANNED_HOURS, result.plannedhours());
         assertEquals(TITLE, result.title());
