@@ -42,7 +42,6 @@ class OrderEmployeeControllerTest {
     private String pathOrdered;
 
     private static final String PATH_ID = "/1";
-    private static final String PATH_NOT_FOUND = "/99";
 
     private static final String JSON_ID = "$.id";
     private static final String JSON_QUALIFICATION_K_MUI = "$.qualificationkmui";
@@ -78,7 +77,6 @@ class OrderEmployeeControllerTest {
     private OrderEmployeeControllerV2 orderEmployeeController;
 
     private OrderEmployeeRequestDTO requestDTO1;
-    private OrderEmployeeRequestDTO requestDTO2;
     private OrderEmployeeResponseDTO responseDTO1;
     private OrderEmployeeResponseDTO responseDTO2;
 
@@ -101,17 +99,6 @@ class OrderEmployeeControllerTest {
             QUALIFICATION_K_MUI_1,
             TITLE_1,
             ORDER_EMPLOYEE_NO_1,
-            orderRef,
-            qualificationRef,
-            employeeRef
-        );
-
-        requestDTO2 = new OrderEmployeeRequestDTO(
-            HOURLY_RATE_2,
-            PLANNED_HOURS_2,
-            QUALIFICATION_K_MUI_2,
-            TITLE_2,
-            ORDER_EMPLOYEE_NO_2,
             orderRef,
             qualificationRef,
             employeeRef
