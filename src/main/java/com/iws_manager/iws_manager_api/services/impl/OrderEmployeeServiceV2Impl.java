@@ -31,7 +31,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     private final String ORDER_ID = "Order ID";
     private final String QUALIFICATION_FZ_ID = "Qualification FZ ID";
     private final String QUALIFICATION_KMUI = "Qualification K MUI";
-    private final String TITLE = "title";
+    private final String TITLE = "Title";
 
     // ========== BASIC CRUD ==========
     @Override
