@@ -418,7 +418,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     public ProjectReferenceDTO getProjectByOrderEmployeeId(Long orderEmployeeId) {
         OrderEmployee orderEmployee = orderEmployeeRepository.findById(orderEmployeeId)
             .orElseThrow(() -> new EntityNotFoundException(
-                "OrderEmployee not found with id: " + orderEmployeeId));
+                ORDER_EMPLOYEE_NOT_FOUND + orderEmployeeId));
         
         if (orderEmployee.getOrder() == null) {
             throw new EntityNotFoundException(
