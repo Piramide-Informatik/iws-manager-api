@@ -89,4 +89,8 @@ public interface OrderEmployeeServiceV2 {
      * @return ProjectReferenceDTO con la información del project
      */
     ProjectReferenceDTO getProjectByOrderEmployeeId(Long orderEmployeeId);
+
+    // ========== GET BY PROJECT ID ==========
+    List<OrderEmployeeResponseDTO> getByProjectId(Long projectId);
+
 }

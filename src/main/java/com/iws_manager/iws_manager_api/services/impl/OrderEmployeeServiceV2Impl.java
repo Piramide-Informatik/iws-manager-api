@@ -431,6 +431,16 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
         return orderEmployeeMapper.toProjectReferenceDTO(orderEmployee.getOrder().getProject());
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<OrderEmployeeResponseDTO> getByProjectId(Long projectId) {
+
+        List<OrderEmployee> entities =
+            orderEmployeeRepository.findByProjectId(projectId);
+
+        return orderEmployeeMapper.toResponseDTOList(entities);
+    }
+
     // ========== MÉTODOS PRIVADOS DE VALIDACIÓN ==========
     private void validateForCreate(OrderEmployeeRequestDTO dto) {
         if (dto == null) {

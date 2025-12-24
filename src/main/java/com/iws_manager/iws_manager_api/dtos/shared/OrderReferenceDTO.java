@@ -6,6 +6,5 @@ public record OrderReferenceDTO(
     String orderLabel,
     Integer orderNo,
     String orderTitle,
-    ProjectReferenceDTO project,
     Integer version
 ) {}

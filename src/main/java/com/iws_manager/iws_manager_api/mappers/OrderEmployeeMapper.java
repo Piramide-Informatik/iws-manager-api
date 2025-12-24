@@ -218,7 +218,6 @@ public class OrderEmployeeMapper {
             order.getOrderLabel(),
             order.getOrderNo(),
             order.getOrderTitle(),
-            toProjectReferenceDTO(order.getProject()),
             order.getVersion()
         );
     }

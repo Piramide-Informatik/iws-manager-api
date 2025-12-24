@@ -119,7 +119,6 @@ class OrderEmployeeControllerTest {
             "Order Label",
             ORDER_NO,
             "Order Title",
-            null,
             VERSION
         );
 
