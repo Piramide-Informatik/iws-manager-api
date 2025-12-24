@@ -146,7 +146,6 @@ class OrderEmployeeServiceImplTest {
             ORDER_LABEL,
             ORDER_NO,
             ORDER_TITLE,
-            null,
             VERSION
         );
         
