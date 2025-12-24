@@ -334,4 +334,16 @@ public class OrderEmployeeControllerV2 {
         ProjectReferenceDTO project = orderEmployeeService.getProjectByOrderEmployeeId(id);
         return ResponseEntity.ok(project);
     }
+
+    // ===== GET OPERATIONS BY PROJECT =====
+
+    @GetMapping("/project/{projectId}")
+    public ResponseEntity<List<OrderEmployeeResponseDTO>> getByProjectId(
+            @PathVariable Long projectId) {
+
+        List<OrderEmployeeResponseDTO> orderEmployees =
+                orderEmployeeService.getByProjectId(projectId);
+
+        return ResponseEntity.ok(orderEmployees);
+    }
 }
