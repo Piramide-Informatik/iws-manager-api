@@ -158,4 +158,15 @@ public interface OrderEmployeeRepository extends JpaRepository<OrderEmployee, Lo
     // Consultas para obtener empleados únicos por orden
     @Query("SELECT DISTINCT oe.employee FROM OrderEmployee oe WHERE oe.order.id = :orderId")
     List<com.iws_manager.iws_manager_api.models.Employee> findDistinctEmployeesByOrder(@Param("orderId") Long orderId);
+
+    @EntityGraph(attributePaths = {"employee", "order", "qualificationFZ"})
+    @Query("""
+        SELECT DISTINCT oe
+        FROM OrderEmployee oe
+        JOIN oe.order o
+        JOIN o.project p
+        WHERE p.id = :projectId
+    """)
+    List<OrderEmployee> findByProjectId(@Param("projectId") Long projectId);
+
 }
