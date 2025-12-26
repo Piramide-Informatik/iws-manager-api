@@ -11,6 +11,7 @@ import com.iws_manager.iws_manager_api.dtos.employee.*;
 import com.iws_manager.iws_manager_api.mappers.EmployeeMapper;
 import com.iws_manager.iws_manager_api.models.Employee;
 import com.iws_manager.iws_manager_api.repositories.EmployeeRepository;
+import com.iws_manager.iws_manager_api.repositories.OrderRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.EmployeeServiceV2;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -25,11 +26,13 @@ public class EmployeeServiceV2Impl implements EmployeeServiceV2 {
 
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
+    private final OrderRepository orderRepository;
     
     @Autowired
-    public EmployeeServiceV2Impl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper) {
+    public EmployeeServiceV2Impl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, OrderRepository orderRepository) {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
+        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -136,4 +139,19 @@ public class EmployeeServiceV2Impl implements EmployeeServiceV2 {
         List<Employee> entities = employeeRepository.findByEmployeeCategoryId(employeeCategoryId);
         return employeeMapper.toDTOList(entities);
     }
+
+    // get employees by project id through a specific customer id
+    @Override
+    @Transactional(readOnly = true)
+    public List<EmployeeDTO> findByProjectId(Long projectId) {
+        if (projectId == null) {
+            throw new IllegalArgumentException("Project ID cannot be null");
+        }
+
+        List<Employee> employees =
+                orderRepository.findEmployeesByProjectIdOrderByFirstnameAsc(projectId);
+
+        return employeeMapper.toDTOList(employees);
+    }
+
 }
