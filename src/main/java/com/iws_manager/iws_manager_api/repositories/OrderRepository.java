@@ -1,6 +1,7 @@
 package com.iws_manager.iws_manager_api.repositories;
 
 import com.iws_manager.iws_manager_api.models.Order;
+import com.iws_manager.iws_manager_api.models.Employee;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -8,6 +9,8 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
@@ -105,4 +108,15 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByApprovalDateIsNull();
    @EntityGraph(attributePaths = {"approvalStatus", "basiccontract", "basiccontract.contractStatus", "basiccontract.customer", "basiccontract.customer.branch", "basiccontract.customer.companytype", "basiccontract.customer.country", "basiccontract.customer.state", "basiccontract.employeeIws", "basiccontract.fundingProgram", "contractor", "contractor.country", "contractor.customer", "contractor.customer.branch", "contractor.customer.companytype", "contractor.customer.country", "contractor.customer.state", "contractStatus", "customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "employeeIws", "employeeIws.teamIws", "employeeIws.user", "fundingProgram", "orderType", "project", "project.customer", "project.fundingProgram", "project.promoter", "promoter", "promoter.country"})
     List<Order> findByApprovalDateIsNotNull();
+
+    // get employees by project id through a specific customer id
+    @Query("""
+        select distinct e
+        from Order o
+        join o.customer c
+        join Employee e on e.customer = c
+        where o.project.id = :projectId
+        order by e.firstname asc
+    """)
+    List<Employee> findEmployeesByProjectIdOrderByFirstnameAsc(@Param("projectId") Long projectId);
 }
