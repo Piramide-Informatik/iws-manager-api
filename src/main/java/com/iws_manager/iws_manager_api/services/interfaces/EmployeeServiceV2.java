@@ -21,4 +21,7 @@ public interface EmployeeServiceV2 {
     List<EmployeeDTO> findByQualificationFZId(Long qualificationFZId);
     List<EmployeeDTO> findByCustomerId(Long customerId);
     List<EmployeeDTO> findByEmployeeCategoryId(Long employeeCategoryId);
+
+    // get employees by project id through a specific customer id
+    List<EmployeeDTO> findByProjectId(Long projectId);
 }
