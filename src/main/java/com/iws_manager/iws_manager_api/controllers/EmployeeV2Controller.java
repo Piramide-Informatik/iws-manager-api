@@ -98,4 +98,10 @@ public class EmployeeV2Controller {
     public ResponseEntity<List<EmployeeDTO>> findByEmployeeCategoryId(@PathVariable Long employeeCategoryId) {
         return ResponseEntity.ok(employeeService.findByEmployeeCategoryId(employeeCategoryId));
     }
+
+    @GetMapping("/project/{projectId}")
+    public ResponseEntity<List<EmployeeDTO>> findByProjectId(@PathVariable Long projectId) {
+        return ResponseEntity.ok(employeeService.findByProjectId(projectId));
+    }
+
 }
