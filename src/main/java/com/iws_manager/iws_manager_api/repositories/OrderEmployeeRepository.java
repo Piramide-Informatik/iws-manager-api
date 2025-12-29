@@ -166,6 +166,7 @@ public interface OrderEmployeeRepository extends JpaRepository<OrderEmployee, Lo
         JOIN oe.order o
         JOIN o.project p
         WHERE p.id = :projectId
+        ORDER BY oe.employee.employeeno
     """)
     List<OrderEmployee> findByProjectId(@Param("projectId") Long projectId);
 
