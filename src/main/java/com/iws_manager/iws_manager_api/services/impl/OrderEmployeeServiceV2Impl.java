@@ -11,7 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.iws_manager.iws_manager_api.exception.exceptions.DuplicateResourceException;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -34,6 +34,7 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     @Override
     public OrderEmployeeResponseDTO create(OrderEmployeeRequestDTO orderEmployeeDTO) {
         validateForCreate(orderEmployeeDTO);
+        validateUniqueCombinationForCreation(orderEmployeeDTO);
         
         OrderEmployee entity = orderEmployeeMapper.toEntity(orderEmployeeDTO);
         OrderEmployee savedEntity = orderEmployeeRepository.save(entity);
@@ -61,6 +62,8 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
         
         OrderEmployee entity = orderEmployeeRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException(ORDER_EMPLOYEE_NOT_FOUND + id));
+        
+        validateUniqueCombinationForUpdate(orderEmployeeDTO, id, entity);
         
         orderEmployeeMapper.updateEntityFromDTO(entity, orderEmployeeDTO);
         OrderEmployee updatedEntity = orderEmployeeRepository.save(entity);
@@ -494,6 +497,57 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     private void validateBigDecimal(BigDecimal value, String fieldName) {
         if (value == null) {
             throw new IllegalArgumentException(fieldName + " cannot be null");
+        }
+    }
+
+    // ========== VALIDATION: ORDER WITH EMPLOYEE MUST BE UNIQUE ==========
+     private void validateUniqueCombinationForCreation(OrderEmployeeRequestDTO dto) {
+        Long employeeId = dto.employee().id();
+        Long orderId = dto.order().id();
+        
+        if (orderEmployeeRepository.existsByEmployeeIdAndOrderId(employeeId, orderId)) {
+            throw new DuplicateResourceException(
+                String.format("OrderEmployee duplication: Employee with ID %d is already assigned to Order with ID %d", 
+                    employeeId, orderId)
+            );
+        }
+    }
+    
+    private void validateUniqueCombinationForUpdate(OrderEmployeeRequestDTO dto, Long id, OrderEmployee existingEntity) {
+        Long newEmployeeId = (dto.employee() != null && dto.employee().id() != null) 
+            ? dto.employee().id() 
+            : existingEntity.getEmployee().getId();
+            
+        Long newOrderId = (dto.order() != null && dto.order().id() != null) 
+            ? dto.order().id() 
+            : existingEntity.getOrder().getId();
+        
+        // Validate if the combination has changed
+        boolean employeeChanged = dto.employee() != null && dto.employee().id() != null &&
+            !dto.employee().id().equals(existingEntity.getEmployee().getId());
+            
+        boolean orderChanged = dto.order() != null && dto.order().id() != null &&
+            !dto.order().id().equals(existingEntity.getOrder().getId());
+        
+        if (employeeChanged || orderChanged) {
+            validateUniqueCombination(newEmployeeId, newOrderId, id);
+        }
+    }
+    
+    /**
+     * Common method to validate unique combination.
+     */
+    private void validateUniqueCombination(Long employeeId, Long orderId, Long excludeId) {
+        if (employeeId != null && orderId != null) {
+            boolean combinationExists = orderEmployeeRepository
+                .existsByEmployeeIdAndOrderIdAndIdNot(employeeId, orderId, excludeId);
+            
+            if (combinationExists) {
+                throw new DuplicateResourceException(
+                    String.format("OrderEmployee duplication: Employee with ID %d is already assigned to Order with ID %d", 
+                        employeeId, orderId)
+                );
+            }
         }
     }
 }
