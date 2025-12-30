@@ -104,4 +104,13 @@ public class EmployeeV2Controller {
         return ResponseEntity.ok(employeeService.findByProjectId(projectId));
     }
 
+    @GetMapping("/customer/{customerId}/next-employeeno")
+    public ResponseEntity<Integer> getNextEmployeeNoForCustomer(@PathVariable Long customerId) {
+       try {
+            Integer nextEmployeeNo = employeeService.getNextEmployeeNoForCustomer(customerId);
+            return ResponseEntity.ok(nextEmployeeNo);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
