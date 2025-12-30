@@ -3,6 +3,7 @@ package com.iws_manager.iws_manager_api.repositories;
 import com.iws_manager.iws_manager_api.models.Employee;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,4 +28,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     //find by customer Id
     @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "qualificationFZ", "salutation", "title", "employeeCategory"})
     List<Employee> findByCustomerIdOrderByEmployeenoAsc(Long customerId);
+
+    @Query("SELECT MAX(e.employeeno) FROM Employee e")
+    Integer findMaxEmployeeno();
 }
