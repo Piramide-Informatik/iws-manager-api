@@ -535,31 +535,6 @@ public class OrderEmployeeServiceV2Impl implements OrderEmployeeServiceV2 {
     }
     
     /**
-     * Validate that the employee-order combination is unique for partial update.
-     */
-    private void validateUniqueCombinationForPartialUpdate(OrderEmployeeRequestDTO dto, Long id, OrderEmployee existingEntity) {
-        // If no employee or order is provided in the DTO, keep the existing values
-        Long newEmployeeId = (dto.employee() != null && dto.employee().id() != null) 
-            ? dto.employee().id() 
-            : existingEntity.getEmployee().getId();
-            
-        Long newOrderId = (dto.order() != null && dto.order().id() != null) 
-            ? dto.order().id() 
-            : existingEntity.getOrder().getId();
-        
-        // Validate if the values have changed compared to the existing values
-        boolean employeeChanged = dto.employee() != null && dto.employee().id() != null &&
-            !dto.employee().id().equals(existingEntity.getEmployee().getId());
-            
-        boolean orderChanged = dto.order() != null && dto.order().id() != null &&
-            !dto.order().id().equals(existingEntity.getOrder().getId());
-        
-        if (employeeChanged || orderChanged) {
-            validateUniqueCombination(newEmployeeId, newOrderId, id);
-        }
-    }
-    
-    /**
      * Common method to validate unique combination.
      */
     private void validateUniqueCombination(Long employeeId, Long orderId, Long excludeId) {
