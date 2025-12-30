@@ -24,4 +24,7 @@ public interface EmployeeServiceV2 {
 
     // get employees by project id through a specific customer id
     List<EmployeeDTO> findByProjectId(Long projectId);
+
+    // get the next employeeno
+    Integer getNextEmployeeNoForCustomer(Long customerId);
 }

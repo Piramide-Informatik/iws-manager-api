@@ -42,6 +42,11 @@ public class EmployeeServiceV2Impl implements EmployeeServiceV2 {
         }
         
         Employee entity = employeeMapper.toEntity(dto);
+
+        // generate next employee number
+        Integer nextEmployeeNo = calculateNextEmployeeNoForCustomer(dto.customer().id());
+        entity.setEmployeeno(nextEmployeeNo);
+
         Employee savedEntity = employeeRepository.save(entity);
         return employeeMapper.toDTO(savedEntity);
     }
@@ -152,6 +157,22 @@ public class EmployeeServiceV2Impl implements EmployeeServiceV2 {
                 orderRepository.findEmployeesByProjectIdOrderByFirstnameAsc(projectId);
 
         return employeeMapper.toDTOList(employees);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Integer getNextEmployeeNoForCustomer(Long customerId) {
+        if (customerId == null) {
+            throw new IllegalArgumentException("Customer ID cannot be null");
+        }
+        
+        return calculateNextEmployeeNoForCustomer(customerId);
+    }
+
+    // calculate next employeeno for a specific customer
+    private Integer calculateNextEmployeeNoForCustomer(Long customerId) {
+        Integer maxEmployeeNo = employeeRepository.findMaxEmployeenoByCustomerId(customerId);
+        return (maxEmployeeNo != null) ? maxEmployeeNo + 1 : 1;
     }
 
 }

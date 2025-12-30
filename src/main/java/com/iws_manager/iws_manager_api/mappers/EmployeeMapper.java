@@ -25,7 +25,6 @@ public class EmployeeMapper {
         entity.setFirstname(dto.firstname());
         entity.setLastname(dto.lastname());
         entity.setEmail(dto.email());
-        entity.setEmployeeno(dto.employeeno());
         entity.setLabel(dto.label());
         entity.setPhone(dto.phone());
         entity.setCoentrepreneursince(dto.coentrepreneursince());
