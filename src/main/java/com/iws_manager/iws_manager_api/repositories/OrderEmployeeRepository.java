@@ -170,4 +170,11 @@ public interface OrderEmployeeRepository extends JpaRepository<OrderEmployee, Lo
     """)
     List<OrderEmployee> findByProjectId(@Param("projectId") Long projectId);
 
+    @Query("SELECT COUNT(oe) > 0 FROM OrderEmployee oe " +
+           "WHERE oe.employee.id = :employeeId " +
+           "AND oe.order.id = :orderId " +
+           "AND oe.id != :excludeId")
+    boolean existsByEmployeeIdAndOrderIdAndIdNot(@Param("employeeId") Long employeeId,
+                                                 @Param("orderId") Long orderId,
+                                                 @Param("excludeId") Long excludeId);
 }
