@@ -7,7 +7,6 @@ public record EmployeeInputDTO(
     String firstname,
     String lastname,
     String email,
-    Integer employeeno,
     String label,
     String phone,
     LocalDate coentrepreneursince,
