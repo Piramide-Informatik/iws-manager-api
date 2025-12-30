@@ -6,6 +6,7 @@ import com.iws_manager.iws_manager_api.services.interfaces.ProjectPeriodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,6 +65,11 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         if (id == null) {
             throw  new IllegalArgumentException("id cannot be null");
         }
+
+        if (!projectPeriodRepository.existsById(id)) {  
+            throw new EntityNotFoundException("ProjectPeriod not found with id: " + id);
+        }
+
         projectPeriodRepository.deleteById(id);
     }
 

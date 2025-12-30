@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -114,11 +115,19 @@ class ProjectPeriodControllerTest {
 
     @Test
     void deleteShouldReturnNotFoundWhenProjectPeriodNotExists() {
-        doThrow(new RuntimeException("Not found")).when(periodService).delete(TEST_ID);
+        Long nonExistentId = 99L;
+        String errorMessage = "ProjectPeriod not found with id: " + nonExistentId;
+        
+        doThrow(new EntityNotFoundException(errorMessage))
+            .when(periodService).delete(nonExistentId);
 
-        ResponseEntity<Void> response = periodController.delete(TEST_ID);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        EntityNotFoundException exception = assertThrows(
+            EntityNotFoundException.class,
+            () -> periodController.delete(nonExistentId)
+        );
+        
+        assertEquals(errorMessage, exception.getMessage());
+        verify(periodService).delete(nonExistentId);
     }
 
     @Test

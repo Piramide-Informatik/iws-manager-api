@@ -20,6 +20,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.any;
+import jakarta.persistence.EntityNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
 class ProjectPeriodServiceImplTest {
@@ -141,9 +145,26 @@ class ProjectPeriodServiceImplTest {
 
     @Test
     void deleteShouldDeleteProjectPackage() {
+        when(periodRepository.existsById(1L)).thenReturn(true);
+        
         projectPeriodService.delete(1L);
-
+        
+        verify(periodRepository).existsById(1L);
         verify(periodRepository).deleteById(1L);
+    }
+
+    @Test
+    void deleteShouldThrowEntityNotFoundExceptionWhenIdDoesNotExist() {
+        when(periodRepository.existsById(99L)).thenReturn(false);
+        
+        EntityNotFoundException exception = assertThrows(
+            EntityNotFoundException.class,
+            () -> projectPeriodService.delete(99L)
+        );
+    
+        assertEquals("ProjectPeriod not found with id: 99", exception.getMessage());
+        verify(periodRepository).existsById(99L);
+        verify(periodRepository, never()).deleteById(anyLong());
     }
 
     @Test
