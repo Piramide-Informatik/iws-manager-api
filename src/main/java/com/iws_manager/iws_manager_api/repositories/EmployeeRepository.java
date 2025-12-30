@@ -29,6 +29,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @EntityGraph(attributePaths = {"customer", "customer.branch", "customer.companytype", "customer.country", "customer.state", "qualificationFZ", "salutation", "title", "employeeCategory"})
     List<Employee> findByCustomerIdOrderByEmployeenoAsc(Long customerId);
 
-    @Query("SELECT MAX(e.employeeno) FROM Employee e")
-    Integer findMaxEmployeeno();
+    @Query("SELECT MAX(e.employeeno) FROM Employee e WHERE e.customer.id = :customerId")
+    Integer findMaxEmployeenoByCustomerId(Long customerId);
 }

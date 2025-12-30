@@ -44,7 +44,7 @@ public class EmployeeServiceV2Impl implements EmployeeServiceV2 {
         Employee entity = employeeMapper.toEntity(dto);
 
         // generate next employee number
-        Integer nextEmployeeNo = calculateNextEmployeeNo();
+        Integer nextEmployeeNo = calculateNextEmployeeNoForCustomer(dto.customer().id());
         entity.setEmployeeno(nextEmployeeNo);
 
         Employee savedEntity = employeeRepository.save(entity);
@@ -159,16 +159,9 @@ public class EmployeeServiceV2Impl implements EmployeeServiceV2 {
         return employeeMapper.toDTOList(employees);
     }
 
-    // calculate next employeeno
-    /**
-     * Calcula el próximo número de empleado disponible.
-     * Obtiene el máximo employeeNo existente y le suma 1.
-     * Si no hay empleados, retorna 1.
-     * 
-     * @return el próximo número de empleado disponible
-     */
-    private Integer calculateNextEmployeeNo() {
-        Integer maxEmployeeNo = employeeRepository.findMaxEmployeeno();
+    // calculate next employeeno for a specific customer
+    private Integer calculateNextEmployeeNoForCustomer(Long customerId) {
+        Integer maxEmployeeNo = employeeRepository.findMaxEmployeenoByCustomerId(customerId);
         return (maxEmployeeNo != null) ? maxEmployeeNo + 1 : 1;
     }
 
