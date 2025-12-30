@@ -159,6 +159,16 @@ public class EmployeeServiceV2Impl implements EmployeeServiceV2 {
         return employeeMapper.toDTOList(employees);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Integer getNextEmployeeNoForCustomer(Long customerId) {
+        if (customerId == null) {
+            throw new IllegalArgumentException("Customer ID cannot be null");
+        }
+        
+        return calculateNextEmployeeNoForCustomer(customerId);
+    }
+
     // calculate next employeeno for a specific customer
     private Integer calculateNextEmployeeNoForCustomer(Long customerId) {
         Integer maxEmployeeNo = employeeRepository.findMaxEmployeenoByCustomerId(customerId);
