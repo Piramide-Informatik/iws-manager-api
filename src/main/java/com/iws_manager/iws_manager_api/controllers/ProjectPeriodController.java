@@ -1,5 +1,6 @@
 package com.iws_manager.iws_manager_api.controllers;
 
+import com.iws_manager.iws_manager_api.models.Customer;
 import com.iws_manager.iws_manager_api.models.ProjectPeriod;
 import com.iws_manager.iws_manager_api.services.interfaces.ProjectPeriodService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,5 +87,18 @@ public class ProjectPeriodController {
     public ResponseEntity<List<ProjectPeriod>> getAllByProjectId(@PathVariable Long id){
         List<ProjectPeriod> list = projectPeriodService.findAllByProjectId(id);
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/project/{projectId}/next-year")
+    public ResponseEntity<Short> getNextYear(@PathVariable Long projectId) {
+        Short nextYear = projectPeriodService.getNextYear(projectId);
+        return new ResponseEntity<>(nextYear, HttpStatus.OK);
+    }
+
+    @PostMapping("/project/{projectId}/next-year")
+    public ResponseEntity<ProjectPeriod> createWithAutoEmployeeNo(@RequestBody ProjectPeriod projectPeriod, @PathVariable Long projectId) {
+        ProjectPeriod created = projectPeriodService.createWithNextYear(projectPeriod, projectId);
+        return ResponseEntity.ok(created);
+
     }
 }

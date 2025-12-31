@@ -4,6 +4,7 @@ import com.iws_manager.iws_manager_api.models.ProjectPeriod;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,4 +25,7 @@ public interface ProjectPeriodRepository extends JpaRepository<ProjectPeriod, Lo
 
     @Query("SELECT DISTINCT p FROM ProjectPeriod p LEFT JOIN FETCH p.project pr WHERE pr.id = :projectId ORDER BY p.periodNo ASC")
     List<ProjectPeriod> findAllByProjectIdFetchProject(Long projectId);
+
+    @Query("SELECT MAX(pp.periodNo) FROM ProjectPeriod pp WHERE pp.project.id = :projectId")
+    Short findMaxPeriodNoByProject(@Param("projectId") Long projectId);
 }
