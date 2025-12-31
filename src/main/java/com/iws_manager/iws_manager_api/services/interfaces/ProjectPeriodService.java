@@ -17,4 +17,6 @@ public interface ProjectPeriodService {
     List<ProjectPeriod> getAllProjectPeriodsByEndDateAsc();
 
     List<ProjectPeriod> findAllByProjectId(Long id);
+    Short getNextYear(Long projectId);
+    ProjectPeriod createWithNextYear(ProjectPeriod projectPeriod, Long projectId);
 }
