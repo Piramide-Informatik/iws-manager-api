@@ -28,11 +28,10 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
             throw  new IllegalArgumentException("projectPeriod cannot be null");
         }
         //Default Dates
-        if(projectPeriod.getStartDate() == null || projectPeriod.getEndDate() == null){
-            int year = LocalDate.now().getYear();
-            projectPeriod.setStartDate(LocalDate.of(year, 1, 1));
-            projectPeriod.setEndDate(LocalDate.of(year, 12, 31));
-        }
+        int year = LocalDate.now().getYear();
+        if(projectPeriod.getStartDate() == null )projectPeriod.setStartDate(LocalDate.of(year, 1, 1));
+        if(projectPeriod.getEndDate() == null)projectPeriod.setEndDate(LocalDate.of(year, 12, 31));
+
         return projectPeriodRepository.save(projectPeriod);
     }
 

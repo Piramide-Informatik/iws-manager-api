@@ -83,11 +83,9 @@ public class ProjectServiceImplV2 implements ProjectServiceV2 {
         Project project = convertToEntity(projectRequest);
 
         //Default Dates
-        if ( project.getStartDate() == null || project.getEndDate() == null ) {
-            int year = LocalDate.now().getYear();
-            project.setStartDate(LocalDate.of(year, 1, 1));
-            project.setEndDate(LocalDate.of(year, 12, 31));
-        }
+        int year = LocalDate.now().getYear();
+        if ( project.getStartDate() == null  )project.setStartDate(LocalDate.of(year, 1, 1));
+        if (project.getEndDate() == null)project.setEndDate(LocalDate.of(year, 12, 31));
         Project savedProject = projectRepository.save(project);
 
         return ProjectMapper.toResponseDTO(savedProject);
