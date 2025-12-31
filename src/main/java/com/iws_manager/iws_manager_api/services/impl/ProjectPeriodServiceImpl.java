@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityNotFoundException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,12 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
     public ProjectPeriod create(ProjectPeriod projectPeriod) {
         if (projectPeriod == null) {
             throw  new IllegalArgumentException("projectPeriod cannot be null");
+        }
+        //Default Dates
+        if(projectPeriod.getStartDate() == null || projectPeriod.getEndDate() == null){
+            int year = LocalDate.now().getYear();
+            projectPeriod.setStartDate(LocalDate.of(year, 1, 1));
+            projectPeriod.setEndDate(LocalDate.of(year, 12, 31));
         }
         return projectPeriodRepository.save(projectPeriod);
     }
