@@ -17,13 +17,18 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.iws_manager.iws_manager_api.models.Project;
+import com.iws_manager.iws_manager_api.models.ProjectPeriod;
 import com.iws_manager.iws_manager_api.repositories.ProjectRepository;
+import com.iws_manager.iws_manager_api.services.interfaces.ProjectPeriodService;
 
 @ExtendWith(MockitoExtension.class)
 class ProjectServiceImplTest {
 
     @Mock
     private ProjectRepository projectRepository;
+
+    @Mock
+    private ProjectPeriodService projectPeriodService;
 
     @InjectMocks
     private ProjectServiceImpl projectService;
@@ -43,12 +48,15 @@ class ProjectServiceImplTest {
     @Test
     void createShouldSaveAndReturnProject() {
         when(projectRepository.save(any(Project.class))).thenReturn(testProject);
+        when(projectPeriodService.createDefaultPeriodForProject(any(Project.class)))
+                .thenReturn(new ProjectPeriod());
 
         Project result = projectService.create(testProject);
 
         assertNotNull(result);
         assertEquals(testProject.getId(), result.getId());
         verify(projectRepository).save(testProject);
+        verify(projectPeriodService).createDefaultPeriodForProject(testProject);
     }
 
     @Test
