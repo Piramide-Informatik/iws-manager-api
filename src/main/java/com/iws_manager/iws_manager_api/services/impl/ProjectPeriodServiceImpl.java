@@ -117,9 +117,9 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
             throw new IllegalArgumentException("projectPeriod cannot be null");
         }
         Project project = projectRepository.getReferenceById(projectId);
-        Short maxYear = projectPeriodRepository.findMaxPeriodNoByProject(projectId);
 
-        Short newYear = (maxYear == null) ? 1 : (short) (maxYear + 1);
+        Short newYear = getNextYear(projectId);
+
         projectPeriod.setPeriodNo(newYear);
         projectPeriod.setProject(project);
         //Default Dates
