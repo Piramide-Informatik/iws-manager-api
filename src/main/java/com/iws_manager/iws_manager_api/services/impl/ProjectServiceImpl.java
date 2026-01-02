@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.iws_manager.iws_manager_api.models.Project;
 import com.iws_manager.iws_manager_api.repositories.ProjectRepository;
 import com.iws_manager.iws_manager_api.services.interfaces.ProjectService;
+import com.iws_manager.iws_manager_api.services.interfaces.ProjectPeriodService;
 
 /**
  * Implementation of the {@link ProjectService} interface for managing Branch
@@ -29,15 +30,18 @@ import com.iws_manager.iws_manager_api.services.interfaces.ProjectService;
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final ProjectPeriodService projectPeriodService;
 
     /**
      * Constructs a new ProjectService with the required repository dependency.
      * 
-     * @param projectRepository the repository for Project entity operations
+     * @param projectRepository    the repository for Project entity operations
+     * @param projectPeriodService the service for ProjectPeriod entity operations
      */
     @Autowired
-    public ProjectServiceImpl(ProjectRepository projectRepository) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, ProjectPeriodService projectPeriodService) {
         this.projectRepository = projectRepository;
+        this.projectPeriodService = projectPeriodService;
     }
 
     /**
@@ -52,7 +56,12 @@ public class ProjectServiceImpl implements ProjectService {
         if (project == null) {
             throw new IllegalArgumentException("Project cannot be null");
         }
-        return projectRepository.save(project);
+        Project savedProject = projectRepository.save(project);
+
+        // Create default accounting year (project period) for the new project
+        projectPeriodService.createDefaultPeriodForProject(savedProject);
+
+        return savedProject;
     }
 
     /**

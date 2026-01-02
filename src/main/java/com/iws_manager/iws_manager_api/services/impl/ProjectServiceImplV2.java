@@ -1,6 +1,7 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.services.interfaces.ProjectServiceV2;
+import com.iws_manager.iws_manager_api.services.interfaces.ProjectPeriodService;
 import com.iws_manager.iws_manager_api.dtos.project.ProjectResponseDTO;
 import com.iws_manager.iws_manager_api.dtos.shared.BasicReferenceDTO;
 import com.iws_manager.iws_manager_api.dtos.project.ProjectRequestDTO;
@@ -52,6 +53,7 @@ public class ProjectServiceImplV2 implements ProjectServiceV2 {
     private final FundingProgramRepository fundingProgramRepository;
     private final PromoterRepository promoterRepository;
     private final ProjectStatusRepository projectStatusRepository;
+    private final ProjectPeriodService projectPeriodService;
 
     @Autowired
     public ProjectServiceImplV2(ProjectRepository projectRepository,
@@ -61,7 +63,8 @@ public class ProjectServiceImplV2 implements ProjectServiceV2 {
             NetworkRepository networkRepository,
             FundingProgramRepository fundingProgramRepository,
             PromoterRepository promoterRepository,
-            ProjectStatusRepository projectStatusRepository) {
+            ProjectStatusRepository projectStatusRepository,
+            ProjectPeriodService projectPeriodService) {
         this.projectRepository = projectRepository;
         this.customerRepository = customerRepository;
         this.employeeIwsRepository = employeeIwsRepository;
@@ -70,6 +73,7 @@ public class ProjectServiceImplV2 implements ProjectServiceV2 {
         this.fundingProgramRepository = fundingProgramRepository;
         this.promoterRepository = promoterRepository;
         this.projectStatusRepository = projectStatusRepository;
+        this.projectPeriodService = projectPeriodService;
     }
 
     @Override
@@ -82,11 +86,10 @@ public class ProjectServiceImplV2 implements ProjectServiceV2 {
         // Convert DTO to Entity
         Project project = convertToEntity(projectRequest);
 
-        //Default Dates
-        int year = LocalDate.now().getYear();
-        if ( project.getStartDate() == null  )project.setStartDate(LocalDate.of(year, 1, 1));
-        if (project.getEndDate() == null)project.setEndDate(LocalDate.of(year, 12, 31));
         Project savedProject = projectRepository.save(project);
+
+        // Create default accounting year (project period) for the new project
+        projectPeriodService.createDefaultPeriodForProject(savedProject);
 
         return ProjectMapper.toResponseDTO(savedProject);
     }
@@ -141,37 +144,37 @@ public class ProjectServiceImplV2 implements ProjectServiceV2 {
 
     // VALIDATIONS
     /**
-     * Validates that the projectName is unique for creation (case-insensitive) across all projects.
+     * Validates that the projectName is unique for creation (case-insensitive)
+     * across all projects.
      */
     private void validateUniqueProjectNameForCreation(String projectName) {
         if (projectName != null && projectRepository.existsByProjectNameIgnoreCase(projectName)) {
             throw new DuplicateResourceException(
-                "Project duplication with attribute 'projectName' = '" + projectName + "'. " +
-                "A project with this name already exists."
-            );
+                    "Project duplication with attribute 'projectName' = '" + projectName + "'. " +
+                            "A project with this name already exists.");
         }
     }
 
     /**
-     * Validates that the projectName is unique for update, considering only other records (case-insensitive).
+     * Validates that the projectName is unique for update, considering only other
+     * records (case-insensitive).
      * Only validates if the projectName has changed.
      */
-    private void validateUniqueProjectNameForUpdate(Project existingProject, 
-                                                ProjectRequestDTO newProjectDTO, 
-                                                Long id) {
-        
+    private void validateUniqueProjectNameForUpdate(Project existingProject,
+            ProjectRequestDTO newProjectDTO,
+            Long id) {
+
         // Check if projectName has changed
         boolean projectNameChanged = !existingProject.getProjectName().equals(newProjectDTO.projectName());
-        
+
         if (projectNameChanged) {
             boolean projectNameExists = projectRepository
-                .existsByProjectNameIgnoreCaseAndIdNot(newProjectDTO.projectName(), id);
-            
+                    .existsByProjectNameIgnoreCaseAndIdNot(newProjectDTO.projectName(), id);
+
             if (projectNameExists) {
                 throw new DuplicateResourceException(
-                    "Project duplication with attribute 'projectName' = '" + newProjectDTO.projectName() + "'. " +
-                    "A project with this name already exists."
-                );
+                        "Project duplication with attribute 'projectName' = '" + newProjectDTO.projectName() + "'. " +
+                                "A project with this name already exists.");
             }
         }
     }

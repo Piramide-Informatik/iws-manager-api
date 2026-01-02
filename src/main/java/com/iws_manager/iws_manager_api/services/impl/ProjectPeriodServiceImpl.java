@@ -21,7 +21,8 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
     private final ProjectRepository projectRepository;
 
     @Autowired
-    public ProjectPeriodServiceImpl(ProjectPeriodRepository projectPeriodRepository, ProjectRepository projectRepository) {
+    public ProjectPeriodServiceImpl(ProjectPeriodRepository projectPeriodRepository,
+            ProjectRepository projectRepository) {
         this.projectPeriodRepository = projectPeriodRepository;
         this.projectRepository = projectRepository;
     }
@@ -29,10 +30,8 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
     @Override
     public ProjectPeriod create(ProjectPeriod projectPeriod) {
         if (projectPeriod == null) {
-            throw  new IllegalArgumentException("projectPeriod cannot be null");
+            throw new IllegalArgumentException("projectPeriod cannot be null");
         }
-        //Default Dates
-        setDefaultDates(projectPeriod);
         return projectPeriodRepository.save(projectPeriod);
     }
 
@@ -40,7 +39,7 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
     @Transactional(readOnly = true)
     public Optional<ProjectPeriod> findById(Long id) {
         if (id == null) {
-            throw  new IllegalArgumentException("id cannot be null");
+            throw new IllegalArgumentException("id cannot be null");
         }
         return projectPeriodRepository.findById(id);
     }
@@ -54,26 +53,26 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
     @Override
     public ProjectPeriod update(Long id, ProjectPeriod projectPeriodDetails) {
         if (id == null || projectPeriodDetails == null) {
-            throw  new IllegalArgumentException("id and projectPeriodDetails cannot be null");
+            throw new IllegalArgumentException("id and projectPeriodDetails cannot be null");
         }
         return projectPeriodRepository.findById(id)
-                .map( existingProjectPeriod -> {
+                .map(existingProjectPeriod -> {
                     existingProjectPeriod.setPeriodNo(projectPeriodDetails.getPeriodNo());
                     existingProjectPeriod.setStartDate(projectPeriodDetails.getStartDate());
                     existingProjectPeriod.setEndDate(projectPeriodDetails.getEndDate());
                     existingProjectPeriod.setProject(projectPeriodDetails.getProject());
                     return projectPeriodRepository.save(existingProjectPeriod);
                 })
-                .orElseThrow(()-> new RuntimeException("ProjectPeriod not found with id " + id));
+                .orElseThrow(() -> new RuntimeException("ProjectPeriod not found with id " + id));
     }
 
     @Override
     public void delete(Long id) {
         if (id == null) {
-            throw  new IllegalArgumentException("id cannot be null");
+            throw new IllegalArgumentException("id cannot be null");
         }
 
-        if (!projectPeriodRepository.existsById(id)) {  
+        if (!projectPeriodRepository.existsById(id)) {
             throw new EntityNotFoundException("ProjectPeriod not found with id: " + id);
         }
 
@@ -122,8 +121,25 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
 
         projectPeriod.setPeriodNo(newYear);
         projectPeriod.setProject(project);
-        //Default Dates
+        // Default Dates
         setDefaultDates(projectPeriod);
+
+        return projectPeriodRepository.save(projectPeriod);
+    }
+
+    @Override
+    public ProjectPeriod createDefaultPeriodForProject(Project project) {
+        if (project == null) {
+            throw new IllegalArgumentException("project cannot be null");
+        }
+
+        ProjectPeriod projectPeriod = new ProjectPeriod();
+        projectPeriod.setPeriodNo((short) 1);
+        projectPeriod.setProject(project);
+
+        // Use project's dates if they exist, otherwise leave empty
+        projectPeriod.setStartDate(project.getStartDate());
+        projectPeriod.setEndDate(project.getEndDate());
 
         return projectPeriodRepository.save(projectPeriod);
     }
