@@ -13,33 +13,32 @@ public class UserMapper {
     private UserMapper() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
-    public static UserDTO toDTO(User user) {
+
+    public static UserDTO toDTO(User user, boolean isAdmin) {
         return new UserDTO(
                 user.getId(),
                 user.getUsername(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getEmail(),
+                isAdmin ? user.getPassword() : "********",
                 user.isActive(),
                 user.getEmail(),
-                user.getVersion()
-        );
+                user.getVersion());
     }
 
-    public static UserWithRolesDTO toDTOWithRoles(User user) {
+    public static UserWithRolesDTO toDTOWithRoles(User user, boolean isAdmin) {
         return new UserWithRolesDTO(
                 user.getId(),
                 user.getUsername(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getPassword(),
+                isAdmin ? user.getPassword() : "********",
                 user.isActive(),
                 user.getEmail(),
                 user.getRoles().stream()
                         .map(role -> new RoleDTO(role.getId(), role.getName()))
                         .collect(Collectors.toList()),
-                user.getVersion()
-        );
+                user.getVersion());
     }
 
     public static User toEntity(CreateUserDTO dto) {
@@ -54,11 +53,17 @@ public class UserMapper {
     }
 
     public static void updateEntity(User user, UpdateUserDTO dto) {
-        if (dto.username() != null) user.setUsername(dto.username());
-        if (dto.firstName() != null) user.setFirstName(dto.firstName());
-        if (dto.lastName() != null) user.setLastName(dto.lastName());
-        if (dto.email() != null) user.setEmail(dto.email());
-        if (dto.password() != null) user.setPassword(dto.password());
-        if (dto.active() != null) user.setActive(dto.active());
+        if (dto.username() != null)
+            user.setUsername(dto.username());
+        if (dto.firstName() != null)
+            user.setFirstName(dto.firstName());
+        if (dto.lastName() != null)
+            user.setLastName(dto.lastName());
+        if (dto.email() != null)
+            user.setEmail(dto.email());
+        if (dto.password() != null)
+            user.setPassword(dto.password());
+        if (dto.active() != null)
+            user.setActive(dto.active());
     }
 }

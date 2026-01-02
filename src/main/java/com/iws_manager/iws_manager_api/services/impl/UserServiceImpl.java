@@ -21,23 +21,28 @@ public class UserServiceImpl implements UserService {
     private static final String USERNOTFOUND = "User not found";
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
+            org.springframework.security.crypto.password.PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public User create(User user) {
-        if(user == null) {
+        if (user == null) {
             throw new IllegalArgumentException("User cannot be null");
         }
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    "Username already exists"
-            );
+                    "Username already exists");
+        }
+        if (user.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         return userRepository.save(user);
     }
@@ -59,8 +64,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(Long id, User userDetails) {
-        if (id == null || userDetails == null){
-         throw new IllegalArgumentException("Id and user details cannot be null");
+        if (id == null || userDetails == null) {
+            throw new IllegalArgumentException("Id and user details cannot be null");
         }
         return userRepository.findById(id)
                 .map(existingUser -> {
@@ -68,19 +73,20 @@ public class UserServiceImpl implements UserService {
                             && userRepository.existsByUsername(userDetails.getUsername())) {
                         throw new ResponseStatusException(
                                 HttpStatus.CONFLICT,
-                                "Username already exists"
-                        );
+                                "Username already exists");
                     }
                     existingUser.setFirstName(userDetails.getFirstName());
                     existingUser.setLastName(userDetails.getLastName());
                     existingUser.setActive(userDetails.isActive());
                     existingUser.setEmail(userDetails.getEmail());
-                    existingUser.setPassword(userDetails.getPassword());
+                    if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
+                        existingUser.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+                    }
                     if (userDetails.getUsername() != null) {
                         existingUser.setUsername(userDetails.getUsername());
                     }
                     return userRepository.save(existingUser);
-                }).orElseThrow(() -> new RuntimeException("User not found with id: "+id));
+                }).orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
 
     @Override
@@ -98,8 +104,7 @@ public class UserServiceImpl implements UserService {
         if (roleCount > 0) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    "User is assigned to " + roleCount + " role(s) and cannot be deleted"
-            );
+                    "User is assigned to " + roleCount + " role(s) and cannot be deleted");
         }
         userRepository.deleteById(id);
     }
@@ -119,6 +124,5 @@ public class UserServiceImpl implements UserService {
         }
         return roleRepository.findByUserId(userId);
     }
-
 
 }

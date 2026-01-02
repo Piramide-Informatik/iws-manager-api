@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.iws_manager.iws_manager_api.models.base.BaseEntity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,17 +22,17 @@ import java.util.List;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "user")
-@AttributeOverride(name ="id", column = @Column(name = "userid"))
-public class User extends BaseEntity{
+@AttributeOverride(name = "id", column = @Column(name = "userid"))
+public class User extends BaseEntity {
 
     /**
      * Indicates if the account is active.
      * Default: true
      */
-    @Column(name="active",nullable = false)
+    @Column(name = "active", nullable = false)
     private boolean active = true;
 
-    @Column(name="firstname", length = 255)
+    @Column(name = "firstname", length = 255)
     private String firstName;
 
     @Column(name = "lastname", length = 255)
@@ -48,18 +47,14 @@ public class User extends BaseEntity{
     /**
      * Encrypted user password (using BCrypt hashing).
      */
-    @Column(name = "password", length = 255,nullable = true)
+    @Column(name = "password", length = 255, nullable = true)
     private String password;
 
-    @Column(name = "username",unique = true, length = 255)
+    @Column(name = "username", unique = true, length = 255)
     private String username;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "userrole",
-            joinColumns = @JoinColumn(name = "userid"),
-            inverseJoinColumns = @JoinColumn(name = "roleid")
-    )
+    @JoinTable(name = "userrole", joinColumns = @JoinColumn(name = "userid"), inverseJoinColumns = @JoinColumn(name = "roleid"))
     private List<Role> roles = new ArrayList<>();
 
 }

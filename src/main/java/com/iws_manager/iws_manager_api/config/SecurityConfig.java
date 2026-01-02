@@ -7,31 +7,44 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import com.iws_manager.iws_manager_api.security.JwtAuthenticationFilter;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableMethodSecurity(prePostEnabled = true)
 @Configuration
 @EnableWebSecurity
-
-/**
-* It manages all security configuration for requests
-*
- **/
 public class SecurityConfig {
 
     @Autowired
     CustomCorsConfiguration customCorsConfiguration;
 
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll())
+                .csrf(csrf -> csrf.disable())
                 .cors(c -> c.configurationSource(customCorsConfiguration))
-                .csrf(csrf -> csrf
-                        .disable()
-                );
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/users").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .anyRequest().authenticated());
+
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 
