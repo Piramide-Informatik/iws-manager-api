@@ -55,12 +55,8 @@ public class OrderController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Order> update(@PathVariable Long id, @RequestBody Order orderDetails){
-        try {
-            Order updateOrder = orderService.update(id, orderDetails);
-            return new ResponseEntity<>(updateOrder, HttpStatus.OK);
-        } catch (RuntimeException e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Order updateOrder = orderService.update(id, orderDetails);
+        return new ResponseEntity<>(updateOrder, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
