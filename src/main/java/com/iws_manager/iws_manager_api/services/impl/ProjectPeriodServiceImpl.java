@@ -32,6 +32,7 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         if (projectPeriod == null) {
             throw new IllegalArgumentException("projectPeriod cannot be null");
         }
+        validateProjectPeriod(projectPeriod);
         return projectPeriodRepository.save(projectPeriod);
     }
 
@@ -61,6 +62,7 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
                     existingProjectPeriod.setStartDate(projectPeriodDetails.getStartDate());
                     existingProjectPeriod.setEndDate(projectPeriodDetails.getEndDate());
                     existingProjectPeriod.setProject(projectPeriodDetails.getProject());
+                    validateProjectPeriod(existingProjectPeriod);
                     return projectPeriodRepository.save(existingProjectPeriod);
                 })
                 .orElseThrow(() -> new RuntimeException("ProjectPeriod not found with id " + id));
@@ -124,6 +126,7 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         // Default Dates
         setDefaultDates(projectPeriod);
 
+        validateProjectPeriod(projectPeriod);
         return projectPeriodRepository.save(projectPeriod);
     }
 
@@ -141,6 +144,7 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         projectPeriod.setStartDate(project.getStartDate());
         projectPeriod.setEndDate(project.getEndDate());
 
+        validateProjectPeriod(projectPeriod);
         return projectPeriodRepository.save(projectPeriod);
     }
 
@@ -152,5 +156,68 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         if (projectPeriod.getEndDate() == null) {
             projectPeriod.setEndDate(LocalDate.of(year, 12, 31));
         }
+    }
+
+    private void validateProjectPeriod(ProjectPeriod projectPeriod) {
+        if (projectPeriod == null) {
+            return;
+        }
+
+        validateDateRange(projectPeriod);
+
+        if (projectPeriod.getProject() == null || projectPeriod.getProject().getId() == null) {
+            return;
+        }
+
+        validatePeriodSequence(projectPeriod);
+    }
+
+    private void validateDateRange(ProjectPeriod projectPeriod) {
+        LocalDate start = projectPeriod.getStartDate();
+        LocalDate end = projectPeriod.getEndDate();
+        if (start != null && end != null && start.isAfter(end)) {
+            throw new IllegalArgumentException("The start date cannot be after the end date");
+        }
+    }
+
+    private void validatePeriodSequence(ProjectPeriod projectPeriod) {
+        Short currentPeriodNo = projectPeriod.getPeriodNo();
+        if (currentPeriodNo == null) {
+            return;
+        }
+
+        Long projectId = projectPeriod.getProject().getId();
+        validateAgainstPreviousPeriod(projectPeriod, projectId, currentPeriodNo);
+        validateAgainstNextPeriod(projectPeriod, projectId, currentPeriodNo);
+    }
+
+    private void validateAgainstPreviousPeriod(ProjectPeriod projectPeriod, Long projectId, Short currentPeriodNo) {
+        if (currentPeriodNo <= 1) {
+            return;
+        }
+
+        projectPeriodRepository.findByProjectIdAndPeriodNo(projectId, (short) (currentPeriodNo - 1))
+                .ifPresent(prev -> {
+                    if (projectPeriod.getStartDate() != null && prev.getEndDate() != null
+                            && !projectPeriod.getStartDate().isAfter(prev.getEndDate())) {
+                        throw new IllegalArgumentException("The start date of the period "
+                                + currentPeriodNo + " (" + projectPeriod.getStartDate()
+                                + ") cannot be less than or equal to the end date of the previous period " +
+                                (currentPeriodNo - 1) + " (" + prev.getEndDate() + ")");
+                    }
+                });
+    }
+
+    private void validateAgainstNextPeriod(ProjectPeriod projectPeriod, Long projectId, Short currentPeriodNo) {
+        projectPeriodRepository.findByProjectIdAndPeriodNo(projectId, (short) (currentPeriodNo + 1))
+                .ifPresent(next -> {
+                    if (projectPeriod.getEndDate() != null && next.getStartDate() != null
+                            && !projectPeriod.getEndDate().isBefore(next.getStartDate())) {
+                        throw new IllegalArgumentException("The end date of the period " + currentPeriodNo +
+                                " (" + projectPeriod.getEndDate()
+                                + ") It cannot be greater than or equal to the start date of the following period "
+                                + (currentPeriodNo + 1) + " (" + next.getStartDate() + ")");
+                    }
+                });
     }
 }
