@@ -54,12 +54,18 @@ class ProjectPeriodControllerTest {
 
     @Test
     void updateShouldReturnNotFoundWhenProjectPeriodNotExists() {
-        when(periodService.update(eq(TEST_ID), any(ProjectPeriod.class)))
-                .thenThrow(new RuntimeException("Not found"));
+        Long nonExistentId = 99L;
+        String errorMessage = "ProjectPeriod not found with id: " + nonExistentId;
 
-        ResponseEntity<ProjectPeriod> response = periodController.update(TEST_ID, testPeriod);
+        when(periodService.update(eq(nonExistentId), any(ProjectPeriod.class)))
+                .thenThrow(new EntityNotFoundException(errorMessage));
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        EntityNotFoundException exception = assertThrows(
+                EntityNotFoundException.class,
+                () -> periodController.update(nonExistentId, testPeriod));
+
+        assertEquals(errorMessage, exception.getMessage());
+        verify(periodService).update(eq(nonExistentId), any(ProjectPeriod.class));
     }
 
     @Test
@@ -117,15 +123,14 @@ class ProjectPeriodControllerTest {
     void deleteShouldReturnNotFoundWhenProjectPeriodNotExists() {
         Long nonExistentId = 99L;
         String errorMessage = "ProjectPeriod not found with id: " + nonExistentId;
-        
+
         doThrow(new EntityNotFoundException(errorMessage))
-            .when(periodService).delete(nonExistentId);
+                .when(periodService).delete(nonExistentId);
 
         EntityNotFoundException exception = assertThrows(
-            EntityNotFoundException.class,
-            () -> periodController.delete(nonExistentId)
-        );
-        
+                EntityNotFoundException.class,
+                () -> periodController.delete(nonExistentId));
+
         assertEquals(errorMessage, exception.getMessage());
         verify(periodService).delete(nonExistentId);
     }

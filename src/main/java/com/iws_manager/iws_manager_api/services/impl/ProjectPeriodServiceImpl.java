@@ -58,14 +58,13 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         }
         return projectPeriodRepository.findById(id)
                 .map(existingProjectPeriod -> {
-                    existingProjectPeriod.setPeriodNo(projectPeriodDetails.getPeriodNo());
+                    // Only update the dates, preserve periodNo and project
                     existingProjectPeriod.setStartDate(projectPeriodDetails.getStartDate());
                     existingProjectPeriod.setEndDate(projectPeriodDetails.getEndDate());
-                    existingProjectPeriod.setProject(projectPeriodDetails.getProject());
                     validateProjectPeriod(existingProjectPeriod);
                     return projectPeriodRepository.save(existingProjectPeriod);
                 })
-                .orElseThrow(() -> new RuntimeException("ProjectPeriod not found with id " + id));
+                .orElseThrow(() -> new EntityNotFoundException("ProjectPeriod not found with id: " + id));
     }
 
     @Override
