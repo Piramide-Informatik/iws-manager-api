@@ -199,7 +199,7 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
                 .ifPresent(prev -> {
                     if (projectPeriod.getStartDate() != null && prev.getEndDate() != null
                             && !projectPeriod.getStartDate().isAfter(prev.getEndDate())) {
-                        throw new IllegalArgumentException("The start date of the period "
+                        throw new IllegalArgumentException("Overlapping Periods Detected: The start date of the period "
                                 + currentPeriodNo + " (" + projectPeriod.getStartDate()
                                 + ") cannot be less than or equal to the end date of the previous period " +
                                 (currentPeriodNo - 1) + " (" + prev.getEndDate() + ")");
@@ -212,7 +212,7 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
                 .ifPresent(next -> {
                     if (projectPeriod.getEndDate() != null && next.getStartDate() != null
                             && !projectPeriod.getEndDate().isBefore(next.getStartDate())) {
-                        throw new IllegalArgumentException("The end date of the period " + currentPeriodNo +
+                        throw new IllegalArgumentException("Overlapping Periods Detected: The end date of the period " + currentPeriodNo +
                                 " (" + projectPeriod.getEndDate()
                                 + ") It cannot be greater than or equal to the start date of the following period "
                                 + (currentPeriodNo + 1) + " (" + next.getStartDate() + ")");
