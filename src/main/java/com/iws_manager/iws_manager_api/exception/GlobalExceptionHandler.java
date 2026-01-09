@@ -22,15 +22,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleOptimisticLockingException(
             ObjectOptimisticLockingFailureException ex,
             WebRequest request) {
-        
+
         ErrorResponse errorDetails = new ErrorResponse(
-            LocalDateTime.now(),
-            HttpStatus.CONFLICT.value(),
-            "Conflict",
-            "The data has been modified by another user. Please refresh and try again.",
-            request.getDescription(false).replace("uri=", "")
-        );
-        
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Conflict",
+                "The data has been modified by another user. Please refresh and try again.",
+                request.getDescription(false).replace("uri=", ""));
+
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
 
@@ -40,20 +39,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleValidationExceptions(
             MethodArgumentNotValidException ex,
             WebRequest request) {
-        
+
         String errorMessage = ex.getBindingResult().getFieldErrors().stream()
-            .map(error -> error.getField() + ": " + 
-                (error.getDefaultMessage() != null ? error.getDefaultMessage() : "validation error"))
-            .reduce("", (a, b) -> a + (a.isEmpty() ? "" : "; ") + b);
-        
+                .map(error -> error.getField() + ": " +
+                        (error.getDefaultMessage() != null ? error.getDefaultMessage() : "validation error"))
+                .reduce("", (a, b) -> a + (a.isEmpty() ? "" : "; ") + b);
+
         ErrorResponse errorDetails = new ErrorResponse(
-            LocalDateTime.now(),
-            HttpStatus.BAD_REQUEST.value(),
-            "Bad Request",
-            "Validation errors: " + errorMessage,
-            request.getDescription(false).replace("uri=", "")
-        );
-        
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Bad Request",
+                "Validation errors: " + errorMessage,
+                request.getDescription(false).replace("uri=", ""));
+
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
@@ -63,15 +61,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleEntityNotFoundException(
             jakarta.persistence.EntityNotFoundException ex,
             WebRequest request) {
-        
+
         ErrorResponse errorDetails = new ErrorResponse(
-            LocalDateTime.now(),
-            HttpStatus.NOT_FOUND.value(),
-            "Not Found",
-            ex.getMessage(),
-            request.getDescription(false).replace("uri=", "")
-        );
-        
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Not Found",
+                ex.getMessage(),
+                request.getDescription(false).replace("uri=", ""));
+
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
@@ -81,16 +78,32 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleDuplicateResourceException(
             DuplicateResourceException ex,
             WebRequest request) {
-        
+
         ErrorResponse errorDetails = new ErrorResponse(
-            LocalDateTime.now(),
-            HttpStatus.CONFLICT.value(),
-            "Conflict",
-            ex.getMessage(),
-            request.getDescription(false).replace("uri=", "")
-        );
-        
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Conflict",
+                ex.getMessage(),
+                request.getDescription(false).replace("uri=", ""));
+
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
+    }
+
+    // Handle illegal argument exceptions (validation errors)
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(
+            IllegalArgumentException ex,
+            WebRequest request) {
+
+        ErrorResponse errorDetails = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Bad Request",
+                ex.getMessage(),
+                request.getDescription(false).replace("uri=", ""));
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
     // Handle all other exceptions
@@ -99,15 +112,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleGlobalException(
             Exception ex,
             WebRequest request) {
-        
+
         ErrorResponse errorDetails = new ErrorResponse(
-            LocalDateTime.now(),
-            HttpStatus.INTERNAL_SERVER_ERROR.value(),
-            "Internal Server Error",
-            "An unexpected error occurred: " + ex.getMessage(),
-            request.getDescription(false).replace("uri=", "")
-        );
-        
+                LocalDateTime.now(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Internal Server Error",
+                "An unexpected error occurred: " + ex.getMessage(),
+                request.getDescription(false).replace("uri=", ""));
+
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
