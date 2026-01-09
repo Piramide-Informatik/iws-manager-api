@@ -50,12 +50,8 @@ public class ProjectPeriodController {
     @PutMapping("/{id}")
     public ResponseEntity<ProjectPeriod> update(@PathVariable Long id,
             @RequestBody ProjectPeriod projectPeriodDetails) {
-        try {
-            ProjectPeriod updateProjectPeriod = projectPeriodService.update(id, projectPeriodDetails);
-            return new ResponseEntity<>(updateProjectPeriod, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        ProjectPeriod updateProjectPeriod = projectPeriodService.update(id, projectPeriodDetails);
+        return new ResponseEntity<>(updateProjectPeriod, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
