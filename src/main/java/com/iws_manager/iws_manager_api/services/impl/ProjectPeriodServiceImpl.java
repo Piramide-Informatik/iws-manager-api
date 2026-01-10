@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityNotFoundException;
+import com.iws_manager.iws_manager_api.exception.exceptions.ConflictException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,6 +34,7 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
             throw new IllegalArgumentException("projectPeriod cannot be null");
         }
         validateProjectPeriod(projectPeriod);
+        validateNoOverlap(projectPeriod, null);
         return projectPeriodRepository.save(projectPeriod);
     }
 
@@ -58,10 +60,11 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         }
         return projectPeriodRepository.findById(id)
                 .map(existingProjectPeriod -> {
+                    validateProjectPeriod(existingProjectPeriod);
+                    validateNoOverlap(existingProjectPeriod, id);
                     // Only update the dates, preserve periodNo and project
                     existingProjectPeriod.setStartDate(projectPeriodDetails.getStartDate());
                     existingProjectPeriod.setEndDate(projectPeriodDetails.getEndDate());
-                    validateProjectPeriod(existingProjectPeriod);
                     return projectPeriodRepository.save(existingProjectPeriod);
                 })
                 .orElseThrow(() -> new EntityNotFoundException("ProjectPeriod not found with id: " + id));
@@ -126,6 +129,7 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         setDefaultDates(projectPeriod);
 
         validateProjectPeriod(projectPeriod);
+        validateNoOverlap(projectPeriod, null);
         return projectPeriodRepository.save(projectPeriod);
     }
 
@@ -144,6 +148,7 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         projectPeriod.setEndDate(project.getEndDate());
 
         validateProjectPeriod(projectPeriod);
+        validateNoOverlap(projectPeriod, null);
         return projectPeriodRepository.save(projectPeriod);
     }
 
@@ -167,8 +172,6 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         if (projectPeriod.getProject() == null || projectPeriod.getProject().getId() == null) {
             return;
         }
-
-        validatePeriodSequence(projectPeriod);
     }
 
     private void validateDateRange(ProjectPeriod projectPeriod) {
@@ -179,44 +182,82 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         }
     }
 
-    private void validatePeriodSequence(ProjectPeriod projectPeriod) {
-        Short currentPeriodNo = projectPeriod.getPeriodNo();
-        if (currentPeriodNo == null) {
+
+    /**
+     * Main method to validate overlaps using the repository
+     * @param projectPeriod Period to validate
+     * @param excludeId ID to exclude (for updates), null for creations
+     */
+    private void validateNoOverlap(ProjectPeriod projectPeriod, Long excludeId) {
+        if (projectPeriod == null || 
+            projectPeriod.getProject() == null || 
+            projectPeriod.getProject().getId() == null ||
+            projectPeriod.getStartDate() == null ||
+            projectPeriod.getEndDate() == null) {
+            // No podemos validar si no tenemos la información necesaria
             return;
         }
 
         Long projectId = projectPeriod.getProject().getId();
-        validateAgainstPreviousPeriod(projectPeriod, projectId, currentPeriodNo);
-        validateAgainstNextPeriod(projectPeriod, projectId, currentPeriodNo);
-    }
+        LocalDate startDate = projectPeriod.getStartDate();
+        LocalDate endDate = projectPeriod.getEndDate();
 
-    private void validateAgainstPreviousPeriod(ProjectPeriod projectPeriod, Long projectId, Short currentPeriodNo) {
-        if (currentPeriodNo <= 1) {
-            return;
+        // Usar el método del repositorio para encontrar periodos solapados
+        List<ProjectPeriod> overlappingPeriods = projectPeriodRepository.findOverlappingPeriods(
+            projectId, startDate, endDate, excludeId
+        );
+
+        // Si hay periodos solapados, lanzar excepción
+        if (!overlappingPeriods.isEmpty()) {
+            String errorMessage = buildOverlapErrorMessage(projectPeriod, overlappingPeriods);
+            String fullMessage = "Overlapping Periods Detected: " + errorMessage;
+            throw new ConflictException("PERIOD_OVERLAP", errorMessage, fullMessage);
         }
-
-        projectPeriodRepository.findByProjectIdAndPeriodNo(projectId, (short) (currentPeriodNo - 1))
-                .ifPresent(prev -> {
-                    if (projectPeriod.getStartDate() != null && prev.getEndDate() != null
-                            && !projectPeriod.getStartDate().isAfter(prev.getEndDate())) {
-                        throw new IllegalArgumentException("Overlapping Periods Detected: The start date of the period "
-                                + currentPeriodNo + " (" + projectPeriod.getStartDate()
-                                + ") cannot be less than or equal to the end date of the previous period " +
-                                (currentPeriodNo - 1) + " (" + prev.getEndDate() + ")");
-                    }
-                });
     }
 
-    private void validateAgainstNextPeriod(ProjectPeriod projectPeriod, Long projectId, Short currentPeriodNo) {
-        projectPeriodRepository.findByProjectIdAndPeriodNo(projectId, (short) (currentPeriodNo + 1))
-                .ifPresent(next -> {
-                    if (projectPeriod.getEndDate() != null && next.getStartDate() != null
-                            && !projectPeriod.getEndDate().isBefore(next.getStartDate())) {
-                        throw new IllegalArgumentException("Overlapping Periods Detected: The end date of the period " + currentPeriodNo +
-                                " (" + projectPeriod.getEndDate()
-                                + ") It cannot be greater than or equal to the start date of the following period "
-                                + (currentPeriodNo + 1) + " (" + next.getStartDate() + ")");
-                    }
-                });
+    /**
+     * Construye un mensaje de error detallado con información de los periodos solapados
+     */
+    private String buildOverlapErrorMessage(ProjectPeriod newPeriod, List<ProjectPeriod> overlappingPeriods) {
+        StringBuilder details = new StringBuilder();
+        
+        // Construir mensaje principal
+        details.append("The period ");
+        
+        if (newPeriod.getPeriodNo() != null) {
+            details.append("Period ").append(newPeriod.getPeriodNo()).append(" ");
+        }
+        
+        details.append("(").append(newPeriod.getStartDate())
+               .append(" to ").append(newPeriod.getEndDate()).append(")");
+        
+        if (newPeriod.getId() != null) {
+            details.append(" cannot be updated because it overlaps with ");
+        } else {
+            details.append(" cannot be created because it overlaps with ");
+        }
+        
+        // Agregar información de periodos solapados
+        if (overlappingPeriods.size() == 1) {
+            ProjectPeriod overlapping = overlappingPeriods.get(0);
+            details.append("Period ").append(overlapping.getPeriodNo())
+                   .append(" (").append(overlapping.getStartDate())
+                   .append(" to ").append(overlapping.getEndDate()).append(")");
+        } else {
+            details.append("existing periods: ");
+            for (int i = 0; i < overlappingPeriods.size(); i++) {
+                ProjectPeriod overlapping = overlappingPeriods.get(i);
+                details.append("Period ").append(overlapping.getPeriodNo())
+                       .append(" (").append(overlapping.getStartDate())
+                       .append(" to ").append(overlapping.getEndDate()).append(")");
+                
+                if (i < overlappingPeriods.size() - 1) {
+                    details.append(", ");
+                }
+            }
+        }
+        
+        return details.toString();
     }
+    
 }
