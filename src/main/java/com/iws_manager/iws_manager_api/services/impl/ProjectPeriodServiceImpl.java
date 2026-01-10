@@ -21,6 +21,8 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
     private final ProjectPeriodRepository projectPeriodRepository;
     private final ProjectRepository projectRepository;
 
+    private static final String PERIOD_STRING = "Period ";
+
     @Autowired
     public ProjectPeriodServiceImpl(ProjectPeriodRepository projectPeriodRepository,
             ProjectRepository projectRepository) {
@@ -221,7 +223,7 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         details.append("The period ");
         
         if (newPeriod.getPeriodNo() != null) {
-            details.append("Period ").append(newPeriod.getPeriodNo()).append(" ");
+            details.append(PERIOD_STRING).append(newPeriod.getPeriodNo()).append(" ");
         }
         
         details.append("(").append(newPeriod.getStartDate())
@@ -236,14 +238,14 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         // Agregar información de periodos solapados
         if (overlappingPeriods.size() == 1) {
             ProjectPeriod overlapping = overlappingPeriods.get(0);
-            details.append("Period ").append(overlapping.getPeriodNo())
+            details.append(PERIOD_STRING).append(overlapping.getPeriodNo())
                    .append(" (").append(overlapping.getStartDate())
                    .append(" to ").append(overlapping.getEndDate()).append(")");
         } else {
             details.append("existing periods: ");
             for (int i = 0; i < overlappingPeriods.size(); i++) {
                 ProjectPeriod overlapping = overlappingPeriods.get(i);
-                details.append("Period ").append(overlapping.getPeriodNo())
+                details.append(PERIOD_STRING).append(overlapping.getPeriodNo())
                        .append(" (").append(overlapping.getStartDate())
                        .append(" to ").append(overlapping.getEndDate()).append(")");
                 
