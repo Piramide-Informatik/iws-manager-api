@@ -192,7 +192,7 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
             projectPeriod.getProject().getId() == null ||
             projectPeriod.getStartDate() == null ||
             projectPeriod.getEndDate() == null) {
-            // No podemos validar si no tenemos la información necesaria
+            // Can't validate if we don't have the necessary information
             return;
         }
 
@@ -200,12 +200,12 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         LocalDate startDate = projectPeriod.getStartDate();
         LocalDate endDate = projectPeriod.getEndDate();
 
-        // Usar el método del repositorio para encontrar periodos solapados
+        // Use the repository method to find overlapping periods
         List<ProjectPeriod> overlappingPeriods = projectPeriodRepository.findOverlappingPeriods(
             projectId, startDate, endDate, excludeId
         );
 
-        // Si hay periodos solapados, lanzar excepción
+        // If there are overlapping periods, throw exception
         if (!overlappingPeriods.isEmpty()) {
             String errorMessage = buildOverlapErrorMessage(projectPeriod, overlappingPeriods);
             String fullMessage = "Overlapping Periods Detected: " + errorMessage;
@@ -214,12 +214,12 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
     }
 
     /**
-     * Construye un mensaje de error detallado con información de los periodos solapados
+     * Build a detailed error message with information about overlapping periods
      */
     private String buildOverlapErrorMessage(ProjectPeriod newPeriod, List<ProjectPeriod> overlappingPeriods) {
         StringBuilder details = new StringBuilder();
         
-        // Construir mensaje principal
+        // Build main message
         details.append("The period ");
         
         if (newPeriod.getPeriodNo() != null) {
@@ -235,7 +235,7 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
             details.append(" cannot be created because it overlaps with ");
         }
         
-        // Agregar información de periodos solapados
+        // Add information about overlapping periods
         if (overlappingPeriods.size() == 1) {
             ProjectPeriod overlapping = overlappingPeriods.get(0);
             details.append(PERIOD_STRING).append(overlapping.getPeriodNo())
