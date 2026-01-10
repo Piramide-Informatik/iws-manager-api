@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+import com.iws_manager.iws_manager_api.exception.exceptions.ConflictException;
 import com.iws_manager.iws_manager_api.exception.exceptions.DuplicateResourceException;
 
 @RestControllerAdvice
@@ -28,6 +29,23 @@ public class GlobalExceptionHandler {
                 HttpStatus.CONFLICT.value(),
                 "Conflict",
                 "The data has been modified by another user. Please refresh and try again.",
+                request.getDescription(false).replace("uri=", ""));
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
+    }
+
+    // Handle conflict exceptions (for overlapping periods)
+    @ExceptionHandler(ConflictException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<ErrorResponse> handleConflictException(
+            ConflictException ex,
+            WebRequest request) {
+
+        ErrorResponse errorDetails = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Conflict",
+                ex.getDetails(),
                 request.getDescription(false).replace("uri=", ""));
 
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
