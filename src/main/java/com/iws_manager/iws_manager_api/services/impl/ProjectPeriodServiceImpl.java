@@ -62,8 +62,15 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         }
         return projectPeriodRepository.findById(id)
                 .map(existingProjectPeriod -> {
-                    validateProjectPeriod(existingProjectPeriod);
-                    validateNoOverlap(existingProjectPeriod, id);
+                    validateDateRange(projectPeriodDetails.getStartDate(), projectPeriodDetails.getEndDate());
+                    validateNoOverlapForUpdate(
+                        existingProjectPeriod.getProject().getId(),
+                        projectPeriodDetails.getStartDate(),
+                        projectPeriodDetails.getEndDate(),
+                        id,
+                        existingProjectPeriod.getPeriodNo()
+                    );
+
                     // Only update the dates, preserve periodNo and project
                     existingProjectPeriod.setStartDate(projectPeriodDetails.getStartDate());
                     existingProjectPeriod.setEndDate(projectPeriodDetails.getEndDate());
@@ -169,12 +176,14 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
             return;
         }
 
-        validateDateRange(projectPeriod);
+        validateDateRange(projectPeriod.getStartDate(), projectPeriod.getEndDate());
     }
 
     private void validateDateRange(ProjectPeriod projectPeriod) {
-        LocalDate start = projectPeriod.getStartDate();
-        LocalDate end = projectPeriod.getEndDate();
+        validateDateRange(projectPeriod.getStartDate(), projectPeriod.getEndDate());
+    }
+
+    private void validateDateRange(LocalDate start, LocalDate end) {
         if (start != null && end != null && start.isAfter(end)) {
             throw new IllegalArgumentException("The start date cannot be after the end date");
         }
@@ -211,6 +220,43 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
             String fullMessage = "Overlapping Periods Detected: " + errorMessage;
             throw new ConflictException("PERIOD_OVERLAP", errorMessage, fullMessage);
         }
+    }
+
+    private void validateNoOverlapForUpdate(Long projectId, LocalDate startDate, LocalDate endDate, 
+                                           Long excludeId, Short periodNo) {
+        if (projectId == null || startDate == null || endDate == null) {
+            return;
+        }
+
+        // First check quickly if there is an overlap
+        boolean hasOverlap = projectPeriodRepository.existsOverlappingPeriod(
+            projectId, startDate, endDate, excludeId
+        );
+
+        if (hasOverlap) {
+            // If there is an overlap, get the details for the error message
+            List<ProjectPeriod> overlappingPeriods = projectPeriodRepository.findOverlappingPeriods(
+                projectId, startDate, endDate, excludeId
+            );
+            
+            String errorMessage = buildOverlapErrorMessageForUpdate(
+                startDate, endDate, periodNo, overlappingPeriods
+            );
+            String fullMessage = "Overlapping Periods Detected: " + errorMessage;
+            throw new ConflictException("PERIOD_OVERLAP", errorMessage, fullMessage);
+        }
+    }
+
+    private String buildOverlapErrorMessageForUpdate(LocalDate startDate, LocalDate endDate, 
+                                                Short periodNo, List<ProjectPeriod> overlappingPeriods) {
+        // Create a temporary period only for the error message
+        ProjectPeriod tempPeriod = new ProjectPeriod();
+        tempPeriod.setStartDate(startDate);
+        tempPeriod.setEndDate(endDate);
+        tempPeriod.setPeriodNo(periodNo);
+        tempPeriod.setId(1L); 
+        
+        return buildOverlapErrorMessage(tempPeriod, overlappingPeriods);
     }
 
     /**
