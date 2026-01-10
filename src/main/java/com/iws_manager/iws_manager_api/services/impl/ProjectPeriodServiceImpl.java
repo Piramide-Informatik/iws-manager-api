@@ -168,10 +168,6 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         }
 
         validateDateRange(projectPeriod);
-
-        if (projectPeriod.getProject() == null || projectPeriod.getProject().getId() == null) {
-            return;
-        }
     }
 
     private void validateDateRange(ProjectPeriod projectPeriod) {
