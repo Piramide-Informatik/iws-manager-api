@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorDetails = new ErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.CONFLICT.value(),
-                "Conflict",
+                "Overlapping Conflict",
                 ex.getDetails(),
                 request.getDescription(false).replace("uri=", ""));
 
