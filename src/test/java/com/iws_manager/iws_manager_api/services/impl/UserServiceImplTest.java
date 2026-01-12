@@ -11,7 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +31,10 @@ public class UserServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
+    @Mock
     private RoleRepository roleRepository;
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -38,9 +42,6 @@ public class UserServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        userRepository = mock(UserRepository.class);
-        userService = new UserServiceImpl(userRepository, roleRepository);
-
         sampleUser = new User();
         sampleUser.setId(1L);
         sampleUser.setFirstName(FIRSTNAME_ROGER);

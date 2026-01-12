@@ -8,7 +8,7 @@ import com.iws_manager.iws_manager_api.dtos.user.UserWithRolesDTO;
 import com.iws_manager.iws_manager_api.mappers.UserMapper;
 import com.iws_manager.iws_manager_api.models.User;
 import com.iws_manager.iws_manager_api.services.interfaces.UserServiceV2;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,24 +36,22 @@ public class UserControllerV2 {
     @PostMapping
     public ResponseEntity<UserDTO> create(@RequestBody CreateUserDTO dto) {
         User user = userService.create(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toDTO(user, isAdmin()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toDTO(user));
     }
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAll() {
-        boolean adminStatus = isAdmin();
         List<UserDTO> list = userService.findAll()
                 .stream()
-                .map(user -> UserMapper.toDTO(user, adminStatus))
+                .map(UserMapper::toDTO)
                 .toList();
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserWithRolesDTO> getById(@PathVariable Long id) {
-        boolean adminStatus = isAdmin();
         return userService.findById(id)
-                .map(user -> UserMapper.toDTOWithRoles(user, adminStatus))
+                .map(UserMapper::toDTOWithRoles)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -61,7 +59,7 @@ public class UserControllerV2 {
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UpdateUserDTO dto) {
         User updated = userService.update(id, dto);
-        return ResponseEntity.ok(UserMapper.toDTO(updated, isAdmin()));
+        return ResponseEntity.ok(UserMapper.toDTO(updated));
     }
 
     @DeleteMapping("/{id}")
@@ -75,14 +73,7 @@ public class UserControllerV2 {
             @PathVariable Long id,
             @RequestBody List<Long> roleIds) {
         User user = userService.assignRole(id, roleIds);
-        return ResponseEntity.ok(UserMapper.toDTOWithRoles(user, isAdmin()));
-    }
-
-    private boolean isAdmin() {
-        var authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-        System.out.println("DEBUG CONTROLLER: Autoridades de la sesión: " + authorities);
-        return authorities.stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        return ResponseEntity.ok(UserMapper.toDTOWithRoles(user));
     }
 
     @GetMapping("/{id}/roles")

@@ -14,25 +14,25 @@ public class UserMapper {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
-    public static UserDTO toDTO(User user, boolean isAdmin) {
+    public static UserDTO toDTO(User user) {
         return new UserDTO(
                 user.getId(),
                 user.getUsername(),
                 user.getFirstName(),
                 user.getLastName(),
-                isAdmin ? user.getPassword() : "********",
+                user.getPassword(),
                 user.isActive(),
                 user.getEmail(),
                 user.getVersion());
     }
 
-    public static UserWithRolesDTO toDTOWithRoles(User user, boolean isAdmin) {
+    public static UserWithRolesDTO toDTOWithRoles(User user) {
         return new UserWithRolesDTO(
                 user.getId(),
                 user.getUsername(),
                 user.getFirstName(),
                 user.getLastName(),
-                isAdmin ? user.getPassword() : "********",
+                user.getPassword(),
                 user.isActive(),
                 user.getEmail(),
                 user.getRoles().stream()
