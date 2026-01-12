@@ -8,6 +8,7 @@ import com.iws_manager.iws_manager_api.dtos.user.UserWithRolesDTO;
 import com.iws_manager.iws_manager_api.mappers.UserMapper;
 import com.iws_manager.iws_manager_api.models.User;
 import com.iws_manager.iws_manager_api.services.interfaces.UserServiceV2;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,8 +71,7 @@ public class UserControllerV2 {
     @PostMapping("/{id}/roles")
     public ResponseEntity<UserWithRolesDTO> assignRoles(
             @PathVariable Long id,
-            @RequestBody List<Long> roleIds
-    ) {
+            @RequestBody List<Long> roleIds) {
         User user = userService.assignRole(id, roleIds);
         return ResponseEntity.ok(UserMapper.toDTOWithRoles(user));
     }

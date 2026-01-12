@@ -2,6 +2,8 @@ object Versions {
     const val JUNIT = "5.10.1"
     const val MOCKITO = "5.16.0"
     const val MARIADB = "3.3.3"
+    const val JJWT = "0.11.5"
+    const val SPRINGDOC = "2.8.9"
 }
 
 plugins {
@@ -37,7 +39,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
 
-    
+    implementation("io.jsonwebtoken:jjwt-api:${Versions.JJWT}")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:${Versions.JJWT}")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:${Versions.JJWT}")
+
     // Lombok
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
@@ -49,7 +54,7 @@ dependencies {
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client:${Versions.MARIADB}")
 
      // Swagger/OpenAPI Documentation
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${Versions.SPRINGDOC}")
 
     // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
