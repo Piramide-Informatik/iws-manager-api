@@ -2,6 +2,7 @@ package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.models.ProjectPackage;
 import com.iws_manager.iws_manager_api.models.ProjectPeriod;
+import com.iws_manager.iws_manager_api.models.Project;
 import com.iws_manager.iws_manager_api.repositories.ProjectPackageRepository;
 import com.iws_manager.iws_manager_api.repositories.ProjectPeriodRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -119,14 +120,31 @@ class ProjectPeriodServiceImplTest {
         ProjectPeriod updatedDetails = new ProjectPeriod();
         updatedDetails.setPeriodNo((short) 1);
         updatedDetails.setStartDate(LocalDate.now());
+        updatedDetails.setEndDate(LocalDate.now().plusDays(1)); // ← Agregar endDate
+        
+        // Configurar project (necesario para validaciones)
+        Project project = new Project();
+        project.setId(1L);
+        updatedDetails.setProject(project);
+        
+        // Configurar testProjectPeriod
+        testProjectPeriod.setProject(project);
+        testProjectPeriod.setPeriodNo((short) 1);
+        testProjectPeriod.setStartDate(LocalDate.now().minusDays(10));
+        testProjectPeriod.setEndDate(LocalDate.now().minusDays(5));
 
         when(periodRepository.findById(1L)).thenReturn(Optional.of(testProjectPeriod));
         when(periodRepository.save(any(ProjectPeriod.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        
+        // Mockear validación de solapamiento
+        when(periodRepository.existsOverlappingPeriod(anyLong(), any(LocalDate.class), 
+            any(LocalDate.class), anyLong())).thenReturn(false);
 
         ProjectPeriod result = projectPeriodService.update(1L, updatedDetails);
 
         assertEquals((short) 1, result.getPeriodNo());
         assertEquals(LocalDate.now(), result.getStartDate());
+        assertEquals(LocalDate.now().plusDays(1), result.getEndDate());
         verify(periodRepository).save(testProjectPeriod);
     }
 

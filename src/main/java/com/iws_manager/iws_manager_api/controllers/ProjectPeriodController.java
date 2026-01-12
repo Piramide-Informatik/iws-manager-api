@@ -1,6 +1,5 @@
 package com.iws_manager.iws_manager_api.controllers;
 
-import com.iws_manager.iws_manager_api.models.Customer;
 import com.iws_manager.iws_manager_api.models.ProjectPeriod;
 import com.iws_manager.iws_manager_api.services.interfaces.ProjectPeriodService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,61 +29,58 @@ public class ProjectPeriodController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> create(@RequestBody ProjectPeriod projectPeriod){
+    public ResponseEntity<?> create(@RequestBody ProjectPeriod projectPeriod) {
         ProjectPeriod createProjectPeriod = projectPeriodService.create(projectPeriod);
         return new ResponseEntity<>(createProjectPeriod, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProjectPeriod> getById(@PathVariable Long id){
-        return  projectPeriodService.findById(id)
-                .map( projectPeriod -> new ResponseEntity<>(projectPeriod, HttpStatus.OK))
+    public ResponseEntity<ProjectPeriod> getById(@PathVariable Long id) {
+        return projectPeriodService.findById(id)
+                .map(projectPeriod -> new ResponseEntity<>(projectPeriod, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping
-    public ResponseEntity<List<ProjectPeriod>> getAll(){
+    public ResponseEntity<List<ProjectPeriod>> getAll() {
         List<ProjectPeriod> projectPeriods = projectPeriodService.findAll();
         return new ResponseEntity<>(projectPeriods, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProjectPeriod> update(@PathVariable Long id, @RequestBody ProjectPeriod projectPeriodDetails){
-        try {
-            ProjectPeriod updateProjectPeriod = projectPeriodService.update(id, projectPeriodDetails);
-            return new ResponseEntity<>(updateProjectPeriod, HttpStatus.OK);
-        } catch (RuntimeException e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<ProjectPeriod> update(@PathVariable Long id,
+            @RequestBody ProjectPeriod projectPeriodDetails) {
+        ProjectPeriod updateProjectPeriod = projectPeriodService.update(id, projectPeriodDetails);
+        return new ResponseEntity<>(updateProjectPeriod, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
-    
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+
         projectPeriodService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/order-by-periodno")
-    public ResponseEntity<List<ProjectPeriod>> getAllByOrderByNoAsc(){
+    public ResponseEntity<List<ProjectPeriod>> getAllByOrderByNoAsc() {
         List<ProjectPeriod> projectPeriods = projectPeriodService.getAllProjectPeriodsByPeriodNoAsc();
         return new ResponseEntity<>(projectPeriods, HttpStatus.OK);
     }
 
     @GetMapping("/order-by-startdate")
-    public ResponseEntity<List<ProjectPeriod>> getAllByOrderByStartDateAsc(){
+    public ResponseEntity<List<ProjectPeriod>> getAllByOrderByStartDateAsc() {
         List<ProjectPeriod> projectPeriods = projectPeriodService.getAllProjectPeriodsByStartDateAsc();
         return new ResponseEntity<>(projectPeriods, HttpStatus.OK);
     }
 
     @GetMapping("/order-by-enddate")
-    public ResponseEntity<List<ProjectPeriod>> getAllByOrderByEndDateAsc(){
+    public ResponseEntity<List<ProjectPeriod>> getAllByOrderByEndDateAsc() {
         List<ProjectPeriod> projectPeriods = projectPeriodService.getAllProjectPeriodsByEndDateAsc();
         return new ResponseEntity<>(projectPeriods, HttpStatus.OK);
     }
 
     @GetMapping("/project/{id}")
-    public ResponseEntity<List<ProjectPeriod>> getAllByProjectId(@PathVariable Long id){
+    public ResponseEntity<List<ProjectPeriod>> getAllByProjectId(@PathVariable Long id) {
         List<ProjectPeriod> list = projectPeriodService.findAllByProjectId(id);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
@@ -96,7 +92,8 @@ public class ProjectPeriodController {
     }
 
     @PostMapping("/project/{projectId}/next-year")
-    public ResponseEntity<ProjectPeriod> createWithAutoEmployeeNo(@RequestBody ProjectPeriod projectPeriod, @PathVariable Long projectId) {
+    public ResponseEntity<ProjectPeriod> createWithAutoEmployeeNo(@RequestBody ProjectPeriod projectPeriod,
+            @PathVariable Long projectId) {
         ProjectPeriod created = projectPeriodService.createWithNextYear(projectPeriod, projectId);
         return ResponseEntity.ok(created);
 
