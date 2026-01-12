@@ -12,11 +12,15 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -28,16 +32,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            // Imprimir todos los headers recibidos para diagnóstico
-            System.out.println("--- Headers Recibidos ---");
-            java.util.Collections.list(request.getHeaderNames())
-                    .forEach(headerName -> System.out.println(headerName + ": " + request.getHeader(headerName)));
-            System.out.println("-------------------------");
-
             String jwt = parseJwt(request);
             if (jwt != null) {
                 String username = jwtUtils.extractUsername(jwt);
-                System.out.println("DEBUG: Intento de acceso con usuario: " + username);
+                logger.debug("Intento de acceso con usuario: {}", username);
 
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -48,18 +46,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                         SecurityContextHolder.getContext().setAuthentication(authentication);
-                        System.out.println("DEBUG: Autenticación OK para: " + username + " con roles: "
-                                + userDetails.getAuthorities());
+                        logger.debug("Autenticación OK para: {} con roles: {}", username, userDetails.getAuthorities());
                     } else {
-                        System.out.println("DEBUG: Token INVALIDO para: " + username);
+                        logger.warn("Token INVALIDO para: {}", username);
                     }
                 }
             } else {
-                System.out.println("DEBUG: No se detectó token en la petición.");
+                logger.trace("No se detectó token en la petición.");
             }
         } catch (Exception e) {
-            System.err.println("DEBUG ERROR: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Error en el filtro de autenticación JWT: {}", e.getMessage());
         }
 
         filterChain.doFilter(request, response);
