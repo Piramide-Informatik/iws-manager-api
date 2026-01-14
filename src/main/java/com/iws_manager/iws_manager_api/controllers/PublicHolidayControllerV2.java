@@ -1,9 +1,9 @@
-package com.iws_manager.iws_manager_api.controllers.V2;
+package com.iws_manager.iws_manager_api.controllers;
 
 import com.iws_manager.iws_manager_api.dtos.publicholiday.SimpleHolidayDTO;
 import com.iws_manager.iws_manager_api.models.PublicHoliday;
 import com.iws_manager.iws_manager_api.models.State;
-import com.iws_manager.iws_manager_api.services.V2.interfaces.PublicHolidayServiceV2;
+import com.iws_manager.iws_manager_api.services.interfaces.PublicHolidayServiceV2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;

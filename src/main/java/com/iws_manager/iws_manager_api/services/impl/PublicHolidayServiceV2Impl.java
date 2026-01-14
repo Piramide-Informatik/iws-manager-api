@@ -1,4 +1,4 @@
-package com.iws_manager.iws_manager_api.services.V2.impl;
+package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.dtos.publicholiday.SimpleHolidayDTO;
 import com.iws_manager.iws_manager_api.mappers.PublicHolidayMapper;
@@ -8,7 +8,7 @@ import com.iws_manager.iws_manager_api.models.StateHoliday;
 import com.iws_manager.iws_manager_api.repositories.PublicHolidayRepository;
 import com.iws_manager.iws_manager_api.repositories.StateHolidayRepository;
 import com.iws_manager.iws_manager_api.repositories.StateRepository;
-import com.iws_manager.iws_manager_api.services.V2.interfaces.PublicHolidayServiceV2;
+import com.iws_manager.iws_manager_api.services.interfaces.PublicHolidayServiceV2;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
