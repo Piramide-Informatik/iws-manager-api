@@ -2,8 +2,8 @@ package com.iws_manager.iws_manager_api.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iws_manager.iws_manager_api.models.PublicHoliday;
-import com.iws_manager.iws_manager_api.services.v2.interfaces.PublicHolidayServiceV2;
-import com.iws_manager.iws_manager_api.controllers.v2.PublicHolidayControllerV2;
+import com.iws_manager.iws_manager_api.services.V2.interfaces.PublicHolidayServiceV2;
+import com.iws_manager.iws_manager_api.controllers.V2.PublicHolidayControllerV2;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,9 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 public class PublicHolidayControllerTest {
-    private  static  final String FIRST_NAME = "Independence Day";
-    private  static  final String UPDATE_NAME = "Independence Day Updated";
-    private  static  final String SECOND_NAME = "Corpus Christi";
+    private static final String FIRST_NAME = "Independence Day";
+    private static final String UPDATE_NAME = "Independence Day Updated";
+    private static final String SECOND_NAME = "Corpus Christi";
 
     private MockMvc mockMvc;
     private String uri = "/api/v2/holidays";
@@ -47,7 +47,7 @@ public class PublicHolidayControllerTest {
     private PublicHoliday publicHoliday2;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(publicHolidayController).build();
 
         publicHoliday1 = new PublicHoliday();
@@ -66,8 +66,8 @@ public class PublicHolidayControllerTest {
         given(publicHolidayService.create(any(PublicHoliday.class))).willReturn(publicHoliday1);
 
         mockMvc.perform(post(uri)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(publicHoliday1)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(publicHoliday1)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath(name).value(FIRST_NAME));
@@ -77,7 +77,7 @@ public class PublicHolidayControllerTest {
     void getPublicHolidayByIdShouldReturnPublicHoliday() throws Exception {
         given(publicHolidayService.findById(1L)).willReturn(Optional.of(publicHoliday1));
 
-        mockMvc.perform(get(uri+"/1"))
+        mockMvc.perform(get(uri + "/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath(name).value(FIRST_NAME));
@@ -87,10 +87,9 @@ public class PublicHolidayControllerTest {
     void getPublicHolidayByIdShouldReturnNotFound() throws Exception {
         given(publicHolidayService.findById(99L)).willReturn(Optional.empty());
 
-        mockMvc.perform(get(uri+"/99"))
+        mockMvc.perform(get(uri + "/99"))
                 .andExpect(status().isNotFound());
     }
-
 
     @Test
     void getAllPublicHolidayShouldReturnAllPublicHoliday() throws Exception {
@@ -100,8 +99,7 @@ public class PublicHolidayControllerTest {
         mockMvc.perform(get(uri))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].sequenceNo").value(1
-                ))
+                .andExpect(jsonPath("$[0].sequenceNo").value(1))
                 .andExpect(jsonPath("$[1].id").value(2L))
                 .andExpect(jsonPath("$[1].sequenceNo").value(2));
     }
@@ -113,21 +111,21 @@ public class PublicHolidayControllerTest {
 
         given(publicHolidayService.update(1L, updatedPublicHoliday)).willReturn(updatedPublicHoliday);
 
-        mockMvc.perform(put(uri+"/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updatedPublicHoliday)))
+        mockMvc.perform(put(uri + "/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedPublicHoliday)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(name).value(UPDATE_NAME));
     }
 
     @Test
     void updatePublicHolidayShouldReturnNotFound() throws Exception {
-        given(publicHolidayService.update(anyLong(),any(PublicHoliday.class)))
+        given(publicHolidayService.update(anyLong(), any(PublicHoliday.class)))
                 .willThrow(new RuntimeException("PublicHoliday not found"));
 
-        mockMvc.perform(put(uri+"/99")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(publicHoliday1)))
+        mockMvc.perform(put(uri + "/99")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(publicHoliday1)))
                 .andExpect(status().isNotFound());
     }
 
@@ -135,7 +133,7 @@ public class PublicHolidayControllerTest {
     void deletePublicHolidayShouldReturnNoContent() throws Exception {
         doNothing().when(publicHolidayService).delete(1L);
 
-        mockMvc.perform(delete(uri+"/1"))
+        mockMvc.perform(delete(uri + "/1"))
                 .andExpect(status().isNoContent());
     }
 
@@ -147,8 +145,8 @@ public class PublicHolidayControllerTest {
         when(publicHolidayService.create(any(PublicHoliday.class))).thenReturn(validPublicHoliday);
 
         mockMvc.perform(post(uri)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(validPublicHoliday)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(validPublicHoliday)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath(name).value(FIRST_NAME));
     }

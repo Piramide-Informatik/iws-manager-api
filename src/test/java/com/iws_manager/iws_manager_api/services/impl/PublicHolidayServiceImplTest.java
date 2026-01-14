@@ -2,7 +2,7 @@ package com.iws_manager.iws_manager_api.services.impl;
 
 import com.iws_manager.iws_manager_api.models.PublicHoliday;
 import com.iws_manager.iws_manager_api.repositories.PublicHolidayRepository;
-import com.iws_manager.iws_manager_api.services.v2.impl.PublicHolidayServiceV2Impl;
+import com.iws_manager.iws_manager_api.services.V2.impl.PublicHolidayServiceV2Impl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
