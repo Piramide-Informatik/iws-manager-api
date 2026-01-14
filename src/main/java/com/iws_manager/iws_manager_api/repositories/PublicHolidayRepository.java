@@ -21,30 +21,30 @@ public interface PublicHolidayRepository extends JpaRepository<PublicHoliday, Lo
     // @EntityGraph(attributePaths = {"stateHolidays", "holidayYears"})
     List<PublicHoliday> findAllByOrderBySequenceNoDesc();
 
-    @EntityGraph(attributePaths = {"stateHolidays", "holidayYears"})
+    @EntityGraph(attributePaths = { "stateHolidays", "holidayYears" })
     @Query("SELECT COALESCE(MAX(p.sequenceNo), 0) FROM PublicHoliday p")
     Long findMaxSequenceNo();
 
     // Method to get holidays between dates
-    @Query("SELECT p FROM PublicHoliday p WHERE p.date BETWEEN :startDate AND :endDate")
-    List<PublicHoliday> findHolidaysBetweenDates(LocalDate startDate, LocalDate endDate);
-    
+    @Query("SELECT DISTINCT p FROM PublicHoliday p JOIN p.stateHolidays sh WHERE p.date BETWEEN :startDate AND :endDate AND (:stateId IS NULL OR sh.state.id = :stateId) AND sh.isholiday = true")
+    List<PublicHoliday> findHolidaysBetweenDates(LocalDate startDate, LocalDate endDate, Long stateId);
+
     // Method to get holidays by year
-    @Query("SELECT p FROM PublicHoliday p WHERE YEAR(p.date) = :year")
-    List<PublicHoliday> findHolidaysByYear(Integer year);
+    @Query("SELECT DISTINCT p FROM PublicHoliday p JOIN p.stateHolidays sh WHERE YEAR(p.date) = :year AND (:stateId IS NULL OR sh.state.id = :stateId) AND sh.isholiday = true")
+    List<PublicHoliday> findHolidaysByYear(Integer year, Long stateId);
 
     // Get all holidays with fixed date by day and month
-    @Query("SELECT p FROM PublicHoliday p WHERE p.isFixedDate = true AND MONTH(p.date) = :month AND DAY(p.date) = :day")
-    List<PublicHoliday> findFixedHolidaysByDayAndMonth(Integer day, Integer month);
-    
+    @Query("SELECT DISTINCT p FROM PublicHoliday p JOIN p.stateHolidays sh WHERE p.isFixedDate = true AND MONTH(p.date) = :month AND DAY(p.date) = :day AND (:stateId IS NULL OR sh.state.id = :stateId) AND sh.isholiday = true")
+    List<PublicHoliday> findFixedHolidaysByDayAndMonth(Integer day, Integer month, Long stateId);
+
     // Get all holidays with fixed date
-    @Query("SELECT p FROM PublicHoliday p WHERE p.isFixedDate = true")
-    List<PublicHoliday> findAllFixedHolidays();
+    @Query("SELECT DISTINCT p FROM PublicHoliday p JOIN p.stateHolidays sh WHERE p.isFixedDate = true AND (:stateId IS NULL OR sh.state.id = :stateId) AND sh.isholiday = true")
+    List<PublicHoliday> findAllFixedHolidays(Long stateId);
 
     // Checks if a public holiday exists on a specific date.
     boolean existsByDate(LocalDate date);
-    
+
     // Finds a public holiday by specific date.
     Optional<PublicHoliday> findByDate(LocalDate date);
-    
+
 }
