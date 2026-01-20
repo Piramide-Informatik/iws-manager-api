@@ -16,7 +16,7 @@ import com.iws_manager.iws_manager_api.models.AbsenceDay;
  */
 @Repository
 public interface AbsenceDayRepository extends JpaRepository<AbsenceDay, Long> {
-    
+
     /**
      * Finds all absence days for a specific employee.
      * 
@@ -24,31 +24,31 @@ public interface AbsenceDayRepository extends JpaRepository<AbsenceDay, Long> {
      * @return list of absence days associated with the employee
      */
     List<AbsenceDay> findByEmployeeId(Long employeeId);
-    
+
     /**
      * Finds absence days for an employee within a specific date range.
      * 
      * @param employeeId the ID of the employee
-     * @param startDate the start date of the range (inclusive)
-     * @param endDate the end date of the range (inclusive)
+     * @param startDate  the start date of the range (inclusive)
+     * @param endDate    the end date of the range (inclusive)
      * @return list of absence days matching the criteria
      */
     List<AbsenceDay> findByEmployeeIdAndAbsenceDateBetween(
-        Long employeeId, 
-        LocalDate startDate, 
-        LocalDate endDate);
-    
+            Long employeeId,
+            LocalDate startDate,
+            LocalDate endDate);
+
     /**
      * Finds absence days for an employee with a specific absence type.
      * 
-     * @param employeeId the ID of the employee
+     * @param employeeId    the ID of the employee
      * @param absenceTypeId the ID of the absence type to filter by
      * @return list of matching absence days
      */
     List<AbsenceDay> findByEmployeeIdAndAbsenceTypeId(
-        Long employeeId, 
-        Long absenceTypeId);
-    
+            Long employeeId,
+            Long absenceTypeId);
+
     /**
      * Custom query to count absence days by type for a specific employee.
      * Returns an array of objects where each contains:
@@ -60,73 +60,79 @@ public interface AbsenceDayRepository extends JpaRepository<AbsenceDay, Long> {
      */
     @Query("SELECT a.absenceType, COUNT(a) FROM AbsenceDay a WHERE a.employee.id = :employeeId GROUP BY a.absenceType")
     List<Object[]> countAbsenceDaysByTypeForEmployee(Long employeeId);
-    
+
     /**
      * Checks if an employee has an absence recorded on a specific date.
      * 
-     * @param employeeId the ID of the employee to check
+     * @param employeeId  the ID of the employee to check
      * @param absenceDate the date to check for absences
      * @return true if an absence exists, false otherwise
      */
     boolean existsByEmployeeIdAndAbsenceDate(Long employeeId, LocalDate absenceDate);
 
     /**
-     * Checks if an absence exists for an employee on a specific date, excluding a specific absence ID.
+     * Checks if an absence exists for an employee on a specific date, excluding a
+     * specific absence ID.
      * 
-     * @param employeeId the ID of the employee
-     * @param absenceDate the date to check
+     * @param employeeId          the ID of the employee
+     * @param absenceDate         the date to check
      * @param excludeAbsenceDayId the absence day ID to exclude from the check
      * @return true if another absence exists, false otherwise
      */
     @Query("SELECT COUNT(a) > 0 FROM AbsenceDay a WHERE a.employee.id = :employeeId " +
-        "AND a.absenceDate = :absenceDate AND a.id != :excludeAbsenceDayId")
+            "AND a.absenceDate = :absenceDate AND a.id != :excludeAbsenceDayId")
     boolean existsByEmployeeIdAndAbsenceDateExcludingId(
-        Long employeeId, 
-        LocalDate absenceDate, 
-        Long excludeAbsenceDayId);
+            Long employeeId,
+            LocalDate absenceDate,
+            Long excludeAbsenceDayId);
 
     /**
      * Finds all absence days for a specific employee in a specific year.
      * 
      * @param employeeId the ID of the employee
-     * @param year the year to filter by
+     * @param year       the year to filter by
      * @return list of absence days matching the criteria
      */
     @Query("SELECT a FROM AbsenceDay a WHERE a.employee.id = :employeeId " +
-        "AND YEAR(a.absenceDate) = :year")
-    List<AbsenceDay> findByEmployeeIdAndYear(@Param("employeeId") Long employeeId, 
-                                            @Param("year") int year);
+            "AND YEAR(a.absenceDate) = :year")
+    List<AbsenceDay> findByEmployeeIdAndYear(@Param("employeeId") Long employeeId,
+            @Param("year") int year);
 
     /**
-     * Counts absence days for a specific employee and absence type in a specific year.
+     * Counts absence days for a specific employee and absence type in a specific
+     * year.
      * 
-     * @param employeeId the ID of the employee
+     * @param employeeId    the ID of the employee
      * @param absenceTypeId the ID of the absence type
-     * @param year the year to filter by
+     * @param year          the year to filter by
      * @return count of absence days matching the criteria
      */
     @Query("SELECT COUNT(a) FROM AbsenceDay a WHERE a.employee.id = :employeeId " +
-        "AND a.absenceType.id = :absenceTypeId " +
-        "AND YEAR(a.absenceDate) = :year")
+            "AND a.absenceType.id = :absenceTypeId " +
+            "AND YEAR(a.absenceDate) = :year")
     long countByEmployeeIdAndAbsenceTypeIdAndYear(@Param("employeeId") Long employeeId,
-                                                @Param("absenceTypeId") Long absenceTypeId,
-                                                @Param("year") int year);
+            @Param("absenceTypeId") Long absenceTypeId,
+            @Param("year") int year);
 
     /**
-     * Custom query to count absence days by type for a specific employee in a specific year.
+     * Custom query to count absence days by type for a specific employee in a
+     * specific year.
      * Returns an array of objects where each contains:
      * - [0] AbsenceType entity
-     * - [1] Count of days for that type
+     * - [1] Count of days for that type (Long)
+     * - [2] Calculated count: count * shareOfDay (BigDecimal)
      * 
      * @param employeeId the ID of the employee
-     * @param year the year to filter by
-     * @return list of Object arrays containing absence type and count pairs
+     * @param year       the year to filter by
+     * @return list of Object arrays containing absence type, count and calculated
+     *         count
      */
-    @Query("SELECT a.absenceType, COUNT(a) FROM AbsenceDay a " +
-        "WHERE a.employee.id = :employeeId AND YEAR(a.absenceDate) = :year " +
-        "GROUP BY a.absenceType " +
-        "ORDER BY a.absenceType.label ASC")
+    @Query("SELECT a.absenceType, COUNT(a), COUNT(a) * a.absenceType.shareOfDay " +
+            "FROM AbsenceDay a " +
+            "WHERE a.employee.id = :employeeId AND YEAR(a.absenceDate) = :year " +
+            "GROUP BY a.absenceType " +
+            "ORDER BY a.absenceType.label ASC")
     List<Object[]> countAbsenceDaysByTypeForEmployeeAndYear(
-        @Param("employeeId") Long employeeId, 
-        @Param("year") int year);
+            @Param("employeeId") Long employeeId,
+            @Param("year") int year);
 }
