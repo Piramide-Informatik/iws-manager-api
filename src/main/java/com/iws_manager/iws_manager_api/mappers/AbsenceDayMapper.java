@@ -10,6 +10,7 @@ import com.iws_manager.iws_manager_api.models.AbsenceType;
 import com.iws_manager.iws_manager_api.models.Employee;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -24,12 +25,11 @@ public class AbsenceDayMapper {
         }
 
         return new AbsenceDayInfoDTO(
-            absenceDay.getId(),
-            absenceDay.getAbsenceDate(),
-            toAbsenceTypeInfoDTO(absenceDay.getAbsenceType()),
-            toEmployeeBasicDTO(absenceDay.getEmployee()),
-            absenceDay.getVersion()
-        );
+                absenceDay.getId(),
+                absenceDay.getAbsenceDate(),
+                toAbsenceTypeInfoDTO(absenceDay.getAbsenceType()),
+                toEmployeeBasicDTO(absenceDay.getEmployee()),
+                absenceDay.getVersion());
     }
 
     // Entity -> AbsenceDayDetailDTO (for details)
@@ -39,14 +39,13 @@ public class AbsenceDayMapper {
         }
 
         return new AbsenceDayDetailDTO(
-            absenceDay.getId(),
-            absenceDay.getAbsenceDate(),
-            absenceDay.getCreatedAt(),
-            absenceDay.getUpdatedAt(),
-            absenceDay.getVersion(),
-            toAbsenceTypeInfoDTO(absenceDay.getAbsenceType()),
-            toEmployeeInfoDTO(absenceDay.getEmployee())
-        );
+                absenceDay.getId(),
+                absenceDay.getAbsenceDate(),
+                absenceDay.getCreatedAt(),
+                absenceDay.getUpdatedAt(),
+                absenceDay.getVersion(),
+                toAbsenceTypeInfoDTO(absenceDay.getAbsenceType()),
+                toEmployeeInfoDTO(absenceDay.getEmployee()));
     }
 
     // AbsenceDayRequestDTO -> Entity (for creation)
@@ -57,7 +56,7 @@ public class AbsenceDayMapper {
 
         AbsenceDay absenceDay = new AbsenceDay();
         absenceDay.setAbsenceDate(requestDTO.absenceDate());
-        
+
         return absenceDay;
     }
 
@@ -66,7 +65,7 @@ public class AbsenceDayMapper {
         if (absenceDays == null) {
             return List.of();
         }
-        
+
         return absenceDays.stream()
                 .map(this::toInfoDTO)
                 .collect(Collectors.toList());
@@ -77,7 +76,7 @@ public class AbsenceDayMapper {
         if (absenceDays == null) {
             return List.of();
         }
-        
+
         return absenceDays.stream()
                 .map(this::toDetailDTO)
                 .collect(Collectors.toList());
@@ -90,13 +89,12 @@ public class AbsenceDayMapper {
         }
 
         return new EmployeeBasicDTO(
-            employee.getId(),
-            employee.getEmployeeno(),
-            employee.getFirstname(),
-            employee.getLastname(),
-            employee.getLabel(),
-            employee.getVersion()
-        );
+                employee.getId(),
+                employee.getEmployeeno(),
+                employee.getFirstname(),
+                employee.getLastname(),
+                employee.getLabel(),
+                employee.getVersion());
     }
 
     // Helper: AbsenceType -> AbsenceTypeInfoDTO
@@ -106,14 +104,13 @@ public class AbsenceDayMapper {
         }
 
         return new AbsenceTypeInfoDTO(
-            absenceType.getId(),
-            absenceType.getName(),
-            absenceType.getLabel(),
-            absenceType.getHours(),
-            absenceType.getIsHoliday(),
-            absenceType.getShareOfDay(),
-            absenceType.getVersion()
-        );
+                absenceType.getId(),
+                absenceType.getName(),
+                absenceType.getLabel(),
+                absenceType.getHours(),
+                absenceType.getIsHoliday(),
+                absenceType.getShareOfDay(),
+                absenceType.getVersion());
     }
 
     // Helper: Employee -> EmployeeInfoDTO
@@ -123,46 +120,47 @@ public class AbsenceDayMapper {
         }
 
         return new EmployeeInfoDTO(
-            employee.getId(),
-            employee.getFirstname(),
-            employee.getLastname(),
-            employee.getEmail(),
-            employee.getEmployeeno(),
-            employee.getLabel(),
-            employee.getPhone(),
-            employee.getCoentrepreneursince(),
-            employee.getGeneralmanagersince(),
-            employee.getShareholdersince(),
-            employee.getSoleproprietorsince(),
-            employee.getQualificationkmui(),
-            employee.getVersion(),
-            null, // customer
-            null, // qualificationFZ
-            null, // salutation
-            null, // title
-            null  // employeeCategory
+                employee.getId(),
+                employee.getFirstname(),
+                employee.getLastname(),
+                employee.getEmail(),
+                employee.getEmployeeno(),
+                employee.getLabel(),
+                employee.getPhone(),
+                employee.getCoentrepreneursince(),
+                employee.getGeneralmanagersince(),
+                employee.getShareholdersince(),
+                employee.getSoleproprietorsince(),
+                employee.getQualificationkmui(),
+                employee.getVersion(),
+                null, // customer
+                null, // qualificationFZ
+                null, // salutation
+                null, // title
+                null // employeeCategory
         );
     }
 
     public AbsenceDayCountDTO toCountDTO(Object[] result) {
-        if (result == null || result.length < 2) {
+        if (result == null || result.length < 3) {
             return null;
         }
 
         AbsenceType absenceType = (AbsenceType) result[0];
         Long count = (Long) result[1];
+        BigDecimal calculatedCount = (BigDecimal) result[2]; // calculated in SQL
 
         return new AbsenceDayCountDTO(
-            toAbsenceTypeInfoDTO(absenceType),
-            count
-        );
+                toAbsenceTypeInfoDTO(absenceType),
+                count,
+                calculatedCount);
     }
 
     public List<AbsenceDayCountDTO> toCountDTOList(List<Object[]> results) {
         if (results == null) {
             return List.of();
         }
-        
+
         return results.stream()
                 .map(this::toCountDTO)
                 .filter(Objects::nonNull)
