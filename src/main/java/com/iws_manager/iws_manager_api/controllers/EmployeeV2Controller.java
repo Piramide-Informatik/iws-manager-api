@@ -11,7 +11,8 @@ import java.util.List;
 
 /**
  * REST controller V2 for managing Employee entities with DTOs.
- * Provides endpoints for CRUD operations and various query operations using DTOs.
+ * Provides endpoints for CRUD operations and various query operations using
+ * DTOs.
  */
 @RestController
 @RequestMapping("/api/v2/employees")
@@ -106,11 +107,17 @@ public class EmployeeV2Controller {
 
     @GetMapping("/customer/{customerId}/next-employeeno")
     public ResponseEntity<Integer> getNextEmployeeNoForCustomer(@PathVariable Long customerId) {
-       try {
+        try {
             Integer nextEmployeeNo = employeeService.getNextEmployeeNoForCustomer(customerId);
             return ResponseEntity.ok(nextEmployeeNo);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @GetMapping("/customer/{customerId}/sort-by-fullname")
+    public ResponseEntity<List<EmployeeNameDTO>> getEmployeesByCustomerSortedByFullname(@PathVariable Long customerId) {
+        List<EmployeeNameDTO> employees = employeeService.getEmployeesByCustomerSortedByName(customerId);
+        return ResponseEntity.ok(employees);
     }
 }
