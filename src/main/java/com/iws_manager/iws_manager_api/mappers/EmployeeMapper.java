@@ -239,6 +239,7 @@ public class EmployeeMapper {
 
         return new EmployeeNameDTO(
                 entity.getId(),
+                entity.getEmployeeno(),
                 entity.getFirstname(),
                 entity.getLastname(),
                 buildFullName(entity.getFirstname(), entity.getLastname()));
