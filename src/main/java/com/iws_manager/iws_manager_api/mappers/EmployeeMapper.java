@@ -47,7 +47,7 @@ public class EmployeeMapper {
             customer.setVersion(dto.customer().version());
             entity.setCustomer(customer);
         } else {
-            entity.setCustomer(null);  //Desasignar si viene null o sin id
+            entity.setCustomer(null); // Desasignar si viene null o sin id
         }
 
         // QualificationFZ
@@ -57,7 +57,7 @@ public class EmployeeMapper {
             qualificationFZ.setVersion(dto.qualificationFZ().version());
             entity.setQualificationFZ(qualificationFZ);
         } else {
-            entity.setQualificationFZ(null); 
+            entity.setQualificationFZ(null);
         }
 
         // Salutation
@@ -67,7 +67,7 @@ public class EmployeeMapper {
             salutation.setVersion(dto.salutation().version());
             entity.setSalutation(salutation);
         } else {
-            entity.setSalutation(null); 
+            entity.setSalutation(null);
         }
 
         // Title
@@ -77,7 +77,7 @@ public class EmployeeMapper {
             title.setVersion(dto.title().version());
             entity.setTitle(title);
         } else {
-            entity.setTitle(null); 
+            entity.setTitle(null);
         }
 
         // EmployeeCategory
@@ -87,7 +87,7 @@ public class EmployeeMapper {
             employeeCategory.setVersion(dto.employeeCategory().version());
             entity.setEmployeeCategory(employeeCategory);
         } else {
-            entity.setEmployeeCategory(null); 
+            entity.setEmployeeCategory(null);
         }
     }
 
@@ -231,4 +231,41 @@ public class EmployeeMapper {
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
+
+    public EmployeeNameDTO toNameDTO(Employee entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        return new EmployeeNameDTO(
+                entity.getId(),
+                entity.getFirstname(),
+                entity.getLastname(),
+                buildFullName(entity.getFirstname(), entity.getLastname()));
+    }
+
+    private String buildFullName(String firstname, String lastname) {
+        boolean hasLastName = lastname != null && !lastname.trim().isEmpty();
+        boolean hasFirstName = firstname != null && !firstname.trim().isEmpty();
+
+        if (hasLastName && hasFirstName) {
+            return lastname.trim() + ", " + firstname.trim();
+        } else if (hasLastName) {
+            return lastname.trim();
+        } else if (hasFirstName) {
+            return firstname.trim();
+        }
+        return "";
+    }
+
+    public List<EmployeeNameDTO> toNameDTOList(List<Employee> entities) {
+        if (entities == null) {
+            return List.of();
+        }
+
+        return entities.stream()
+                .map(this::toNameDTO)
+                .collect(Collectors.toList());
+    }
+
 }

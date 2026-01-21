@@ -1,5 +1,6 @@
 package com.iws_manager.iws_manager_api.services.impl;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,8 +18,10 @@ import com.iws_manager.iws_manager_api.services.interfaces.EmployeeServiceV2;
 import jakarta.persistence.EntityNotFoundException;
 
 /**
- * Implementation of the {@link EmployeeServiceV2} interface for managing Employee entities with DTOs.
- * Provides CRUD operations and business logic for Employee management using DTOs.
+ * Implementation of the {@link EmployeeServiceV2} interface for managing
+ * Employee entities with DTOs.
+ * Provides CRUD operations and business logic for Employee management using
+ * DTOs.
  */
 @Service
 @Transactional
@@ -27,9 +30,10 @@ public class EmployeeServiceV2Impl implements EmployeeServiceV2 {
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
     private final OrderRepository orderRepository;
-    
+
     @Autowired
-    public EmployeeServiceV2Impl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper, OrderRepository orderRepository) {
+    public EmployeeServiceV2Impl(EmployeeRepository employeeRepository, EmployeeMapper employeeMapper,
+            OrderRepository orderRepository) {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
         this.orderRepository = orderRepository;
@@ -40,7 +44,7 @@ public class EmployeeServiceV2Impl implements EmployeeServiceV2 {
         if (dto == null) {
             throw new IllegalArgumentException("Employee DTO cannot be null");
         }
-        
+
         Employee entity = employeeMapper.toEntity(dto);
 
         // generate next employee number
@@ -73,7 +77,7 @@ public class EmployeeServiceV2Impl implements EmployeeServiceV2 {
         if (id == null || dto == null) {
             throw new IllegalArgumentException("ID and employee DTO cannot be null");
         }
-        
+
         return employeeRepository.findById(id)
                 .map(existingEmployee -> {
                     employeeMapper.updateEntityFromDTO(dto, existingEmployee);
@@ -88,8 +92,8 @@ public class EmployeeServiceV2Impl implements EmployeeServiceV2 {
         if (id == null) {
             throw new IllegalArgumentException("ID cannot be null");
         }
-        
-        if (!employeeRepository.existsById(id)) {  
+
+        if (!employeeRepository.existsById(id)) {
             throw new EntityNotFoundException("Employee not found with id: " + id);
         }
         employeeRepository.deleteById(id);
@@ -153,8 +157,7 @@ public class EmployeeServiceV2Impl implements EmployeeServiceV2 {
             throw new IllegalArgumentException("Project ID cannot be null");
         }
 
-        List<Employee> employees =
-                orderRepository.findEmployeesByProjectIdOrderByFirstnameAsc(projectId);
+        List<Employee> employees = orderRepository.findEmployeesByProjectIdOrderByFirstnameAsc(projectId);
 
         return employeeMapper.toDTOList(employees);
     }
@@ -165,8 +168,25 @@ public class EmployeeServiceV2Impl implements EmployeeServiceV2 {
         if (customerId == null) {
             throw new IllegalArgumentException("Customer ID cannot be null");
         }
-        
+
         return calculateNextEmployeeNoForCustomer(customerId);
+    }
+
+    @Override
+    public List<EmployeeNameDTO> getEmployeesByCustomerSortedByName(Long customerId) {
+        if (customerId == null) {
+            throw new IllegalArgumentException("Customer ID cannot be null");
+        }
+
+        List<Employee> employees = employeeRepository.findByCustomerIdOrderByEmployeenoAsc(customerId);
+
+        List<EmployeeNameDTO> employeeNameDTOs = employeeMapper.toNameDTOList(employees);
+
+        employeeNameDTOs.sort(Comparator.comparing(
+                EmployeeNameDTO::fullname,
+                Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER)));
+
+        return employeeNameDTOs;
     }
 
     // calculate next employeeno for a specific customer
