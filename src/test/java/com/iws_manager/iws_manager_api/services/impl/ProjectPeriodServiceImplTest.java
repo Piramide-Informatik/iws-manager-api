@@ -39,9 +39,10 @@ class ProjectPeriodServiceImplTest {
     void setUp() {
         testProjectPeriod = new ProjectPeriod();
         testProjectPeriod.setId(1L);
-        testProjectPeriod.setPeriodNo((short) 1);
+        testProjectPeriod.setPeriodNo("1");
         testProjectPeriod.setStartDate(LocalDate.now());
     }
+
     @Test
     void createShouldSaveAndReturnProjectPeriod() {
         when(periodRepository.save(any(ProjectPeriod.class))).thenReturn(testProjectPeriod);
@@ -118,31 +119,31 @@ class ProjectPeriodServiceImplTest {
     @Test
     void updateShouldUpdateExistingProjectPeriod() {
         ProjectPeriod updatedDetails = new ProjectPeriod();
-        updatedDetails.setPeriodNo((short) 1);
+        updatedDetails.setPeriodNo("1");
         updatedDetails.setStartDate(LocalDate.now());
         updatedDetails.setEndDate(LocalDate.now().plusDays(1)); // ← Agregar endDate
-        
+
         // Configurar project (necesario para validaciones)
         Project project = new Project();
         project.setId(1L);
         updatedDetails.setProject(project);
-        
+
         // Configurar testProjectPeriod
         testProjectPeriod.setProject(project);
-        testProjectPeriod.setPeriodNo((short) 1);
+        testProjectPeriod.setPeriodNo("1");
         testProjectPeriod.setStartDate(LocalDate.now().minusDays(10));
         testProjectPeriod.setEndDate(LocalDate.now().minusDays(5));
 
         when(periodRepository.findById(1L)).thenReturn(Optional.of(testProjectPeriod));
         when(periodRepository.save(any(ProjectPeriod.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        
+
         // Mockear validación de solapamiento
-        when(periodRepository.existsOverlappingPeriod(anyLong(), any(LocalDate.class), 
-            any(LocalDate.class), anyLong())).thenReturn(false);
+        when(periodRepository.existsOverlappingPeriod(anyLong(), any(LocalDate.class),
+                any(LocalDate.class), anyLong())).thenReturn(false);
 
         ProjectPeriod result = projectPeriodService.update(1L, updatedDetails);
 
-        assertEquals((short) 1, result.getPeriodNo());
+        assertEquals("1", result.getPeriodNo());
         assertEquals(LocalDate.now(), result.getStartDate());
         assertEquals(LocalDate.now().plusDays(1), result.getEndDate());
         verify(periodRepository).save(testProjectPeriod);
@@ -164,9 +165,9 @@ class ProjectPeriodServiceImplTest {
     @Test
     void deleteShouldDeleteProjectPackage() {
         when(periodRepository.existsById(1L)).thenReturn(true);
-        
+
         projectPeriodService.delete(1L);
-        
+
         verify(periodRepository).existsById(1L);
         verify(periodRepository).deleteById(1L);
     }
@@ -174,12 +175,11 @@ class ProjectPeriodServiceImplTest {
     @Test
     void deleteShouldThrowEntityNotFoundExceptionWhenIdDoesNotExist() {
         when(periodRepository.existsById(99L)).thenReturn(false);
-        
+
         EntityNotFoundException exception = assertThrows(
-            EntityNotFoundException.class,
-            () -> projectPeriodService.delete(99L)
-        );
-    
+                EntityNotFoundException.class,
+                () -> projectPeriodService.delete(99L));
+
         assertEquals("ProjectPeriod not found with id: 99", exception.getMessage());
         verify(periodRepository).existsById(99L);
         verify(periodRepository, never()).deleteById(anyLong());

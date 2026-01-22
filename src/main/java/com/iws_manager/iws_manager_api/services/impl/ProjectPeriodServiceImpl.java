@@ -64,14 +64,13 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
                 .map(existingProjectPeriod -> {
                     validateDateRange(projectPeriodDetails.getStartDate(), projectPeriodDetails.getEndDate());
                     validateNoOverlapForUpdate(
-                        existingProjectPeriod.getProject().getId(),
-                        projectPeriodDetails.getStartDate(),
-                        projectPeriodDetails.getEndDate(),
-                        id,
-                        existingProjectPeriod.getPeriodNo()
-                    );
+                            existingProjectPeriod.getProject().getId(),
+                            projectPeriodDetails.getStartDate(),
+                            projectPeriodDetails.getEndDate(),
+                            id,
+                            existingProjectPeriod.getPeriodNo());
 
-                    // Only update the dates, preserve periodNo and project
+                    existingProjectPeriod.setPeriodNo(projectPeriodDetails.getPeriodNo());
                     existingProjectPeriod.setStartDate(projectPeriodDetails.getStartDate());
                     existingProjectPeriod.setEndDate(projectPeriodDetails.getEndDate());
                     return projectPeriodRepository.save(existingProjectPeriod);
@@ -132,7 +131,7 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
 
         Short newYear = getNextYear(projectId);
 
-        projectPeriod.setPeriodNo(newYear);
+        projectPeriod.setPeriodNo(newYear.toString());
         projectPeriod.setProject(project);
         // Default Dates
         setDefaultDates(projectPeriod);
@@ -149,7 +148,7 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         }
 
         ProjectPeriod projectPeriod = new ProjectPeriod();
-        projectPeriod.setPeriodNo((short) 1);
+        projectPeriod.setPeriodNo("1");
         projectPeriod.setProject(project);
 
         // Use project's dates if they exist, otherwise leave empty
@@ -189,18 +188,18 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         }
     }
 
-
     /**
      * Main method to validate overlaps using the repository
+     * 
      * @param projectPeriod Period to validate
-     * @param excludeId ID to exclude (for updates), null for creations
+     * @param excludeId     ID to exclude (for updates), null for creations
      */
     private void validateNoOverlap(ProjectPeriod projectPeriod, Long excludeId) {
-        if (projectPeriod == null || 
-            projectPeriod.getProject() == null || 
-            projectPeriod.getProject().getId() == null ||
-            projectPeriod.getStartDate() == null ||
-            projectPeriod.getEndDate() == null) {
+        if (projectPeriod == null ||
+                projectPeriod.getProject() == null ||
+                projectPeriod.getProject().getId() == null ||
+                projectPeriod.getStartDate() == null ||
+                projectPeriod.getEndDate() == null) {
             // Can't validate if we don't have the necessary information
             return;
         }
@@ -211,8 +210,7 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
 
         // Use the repository method to find overlapping periods
         List<ProjectPeriod> overlappingPeriods = projectPeriodRepository.findOverlappingPeriods(
-            projectId, startDate, endDate, excludeId
-        );
+                projectId, startDate, endDate, excludeId);
 
         // If there are overlapping periods, throw exception
         if (!overlappingPeriods.isEmpty()) {
@@ -222,40 +220,37 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
         }
     }
 
-    private void validateNoOverlapForUpdate(Long projectId, LocalDate startDate, LocalDate endDate, 
-                                           Long excludeId, Short periodNo) {
+    private void validateNoOverlapForUpdate(Long projectId, LocalDate startDate, LocalDate endDate,
+            Long excludeId, String periodNo) {
         if (projectId == null || startDate == null || endDate == null) {
             return;
         }
 
         // First check quickly if there is an overlap
         boolean hasOverlap = projectPeriodRepository.existsOverlappingPeriod(
-            projectId, startDate, endDate, excludeId
-        );
+                projectId, startDate, endDate, excludeId);
 
         if (hasOverlap) {
             // If there is an overlap, get the details for the error message
             List<ProjectPeriod> overlappingPeriods = projectPeriodRepository.findOverlappingPeriods(
-                projectId, startDate, endDate, excludeId
-            );
-            
+                    projectId, startDate, endDate, excludeId);
+
             String errorMessage = buildOverlapErrorMessageForUpdate(
-                startDate, endDate, periodNo, overlappingPeriods
-            );
+                    startDate, endDate, periodNo, overlappingPeriods);
             String fullMessage = "Overlapping Periods Detected: " + errorMessage;
             throw new ConflictException("PERIOD_OVERLAP", errorMessage, fullMessage);
         }
     }
 
-    private String buildOverlapErrorMessageForUpdate(LocalDate startDate, LocalDate endDate, 
-                                                Short periodNo, List<ProjectPeriod> overlappingPeriods) {
+    private String buildOverlapErrorMessageForUpdate(LocalDate startDate, LocalDate endDate,
+            String periodNo, List<ProjectPeriod> overlappingPeriods) {
         // Create a temporary period only for the error message
         ProjectPeriod tempPeriod = new ProjectPeriod();
         tempPeriod.setStartDate(startDate);
         tempPeriod.setEndDate(endDate);
         tempPeriod.setPeriodNo(periodNo);
-        tempPeriod.setId(1L); 
-        
+        tempPeriod.setId(1L);
+
         return buildOverlapErrorMessage(tempPeriod, overlappingPeriods);
     }
 
@@ -264,44 +259,44 @@ public class ProjectPeriodServiceImpl implements ProjectPeriodService {
      */
     private String buildOverlapErrorMessage(ProjectPeriod newPeriod, List<ProjectPeriod> overlappingPeriods) {
         StringBuilder details = new StringBuilder();
-        
+
         // Build main message
         details.append("The period ");
-        
+
         if (newPeriod.getPeriodNo() != null) {
             details.append(PERIOD_STRING).append(newPeriod.getPeriodNo()).append(" ");
         }
-        
+
         details.append("(").append(newPeriod.getStartDate())
-               .append(" to ").append(newPeriod.getEndDate()).append(")");
-        
+                .append(" to ").append(newPeriod.getEndDate()).append(")");
+
         if (newPeriod.getId() != null) {
             details.append(" cannot be updated because it overlaps with ");
         } else {
             details.append(" cannot be created because it overlaps with ");
         }
-        
+
         // Add information about overlapping periods
         if (overlappingPeriods.size() == 1) {
             ProjectPeriod overlapping = overlappingPeriods.get(0);
             details.append(PERIOD_STRING).append(overlapping.getPeriodNo())
-                   .append(" (").append(overlapping.getStartDate())
-                   .append(" to ").append(overlapping.getEndDate()).append(")");
+                    .append(" (").append(overlapping.getStartDate())
+                    .append(" to ").append(overlapping.getEndDate()).append(")");
         } else {
             details.append("existing periods: ");
             for (int i = 0; i < overlappingPeriods.size(); i++) {
                 ProjectPeriod overlapping = overlappingPeriods.get(i);
                 details.append(PERIOD_STRING).append(overlapping.getPeriodNo())
-                       .append(" (").append(overlapping.getStartDate())
-                       .append(" to ").append(overlapping.getEndDate()).append(")");
-                
+                        .append(" (").append(overlapping.getStartDate())
+                        .append(" to ").append(overlapping.getEndDate()).append(")");
+
                 if (i < overlappingPeriods.size() - 1) {
                     details.append(", ");
                 }
             }
         }
-        
+
         return details.toString();
     }
-    
+
 }
