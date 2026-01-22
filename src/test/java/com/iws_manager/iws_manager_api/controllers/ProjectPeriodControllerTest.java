@@ -39,7 +39,7 @@ class ProjectPeriodControllerTest {
     void setUp() {
         testPeriod = new ProjectPeriod();
         testPeriod.setId(TEST_ID);
-        testPeriod.setPeriodNo((short) 1);
+        testPeriod.setPeriodNo("1");
     }
 
     @Test
