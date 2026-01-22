@@ -27,10 +27,10 @@ import java.time.LocalDate;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "projectperiod")
-@AttributeOverride(name ="id", column = @Column(name = "projectperiodid"))
+@AttributeOverride(name = "id", column = @Column(name = "projectperiodid"))
 public class ProjectPeriod extends BaseEntity {
-    @Column(name="packageno", length = 255)
-    private Short periodNo;
+    @Column(name = "packageno", length = 255)
+    private String periodNo;
 
     @Column(name = "start", columnDefinition = "DATE")
     private LocalDate startDate;
@@ -39,7 +39,7 @@ public class ProjectPeriod extends BaseEntity {
     private LocalDate endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"customer", "hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties({ "customer", "hibernateLazyInitializer", "handler" })
     @JoinColumn(name = "projectid")
     private Project project;
 }

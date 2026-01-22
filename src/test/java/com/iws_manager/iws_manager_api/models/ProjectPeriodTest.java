@@ -7,8 +7,9 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProjectPeriodTest {
-    Short periodNo = 1;
+    String periodNo = "1";
     ProjectPeriod projectPeriod = new ProjectPeriod();
+
     @Test
     void testPublicHolidayCreation() {
         projectPeriod.setPeriodNo(periodNo);
@@ -17,7 +18,7 @@ class ProjectPeriodTest {
     }
 
     @Test
-    void testPublicHolidayWithAuditFields(){
+    void testPublicHolidayWithAuditFields() {
         // Arrange
         projectPeriod.setPeriodNo(periodNo);
         LocalDateTime now = LocalDateTime.now();
@@ -32,7 +33,7 @@ class ProjectPeriodTest {
     }
 
     @Test
-    void testEqualsAndHashCode(){
+    void testEqualsAndHashCode() {
         // Arrange
         projectPeriod.setPeriodNo(periodNo);
         projectPeriod.setId(1L);
