@@ -28,10 +28,14 @@ public class CustomCorsConfiguration {
                 "GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
         // ALLOWED HEADERS
-        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedHeaders(List.of(
+                "Authorization",
+                "Content-Type",
+                "Accept"));
 
         // CRITICAL FOR SESSIONS
         config.setAllowCredentials(true);
+        config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
