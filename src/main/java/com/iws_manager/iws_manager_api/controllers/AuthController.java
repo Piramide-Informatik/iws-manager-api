@@ -43,4 +43,19 @@ public class AuthController {
                     .body(Map.of("error", "Invalid username or password"));
         }
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(Authentication authentication) {
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Not authenticated"));
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        return ResponseEntity.ok(
+                new LoginResponse(userDetails.getUsername()));
+    }
 }
