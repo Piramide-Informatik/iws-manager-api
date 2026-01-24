@@ -3,6 +3,8 @@ package com.iws_manager.iws_manager_api.controllers;
 import com.iws_manager.iws_manager_api.dtos.auth.LoginRequest;
 import com.iws_manager.iws_manager_api.dtos.auth.LoginResponse;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.AuthenticationException;
+
 import java.util.Map;
 
 @RestController
@@ -58,4 +61,15 @@ public class AuthController {
         return ResponseEntity.ok(
                 new LoginResponse(userDetails.getUsername()));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+
+        request.getSession().invalidate();
+        SecurityContextHolder.clearContext();
+
+        return ResponseEntity.ok(
+                Map.of("message", "Logged out successfully"));
+    }
+
 }
