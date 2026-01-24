@@ -1,6 +1,8 @@
 package com.iws_manager.iws_manager_api.controllers;
 
 import com.iws_manager.iws_manager_api.dtos.auth.LoginRequest;
+import com.iws_manager.iws_manager_api.dtos.auth.LoginResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +35,7 @@ public class AuthController {
 
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-            return ResponseEntity.ok(
-                    Map.of("username", userDetails.getUsername()));
+            return ResponseEntity.ok(new LoginResponse(userDetails.getUsername()));
 
         } catch (AuthenticationException e) {
             return ResponseEntity
