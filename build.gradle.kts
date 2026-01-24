@@ -38,6 +38,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
+    
+    // Spring Session
+    implementation("org.springframework.session:spring-session-core")
 
     // JWT (JSON Web Token)
     // implementation("io.jsonwebtoken:jjwt-api:${Versions.JJWT}")
