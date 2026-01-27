@@ -56,22 +56,41 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> {
                 })
+
+                // SESIÓN
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+
+                // SECURITY CONTEXT (CRÍTICO)
+                .securityContext(securityContext -> securityContext
+                        .securityContextRepository(securityContextRepository())
+                        .requireExplicitSave(false))
+
+                // DESACTIVAR LOGIN AUTOMÁTICO
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable())
+
+                // AUTORIZACIÓN
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers("/auth/login", "/auth/me").permitAll()
                         .anyRequest().authenticated())
+
+                // 401 JSON
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) -> {
                             response.setStatus(HttpStatus.UNAUTHORIZED.value());
                             response.setContentType("application/json");
                             response.getWriter().write("{\"error\":\"Unauthorized\"}");
                         }))
-                .securityContext(securityContext -> securityContext
-                        .securityContextRepository(new HttpSessionSecurityContextRepository()))
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                        .maximumSessions(1))
+
                 .authenticationProvider(authenticationProvider());
 
         return http.build();
     }
+
+    @Bean
+    public HttpSessionSecurityContextRepository securityContextRepository() {
+        return new HttpSessionSecurityContextRepository();
+    }
+
 }
