@@ -1,21 +1,45 @@
 package com.iws_manager.iws_manager_api.config;
 
-import java.util.List;
-
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 
-@Component
-public class CustomCorsConfiguration implements CorsConfigurationSource {
-    @Override
-    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+@Configuration
+public class CustomCorsConfiguration {
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("*"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-        config.setAllowedHeaders(List.of("*"));
-        return config;
+
+        // FRONTEND ORIGINS
+        config.setAllowedOrigins(List.of(
+                "http://localhost:4200",
+                "http://localhost:8081",
+                "https://iws-manager.web.app",
+                "https://iws.piramide.de"));
+
+        // ALLOWED METHODS
+        config.setAllowedMethods(List.of(
+                "GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // ALLOWED HEADERS
+        config.setAllowedHeaders(List.of(
+                "Authorization",
+                "Content-Type",
+                "Accept"));
+
+        // CRITICAL FOR SESSIONS
+        config.setAllowCredentials(true);
+        config.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }
