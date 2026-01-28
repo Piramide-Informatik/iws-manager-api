@@ -11,35 +11,34 @@ import java.util.List;
 @Configuration
 public class CustomCorsConfiguration {
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+        @Bean
+        public CorsConfigurationSource corsConfigurationSource() {
 
-        CorsConfiguration config = new CorsConfiguration();
+                CorsConfiguration config = new CorsConfiguration();
 
-        // FRONTEND ORIGINS
-        config.setAllowedOrigins(List.of(
-                "http://localhost:4200",
-                "http://localhost:8081",
-                "https://iws-manager.web.app",
-                "https://iws.piramide.de"));
+                // FRONTEND ORIGINS
+                config.setAllowedOrigins(List.of(
+                                "http://localhost:4200",
+                                "https://iws-manager.web.app",
+                                "https://iws.piramide.de"));
 
-        // ALLOWED METHODS
-        config.setAllowedMethods(List.of(
-                "GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                // ALLOWED METHODS
+                config.setAllowedMethods(List.of(
+                                "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
 
-        // ALLOWED HEADERS
-        config.setAllowedHeaders(List.of(
-                "Authorization",
-                "Content-Type",
-                "Accept"));
+                // ALLOWED HEADERS
+                config.setAllowedHeaders(List.of(
+                                "Authorization",
+                                "Content-Type",
+                                "Accept"));
 
-        // CRITICAL FOR SESSIONS
-        config.setAllowCredentials(true);
-        config.setMaxAge(3600L);
+                // CRITICAL FOR SESSIONS
+                config.setAllowCredentials(true);
+                config.setMaxAge(3600L);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration("/**", config);
-        return source;
-    }
+                source.registerCorsConfiguration("/**", config);
+                return source;
+        }
 }
