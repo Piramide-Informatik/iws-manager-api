@@ -57,7 +57,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(
                                 CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .ignoringRequestMatchers("/auth/login"))
+                        .ignoringRequestMatchers(
+                                "/auth/login",
+                                "/auth/logout"))
 
                 .cors(cors -> {
                 })
